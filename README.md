@@ -3,8 +3,6 @@
 # Simple Map
 A beautifully simple Google Map field type for Craft CMS, compatible with Matrix.
 
-![How it looks](resources/preview.png)
-
 ## Installation
 Clone this repo into `craft/plugins/simplemap`.
 
@@ -12,8 +10,10 @@ Clone this repo into `craft/plugins/simplemap`.
 Create the field as you would any other.  
 The field type will return an array containing `lat`, `lng`, and `address`. This means you can use `{{ myMapField.lat }}`.
 
----
+![How it looks](resources/preview.png)
 
+---
+  
 Copyright © 2015 Ether Creative <hello@ethercreative.co.uk>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

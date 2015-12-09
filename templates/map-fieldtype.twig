@@ -1,0 +1,14 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	placeholder: 'Address',
+	id: id ~ '-address',
+	class: 'simplemap--address',
+	value: value is not null and value.address ? value.address : '',
+}) }}
+
+<div id="{{ id }}" class="simplemap--map"></div>
+
+<input type="hidden" name="{{ name }}[lat]" value="{{ value is not null and value.lat ? value.lat : '' }}" id="{{ id }}-input-lat">
+<input type="hidden" name="{{ name }}[lng]" value="{{ value is not null and value.lng ? value.lng : '' }}" id="{{ id }}-input-lng">
+<input type="hidden" name="{{ name }}[address]" value="{{ value is not null and value.address ? value.address : '' }}" id="{{ id }}-input-address">

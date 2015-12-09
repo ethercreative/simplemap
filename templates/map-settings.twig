@@ -1,0 +1,45 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "Latitude"|t,
+	instructions: 'The maps default latitude',
+	placeholder: '51.272154',
+	size: 10,
+	id: 'lat',
+	name: 'lat',
+	value: settings.lat,
+	type: 'text'
+}) }}
+
+{{ forms.textField({
+	label: "Longitude"|t,
+	instructions: 'The maps default longitude',
+	placeholder: '0.514951',
+	size: 10,
+	id: 'lng',
+	name: 'lng',
+	value: settings.lng,
+	type: 'text'
+}) }}
+
+{{ forms.textField({
+	label: "Zoom Level"|t,
+	instructions: "The default zoom level"|t,
+	placeholder: '12',
+	size: 2,
+	id: 'zoom',
+	name: 'zoom',
+	value: settings.zoom,
+	type: 'number'
+}) }}
+
+{{ forms.textField({
+	label: "Height"|t,
+	instructions: "The maps height in the input"|t,
+	placeholder: '400',
+	size: 3,
+	id: 'height',
+	name: 'height',
+	value: settings.height,
+	type: 'number'
+}) }}

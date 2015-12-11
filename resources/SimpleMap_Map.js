@@ -81,6 +81,7 @@ SimpleMap.prototype.loadMaps = function () {
 // Setup Map
 SimpleMap.prototype.setupMap = function () {
 	this.setup = true;
+	var self = this;
 
 	// Geocoder (for address search)
 	this.geocoder = new google.maps.Geocoder();
@@ -100,6 +101,10 @@ SimpleMap.prototype.setupMap = function () {
 	autocomplete.map = this.map;
 	autocomplete.bindTo('bounds', this.map);
 
+	this.address.addEventListener('input', function () {
+		if (this.value === '') self.clear();
+	});
+
 	// Add marker
 	this.map.marker = new google.maps.Marker({
 		draggable: true,
@@ -113,8 +118,6 @@ SimpleMap.prototype.setupMap = function () {
 
 	// Update the marker location & center the map
 	this.update(lat, lng, false, true).center();
-
-	var self = this;
 
 	// When the autocomplete place changes
 	google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -226,10 +229,9 @@ SimpleMap.prototype.geo = function (latLng, callback) {
 };
 
 SimpleMap.prototype.clear = function () {
-	self.address.value = '';
-	self.inputs.lat.value = '';
-	self.inputs.lng.value = '';
-	self.inputs.address.value = '';
+	this.inputs.lat.value = '';
+	this.inputs.lng.value = '';
+	this.inputs.address.value = '';
 };
 
 window.SimpleMap = SimpleMap;

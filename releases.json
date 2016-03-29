@@ -1,0 +1,27 @@
+[
+  {
+    "version": "1.0.0",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.0.0.zip",
+    "date": "2015-12-09T10:00:00-08:00",
+    "notes": [
+      "Initial Release"
+    ]
+  },
+  {
+    "version": "1.0.1",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.0.1.zip",
+    "date": "2015-12-11T10:00:00-08:00",
+    "notes": [
+      "Fixed: Hidden Lat/Lng/Address fields are now cleared when the Address Search input is empty."
+    ]
+  },
+  {
+    "version": "1.0.2",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.0.2.zip",
+    "date": "2016-03-29T10:00:00-08:00",
+    "notes": [
+      "Added link to docs",
+      "Added releases json for updates"
+    ]
+  }
+]

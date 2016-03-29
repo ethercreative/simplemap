@@ -24,7 +24,12 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.0.1';
+		return '1.0.2';
+	}
+
+	public function getSchemaVersion()
+	{
+		return '0.0.1';
 	}
 
 	public function getDeveloper()
@@ -35,6 +40,16 @@ class SimpleMapPlugin extends BasePlugin {
 	public function getDeveloperUrl()
 	{
 		return 'http://ethercreative.co.uk';
+	}
+
+	public function getDocumentationUrl()
+	{
+		return 'https://github.com/ethercreative/SimpleMap/blob/master/README.md';
+	}
+
+	public function getReleaseFeedUrl()
+	{
+		return 'https://raw.githubusercontent.com/ethercreative/SimpleMap/master/releases.json';
 	}
 
 }

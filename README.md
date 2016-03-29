@@ -12,6 +12,18 @@ The field type will return an array containing `lat`, `lng`, and `address`. This
 
 ![How it looks](resources/preview.png)
 
+## Changelog
+
+### 1.0.2
+- Added link to docs
+- Added releases json for updates
+
+### 1.0.1
+- Fixed: Hidden Lat/Lng/Address fields are now cleared when the Address Search input is empty.
+
+### 1.0.0
+- Initial Release
+
 ---
   
 Copyright © 2015 Ether Creative <hello@ethercreative.co.uk>

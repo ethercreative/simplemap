@@ -7,6 +7,7 @@ var SimpleMap = function (mapId, settings) {
 	this.inputs = {
 		lat: document.getElementById(mapId + '-input-lat'),
 		lng: document.getElementById(mapId + '-input-lng'),
+		zoom: document.getElementById(mapId + '-input-zoom'),
 		address: document.getElementById(mapId + '-input-address')
 	};
 
@@ -112,12 +113,16 @@ SimpleMap.prototype.setupMap = function () {
 		map: this.map
 	});
 
-	// Get the initial lat/lng, falling back to defaults if we don't have one
-	var lat = this.inputs.lat.value || this.settings.lat,
-		lng = this.inputs.lng.value || this.settings.lng;
+	// Get the initial lat/lng/zoom, falling back to defaults if we don't have one
+	var lat = this.inputs.lat.value   || this.settings.lat,
+		lng = this.inputs.lng.value   || this.settings.lng,
+		zoom = this.inputs.zoom.value || this.settings.zoom;
 
 	// Update the marker location & center the map
 	this.update(lat, lng, false, true).center();
+
+	// Update map to saved zoom
+	this.map.setZoom(parseInt(zoom));
 
 	// When the autocomplete place changes
 	google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -172,6 +177,13 @@ SimpleMap.prototype.setupMap = function () {
 
 		self.update(lat, lng).sync();
 	});
+
+	// When the zoom is changed
+	google.maps.event.addListener(this.map, 'zoom_changed', function () {
+		var zoom = this.getZoom();
+
+		self.updateZoom(zoom).center();
+	});
 };
 
 SimpleMap.prototype.update = function (lat, lng, leaveMarker, leaveFields) {
@@ -186,6 +198,12 @@ SimpleMap.prototype.update = function (lat, lng, leaveMarker, leaveFields) {
 		this.map.marker.setPosition(latLng);
 		this.map.marker.setVisible(true);
 	}
+
+	return this;
+};
+
+SimpleMap.prototype.updateZoom = function (zoom) {
+	this.inputs.zoom.value = zoom;
 
 	return this;
 };
@@ -231,6 +249,7 @@ SimpleMap.prototype.geo = function (latLng, callback) {
 SimpleMap.prototype.clear = function () {
 	this.inputs.lat.value = '';
 	this.inputs.lng.value = '';
+	this.inputs.zoom.value = '';
 	this.inputs.address.value = '';
 };
 

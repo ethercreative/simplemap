@@ -220,8 +220,12 @@ SimpleMap.prototype.sync = function (update) {
 
 	// Update address / lat / lng based off marker location
 	this.geo(pos, function (loc) {
-		self.address.value = loc.formatted_address;
-		self.inputs.address.value = loc.formatted_address;
+		// if loc, set address to formatted_location, else to postion
+		var address = loc ? loc.formatted_address : pos.lat() + ", " + pos.lng();
+
+		// update address value
+		self.address.value = address;
+		self.inputs.address.value = address;
 	});
 
 	if (update) return this.update(pos.lat, pos.lng, true);
@@ -233,15 +237,22 @@ SimpleMap.prototype.geo = function (latLng, callback) {
 	if (!latLng.lat) attr = {'address': latLng};
 
 	this.geocoder.geocode(attr, function (results, status) {
-		if (status !== google.maps.GeocoderStatus.OK) {
-			SimpleMap.Fail('Geocoder failed as a result of', status);
-			return;
-		} else if (!results[0]) {
-			SimpleMap.Fail('No results found!');
+		var loc;
+
+		// if location available, set loc to first result
+		if (status == google.maps.GeocoderStatus.OK) {
+			loc = results[0];
+
+		// if zero_results, set loc to false
+		} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+			loc = false;
+
+		// else return error message
+		} else {
+			SimpleMap.Fail('Geocoder failed as a result of ' + status);
 			return;
 		}
 
-		var loc = results[0];
 		callback(loc);
 	});
 };

@@ -47,7 +47,8 @@ var SimpleMap = function (mapId, settings) {
 };
 
 SimpleMap.Fail = function (message) {
-	if (window.console) console.error('SimpleMap:', message);
+	Craft.cp.displayError('<strong>SimpleMap:</strong> ' + message);
+	if (window.console) console.error.apply(console, ['%cSimpleMap: %c' + message, 'font-weight:bold;','font-weight:normal;']);
 };
 
 SimpleMap.LoadGoogleAPI = function () {
@@ -124,7 +125,7 @@ SimpleMap.prototype.setupMap = function () {
 	// Update map to saved zoom
 	this.map.setZoom(parseInt(zoom));
 
-	// When the autocomplete place changes
+	// When the auto-complete place changes
 	google.maps.event.addListener(autocomplete, 'place_changed', function () {
 		var address = self.address.value, lat, lng;
 		self.inputs.address.value = address;

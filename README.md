@@ -8,11 +8,17 @@ Clone this repo into `craft/plugins/simplemap`.
 
 ## Usage
 Create the field as you would any other.  
-The field type will return an array containing `lat`, `lng`, and `address`. This means you can use `{{ myMapField.lat }}`.
+The field type will return an array containing `lat`, `lng`, `zoom`, and `address`. This means you can use `{{ myMapField.lat }}`.
 
 ![How it looks](resources/preview.png)
 
 ## Changelog
+
+### 1.1.0
+- Merged \#2 & \#3 from @cballenar
+- \#2 - Field now stores map zoom
+- \#3 - Improved handling of unknown locations
+- Improved error message display
 
 ### 1.0.2
 - Added link to docs

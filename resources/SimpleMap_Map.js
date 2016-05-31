@@ -8,11 +8,13 @@ var SimpleMap = function (mapId, settings) {
 		lat: document.getElementById(mapId + '-input-lat'),
 		lng: document.getElementById(mapId + '-input-lng'),
 		zoom: document.getElementById(mapId + '-input-zoom'),
-		address: document.getElementById(mapId + '-input-address')
+		address: document.getElementById(mapId + '-input-address'),
+		parts: document.getElementById(mapId + '-input-address-parts'),
+		partsBase: document.getElementById(mapId + '-input-parts-base')
 	};
 
 	// Check we have everything we need
-	if (!this.mapEl || !this.address || !this.inputs.lat || !this.inputs.lng || !this.inputs.address) {
+	if (!this.mapEl || !this.address || !this.inputs.lat || !this.inputs.lng || !this.inputs.address || !this.inputs.parts) {
 		SimpleMap.Fail('Map inputs with id ' + mapId + ' not found!');
 		return;
 	}
@@ -137,7 +139,7 @@ SimpleMap.prototype.setupMap = function () {
 			lng = latLng[1];
 
 			if (!isNaN(lat) && !isNaN(lng)) {
-				self.update(parseFloat(lat), parseFloat(lng)).center();
+				self.update(parseFloat(lat), parseFloat(lng)).sync().center();
 
 				return;
 			}
@@ -150,7 +152,7 @@ SimpleMap.prototype.setupMap = function () {
 			lat = place.geometry.location.lat();
 			lng = place.geometry.location.lng();
 
-			self.update(lat, lng).center();
+			self.update(lat, lng).sync().center();
 
 			return;
 		}
@@ -160,7 +162,7 @@ SimpleMap.prototype.setupMap = function () {
 			var lat = loc.geometry.location.lat(),
 				lng = loc.geometry.location.lng();
 
-			self.update(lat, lng).center();
+			self.update(lat, lng).sync().center();
 		});
 
 	});
@@ -221,12 +223,28 @@ SimpleMap.prototype.sync = function (update) {
 
 	// Update address / lat / lng based off marker location
 	this.geo(pos, function (loc) {
-		// if loc, set address to formatted_location, else to postion
+		// if loc, set address to formatted_location, else to position
 		var address = loc ? loc.formatted_address : pos.lat() + ", " + pos.lng();
 
 		// update address value
 		self.address.value = address;
 		self.inputs.address.value = address;
+
+		// update address parts
+		while (self.inputs.parts.firstChild)
+			self.inputs.parts.removeChild(self.inputs.parts.firstChild);
+
+		var name = self.inputs.partsBase.name;
+		loc.address_components.forEach(function (el) {
+			var input = document.createElement('input'),
+				n = el.types[0];
+			if (!n) return;
+			if (n === 'postal_code_prefix') n = 'postal_code';
+			input.type = 'hidden';
+			input.name = name + '[' + n + ']';
+			input.value = el.long_name;
+			self.inputs.parts.appendChild(input);
+		});
 	});
 
 	if (update) return this.update(pos.lat, pos.lng, true);
@@ -263,6 +281,9 @@ SimpleMap.prototype.clear = function () {
 	this.inputs.lng.value = '';
 	this.inputs.zoom.value = '';
 	this.inputs.address.value = '';
+
+	while (this.inputs.parts.firstChild)
+		this.inputs.parts.removeChild(this.inputs.parts.firstChild);
 };
 
 window.SimpleMap = SimpleMap;

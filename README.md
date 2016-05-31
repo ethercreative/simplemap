@@ -8,11 +8,19 @@ Clone this repo into `craft/plugins/simplemap`.
 
 ## Usage
 Create the field as you would any other.  
-The field type will return an array containing `lat`, `lng`, `zoom`, and `address`. This means you can use `{{ myMapField.lat }}`.
+The field type will return an array containing `lat`, `lng`, `zoom`, `address`, and `parts`. This means you can use `{{ myMapField.lat }}`.
+
+**`parts`**
+
+This contains the locations address, broken down into its constituent parts. All values are optional so you'll need to have checks on any you use to make sure they exist.  
+A list of the available values can be found [here](https://developers.google.com/maps/documentation/geocoding/intro#Types).
 
 ![How it looks](resources/preview.png)
 
 ## Changelog
+
+### 1.1.1
+- Added `parts` to the fieldtype output.
 
 ### 1.1.0
 - Merged \#2 & \#3 from @cballenar

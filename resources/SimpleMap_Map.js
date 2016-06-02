@@ -229,7 +229,7 @@ SimpleMap.prototype.sync = function (update) {
 		self.inputs.address.value = address;
 	});
 
-	if (update) return this.update(pos.lat, pos.lng, true);
+	if (update) return this.update(pos.lat(), pos.lng(), true);
 	return this;
 };
 

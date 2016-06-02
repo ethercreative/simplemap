@@ -42,5 +42,13 @@
     "notes": [
       "Added `parts` to the fieldtype output."
     ]
+  },
+  {
+    "version": "1.1.2",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.1.2.zip",
+    "date": "2016-06-02T10:00:00-08:00",
+    "notes": [
+      "Fix #5 via @jripmeester - Fixed Lat / Lng being populated with function, not number."
+    ]
   }
 ]

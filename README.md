@@ -19,6 +19,9 @@ A list of the available values can be found [here](https://developers.google.com
 
 ## Changelog
 
+### 1.1.2
+- Fix \#5 via @jripmeester - Fixed Lat / Lng being populated with function, not number.
+
 ### 1.1.1
 - Added `parts` to the fieldtype output.
 

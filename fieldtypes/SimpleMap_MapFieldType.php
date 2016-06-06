@@ -11,7 +11,7 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 
 	public function defineContentAttribute()
 	{
-		return AttributeType::Mixed;
+		return false;
 	}
 
 	public function getInputHtml($name, $value)
@@ -34,7 +34,8 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 		return craft()->templates->render('simplemap/map-fieldtype', array(
 			'id'  => $id,
 			'name'  => $name,
-			'value' => $value
+			'value' => $value,
+			'settings' => $settings
 		));
 	}
 
@@ -53,6 +54,22 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 		return craft()->templates->render('simplemap/map-settings', array(
 			'settings' => $this->getSettings()
 		));
+	}
+
+	public function onAfterElementSave()
+	{
+		craft()->simpleMap->saveField($this);
+	}
+
+	public function prepValue($value)
+	{
+		return craft()->simpleMap->getField($this, $value);
+	}
+
+	public function modifyElementsQuery(DbCommand $query, $value)
+	{
+		if ($value !== null)
+			craft()->simpleMap->modifyQuery($query, $value);
 	}
 
 }

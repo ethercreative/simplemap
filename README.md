@@ -1,7 +1,7 @@
 ![Simple Map](resources/banner.jpg)
 
 # Simple Map
-A beautifully simple Google Map field type for Craft CMS, compatible with Matrix.
+A beautifully simple Google Map field type for Craft CMS. Full localization support, and compatible with Matrix.
 
 ## Installation
 Clone this repo into `craft/plugins/simplemap`.
@@ -21,6 +21,7 @@ A list of the available values can be found [here](https://developers.google.com
 
 ### 1.2.0 [DEV - Work In Progress]
 - Added optional Google API Server Key setting
+- **Added search and sorting support.**
 
 ### 1.1.2 [RELEASE]
 - Fix \#5 via @jripmeester - Fixed Lat / Lng being populated with function, not number.

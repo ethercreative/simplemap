@@ -50,5 +50,15 @@
     "notes": [
       "Fix #5 via @jripmeester - Fixed Lat / Lng being populated with function, not number."
     ]
+  },
+  {
+    "version": "1.2.0",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.2.0.zip",
+    "date": "2016-06-07T10:00:00-08:00",
+    "notes": [
+      "**Added search and sorting support.**",
+      "Added optional Google API Server Key setting",
+      "**_WARNING:_** This update will break any map fields that are NOT standalone (global) or in a Matrix field."
+    ]
   }
 ]

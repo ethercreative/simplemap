@@ -1,0 +1,10 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "Google API Server Key"|t,
+	instructions: '<em>Optional.</em> Used for searching and sorting by textual address / location. If left blank, only searching and sorting by Lat/Lng will be available. <a href="https://console.developers.google.com/apis/api/geocoding_backend/overview" target="_blank">Get an API key.</a>',
+	id: 'serverApiKey',
+	name: 'serverApiKey',
+	value: settings.serverApiKey,
+	type: 'text'
+}) }}

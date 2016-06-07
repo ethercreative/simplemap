@@ -24,12 +24,12 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.1.2';
+		return '1.2.0';
 	}
 
 	public function getSchemaVersion()
 	{
-		return '0.0.1';
+		return '0.0.5';
 	}
 
 	public function getDeveloper()
@@ -50,6 +50,20 @@ class SimpleMapPlugin extends BasePlugin {
 	public function getReleaseFeedUrl()
 	{
 		return 'https://raw.githubusercontent.com/ethercreative/SimpleMap/master/releases.json';
+	}
+
+	protected function defineSettings()
+	{
+		return array(
+			'serverApiKey' => array(AttributeType::String)
+		);
+	}
+
+	public function getSettingsHtml()
+	{
+		return craft()->templates->render('simplemap/plugin-settings', array(
+			'settings' => $this->getSettings()
+		));
 	}
 
 }

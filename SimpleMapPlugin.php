@@ -24,12 +24,12 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.1.3';
+		return '1.2.0';
 	}
 
 	public function getSchemaVersion()
 	{
-		return '0.0.2';
+		return '0.0.5';
 	}
 
 	public function getDeveloper()

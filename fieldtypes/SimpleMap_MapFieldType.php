@@ -70,6 +70,8 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 	{
 		if ($value !== null)
 			craft()->simpleMap->modifyQuery($query, $value);
+
+		return $query;
 	}
 
 }

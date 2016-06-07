@@ -1,7 +1,8 @@
 ![Simple Map](resources/banner.jpg)
 
 # Simple Map
-A beautifully simple Google Map field type for Craft CMS. Full localization support, and compatible with Matrix.
+A beautifully simple Google Map field type for Craft CMS. Full localization support, compatible with Matrix, supports 
+searching by location and sorting by distance.
 
 ## Installation
 Clone this repo into `craft/plugins/simplemap`.
@@ -15,15 +16,32 @@ The field type will return an array containing `lat`, `lng`, `zoom`, `address`, 
 This contains the locations address, broken down into its constituent parts. All values are optional so you'll need to have checks on any you use to make sure they exist.  
 A list of the available values can be found [here](https://developers.google.com/maps/documentation/geocoding/intro#Types).
 
+**Searching and Sorting**
+
+You can search for elements using the location specified in your map field. When searching by your map field you also have the option to sort the results by distance.
+
+```twig
+{% set entries = craft.entries.myMapField({
+    location: 'Maidstone, Kent, UK',
+    radius: 100,
+    unit: 'mi'
+}).order('distance') %}
+```
+
+- `location`: Can either be an address string (requires a Google Maps Geocoding API key) or a Lat Lng Array (`{ 'lat': 51.27219908, 'lng': 0.51545620 }` or `craft.simpleMap.latLng(51.27219908, 0.51545620)`).
+- `radius`: The radius around the location to search. Defaults to `50`.
+- `unit`: The unit of measurement for the search. Can be either `km` (kilometers) or `mi` (miles). Defaults to `km`.
+
 ![How it looks](resources/preview.png)
 
 ## Changelog
 
-### 1.2.0 [DEV - Work In Progress]
-- Added optional Google API Server Key setting
+### 1.2.0
 - **Added search and sorting support.**
+- Added optional Google API Server Key setting
+- **_WARNING:_** This update will break any map fields that are NOT standalone (global) or in a Matrix field.
 
-### 1.1.2 [RELEASE]
+### 1.1.2
 - Fix \#5 via @jripmeester - Fixed Lat / Lng being populated with function, not number.
 
 ### 1.1.1

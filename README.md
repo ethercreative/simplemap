@@ -36,6 +36,9 @@ You can search for elements using the location specified in your map field. When
 
 ## Changelog
 
+### 1.2.1
+- Fixed bug where map would not display correctly when in a secondary tab.
+
 ### 1.2.0
 - **Added search and sorting support.**
 - Added optional Google API Server Key setting

@@ -46,6 +46,20 @@ var SimpleMap = function (mapId, settings) {
 	document.addEventListener('SimpleMapsGAPILoaded', function () {
 		if (!self.setup) self.setupMap();
 	});
+
+	// Re-draw map on tab change
+	[].slice.call(document.getElementById('tabs').getElementsByTagName('a')).forEach(function (el) {
+		el.addEventListener('click', function () {
+			var x = self.map.getZoom(),
+				c = self.map.getCenter();
+
+			setTimeout(function () {
+				google.maps.event.trigger(self.map,'resize');
+				self.map.setZoom(x);
+				self.map.setCenter(c);
+			}, 1);
+		});
+	});
 };
 
 SimpleMap.Fail = function (message) {

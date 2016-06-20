@@ -1,4 +1,5 @@
 .simplemap--map {
+	display: block;
 	border-radius: 3px;
 	border: 1px solid #e3e5e8;
 }

@@ -36,6 +36,9 @@ You can search for elements using the location specified in your map field. When
 
 ## Changelog
 
+### 1.2.2
+- Added Browser API key setting
+
 ### 1.2.1
 - Fixed bug where map would not display correctly when in a secondary tab.
 

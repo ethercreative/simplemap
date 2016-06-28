@@ -1,4 +1,9 @@
-var SimpleMap = function (mapId, settings) {
+var SimpleMap = function (key, mapId, settings) {
+	if (!key) {
+		SimpleMap.Fail('Missing API Key!');
+		return;
+	}
+
 	// Vars
 	this.setup = false;
 	this.settings = settings;
@@ -36,9 +41,9 @@ var SimpleMap = function (mapId, settings) {
 
 	// Load Google APIs if they aren't already
 	if (typeof google === "undefined") {
-		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI();
+		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI(key);
 	} else if (!google.maps || !google.maps.places) { // Load Google Maps APIs if the aren't already
-		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI.LoadMapsApi();
+		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
 	} else {
 		if (!self.setup) self.setupMap();
 	}
@@ -67,32 +72,24 @@ SimpleMap.Fail = function (message) {
 	if (window.console) console.error.apply(console, ['%cSimpleMap: %c' + message, 'font-weight:bold;','font-weight:normal;']);
 };
 
-SimpleMap.LoadGoogleAPI = function () {
+SimpleMap.LoadGoogleAPI = function (key) {
 	window.simpleMapsLoadingGoogle = true;
 
 	var gmjs = document.createElement('script');
 	gmjs.type = 'text/javascript';
-	gmjs.src = 'https://www.google.com/jsapi';//'https://maps.googleapis.com/maps/api/js?v=3&amp;sensor=false&amp;libraries=places&amp;callback=google.loader.callbacks.maps';
+	gmjs.src = 'https://www.google.com/jsapi?key=' + key;
 	gmjs.onreadystatechange = function () {
-		SimpleMap.LoadGoogleAPI.LoadMapsApi();
+		SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
 	};
 	gmjs.onload = function () {
-		SimpleMap.LoadGoogleAPI.LoadMapsApi();
+		SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
 	};
 	document.body.appendChild(gmjs);
 };
 
-SimpleMap.LoadGoogleAPI.LoadMapsApi = function () {
-	google.load('maps', '3', { other_params: 'libraries=places', callback: function () {//sensor=false&
+SimpleMap.LoadGoogleAPI.LoadMapsApi = function (key) {
+	google.load('maps', '3', { other_params: 'libraries=places&key='+key, callback: function () {
 		document.dispatchEvent(new Event('SimpleMapsGAPILoaded'));
-	}});
-};
-
-// Load Google Maps API
-SimpleMap.prototype.loadMaps = function () {
-	var self = this;
-	google.load('maps', '3', { other_params: 'libraries=places', callback: function () {//sensor=false&
-		self.setupMap();
 	}});
 };
 

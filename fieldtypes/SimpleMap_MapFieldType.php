@@ -26,8 +26,10 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 		if (!$settings->zoom) $settings->zoom = '15';
 		if (!$settings->height) $settings->height = '400';
 
+		$key = craft()->plugins->getPlugin('SimpleMap')->getSettings()->browserApiKey;
+
 		craft()->templates->includeJsResource('simplemap/SimpleMap_Map.js');
-		craft()->templates->includeJs("new SimpleMap('{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}'});");
+		craft()->templates->includeJs("new SimpleMap('{$key}', '{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}'});");
 
 		craft()->templates->includeCssResource('simplemap/SimpleMap_Map.css');
 

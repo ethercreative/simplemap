@@ -12,4 +12,8 @@ class SimpleMapVariable {
 		return compact('lat', 'lng');
 	}
 
+	public function apiKey () {
+		return craft()->plugins->getPlugin('simpleMap')->getSettings()->browserApiKey;
+	}
+
 }

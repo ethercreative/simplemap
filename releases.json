@@ -76,5 +76,13 @@
     "notes": [
       "- Added Browser API key setting"
     ]
+  },
+  {
+    "version": "1.2.3",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.2.3.zip",
+    "date": "2016-07-07T10:00:00-08:00",
+    "notes": [
+      "- Browser API key can now be accessed in templates"
+    ]
   }
 ]

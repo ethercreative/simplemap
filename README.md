@@ -32,9 +32,16 @@ You can search for elements using the location specified in your map field. When
 - `radius`: The radius around the location to search. Defaults to `50`.
 - `unit`: The unit of measurement for the search. Can be either `km` (kilometers) or `mi` (miles). Defaults to `km`.
 
+**API Keys**
+
+You can access your browser API key in templates using `craft.simpleMap.apiKey`.
+
 ![How it looks](resources/preview.png)
 
 ## Changelog
+
+### 1.2.3
+- Browser API key can now be accessed in templates
 
 ### 1.2.2
 - Added Browser API key setting

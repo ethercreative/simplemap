@@ -84,5 +84,13 @@
     "notes": [
       "- Browser API key can now be accessed in templates"
     ]
+  },
+  {
+    "version": "1.2.4",
+    "downloadUrl": "https://github.com/ethercreative/SimpleMap/archive/v1.2.4.zip",
+    "date": "2016-08-09T10:00:00-08:00",
+    "notes": [
+      "[Improved] The address input automatically updates the map after paste"
+    ]
   }
 ]

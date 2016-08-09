@@ -40,6 +40,9 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 
 ## Changelog
 
+### 1.2.4
+- The address input automatically updates the map after paste
+
 ### 1.2.3
 - Browser API key can now be accessed in templates
 

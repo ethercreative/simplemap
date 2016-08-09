@@ -116,6 +116,13 @@ SimpleMap.prototype.setupMap = function () {
 	autocomplete.map = this.map;
 	autocomplete.bindTo('bounds', this.map);
 
+	// Update map on paste
+	this.address.addEventListener('paste', function () {
+		setTimeout(function () {
+			google.maps.event.trigger(autocomplete, 'place_changed');
+		}, 1);
+	});
+
 	this.address.addEventListener('input', function () {
 		if (this.value === '') self.clear();
 	});
@@ -159,7 +166,7 @@ SimpleMap.prototype.setupMap = function () {
 		// If we have a place
 		var place = this.getPlace();
 
-		if (place.geometry) {
+		if (place && place.geometry) {
 			lat = place.geometry.location.lat();
 			lng = place.geometry.location.lng();
 

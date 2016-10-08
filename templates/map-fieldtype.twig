@@ -7,7 +7,9 @@
 	value: value is not null and value.address ? value.address : '',
 }) }}
 
+{% if settings.hideMap != "true" %}
 <div id="{{ id }}" class="simplemap--map"></div>
+{% endif %}
 
 <input type="hidden" name="{{ name }}[lat]" value="{{ value is not null and value.lat is defined ? value.lat }}" id="{{ id }}-input-lat">
 <input type="hidden" name="{{ name }}[lng]" value="{{ value is not null and value.lng is defined ? value.lng }}" id="{{ id }}-input-lng">

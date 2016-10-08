@@ -18,24 +18,34 @@ var SimpleMap = function (key, mapId, settings) {
 		partsBase: document.getElementById(mapId + '-input-parts-base')
 	};
 
-	// Check we have everything we need
-	if (!this.mapEl || !this.address || !this.inputs.lat || !this.inputs.lng || !this.inputs.address || !this.inputs.parts) {
-		SimpleMap.Fail('Map inputs with id ' + mapId + ' not found!');
-		return;
-	}
-
 	// Setup settings
 	this.settings = {
 		height: this.settings.height,
 		lat: parseFloat(this.settings.lat),
 		lng: parseFloat(this.settings.lng),
-		zoom: parseInt(this.settings.zoom)
+		zoom: parseInt(this.settings.zoom),
+		hideMap: this.settings.hideMap,
+
+		country: this.settings.country,
+		type: this.settings.type,
+		boundary: this.settings.boundary
 	};
 
 	// Stop submission on address field enter
 	this.address.addEventListener('keydown', function (e) {
 		if (e.keyCode === 13) e.preventDefault();
 	});
+
+	if (this.settings.hideMap) {
+		this.AutoCompleteOnly(key);
+		return;
+	}
+
+	// Check we have everything we need
+	if (!this.mapEl || !this.address || !this.inputs.lat || !this.inputs.lng || !this.inputs.address || !this.inputs.parts) {
+		SimpleMap.Fail('Map inputs with id ' + mapId + ' not found!');
+		return;
+	}
 
 	var self = this;
 
@@ -53,17 +63,36 @@ var SimpleMap = function (key, mapId, settings) {
 	});
 
 	// Re-draw map on tab change
-	[].slice.call(document.getElementById('tabs').getElementsByTagName('a')).forEach(function (el) {
-		el.addEventListener('click', function () {
-			var x = self.map.getZoom(),
-				c = self.map.getCenter();
+	if (document.getElementById('tabs')) {
+		[].slice.call(document.getElementById('tabs').getElementsByTagName('a')).forEach(function (el) {
+			el.addEventListener('click', function () {
+				var x = self.map.getZoom(),
+					c = self.map.getCenter();
 
-			setTimeout(function () {
-				google.maps.event.trigger(self.map,'resize');
-				self.map.setZoom(x);
-				self.map.setCenter(c);
-			}, 1);
+				setTimeout(function () {
+					google.maps.event.trigger(self.map, 'resize');
+					self.map.setZoom(x);
+					self.map.setCenter(c);
+				}, 1);
+			});
 		});
+	}
+};
+
+SimpleMap.prototype.AutoCompleteOnly = function (key) {
+	var self = this;
+
+	// Load Google APIs if they aren't already
+	if (typeof google === "undefined") {
+		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI(key);
+	} else if (!google.maps || !google.maps.places) { // Load Google Maps APIs if the aren't already
+		if (!window.simpleMapsLoadingGoogle) SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
+	} else {
+		if (!self.setup) self.setupAutoComplete();
+	}
+
+	document.addEventListener('SimpleMapsGAPILoaded', function () {
+		if (!self.setup) self.setupAutoComplete();
 	});
 };
 
@@ -93,10 +122,20 @@ SimpleMap.LoadGoogleAPI.LoadMapsApi = function (key) {
 	}});
 };
 
+SimpleMap.prototype.formatBoundary = function () {
+	if (this.settings.boundary !== '') {
+		var ne = new google.maps.LatLng(this.settings.boundary.ne.lat, this.settings.boundary.ne.lng),
+			sw = new google.maps.LatLng(this.settings.boundary.sw.lat, this.settings.boundary.sw.lng);
+		this.settings.boundary = new google.maps.LatLngBounds(ne, sw);
+	}
+};
+
 // Setup Map
 SimpleMap.prototype.setupMap = function () {
 	this.setup = true;
 	var self = this;
+
+	this.formatBoundary();
 
 	// Geocoder (for address search)
 	this.geocoder = new google.maps.Geocoder();
@@ -111,21 +150,7 @@ SimpleMap.prototype.setupMap = function () {
 		mapTypeId:	google.maps.MapTypeId.ROADMAP
 	});
 
-	// Setup address search
-	var autocomplete = new google.maps.places.Autocomplete(this.address);
-	autocomplete.map = this.map;
-	autocomplete.bindTo('bounds', this.map);
-
-	// Update map on paste
-	this.address.addEventListener('paste', function () {
-		setTimeout(function () {
-			google.maps.event.trigger(autocomplete, 'place_changed');
-		}, 1);
-	});
-
-	this.address.addEventListener('input', function () {
-		if (this.value === '') self.clear();
-	});
+	this.setupAutoComplete();
 
 	// Add marker
 	this.map.marker = new google.maps.Marker({
@@ -144,6 +169,64 @@ SimpleMap.prototype.setupMap = function () {
 
 	// Update map to saved zoom
 	this.map.setZoom(parseInt(zoom));
+
+	// When the marker is dropped
+	google.maps.event.addListener(this.map.marker, 'dragend', function () {
+		self.sync(true);
+	});
+
+	// When map is clicked
+	google.maps.event.addListener(this.map, 'click', function (e) {
+
+		var lat = e.latLng.lat(),
+			lng = e.latLng.lng();
+
+		self.update(lat, lng).sync();
+	});
+
+	// When the zoom is changed
+	google.maps.event.addListener(this.map, 'zoom_changed', function () {
+		var zoom = this.getZoom();
+
+		self.updateZoom(zoom).center();
+	});
+};
+
+SimpleMap.prototype.setupAutoComplete = function () {
+	if (!this.setup) {
+		this.setup = true;
+		this.formatBoundary();
+	}
+	if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
+	var self = this;
+
+	// Setup address search
+	var opts = {};
+	if (this.settings.country !== '') opts.componentRestrictions = {country: this.settings.country};
+	if (this.settings.type !== '') opts.types = [this.settings.type];
+	if (this.settings.boundary !== '') opts.bounds = this.settings.boundary;
+
+	var autocomplete = new google.maps.places.Autocomplete(this.address, opts);
+	if (!this.settings.hideMap) {
+		autocomplete.map = this.map;
+		autocomplete.bindTo('bounds', this.map);
+	}
+
+	// Initial Update
+	setTimeout(function () {
+		google.maps.event.trigger(autocomplete, 'place_changed');
+	}, 1);
+
+	// Update map on paste
+	this.address.addEventListener('paste', function () {
+		setTimeout(function () {
+			google.maps.event.trigger(autocomplete, 'place_changed');
+		}, 1);
+	});
+
+	this.address.addEventListener('input', function () {
+		if (this.value === '') self.clear();
+	});
 
 	// When the auto-complete place changes
 	google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -184,27 +267,6 @@ SimpleMap.prototype.setupMap = function () {
 		});
 
 	});
-
-	// When the marker is dropped
-	google.maps.event.addListener(this.map.marker, 'dragend', function () {
-		self.sync(true);
-	});
-
-	// When map is clicked
-	google.maps.event.addListener(this.map, 'click', function (e) {
-
-		var lat = e.latLng.lat(),
-			lng = e.latLng.lng();
-
-		self.update(lat, lng).sync();
-	});
-
-	// When the zoom is changed
-	google.maps.event.addListener(this.map, 'zoom_changed', function () {
-		var zoom = this.getZoom();
-
-		self.updateZoom(zoom).center();
-	});
 };
 
 SimpleMap.prototype.update = function (lat, lng, leaveMarker, leaveFields) {
@@ -215,7 +277,7 @@ SimpleMap.prototype.update = function (lat, lng, leaveMarker, leaveFields) {
 		this.inputs.lng.value = lng;
 	}
 
-	if (!leaveMarker) {
+	if (!leaveMarker && !this.settings.hideMap) {
 		this.map.marker.setPosition(latLng);
 		this.map.marker.setVisible(true);
 	}
@@ -230,13 +292,15 @@ SimpleMap.prototype.updateZoom = function (zoom) {
 };
 
 SimpleMap.prototype.center = function () {
+	if (this.settings.hideMap) return this;
+
 	this.map.setCenter(this.map.marker.getPosition());
 
 	return this;
 };
 
 SimpleMap.prototype.sync = function (update) {
-	var pos = this.map.marker.getPosition(),
+	var pos = this.settings.hideMap ? new google.maps.LatLng(this.inputs.lat.value, this.inputs.lng.value) : this.map.marker.getPosition(),
 		self = this;
 
 	// Update address / lat / lng based off marker location
@@ -253,6 +317,7 @@ SimpleMap.prototype.sync = function (update) {
 			self.inputs.parts.removeChild(self.inputs.parts.firstChild);
 
 		var name = self.inputs.partsBase.name;
+		console.log(loc.address_components);
 		loc.address_components.forEach(function (el) {
 			var input = document.createElement('input'),
 				n = el.types[0];
@@ -262,6 +327,11 @@ SimpleMap.prototype.sync = function (update) {
 			input.name = name + '[' + n + ']';
 			input.value = el.long_name;
 			self.inputs.parts.appendChild(input);
+
+			var inputS = input.cloneNode(true);
+			inputS.name = name + '[' + n + '_short]';
+			inputS.value = el.short_name;
+			self.inputs.parts.appendChild(inputS);
 		});
 	});
 

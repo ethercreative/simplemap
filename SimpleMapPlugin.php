@@ -24,12 +24,12 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.2.4';
+		return '1.3.0';
 	}
 
 	public function getSchemaVersion()
 	{
-		return '0.0.5';
+		return '0.0.6';
 	}
 
 	public function getDeveloper()
@@ -55,8 +55,7 @@ class SimpleMapPlugin extends BasePlugin {
 	protected function defineSettings()
 	{
 		return array(
-			'browserApiKey' => array(AttributeType::String),
-			'serverApiKey' => array(AttributeType::String)
+			'browserApiKey' => array(AttributeType::String)
 		);
 	}
 

@@ -167,10 +167,10 @@ class SimpleMapService extends BaseApplicationComponent {
 	 */
 	private function _getLatLngFromAddress ($address)
 	{
-		if (!$this->settings['serverApiKey']) return null;
+		if (!$this->settings['browserApiKey']) return null;
 
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . rawurlencode($address)
-			. '&key=' . $this->settings['serverApiKey'];
+			. '&key=' . $this->settings['browserApiKey'];
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

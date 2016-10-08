@@ -14,7 +14,8 @@ The field type will return an array containing `lat`, `lng`, `zoom`, `address`, 
 **`parts`**
 
 This contains the locations address, broken down into its constituent parts. All values are optional so you'll need to have checks on any you use to make sure they exist.  
-A list of the available values can be found [here](https://developers.google.com/maps/documentation/geocoding/intro#Types).
+A list of the available values can be found [here](https://developers.google.com/maps/documentation/geocoding/intro#Types).  
+To access the short version of any part, append `_short` to the end of its name. E.g. `{{ myMapField.country_short }}`.
 
 **Searching and Sorting**
 
@@ -39,6 +40,13 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 ![How it looks](resources/preview.png)
 
 ## Changelog
+
+### 1.3.0
+- Added option to hide the map, leaving only the address input
+- Added ability to restrict auto-complete by country, address type, and boundary
+- Added `_short` prefix to all parts, returning the short value. **You will need to re-save your fields for this to take effect.**
+- Fixed map JS erroring when in globals
+- Merged API keys into one
 
 ### 1.2.4
 - The address input automatically updates the map after paste

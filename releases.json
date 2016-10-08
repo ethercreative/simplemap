@@ -100,7 +100,7 @@
     "notes": [
       "[Added] Added option to hide the map, leaving only the address input",
       "[Added] Added ability to restrict auto-complete by country, address type, and boundary",
-      "[Added] Added `_short` prefix to all parts, returning the short value. **You will need to re-save your fields for this to take effect.**",
+      "[Added] Added `_short` prefix to all parts, returning the short value. **You will need to re-save your entries for this to take effect.**",
       "[Fixed] Fixed map JS erroring when in globals",
       "[Improved] Merged API keys into one"
     ]

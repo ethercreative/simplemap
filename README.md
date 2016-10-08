@@ -44,7 +44,7 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 ### 1.3.0
 - Added option to hide the map, leaving only the address input
 - Added ability to restrict auto-complete by country, address type, and boundary
-- Added `_short` prefix to all parts, returning the short value. **You will need to re-save your fields for this to take effect.**
+- Added `_short` prefix to all parts, returning the short value. **You will need to re-save your entries for this to take effect.**
 - Fixed map JS erroring when in globals
 - Merged API keys into one
 

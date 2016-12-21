@@ -31,7 +31,16 @@ class SimpleMap_MapFeedMeFieldType extends BaseFeedMeFieldType
         
         // Check for empty Address
         if (!isset($content['address'])) {
-            $content['address'] = $this->_getAddressFromLatLng($content['lat'], $content['lng']);
+            $addressInfo = $this->_getAddressFromLatLng($content['lat'], $content['lng']);
+            $content['address'] = $addressInfo['formatted_address'];
+
+            // Populate address parts
+            if (isset($addressInfo['address_components'])) {
+                foreach ($addressInfo['address_components'] as $component) {
+                    $content['parts'][$component['types'][0]] = $component['long_name'];
+                    $content['parts'][$component['types'][0] . '_short'] = $component['short_name'];
+                }
+            }
         }
 
         // Check for empty Longitude/Latitude
@@ -92,7 +101,7 @@ class SimpleMap_MapFeedMeFieldType extends BaseFeedMeFieldType
 
         if (empty($resp['results'])) return null;
 
-        return $resp['results'][0]['formatted_address'];
+        return $resp['results'][0];
     }
     
 }

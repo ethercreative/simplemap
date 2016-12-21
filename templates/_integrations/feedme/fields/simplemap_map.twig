@@ -1,0 +1,38 @@
+{% set simpleMapSubfields = ['lat','lng','zoom','address'] %}
+
+{% for subfield in simpleMapSubfields %}
+    {% set optionLabel  = field.name ~ ' (' ~ subfield ~ ')' %}
+    {% set optionLabelHandle = field.handle ~ '[' ~ subfield ~ ']' %}
+    {% set optionHandle = field.handle ~ '--' ~ subfield %}
+
+    <tr>
+        <td class="col-field">
+            <div class="field">
+                <div class="heading">
+                    <label>{{ optionLabel }}</label>
+
+                    <div class="instructions">
+                        <code>{{ optionLabelHandle }}</code>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td class="col-map">
+            {% namespace 'fieldMapping' %}
+                {{ forms.selectField({
+                    id: optionHandle,
+                    name: optionHandle,
+                    value: feed.fieldMapping[optionHandle] ?? '',
+                    options: feedData,
+                }) }}
+            {% endnamespace %}
+        </td>
+
+        <td class="col-default">
+            <div class="default-fields">
+                
+            </div>
+        </td>
+    </tr>
+{% endfor %}

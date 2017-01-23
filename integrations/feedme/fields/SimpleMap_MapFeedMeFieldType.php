@@ -16,14 +16,18 @@ class SimpleMap_MapFeedMeFieldType extends BaseFeedMeFieldType
     // Public Methods
     // =========================================================================
 
-    public function prepFieldData($element, $field, $data, $handle, $options)
+    public function prepFieldData($element, $field, $fieldData, $handle, $options)
     {
         // Initialize content array
         $content = array();
 
+        $data = $fieldData['data'];
+
         foreach ($data as $subfieldHandle => $subfieldData) {
             // Set value to subfield of correct address array
-            $content[$subfieldHandle] = $subfieldData;
+            if (isset($subfieldData['data'])) {
+                $content[$subfieldHandle] = $subfieldData['data'];
+            }
         }
 
         // In order to full-fill any empty gaps in data (lng/lat/address), we check to see if we have any data missing
@@ -31,23 +35,27 @@ class SimpleMap_MapFeedMeFieldType extends BaseFeedMeFieldType
         
         // Check for empty Address
         if (!isset($content['address'])) {
-            $addressInfo = $this->_getAddressFromLatLng($content['lat'], $content['lng']);
-            $content['address'] = $addressInfo['formatted_address'];
+            if (isset($content['lat']) || isset($content['lng'])) {
+                $addressInfo = $this->_getAddressFromLatLng($content['lat'], $content['lng']);
+                $content['address'] = $addressInfo['formatted_address'];
 
-            // Populate address parts
-            if (isset($addressInfo['address_components'])) {
-                foreach ($addressInfo['address_components'] as $component) {
-                    $content['parts'][$component['types'][0]] = $component['long_name'];
-                    $content['parts'][$component['types'][0] . '_short'] = $component['short_name'];
+                // Populate address parts
+                if (isset($addressInfo['address_components'])) {
+                    foreach ($addressInfo['address_components'] as $component) {
+                        $content['parts'][$component['types'][0]] = $component['long_name'];
+                        $content['parts'][$component['types'][0] . '_short'] = $component['short_name'];
+                    }
                 }
             }
         }
 
         // Check for empty Longitude/Latitude
         if (!isset($content['lat']) || !isset($content['lng'])) {
-            $latlng = $this->_getLatLngFromAddress($content['address']);
-            $content['lat'] = $latlng['lat'];
-            $content['lng'] = $latlng['lng'];
+            if (isset($content['address'])) {
+                $latlng = $this->_getLatLngFromAddress($content['address']);
+                $content['lat'] = $latlng['lat'];
+                $content['lng'] = $latlng['lng'];
+            }
         }
 
         // Return data

@@ -41,6 +41,9 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 
 ## Changelog
 
+### 1.4.0
+- Changed Git folder structure to exclude surplus files from plugin directory
+
 ### 1.3.0
 - Added option to hide the map, leaving only the address input
 - Added ability to restrict auto-complete by country, address type, and boundary

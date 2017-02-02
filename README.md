@@ -43,6 +43,8 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 
 ### 1.4.0
 - Changed Git folder structure to exclude surplus files from plugin directory
+- Lat / Lng fields are now visible and editable
+- Added option to hide Lat / Lng fields
 
 ### 1.3.0
 - Added option to hide the map, leaving only the address input

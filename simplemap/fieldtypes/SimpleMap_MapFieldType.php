@@ -60,7 +60,10 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 			'lng' => array(AttributeType::Mixed, 'min' => 0),
 			'zoom' => array(AttributeType::Number, 'min' => 0),
 			'height' => array(AttributeType::Number, 'min' => 100),
+
 			'hideMap' => array(AttributeType::Bool, 'default' => false),
+			'hideLatLng' => array(AttributeType::Bool, 'default' => false),
+
 			'countryRestriction' => array(AttributeType::String),
 			'typeRestriction' => array(AttributeType::String),
 

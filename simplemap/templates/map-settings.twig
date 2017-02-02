@@ -52,6 +52,14 @@
 	on: settings.hideMap
 }) }}
 
+{{ forms.lightswitchField({
+	label: "Hide Lat/Lng"|t,
+	instructions: "When on, the latitude & longitude fields will be hidden"|t,
+	id: 'hideLatLng',
+	name: 'hideLatLng',
+	on: settings.hideLatLng
+}) }}
+
 <hr>
 
 {{ forms.selectField({

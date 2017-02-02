@@ -1,18 +1,31 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
-	placeholder: 'Address',
-	id: id ~ '-address',
-	class: 'simplemap--address',
-	value: value is not null and value.address ? value.address : '',
-}) }}
+<div class="field" id="{{ id }}-address-field">
+	<div class="input ltr simplemap--address-field">
+		<input class="text simplemap--address fullwidth" type="text"
+		       id="{{ id }}-address" autocomplete="off" placeholder="Address"
+		       value="{{ value is not null and value.address ? value.address }}">
+
+		<div class="simplemap--lat-lng{{ settings.hideLatLng ? ' hidden' }}">
+			<input class="text fullwidth" type="number"
+			       step="0.000000000000001" width="19"
+			       id="{{ id }}-input-lat" autocomplete="off" placeholder="Lat"
+			       value="{{ value is not null and value.lat is defined ? value.lat }}">
+
+			<input class="text fullwidth" type="number"
+			       step="0.000000000000001" width="19"
+			       id="{{ id }}-input-lng" autocomplete="off" placeholder="Lng"
+			       value="{{ value is not null and value.lng is defined ? value.lng }}">
+		</div>
+	</div>
+</div>
 
 {% if settings.hideMap != "true" %}
 <div id="{{ id }}" class="simplemap--map"></div>
 {% endif %}
 
-<input type="hidden" name="{{ name }}[lat]" value="{{ value is not null and value.lat is defined ? value.lat }}" id="{{ id }}-input-lat">
-<input type="hidden" name="{{ name }}[lng]" value="{{ value is not null and value.lng is defined ? value.lng }}" id="{{ id }}-input-lng">
+{#<input type="hidden" name="{{ name }}[lat]" value="{{ value is not null and value.lat is defined ? value.lat }}" id="{{ id }}-input-lat">#}
+{#<input type="hidden" name="{{ name }}[lng]" value="{{ value is not null and value.lng is defined ? value.lng }}" id="{{ id }}-input-lng">#}
 <input type="hidden" name="{{ name }}[zoom]" value="{{ value is not null and value.zoom is defined and value.zoom is not null ? value.zoom : settings.zoom }}" id="{{ id }}-input-zoom">
 <input type="hidden" name="{{ name }}[address]" value="{{ value is not null and value.address is defined ? value.address }}" id="{{ id }}-input-address">
 <input type="hidden" name="{{ name }}[parts]" id="{{ id }}-input-parts-base">

@@ -6,9 +6,10 @@
 	 * @param {string} key - Google Maps API key
 	 * @param {string} mapId - Map field ID
 	 * @param {object} settings - The map seetings object
+	 * @param {string} locale - The entries locale
 	 * @constructor
 	 */
-	var SimpleMap = function (key, mapId, settings) {
+	var SimpleMap = function (key, mapId, settings, locale) {
 		if (!key) {
 			SimpleMap.Fail('Missing API Key!');
 			return;
@@ -39,7 +40,9 @@
 			
 			country: this.settings.country,
 			type: this.settings.type,
-			boundary: this.settings.boundary
+			boundary: this.settings.boundary,
+			
+			locale: locale,
 		};
 		
 		// Stop submission on address field enter
@@ -70,11 +73,11 @@
 		// Load Google APIs if they aren't already
 		if (typeof google === "undefined") {
 			if (!window.simpleMapsLoadingGoogle)
-				SimpleMap.LoadGoogleAPI(key);
+				SimpleMap.LoadGoogleAPI(key, locale);
 		} else if (!google.maps || !google.maps.places) {
 			// Load Google Maps APIs if the aren't already
 			if (!window.simpleMapsLoadingGoogle)
-				SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
+				SimpleMap.LoadGoogleAPI.LoadMapsApi(key, locale);
 		} else {
 			if (!self.setup)
 				self.setupMap();
@@ -124,11 +127,11 @@
 		// Load Google APIs if they aren't already
 		if (typeof google === "undefined") {
 			if (!window.simpleMapsLoadingGoogle)
-				SimpleMap.LoadGoogleAPI(key);
+				SimpleMap.LoadGoogleAPI(key, this.settings.locale);
 		} else if (!google.maps || !google.maps.places) {
 			// Load Google Maps APIs if the aren't already
 			if (!window.simpleMapsLoadingGoogle)
-				SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
+				SimpleMap.LoadGoogleAPI.LoadMapsApi(key, this.settings.locale);
 		} else {
 			if (!self.setup)
 				self.setupAutoComplete();
@@ -161,19 +164,20 @@
 	 * Load the google API into the dom
 	 *
 	 * @param {string} key - Google Maps API key
+	 * @param {string} locale - The locale
 	 * @static
 	 */
-	SimpleMap.LoadGoogleAPI = function (key) {
+	SimpleMap.LoadGoogleAPI = function (key, locale) {
 		window.simpleMapsLoadingGoogle = true;
 		
 		var gmjs = document.createElement('script');
 		gmjs.type = 'text/javascript';
 		gmjs.src = 'https://www.google.com/jsapi?key=' + key;
 		gmjs.onreadystatechange = function () {
-			SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
+			SimpleMap.LoadGoogleAPI.LoadMapsApi(key, locale);
 		};
 		gmjs.onload = function () {
-			SimpleMap.LoadGoogleAPI.LoadMapsApi(key);
+			SimpleMap.LoadGoogleAPI.LoadMapsApi(key, locale);
 		};
 		document.body.appendChild(gmjs);
 	};
@@ -182,11 +186,16 @@
 	 * Load the google maps API into the dom
 	 *
 	 * @param {string} key - Google Maps API key
+	 * @param {string} locale - The locale
 	 * @static
 	 */
-	SimpleMap.LoadGoogleAPI.LoadMapsApi = function (key) {
+	SimpleMap.LoadGoogleAPI.LoadMapsApi = function (key, locale) {
+		console.log(locale);
+		
 		google.load('maps', '3', {
-			other_params: 'libraries=places&key='+key,
+			other_params: 'libraries=places&key=' + key +
+			'&language=' + locale.replace('_', '-') +
+			'&region=' + locale,
 			callback: function () {
 				document.dispatchEvent(new Event('SimpleMapsGAPILoaded'));
 			}
@@ -380,8 +389,8 @@
 	/**
 	 * Update the map location
 	 *
-	 * @param {float} lat - Latitude
-	 * @param {float} lng - Longitude
+	 * @param {float|Number} lat - Latitude
+	 * @param {float|Number} lng - Longitude
 	 * @param {boolean=} leaveMarker - Leave the marker in it's old position
 	 * @param {boolean=} leaveFields - Leave the lat/lng fields with their old
 	 *     values
@@ -432,7 +441,7 @@
 	/**
 	 * Sync the hidden fields to the maps location
 	 *
-	 * @param {bool} update - Update the map
+	 * @param {boolean=} update - Update the map
 	 * @return {SimpleMap}
 	 */
 	SimpleMap.prototype.sync = function (update) {

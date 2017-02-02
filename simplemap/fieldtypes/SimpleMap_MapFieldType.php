@@ -37,11 +37,12 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 			$boundary = JsonHelper::encode(array('ne' => $ne, 'sw' => $sw));
 		}
 
-
 		$key = craft()->plugins->getPlugin('SimpleMap')->getSettings()->browserApiKey;
 
+		$locale = $value->ownerLocale ?: craft()->language;
+
 		craft()->templates->includeJsResource('simplemap/SimpleMap_Map.js');
-		craft()->templates->includeJs("new SimpleMap('{$key}', '{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}', hideMap: {$settings->hideMap}, country: '{$settings->countryRestriction}', type: '{$settings->typeRestriction}', boundary: {$boundary}});");
+		craft()->templates->includeJs("new SimpleMap('{$key}', '{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}', hideMap: {$settings->hideMap}, country: '{$settings->countryRestriction}', type: '{$settings->typeRestriction}', boundary: {$boundary}}, '{$locale}');");
 
 		craft()->templates->includeCssResource('simplemap/SimpleMap_Map.css');
 

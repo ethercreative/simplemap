@@ -7,12 +7,12 @@
 		       value="{{ value is not null and value.address ? value.address }}">
 
 		<div class="simplemap--lat-lng{{ settings.hideLatLng ? ' hidden' }}">
-			<input class="text fullwidth" type="number"
+			<input class="text fullwidth" type="number" name="{{ name }}[lat]"
 			       step="0.000000000000001" width="19"
 			       id="{{ id }}-input-lat" autocomplete="off" placeholder="Lat"
 			       value="{{ value is not null and value.lat is defined ? value.lat }}">
 
-			<input class="text fullwidth" type="number"
+			<input class="text fullwidth" type="number" name="{{ name }}[lng]"
 			       step="0.000000000000001" width="19"
 			       id="{{ id }}-input-lng" autocomplete="off" placeholder="Lng"
 			       value="{{ value is not null and value.lng is defined ? value.lng }}">

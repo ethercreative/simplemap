@@ -29,7 +29,7 @@ class SimpleMapService extends BaseApplicationComponent {
 	public function getField (SimpleMap_MapFieldType $fieldType, $value)
 	{
 		$owner = $fieldType->element;
-		$field = $fieldType->model;;
+		$field = $fieldType->model;
 
 		$record = SimpleMap_MapRecord::model()->findByAttributes(array(
 			'ownerId'     => $owner->id,
@@ -115,7 +115,8 @@ class SimpleMapService extends BaseApplicationComponent {
 	}
 
 
-	/// PRIVATE ///
+	// Private
+	// =========================================================================
 
 	/**
 	 * Search for entries by location

@@ -146,6 +146,7 @@ SimpleMap.prototype.setupMap = function () {
 	// Create Map
 	this.map = new google.maps.Map(this.mapEl, {
 		zoom:		this.settings.zoom,
+		scrollwheel:    false,
 		center:		new google.maps.LatLng(this.settings.lat, this.settings.lng),
 		mapTypeId:	google.maps.MapTypeId.ROADMAP
 	});

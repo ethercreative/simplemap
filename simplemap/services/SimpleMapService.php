@@ -4,6 +4,8 @@ namespace Craft;
 
 class SimpleMapService extends BaseApplicationComponent {
 
+	private static $browserApiKey;
+
 	public $settings;
 
 	public $searchLatLng;
@@ -81,6 +83,13 @@ class SimpleMapService extends BaseApplicationComponent {
 			'ownerLocale' => $owner->locale
 		));
 
+		list($data['parts'], $data['address']) = $this->_getPartsFromLatLng(
+			$data['lat'],
+			$data['lng'],
+			array_key_exists("address", $data) ? $data['address'] : "",
+			$owner->locale
+		);
+
 		if (!$record) {
 			$record = new SimpleMap_MapRecord;
 			$record->ownerId     = $owner->id;
@@ -93,7 +102,9 @@ class SimpleMapService extends BaseApplicationComponent {
 		$save = $record->save();
 
 		if (!$save) {
-			SimpleMapPlugin::log(print_r($record->getErrors(), true), LogLevel::Error);
+			SimpleMapPlugin::log(
+				print_r($record->getErrors(), true), LogLevel::Error
+			);
 		}
 
 		return $save;
@@ -135,9 +146,11 @@ class SimpleMapService extends BaseApplicationComponent {
 
 		if (!in_array($unit, array('km', 'mi'))) $unit = 'km';
 
-		if (is_string($location)) $location = $this->_getLatLngFromAddress($location);
+		if (is_string($location))
+			$location = self::getLatLngFromAddress($location);
 		if (is_array($location)) {
-			if (!array_key_exists('lat', $location) || !array_key_exists('lng', $location))
+			if (!array_key_exists('lat', $location) ||
+			    !array_key_exists('lng', $location))
 				$location = null;
 		} else return;
 
@@ -166,12 +179,15 @@ class SimpleMapService extends BaseApplicationComponent {
 	 *
 	 * TODO: Cache results?
 	 */
-	private function _getLatLngFromAddress ($address)
+	public static function getLatLngFromAddress ($address)
 	{
-		if (!$this->settings['browserApiKey']) return null;
+		$browserApiKey = self::getAPIKey();
 
-		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . rawurlencode($address)
-			. '&key=' . $this->settings['browserApiKey'];
+		if (!$browserApiKey) return null;
+
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+		       . rawurlencode($address)
+		       . '&key=' . $browserApiKey;
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -186,6 +202,67 @@ class SimpleMapService extends BaseApplicationComponent {
 		return $resp['results'][0]['geometry']['location'];
 	}
 
+	/**
+	 * Get the address parts for the selected location, matching the
+	 * textual address where possible.
+	 *
+	 * @param double $lat
+	 * @param double $lng
+	 * @param string $address
+	 * @param string $locale
+	 *
+	 * @return array
+	 */
+	private function _getPartsFromLatLng ($lat, $lng, $address, $locale)
+	{
+		$browserApiKey = self::getAPIKey();
+
+		if (!$browserApiKey) return [[], $address];
+
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+		       . $lat . ',' . $lng
+		       . '&language=' . $this->_formatLocaleForMap($locale)
+		       . '&key=' . $browserApiKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$resp = json_decode(curl_exec($ch), true);
+
+		if (array_key_exists('error_message', $resp) && $resp['error_message'])
+			SimpleMapPlugin::log($resp['error_message'], LogLevel::Error);
+
+		if (empty($resp['results'])) return [[], $address];
+
+		$result = $resp['results'][0];
+		$formattedAddress = empty($address)
+			? $result['formatted_address']
+			: $address;
+
+		foreach ($resp['results'] as $res) {
+			if ($res['formatted_address'] == $address) {
+				$result = $res;
+				break;
+			}
+		}
+
+		$parts = [];
+		$rawParts = $result['address_components'];
+
+		foreach ($rawParts as $part) {
+			$n = $part['types'][0];
+
+			if (!$n) continue;
+
+			if ($n == 'postal_code_prefix') $n = 'postal_code';
+
+			$parts[$n] = $part['long_name'];
+			$parts[$n . "_short"] = $part['short_name'];
+		}
+
+		return [$parts, $formattedAddress];
+	}
+
 	private function _calculateDistance (SimpleMap_MapModel $model)
 	{
 		if (!$this->searchLatLng || !$this->searchEarthRad) return null;
@@ -197,6 +274,52 @@ class SimpleMapService extends BaseApplicationComponent {
 		$ln2 = $model->lng;
 
 		return ($this->searchEarthRad * acos(cos(deg2rad($lt1)) * cos(deg2rad($lt2)) * cos(deg2rad($ln2) - deg2rad($ln1)) + sin(deg2rad($lt1)) * sin(deg2rad($lt2))));
+	}
+
+	private function _formatLocaleForMap ($locale) {
+		$locale = array_map(
+			'strtolower',
+			explode("_", $locale)
+		);
+
+		if (count($locale) == 1)
+			return $locale[0];
+
+		/**
+		 * Locales that have different, supported, dialects
+		 *
+		 * @see https://developers.google.com/maps/faq#languagesupport
+		 */
+		$allowedSpecifics = [
+			"en","au","gb", // English
+			"pt","br",      // Portuguese
+			"zh","cn","tw", // Chinese
+		];
+
+		if (
+			in_array($locale[0], $allowedSpecifics) &&
+			in_array($locale[1], $allowedSpecifics)
+		) return $locale[0] . "-" . strtoupper($locale[1]);
+
+		return $locale[0];
+	}
+
+	private static function getAPIKey ()
+	{
+		if (self::$browserApiKey)
+			return self::$browserApiKey;
+
+		$browserApiKey = craft()->plugins
+			                 ->getPlugin('SimpleMap')
+			                 ->getSettings()['browserApiKey'];
+
+		if (!$browserApiKey) {
+			SimpleMapPlugin::log("Missing API Key", LogLevel::Error);
+			$browserApiKey = "";
+		}
+
+		self::$browserApiKey = $browserApiKey;
+		return self::$browserApiKey;
 	}
 
 }

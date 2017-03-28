@@ -5,7 +5,7 @@ A beautifully simple Google Map field type for Craft CMS. Full localization supp
 searching by location and sorting by distance.
 
 ## Installation
-Clone this repo into `craft/plugins/simplemap`.
+Copy the `simplemap` folder into `craft/plugins`.
 
 ## Usage
 Create the field as you would any other.  
@@ -40,6 +40,17 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 ![How it looks](resources/preview.png)
 
 ## Changelog
+
+### 1.5.0 - *The "about time" update*
+- Added [FeedMe 2](https://sgroup.com.au/plugins/feedme) support! (thanks to @engram-design, #23)
+- Added support for [Neo](https://github.com/benjamminf/craft-neo). #21
+- Fixed when using the address search, locations that are non-specific (i.e. the name of a country) will no longer be forced to be specific.
+- Fixed "Unnamed Roads" no longer change to a different unnamed road when the map is re-loaded. #26
+- Disabled scrollwheel on map, #27
+- Details about the selected location are now populated server-side, no more JavaScript shittery! #30
+- Improved locale specific address details #24
+- If the query limit is reached, the map will re-try after 1 second, a maximum of 5 times. #19
+- The address of the map will be returned when output as a string, i.e. `{{ entry.myMapField }}`. #29
 
 ### 1.4.0
 - Changed Git folder structure to exclude surplus files from plugin directory
@@ -94,7 +105,7 @@ You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 
 ---
   
-Copyright © 2015 Ether Creative <hello@ethercreative.co.uk>
+Copyright © 2017 Ether Creative <hello@ethercreative.co.uk>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -17,6 +17,7 @@
 		
 		// Vars
 		this.setup = false;
+		this.updateByAddress = false;
 		this.settings = settings;
 		this.mapEl = document.getElementById(mapId);
 		this.address = document.getElementById(mapId + '-address');
@@ -25,8 +26,6 @@
 			lng: document.getElementById(mapId + '-input-lng'),
 			zoom: document.getElementById(mapId + '-input-zoom'),
 			address: document.getElementById(mapId + '-input-address'),
-			parts: document.getElementById(mapId + '-input-address-parts'),
-			partsBase: document.getElementById(mapId + '-input-parts-base')
 		};
 		
 		// Setup settings
@@ -60,9 +59,7 @@
 			!this.mapEl ||
 			!this.address ||
 			!this.inputs.lat ||
-			!this.inputs.lng ||
-			!this.inputs.address ||
-			!this.inputs.parts
+			!this.inputs.lng
 		) {
 			SimpleMap.Fail('Map inputs with id ' + mapId + ' not found!');
 			return;
@@ -190,8 +187,6 @@
 	 * @static
 	 */
 	SimpleMap.LoadGoogleAPI.LoadMapsApi = function (key, locale) {
-		console.log(locale);
-		
 		google.load('maps', '3', {
 			other_params: 'libraries=places&key=' + key +
 			'&language=' + locale.replace('_', '-') +
@@ -236,12 +231,13 @@
 		
 		// Create Map
 		this.map = new google.maps.Map(this.mapEl, {
-			zoom:		this.settings.zoom,
-			center:		new google.maps.LatLng(
-							this.settings.lat,
-							this.settings.lng
-						),
-			mapTypeId:	google.maps.MapTypeId.ROADMAP
+			zoom:		 this.settings.zoom,
+			scrollwheel: false,
+			center:		 new google.maps.LatLng(
+						 	 this.settings.lat,
+							 this.settings.lng
+						 ),
+			mapTypeId:	 google.maps.MapTypeId.ROADMAP
 		});
 		
 		this.setupAutoComplete();
@@ -318,11 +314,6 @@
 			autocomplete.bindTo('bounds', this.map);
 		}
 		
-		// Initial Update
-		setTimeout(function () {
-			google.maps.event.trigger(autocomplete, 'place_changed');
-		}, 1);
-		
 		// Update map on paste
 		this.address.addEventListener('paste', function () {
 			setTimeout(function () {
@@ -337,20 +328,8 @@
 		// When the auto-complete place changes
 		google.maps.event.addListener(autocomplete, 'place_changed', function () {
 			var address = self.address.value, lat, lng;
-			self.inputs.address.value = address;
 			
-			// If a Lat/Lng
-			var latLng = address.split(',');
-			if (latLng.length === 2) {
-				lat = latLng[0];
-				lng = latLng[1];
-				
-				if (!isNaN(lat) && !isNaN(lng)) {
-					self.update(parseFloat(lat), parseFloat(lng)).sync().center();
-					
-					return;
-				}
-			}
+			self.updateByAddress = true;
 			
 			// If we have a place
 			var place = this.getPlace();
@@ -450,38 +429,19 @@
 				? new google.maps.LatLng(this.inputs.lat.value, this.inputs.lng.value)
 				: this.map.marker.getPosition();
 		
-		// Update address / lat / lng based off marker location
-		this.geo(pos, function (loc) {
-			// if loc, set address to formatted_location, else to position
-			var address =
-				loc ? loc.formatted_address : pos.lat() + ", " + pos.lng();
-			
-			// update address value
-			self.address.value = address;
-			self.inputs.address.value = address;
-			
-			// update address parts
-			while (self.inputs.parts.firstChild)
-				self.inputs.parts.removeChild(self.inputs.parts.firstChild);
-			
-			var name = self.inputs.partsBase.name;
-			console.log(loc.address_components);
-			loc.address_components.forEach(function (el) {
-				var input = document.createElement('input'),
-					n = el.types[0];
-				if (!n) return;
-				if (n === 'postal_code_prefix') n = 'postal_code';
-				input.type = 'hidden';
-				input.name = name + '[' + n + ']';
-				input.value = el.long_name;
-				self.inputs.parts.appendChild(input);
+		if (!this.updateByAddress) {
+			// Update address / lat / lng based off marker location
+			this.geo(pos, function (loc) {
+				// if loc, set address to formatted_location, else to position
+				var address =
+					loc ? loc.formatted_address : pos.lat() + ", " + pos.lng();
 				
-				var inputS = input.cloneNode(true);
-				inputS.name = name + '[' + n + '_short]';
-				inputS.value = el.short_name;
-				self.inputs.parts.appendChild(inputS);
+				// update address value
+				self.address.value = address;
 			});
-		});
+		}
+		
+		this.updateByAddress = false;
 		
 		if (update) return this.update(pos.lat(), pos.lng(), true);
 		return this;
@@ -492,21 +452,35 @@
 	 *
 	 * @param {google.maps.LatLng|string} latLng - The location to search
 	 * @param {SimpleMap~geoCallback} callback
+	 * @param {number=} tryNumber
 	 */
-	SimpleMap.prototype.geo = function (latLng, callback) {
-		var attr = {'latLng': latLng};
+	SimpleMap.prototype.geo = function (latLng, callback, tryNumber) {
+		if (typeof tryNumber === typeof undefined)
+			tryNumber = 0;
+		
+		var attr = {'latLng': latLng},
+			self = this;
 		if (!latLng.lat) attr = {'address': latLng};
 		
 		this.geocoder.geocode(attr, function (results, status) {
 			var loc;
 			
 			// if location available, set loc to first result
-			if (status == google.maps.GeocoderStatus.OK) {
+			if (status === google.maps.GeocoderStatus.OK) {
 				loc = results[0];
 				
 				// if zero_results, set loc to false
-			} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+			} else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
 				loc = false;
+				
+				// if over_query_limit, wait and try again
+			} else if (
+				status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT &&
+				tryNumber <= 5
+			) {
+				setTimeout(function () {
+					self.geo(latLng, callback, tryNumber + 1);
+				}, 1000);
 				
 				// else return error message
 			} else {
@@ -525,10 +499,7 @@
 		this.inputs.lat.value = '';
 		this.inputs.lng.value = '';
 		this.inputs.zoom.value = '';
-		this.inputs.address.value = '';
-		
-		while (this.inputs.parts.firstChild)
-			this.inputs.parts.removeChild(this.inputs.parts.firstChild);
+		this.address.value = '';
 	};
 	
 	/**

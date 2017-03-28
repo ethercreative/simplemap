@@ -24,7 +24,7 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.3.0';
+		return '1.5.0';
 	}
 
 	public function getSchemaVersion()
@@ -64,6 +64,20 @@ class SimpleMapPlugin extends BasePlugin {
 		return craft()->templates->render('simplemap/plugin-settings', array(
 			'settings' => $this->getSettings()
 		));
+	}
+
+	public function init ()
+	{
+		Craft::import('plugins.simplemap.integrations.feedme.fields.SimpleMap_MapFeedMeFieldType');
+	}
+
+	// ====================================================================== //
+	// For compatibility with Feed Me plugin (v2.x)
+	public function registerFeedMeFieldTypes()
+	{
+		return array(
+			new SimpleMap_MapFeedMeFieldType(),
+		);
 	}
 
 }

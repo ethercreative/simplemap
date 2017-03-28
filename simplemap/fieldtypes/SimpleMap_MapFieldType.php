@@ -25,7 +25,7 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 		if (!$settings->lng) $settings->lng = '0.514951';
 		if (!$settings->zoom) $settings->zoom = '15';
 		if (!$settings->height) $settings->height = '400';
-		$settings->hideMap = $settings->hideMap ? 'true' : 'false';
+		$settings->hideMap = filter_var($settings->hideMap, FILTER_VALIDATE_BOOLEAN);
 		if (!$settings->typeRestriction) $settings->typeRestriction = '';
 
 		$boundary = "''";
@@ -39,10 +39,11 @@ class SimpleMap_MapFieldType extends BaseFieldType {
 
 		$key = craft()->plugins->getPlugin('SimpleMap')->getSettings()->browserApiKey;
 
-		$locale = $value->ownerLocale ?: craft()->language;
+		$locale = $value ? $value->ownerLocale : craft()->language;
 
 		craft()->templates->includeJsResource('simplemap/SimpleMap_Map.js');
-		craft()->templates->includeJs("new SimpleMap('{$key}', '{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}', hideMap: {$settings->hideMap}, country: '{$settings->countryRestriction}', type: '{$settings->typeRestriction}', boundary: {$boundary}}, '{$locale}');");
+		$hideMap = $settings->hideMap ? "true" : "false";
+		craft()->templates->includeJs("new SimpleMap('{$key}', '{$namespacedId}', {lat: '{$settings->lat}', lng: '{$settings->lng}', zoom: '{$settings->zoom}', height: '{$settings->height}', hideMap: {$hideMap}, country: '{$settings->countryRestriction}', type: '{$settings->typeRestriction}', boundary: {$boundary}}, '{$locale}');");
 
 		craft()->templates->includeCssResource('simplemap/SimpleMap_Map.css');
 

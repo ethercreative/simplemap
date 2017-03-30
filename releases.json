@@ -107,7 +107,7 @@
   },
   {
     "version": "1.5.0",
-    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/1.5.0.zip",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.5.0.zip",
     "date": "2017-03-28T14:45:00-08:00",
     "notes": [
       "[Added] Added [FeedMe 2](https://sgroup.com.au/plugins/feedme) support! (thanks to @engram-design, #23)",

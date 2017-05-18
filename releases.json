@@ -120,5 +120,13 @@
       "[Improved] If the query limit is reached, the map will re-try after 1 second, a maximum of 5 times. #19",
       "[Improved] The address of the map will be returned when output as a string, i.e. `{{ entry.myMapField }}`. #29"
     ]
+  },
+  {
+    "version": "1.5.1",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.5.1.zip",
+    "date": "2017-05-18T14:45:00-08:00",
+    "notes": [
+      "[Fixed] Fixed the Lat/Lng inputs not accepting decimals in Chrome #36"
+    ]
   }
 ]

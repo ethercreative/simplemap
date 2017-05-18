@@ -93,6 +93,9 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.5.1
+- Fixed the Lat/Lng inputs not accepting decimals in Chrome #36
+
 ### 1.5.0 - *The "about time" update*
 - Added [FeedMe 2](https://sgroup.com.au/plugins/feedme) support! (thanks to @engram-design, #23)
 - Added support for [Neo](https://github.com/benjamminf/craft-neo). #21

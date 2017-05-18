@@ -1,26 +1,56 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
+{# WHY YOU NO SUPPORT STEP CRUFT??? :( #}
+
+{#{{ forms.textField({
 	label: "Latitude"|t,
 	instructions: 'The maps default latitude',
 	placeholder: '51.272154',
 	size: 10,
+	step: 0.000000000000001,
 	id: 'lat',
 	name: 'lat',
 	value: settings.lat,
 	type: 'number'
-}) }}
+}) }}#}
 
-{{ forms.textField({
+<div class="field" id="lat-field">
+	<div class="heading">
+		<label id="lat-label" for="lat">Latitude</label>
+		<div class="instructions"><p>The maps default latitude</p></div>
+	</div>
+	<div class="input ltr">
+		<input class="text" type="number" id="lat" size="10"
+		       step="0.000000000000001" name="lat"
+		       value="{{ settings.lat }}"
+		       autocomplete="off" placeholder="51.272154">
+	</div>
+</div>
+
+{#{{ forms.textField({
 	label: "Longitude"|t,
 	instructions: 'The maps default longitude',
 	placeholder: '0.514951',
 	size: 10,
+	step: 0.000000000000001,
 	id: 'lng',
 	name: 'lng',
 	value: settings.lng,
 	type: 'number'
-}) }}
+}) }}#}
+
+<div class="field" id="lng-field">
+	<div class="heading">
+		<label id="lng-label" for="lng">Longitude</label>
+		<div class="instructions"><p>The maps default longitude</p></div>
+	</div>
+	<div class="input ltr">
+		<input class="text" type="number" id="lng" size="10"
+		       step="0.000000000000001" name="lng"
+		       value="{{ settings.lng }}"
+		       autocomplete="off" placeholder="0.514951">
+	</div>
+</div>
 
 {{ forms.textField({
 	label: "Zoom Level"|t,

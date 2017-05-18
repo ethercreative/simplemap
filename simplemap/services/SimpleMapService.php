@@ -74,8 +74,8 @@ class SimpleMapService extends BaseApplicationComponent {
 
 		if (!$data) return false;
 
-		$data['lat'] = (double)$data['lat'];
-		$data['lng'] = (double)$data['lng'];
+		$data['lat'] = number_format(floatval($data['lat']), 8);
+		$data['lng'] = number_format(floatval($data['lng']), 8);
 
 		$record = SimpleMap_MapRecord::model()->findByAttributes(array(
 			'ownerId'     => $owner->id,

@@ -11,7 +11,8 @@ class SimpleMapService extends BaseApplicationComponent {
 	public $searchLatLng;
 	public $searchEarthRad;
 
-	/// PUBLIC ///
+	// Public
+	// =========================================================================
 
 	/**
 	 * Initialize
@@ -32,11 +33,12 @@ class SimpleMapService extends BaseApplicationComponent {
 	{
 		$owner = $fieldType->element;
 		$field = $fieldType->model;
+		$locale = $field->translatable ? $owner->locale : null;
 
 		$record = SimpleMap_MapRecord::model()->findByAttributes(array(
 			'ownerId'     => $owner->id,
 			'fieldId'     => $field->id,
-			'ownerLocale' => $owner->locale
+			'ownerLocale' => $locale
 		));
 
 		if (craft()->request->getPost() && $value)
@@ -67,6 +69,7 @@ class SimpleMapService extends BaseApplicationComponent {
 	{
 		$owner = $fieldType->element;
 		$field = $fieldType->model;
+		$locale = $field->translatable ? $owner->locale : null;
 		$content = $fieldType->element->getContent();
 
 		$handle = $field->handle;
@@ -80,21 +83,21 @@ class SimpleMapService extends BaseApplicationComponent {
 		$record = SimpleMap_MapRecord::model()->findByAttributes(array(
 			'ownerId'     => $owner->id,
 			'fieldId'     => $field->id,
-			'ownerLocale' => $owner->locale
+			'ownerLocale' => $locale
 		));
 
 		list($data['parts'], $data['address']) = $this->_getPartsFromLatLng(
 			$data['lat'],
 			$data['lng'],
 			array_key_exists("address", $data) ? $data['address'] : "",
-			$owner->locale
+			$locale
 		);
 
 		if (!$record) {
 			$record = new SimpleMap_MapRecord;
 			$record->ownerId     = $owner->id;
 			$record->fieldId     = $field->id;
-			$record->ownerLocale = $owner->locale;
+			$record->ownerLocale = $locale;
 		}
 
 		$record->setAttributes($data, false);

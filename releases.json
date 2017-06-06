@@ -128,5 +128,17 @@
     "notes": [
       "[Fixed] Fixed the Lat/Lng inputs not accepting decimals in Chrome #36"
     ]
+  },
+  {
+    "version": "1.6.0",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.6.0.zip",
+    "date": "2017-06-06T12:36:00-08:00",
+    "notes": [
+      "[Added] Added alternative Server API key setting #38",
+      "[Fixed] Fix maps not saving because of troubles with dots and commas #41 - @Zae",
+      "[Fixed] Non-translatable fields now actually don’t translate #43",
+      "[Fixed] Added error handling for failed server geocode requests #37",
+      "[Improved] You can no longer tap to move the marker on mobile (drag map instead) #33"
+    ]
   }
 ]

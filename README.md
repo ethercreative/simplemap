@@ -94,7 +94,11 @@ var map = new mapboxgl.Map({
 ## Changelog
 
 ### 1.6.0
-- 
+- Added alternative Server API key setting #38
+- Fix maps not saving because of troubles with dots and commas #41 - @Zae
+- Non-translatable fields now actually don’t translate #43
+- Added error handling for failed server geocode requests #37
+- You can no longer tap to move the marker on mobile (drag map instead) #33
 
 ### 1.5.1
 - Fixed the Lat/Lng inputs not accepting decimals in Chrome #36

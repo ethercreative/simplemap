@@ -41,6 +41,14 @@ class SimpleMapService extends BaseApplicationComponent {
 			'ownerLocale' => $locale
 		));
 
+		if (!$record) {
+			$record = SimpleMap_MapRecord::model()->findByAttributes(array(
+				'ownerId'     => $owner->id,
+				'fieldId'     => $field->id,
+				'ownerLocale' => craft()->locale->id
+			));
+		}
+
 		if (craft()->request->getPost() && $value)
 		{
 			$model = SimpleMap_MapModel::populateModel($value);

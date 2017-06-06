@@ -140,5 +140,13 @@
       "[Fixed] Added error handling for failed server geocode requests #37",
       "[Improved] You can no longer tap to move the marker on mobile (drag map instead) #33"
     ]
+  },
+  {
+    "version": "1.6.1",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.6.1.zip",
+    "date": "2017-06-06T13:55:00-08:00",
+    "notes": [
+      "Added fix for slightly major bug in 1.6.0 that meant any non-translatable fields would stop displaying old data. #44"
+    ]
   }
 ]

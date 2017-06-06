@@ -93,6 +93,9 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.6.1
+- Added fix for slightly major bug in 1.6.0 that meant any non-translatable fields would stop displaying old data. #44
+
 ### 1.6.0
 - Added alternative Server API key setting #38
 - Fix maps not saving because of troubles with dots and commas #41 - @Zae

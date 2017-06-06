@@ -55,7 +55,8 @@ class SimpleMapPlugin extends BasePlugin {
 	protected function defineSettings()
 	{
 		return array(
-			'browserApiKey' => array(AttributeType::String)
+			'browserApiKey' => array(AttributeType::String),
+			'serverApiKey' => array(AttributeType::String),
 		);
 	}
 

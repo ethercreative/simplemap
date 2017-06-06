@@ -4,7 +4,7 @@ namespace Craft;
 
 class SimpleMapService extends BaseApplicationComponent {
 
-	private static $browserApiKey;
+	private static $apiKey;
 
 	public $settings;
 
@@ -309,20 +309,26 @@ class SimpleMapService extends BaseApplicationComponent {
 
 	private static function getAPIKey ()
 	{
-		if (self::$browserApiKey)
-			return self::$browserApiKey;
+		if (self::$apiKey)
+			return self::$apiKey;
 
-		$browserApiKey = craft()->plugins
-			                 ->getPlugin('SimpleMap')
-			                 ->getSettings()['browserApiKey'];
+		$apiKey = craft()->plugins
+			          ->getPlugin('SimpleMap')
+			          ->getSettings()['serverApiKey'];
 
-		if (!$browserApiKey) {
-			SimpleMapPlugin::log("Missing API Key", LogLevel::Error);
-			$browserApiKey = "";
+		if (!$apiKey) {
+			$apiKey = craft()->plugins
+				          ->getPlugin('SimpleMap')
+				          ->getSettings()['browserApiKey'];
 		}
 
-		self::$browserApiKey = $browserApiKey;
-		return self::$browserApiKey;
+		if (!$apiKey) {
+			SimpleMapPlugin::log("Missing API Key", LogLevel::Error);
+			$apiKey = "";
+		}
+
+		self::$apiKey = $apiKey;
+		return self::$apiKey;
 	}
 
 }

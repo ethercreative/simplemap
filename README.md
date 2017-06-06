@@ -93,6 +93,9 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.6.0
+- 
+
 ### 1.5.1
 - Fixed the Lat/Lng inputs not accepting decimals in Chrome #36
 

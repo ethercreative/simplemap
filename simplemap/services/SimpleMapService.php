@@ -219,8 +219,9 @@ class SimpleMapService extends BaseApplicationComponent {
 	private function _getPartsFromLatLng ($lat, $lng, $address, $locale)
 	{
 		$browserApiKey = self::getAPIKey();
+		$failedReturn = [[], $address];
 
-		if (!$browserApiKey) return [[], $address];
+		if (!$browserApiKey) return $failedReturn;
 
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 		       . $lat . ',' . $lng
@@ -232,10 +233,15 @@ class SimpleMapService extends BaseApplicationComponent {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$resp = json_decode(curl_exec($ch), true);
 
+		if (curl_errno($ch)) {
+			SimpleMapPlugin::log(curl_error($ch), LogLevel::Error);
+			return $failedReturn;
+		}
+
 		if (array_key_exists('error_message', $resp) && $resp['error_message'])
 			SimpleMapPlugin::log($resp['error_message'], LogLevel::Error);
 
-		if (empty($resp['results'])) return [[], $address];
+		if (empty($resp['results'])) return $failedReturn;
 
 		$result = $resp['results'][0];
 		$formattedAddress = empty($address)

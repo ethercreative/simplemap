@@ -146,7 +146,7 @@
     "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.6.1.zip",
     "date": "2017-06-06T13:55:00-08:00",
     "notes": [
-      "Added fix for slightly major bug in 1.6.0 that meant any non-translatable fields would stop displaying old data. #44"
+      "[Fixed] Added fix for slightly major bug in 1.6.0 that meant any non-translatable fields would stop displaying old data. #44"
     ]
   }
 ]

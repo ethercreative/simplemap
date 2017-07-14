@@ -163,11 +163,16 @@ class SimpleMapService extends BaseApplicationComponent {
 			if (!array_key_exists('lat', $location) ||
 			    !array_key_exists('lng', $location))
 				$location = null;
-		} else return;
+		} else {
+			$location = null;
+		}
 
-		if ($location === null) return;
+		if ($location == null) {
+			$query->addSelect("(0) AS distance");
+			return;
+		}
 
-		if ($unit === 'km') $earthRad = 6371;
+		if ($unit == 'km') $earthRad = 6371;
 		else $earthRad = 3959;
 
 		$this->searchLatLng = $location;

@@ -93,6 +93,10 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.6.2
+- Fixed bug where some browsers would consider some decimals invalid in the Lat/Lng inputs #46
+- Fixed `CDbException` when trying to search by invalid location. `mapField.distance` will return `NULL` in this case #48
+
 ### 1.6.1
 - Added fix for slightly major bug in 1.6.0 that meant any non-translatable fields would stop displaying old data. #44
 

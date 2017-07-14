@@ -9,13 +9,13 @@
 
 		<div class="simplemap--lat-lng{{ settings.hideLatLng ? ' hidden' }}">
 			<input class="text fullwidth" type="number" name="{{ name }}[lat]"
-			       step="0.000000000000001" width="19"
-			       id="{{ id }}-input-lat" autocomplete="off" placeholder="Lat"
+			       width="19" id="{{ id }}-input-lat" autocomplete="off"
+			       placeholder="Lat" step="any"
 			       value="{{ value is not null and value.lat is defined ? value.lat }}">
 
 			<input class="text fullwidth" type="number" name="{{ name }}[lng]"
-			       step="0.000000000000001" width="19"
-			       id="{{ id }}-input-lng" autocomplete="off" placeholder="Lng"
+			       width="19" id="{{ id }}-input-lng" autocomplete="off"
+			       placeholder="Lng" step="any"
 			       value="{{ value is not null and value.lng is defined ? value.lng }}">
 		</div>
 	</div>

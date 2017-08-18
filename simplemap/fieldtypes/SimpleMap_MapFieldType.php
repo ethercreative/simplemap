@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-class SimpleMap_MapFieldType extends BaseFieldType {
+class SimpleMap_MapFieldType extends BaseFieldType implements IPreviewableFieldType {
 
 	public function getName()
 	{

@@ -21,7 +21,7 @@ class SimpleMap_MapModel extends BaseModel {
 
 	public function __toString ()
 	{
-		return $this->address;
+		return $this->address ?: "";
 	}
 
 	protected function defineAttributes()

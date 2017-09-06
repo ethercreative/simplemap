@@ -93,6 +93,10 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.6.3
+- The field is now previewable in the entries table (via @joshuabaker)
+- Fixed a bug where `SimpleMap_MapModel` `__toString()` would't always return a string.
+
 ### 1.6.2
 - Fixed bug where some browsers would consider some decimals invalid in the Lat/Lng inputs #46
 - Fixed `CDbException` when trying to search by invalid location. `mapField.distance` will return `NULL` in this case #48

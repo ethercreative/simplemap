@@ -24,7 +24,7 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getVersion()
 	{
-		return '1.6.2';
+		return '1.6.3';
 	}
 
 	public function getSchemaVersion()

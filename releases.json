@@ -157,5 +157,14 @@
       "[Fixed] Fixed bug where some browsers would consider some decimals invalid in the Lat/Lng inputs #46",
       "[Fixed] Fixed `CDbException` when trying to search by invalid location. `mapField.distance` will return `NULL` in this case #48"
     ]
+  },
+  {
+    "version": "1.6.3",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.6.3.zip",
+    "date": "2017-09-06T10:42:00-08:00",
+    "notes": [
+      "[Improved] The field is now previewable in the entries table (via @joshuabaker)",
+      "[Fixed] Fixed a bug where `SimpleMap_MapModel` `__toString()` would't always return a string"
+    ]
   }
 ]

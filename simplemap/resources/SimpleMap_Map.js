@@ -243,7 +243,7 @@
 						 	 this.settings.lat,
 							 this.settings.lng
 						 ),
-			mapTypeId:	 google.maps.MapTypeId.ROADMAP
+			mapTypeId:	 google.maps.MapTypeId.ROADMAP,
 		});
 		
 		this.setupAutoComplete();

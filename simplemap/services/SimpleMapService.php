@@ -173,38 +173,46 @@ class SimpleMapService extends BaseApplicationComponent {
 			return;
 		}
 
-//		if ($unit == 'km') $earthRad = 6371;
-//		else $earthRad = 3959;
-
 		if ($unit == 'km') $distanceUnit = 111.045;
 		else $distanceUnit = 69.0;
 
 		$this->searchLatLng = $location;
-//		$this->searchEarthRad = $earthRad;
 		$this->searchDistanceUnit = $distanceUnit;
 
 		$table = craft()->db->tablePrefix . SimpleMap_MapRecord::TABLE_NAME;
 
-//		$haversine = "($earthRad * acos(cos(radians($location[lat])) * cos(radians($table.lat)) * cos(radians($table.lng) - radians($location[lng])) + sin(radians($location[lat])) * sin(radians($table.lat))))";
-
 		$haversine = "
-	(
-		$distanceUnit
-		* DEGREES(
-			ACOS(
-				COS(RADIANS($location[lat]))
-				* COS(RADIANS($table.lat))
-				* COS(RADIANS($location[lng]) - RADIANS($table.lng))
-				+ SIN(RADIANS($location[lat]))
-				* SIN(RADIANS($table.lat))
-			)
+(
+	$distanceUnit
+	* DEGREES(
+		ACOS(
+			COS(RADIANS($location[lat]))
+			* COS(RADIANS($table.lat))
+			* COS(RADIANS($location[lng]) - RADIANS($table.lng))
+			+ SIN(RADIANS($location[lat]))
+			* SIN(RADIANS($table.lat))
 		)
-		
 	)
+)
 ";
+
+		$restrict = [
+			'and',
+			[
+				'and',
+				"$table.lat >= $location[lat] - ($radius / $distanceUnit)",
+				"$table.lat <= $location[lat] + ($radius / $distanceUnit)",
+			],
+			[
+				'and',
+				"$table.lng >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"$table.lng <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+			]
+		];
 
 		$query
 			->addSelect($haversine . ' AS distance')
+			->andWhere($restrict)
 			->having('distance <= ' . $radius);
 	}
 

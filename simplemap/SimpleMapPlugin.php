@@ -29,7 +29,7 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getSchemaVersion()
 	{
-		return '0.0.6';
+		return '0.0.7';
 	}
 
 	public function getDeveloper()

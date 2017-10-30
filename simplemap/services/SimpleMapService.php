@@ -10,6 +10,7 @@ class SimpleMapService extends BaseApplicationComponent {
 
 	public $searchLatLng;
 	public $searchEarthRad;
+	public $searchDistanceUnit;
 
 	// Public
 	// =========================================================================
@@ -149,11 +150,11 @@ class SimpleMapService extends BaseApplicationComponent {
 	private function _searchLocation (DbCommand &$query, $params)
 	{
 		$location = $params['location'];
-		$radius   = array_key_exists('radius', $params) ? $params['radius'] : 50;
+		$radius   = array_key_exists('radius', $params) ? $params['radius'] : 50.0;
 		$unit     = array_key_exists('unit', $params) ? $params['unit'] : 'kilometers';
 
 		if (!is_numeric($radius)) $radius = (float)$radius;
-		if (!is_numeric($radius)) $radius = 50;
+		if (!is_numeric($radius)) $radius = 50.0;
 
 		if (!in_array($unit, array('km', 'mi'))) $unit = 'km';
 
@@ -172,18 +173,46 @@ class SimpleMapService extends BaseApplicationComponent {
 			return;
 		}
 
-		if ($unit == 'km') $earthRad = 6371;
-		else $earthRad = 3959;
+		if ($unit == 'km') $distanceUnit = 111.045;
+		else $distanceUnit = 69.0;
 
 		$this->searchLatLng = $location;
-		$this->searchEarthRad = $earthRad;
+		$this->searchDistanceUnit = $distanceUnit;
 
 		$table = craft()->db->tablePrefix . SimpleMap_MapRecord::TABLE_NAME;
 
-		$haversine = "($earthRad * acos(cos(radians($location[lat])) * cos(radians($table.lat)) * cos(radians($table.lng) - radians($location[lng])) + sin(radians($location[lat])) * sin(radians($table.lat))))";
+		$haversine = "
+(
+	$distanceUnit
+	* DEGREES(
+		ACOS(
+			COS(RADIANS($location[lat]))
+			* COS(RADIANS($table.lat))
+			* COS(RADIANS($location[lng]) - RADIANS($table.lng))
+			+ SIN(RADIANS($location[lat]))
+			* SIN(RADIANS($table.lat))
+		)
+	)
+)
+";
+
+		$restrict = [
+			'and',
+			[
+				'and',
+				"$table.lat >= $location[lat] - ($radius / $distanceUnit)",
+				"$table.lat <= $location[lat] + ($radius / $distanceUnit)",
+			],
+			[
+				'and',
+				"$table.lng >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"$table.lng <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+			]
+		];
 
 		$query
 			->addSelect($haversine . ' AS distance')
+			->andWhere($restrict)
 			->having('distance <= ' . $radius);
 	}
 
@@ -295,7 +324,19 @@ class SimpleMapService extends BaseApplicationComponent {
 		$lt2 = $model->lat;
 		$ln2 = $model->lng;
 
-		return ($this->searchEarthRad * acos(cos(deg2rad($lt1)) * cos(deg2rad($lt2)) * cos(deg2rad($ln2) - deg2rad($ln1)) + sin(deg2rad($lt1)) * sin(deg2rad($lt2))));
+		return (
+			$this->searchDistanceUnit
+			* rad2deg(
+				acos(
+					cos(deg2rad($lt1))
+					* cos(deg2rad($lt2))
+					* cos(deg2rad($ln1) - deg2rad($ln2))
+					+ sin(deg2rad($lt1))
+					* sin(deg2rad($lt2))
+				)
+			)
+		);
+//		return ($this->searchEarthRad * acos(cos(deg2rad($lt1)) * cos(deg2rad($lt2)) * cos(deg2rad($ln2) - deg2rad($ln1)) + sin(deg2rad($lt1)) * sin(deg2rad($lt2))));
 	}
 
 	private function _formatLocaleForMap ($locale) {

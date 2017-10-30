@@ -25,7 +25,9 @@ class SimpleMap_MapRecord extends BaseRecord {
 	{
 		return array(
 			array('columns' => array('ownerId')),
-			array('columns' => array('fieldId'))
+			array('columns' => array('fieldId')),
+			array('columns' => array('lat')),
+			array('columns' => array('lng')),
 		);
 	}
 

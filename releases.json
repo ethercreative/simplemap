@@ -166,5 +166,13 @@
       "[Improved] The field is now previewable in the entries table (via @joshuabaker)",
       "[Fixed] Fixed a bug where `SimpleMap_MapModel` `__toString()` would't always return a string"
     ]
+  },
+  {
+    "version": "1.7.0",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.7.0.zip",
+    "date": "2017-10-30T13:21:00-08:00",
+    "notes": [
+      "[Improved] Improved the efficiency of the location search query."
+    ]
   }
 ]

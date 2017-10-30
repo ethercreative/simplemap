@@ -93,6 +93,9 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.7.0
+- Improved the efficiency of the location search query.
+
 ### 1.6.3
 - The field is now previewable in the entries table (via @joshuabaker)
 - Fixed a bug where `SimpleMap_MapModel` `__toString()` would't always return a string.

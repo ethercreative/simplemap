@@ -1,5 +1,5 @@
 README.md       export-ignore
-releases.json   export-ignore
+CHANGELOG.md    export-ignore
 /resources      export-ignore
 .gitignore      export-ignore
 .gitattributes  export-ignore

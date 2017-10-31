@@ -1,0 +1,27 @@
+{
+  "name": "ether/SimpleMap",
+  "description": "A beautifully simple Google Map field type.",
+  "version": "3.0.0",
+  "type": "craft-plugin",
+  "minimum-stability": "dev",
+  "require": {
+    "craftcms/cms": "^3.0.0-beta.20"
+  },
+  "autoload": {
+    "psr-4": {
+      "ether\\SimpleMap\\": "src/"
+    }
+  },
+  "support": {
+    "email": "tam@ethercreative.co.uk"
+  },
+  "extra": {
+    "handle": "simplemap",
+    "name": "SimpleMap",
+    "developer": "Ether Creative",
+    "developerUrl": "https://ethercreative.co.uk",
+
+    "class": "ether\\SimpleMap\\SimpleMap",
+    "schemaVersion": "3.0.0"
+  }
+}

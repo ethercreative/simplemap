@@ -1,21 +1,21 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-	label: "Google Maps API Key"|t,
+	label: "settingsApiKeyLabel"|t,
 	instructions: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
-	id: 'browserApiKey',
-	name: 'browserApiKey',
-	value: settings.browserApiKey,
+	id: 'apiKey',
+	name: 'apiKey',
+	value: settings.apiKey,
 	type: 'text',
 	required: true
 }) }}
 
 {{ forms.textField({
-	label: "Alternate Server API Key"|t,
+	label: "settingsAltApiKeyLabel"|t,
 	instructions: 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
-	id: 'serverApiKey',
-	name: 'serverApiKey',
-	value: settings.serverApiKey,
+	id: 'unrestrictedApiKey',
+	name: 'unrestrictedApiKey',
+	value: settings.unrestrictedApiKey,
 	type: 'text',
 	required: false
 }) }}

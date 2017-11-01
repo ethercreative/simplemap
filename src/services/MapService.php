@@ -128,12 +128,14 @@ class MapService extends Component
 	{
 		/** @var Element $owner */
 		$locale = $owner->getSite()->language;
+		/** @var Map $value */
+		$value = $owner->getFieldValue($field->handle);
 
 		// FIXME: All instances of `$field` should be pointing to the value
 		// (except `$field->id`)
 
-		$lat = number_format((float)$field->lat, 9);
-		$lng = number_format((float)$field->lng, 9);
+		$lat = number_format((float)$value->lat, 9);
+		$lng = number_format((float)$value->lng, 9);
 
 		$record = MapRecord::findOne(
 			[
@@ -150,18 +152,18 @@ class MapService extends Component
 			$record->fieldId     = $field->id;
 		}
 
-		list($field->parts, $field->address) = $this->_getPartsFromLatLng(
+		list($value->parts, $value->address) = $this->_getPartsFromLatLng(
 			$lat,
 			$lng,
-			$field->address ?: '',
+			$value->address ?: '',
 			$locale
 		);
 
 		$record->lat     = $lat;
 		$record->lng     = $lng;
-		$record->zoom    = $field->zoom;
-		$record->address = $field->address;
-		$record->parts   = $field->parts;
+		$record->zoom    = $value->zoom;
+		$record->address = $value->address;
+		$record->parts   = $value->parts;
 
 		$save = $record->save();
 

@@ -46,7 +46,8 @@ class Map extends Model
 	public function __construct ($attributes = [], array $config = [])
 	{
 		foreach ($attributes as $key => $value)
-			$this[$key] = $value;
+			if (property_exists($this, $key))
+				$this[$key] = $value;
 
 		parent::__construct($config);
 	}

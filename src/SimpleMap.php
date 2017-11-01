@@ -11,19 +11,31 @@ use craft\services\Fields;
 use craft\services\Plugins;
 use ether\SimpleMap\fields\MapField;
 use ether\SimpleMap\models\Settings;
+use ether\SimpleMap\services\MapService;
 use yii\base\Event;
 
+/**
+ * Class SimpleMap
+ *
+ * @package ether\SimpleMap
+ */
 class SimpleMap extends Plugin
 {
 
-	// Properties
+	// Props
 	// =========================================================================
 
-	public $changelogUrl = 'https://raw.githubusercontent.com/ethercreative/simplemap/v3/CHANGELOG.md';
-	public $downloadUrl = 'https://github.com/ethercreative/simplemap/archive/v3.zip';
+	// Props: Public Static
+	// -------------------------------------------------------------------------
 
 	/** @var SimpleMap */
 	public static $plugin;
+
+	// Props: Public Instance
+	// -------------------------------------------------------------------------
+
+	public $changelogUrl = 'https://raw.githubusercontent.com/ethercreative/simplemap/v3/CHANGELOG.md';
+	public $downloadUrl = 'https://github.com/ethercreative/simplemap/archive/v3.zip';
 
 	// Craft
 	// =========================================================================
@@ -33,6 +45,13 @@ class SimpleMap extends Plugin
 		parent::init();
 		self::$plugin = $this;
 
+		// Components
+		// ---------------------------------------------------------------------
+
+		$this->setComponents([
+			'map' => MapService::class,
+		]);
+
 		// Register Events
 		// ---------------------------------------------------------------------
 
@@ -40,14 +59,14 @@ class SimpleMap extends Plugin
 		Event::on(
 			Fields::className(),
 			Fields::EVENT_REGISTER_FIELD_TYPES,
-			call_user_func([$this, '_onRegisterFieldTypes'])
+			[$this, 'onRegisterFieldTypes']
 		);
 
 		// Redirect to settings after install
 		Event::on(
 			Plugins::className(),
 			Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-			call_user_func([$this, '_onAfterInstallPlugin'])
+			[$this, 'onAfterInstallPlugin']
 		);
 	}
 
@@ -69,18 +88,24 @@ class SimpleMap extends Plugin
 		);
 	}
 
+	// Components
+	// =========================================================================
+
+	public function getMap (): MapService
+	{
+		return $this->map;
+	}
+
 	// Events
 	// =========================================================================
 
-	private function _onRegisterFieldTypes (RegisterComponentTypesEvent $event)
+	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
 	{
 		$event->types[] = MapField::class;
 	}
 
-	private function _onAfterInstallPlugin (PluginEvent $event)
+	public function onAfterInstallPlugin (PluginEvent $event)
 	{
-		// TODO: Is this the correct settings URL?
-
 		if (!Craft::$app->getRequest()->getIsConsoleRequest()
 		    && ($event->plugin === $this)) {
 			Craft::$app->getResponse()->redirect(

@@ -1,0 +1,86 @@
+<?php
+
+namespace ether\SimpleMap\models;
+
+use craft\base\Model;
+
+class Map extends Model
+{
+
+	// Props
+	// =========================================================================
+
+	// Props: Public Instance
+	// -------------------------------------------------------------------------
+
+	/** @var int|null */
+	public $ownerId;
+
+	/** @var int|null */
+	public $ownerSiteId;
+
+	/** @var int|null */
+	public $fieldId;
+
+	/** @var float|null */
+	public $lat;
+
+	/** @var float|null */
+	public $lng;
+
+	/** @var int|null */
+	public $zoom;
+
+	/** @var string|null */
+	public $address;
+
+	/** @var array|null */
+	public $parts;
+
+	/** @var float|null */
+	public $distance;
+
+	// Public Methods
+	// =========================================================================
+
+	public function __construct ($attributes = [], array $config = [])
+	{
+		foreach ($attributes as $key => $value)
+			$this[$key] = $value;
+
+		parent::__construct($config);
+	}
+
+	// Public Methods: Instance
+	// -------------------------------------------------------------------------
+
+	/**
+	 * @inheritdoc
+	 */
+	public function rules ()
+	{
+		$rules = parent::rules();
+
+		$rules[] = [
+			['lat', 'lng', 'zoom', 'height'],
+			'required',
+		];
+
+		$rules[] = [
+			['lat', 'boundaryRestrictionNELat', 'boundaryRestrictionSWLat'],
+			'double',
+			'min' => -90,
+			'max' => 90,
+		];
+
+		$rules[] = [
+			['lng', 'boundaryRestrictionNELng', 'boundaryRestrictionSWLng'],
+			'double',
+			'min' => -180,
+			'max' => 180,
+		];
+
+		return $rules;
+	}
+
+}

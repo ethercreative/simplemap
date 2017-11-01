@@ -1,0 +1,54 @@
+.simplemap--map {
+	display: block;
+	border-radius: 3px;
+	border: 1px solid #e3e5e8;
+}
+
+.simplemap--address-field {
+	display: flex;
+	align-items: flex-start;
+	margin: 0 0 -10px;
+}
+
+.simplemap--address-field:after {
+	font-size: 0;
+}
+
+.simplemap--address {
+	width: calc(100% + 1px);
+}
+
+.simplemap--lat-lng {
+	display: flex;
+	padding: 0 0 0 5px;
+}
+
+.simplemap--lat-lng input {
+	width: 25.5ch;
+	margin: 0;
+	vertical-align: middle;
+	color: #caccce;
+}
+
+.simplemap--lat-lng input:first-child {
+	border-right: none;
+	border-radius: 3px 0 0 3px;
+}
+
+.simplemap--lat-lng input:last-child {
+	border-radius: 0 3px 3px 0;
+}
+
+@media (max-width: 900px) {
+	.simplemap--address-field {
+		display: block;
+	}
+
+	.simplemap--lat-lng {
+		padding: 5px 0 0;
+	}
+
+	.simplemap--lat-lng input {
+		width: 100%;
+	}
+}

@@ -181,25 +181,26 @@ class MapService extends Component
 	/**
 	 * Modifies the query to inject the field data
 	 *
-	 * @param MapField              $field
 	 * @param ElementQueryInterface $query
 	 * @param                       $value
 	 *
 	 * @return null
 	 */
-	public function modifyElementsQuery (MapField $field, ElementQueryInterface $query, $value)
+	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
 		if (!$value) return;
 		/** @var ElementQuery $query */
 
+		$tableName = MapRecord::$tableName;
+
 		$query->join(
 			'JOIN',
-			MapRecord::$tableName,
-			"[[elements.id]] = [[{$field->handle}.ownerId]]"
+			"{$tableName} simplemap",
+			"[[elements.id]] = [[simplemap.ownerId]]"
 		);
 
-		if (array_key_exists('location', $query->params))
-			$this->_searchLocation($query);
+		if (array_key_exists('location', $value))
+			$this->_searchLocation($query, $value);
 
 		return;
 	}
@@ -385,17 +386,16 @@ class MapService extends Component
 	 * Searches for entries by location
 	 *
 	 * @param ElementQuery $query
+	 * @param array        $value
 	 */
-	private function _searchLocation (ElementQuery $query)
+	private function _searchLocation (ElementQuery $query, $value)
 	{
-		$params = $query->params;
-
-		$location = $params['location'];
-		$radius   = array_key_exists('radius', $params)
-						? $params['radius']
+		$location = $value['location'];
+		$radius   = array_key_exists('radius', $value)
+						? $value['radius']
 						: 50.0;
-		$unit     = array_key_exists('unit', $params)
-						? $params['unit']
+		$unit     = array_key_exists('unit', $value)
+						? $value['unit']
 						: 'km';
 
 		if (!is_numeric($radius)) $radius = (float)$radius;
@@ -416,7 +416,8 @@ class MapService extends Component
 		}
 
 		if ($location == null) {
-			$query->addSelect("(0) AS distance");
+			$query->addSelect("(0) AS [[distance]]");
+			$query->subQuery->addSelect("(0) AS [[distance]]");
 			return;
 		}
 
@@ -426,41 +427,44 @@ class MapService extends Component
 		$this->searchLatLng = $location;
 		$this->searchDistanceUnit = $distanceUnit;
 
-		$table = MapRecord::$tableName;
-
 		$haversine = "
 (
 	$distanceUnit
 	* DEGREES(
 		ACOS(
 			COS(RADIANS($location[lat]))
-			* COS(RADIANS($table.lat))
-			* COS(RADIANS($location[lng]) - RADIANS($table.lng))
+			* COS(RADIANS([[simplemap.lat]]))
+			* COS(RADIANS($location[lng]) - RADIANS([[simplemap.lng]]))
 			+ SIN(RADIANS($location[lat]))
-			* SIN(RADIANS($table.lat))
+			* SIN(RADIANS([[simplemap.lat]]))
 		)
 	)
 )
 ";
 
+		$haversine = str_replace(["\r", "\n", "\t"], '', $haversine);
+
 		$restrict = [
 			'and',
 			[
 				'and',
-				"$table.lat >= $location[lat] - ($radius / $distanceUnit)",
-				"$table.lat <= $location[lat] + ($radius / $distanceUnit)",
+				"[[simplemap.lat]] >= $location[lat] - ($radius / $distanceUnit)",
+				"[[simplemap.lat]] <= $location[lat] + ($radius / $distanceUnit)",
 			],
 			[
 				'and',
-				"$table.lng >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
-				"$table.lng <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"[[simplemap.lng]] >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"[[simplemap.lng]] <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
 			]
 		];
 
+		$query->addSelect($haversine . ' AS [[distance]]');
+
 		$query
-			->addSelect($haversine . ' AS distance')
-			->andWhere($restrict)
-			->having('distance <= ' . $radius);
+			->subQuery
+				->addSelect("(0) AS [[distance]]")
+				->andWhere($restrict)
+				->andWhere("$haversine <= $radius");
 	}
 
 }

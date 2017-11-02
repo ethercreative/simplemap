@@ -9,6 +9,7 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Plugins;
+use craft\web\twig\variables\CraftVariable;
 use ether\SimpleMap\fields\MapField;
 use ether\SimpleMap\models\Settings;
 use ether\SimpleMap\services\MapService;
@@ -68,6 +69,13 @@ class SimpleMap extends Plugin
 			Plugins::EVENT_AFTER_INSTALL_PLUGIN,
 			[$this, 'onAfterInstallPlugin']
 		);
+
+		// Variable
+		Event::on(
+			CraftVariable::class,
+			CraftVariable::EVENT_INIT,
+			[$this, 'onRegisterVariable']
+		);
 	}
 
 	// Craft: Settings
@@ -112,6 +120,13 @@ class SimpleMap extends Plugin
 				UrlHelper::cpUrl('settings/plugins/simplemap')
 			)->send();
 		}
+	}
+
+	public function onRegisterVariable (Event $event)
+	{
+		/** @var CraftVariable $variable */
+		$variable = $event->sender;
+		$variable->set('simpleMap', Variable::class);
 	}
 
 }

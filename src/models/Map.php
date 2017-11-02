@@ -52,6 +52,11 @@ class Map extends Model
 		parent::__construct($config);
 	}
 
+	public function __toString (): string
+	{
+		return $this->address ?: '';
+	}
+
 	// Public Methods: Instance
 	// -------------------------------------------------------------------------
 

@@ -36,10 +36,10 @@ You can search for elements using the location specified in your map field. When
     location: 'Maidstone, Kent, UK',
     radius: 100,
     unit: 'mi'
-}).order('distance') %}
+}).orderBy('distance').all() %}
 ```
 
-- `location`: Can either be an address string (requires a Google Maps Geocoding API key) or a Lat Lng Array (`{ 'lat': 51.27219908, 'lng': 0.51545620 }` or `craft.simpleMap.latLng(51.27219908, 0.51545620)`).
+- `location`: Can either be an address string (requires a Google Maps Geocoding API key) or a Lat Lng Array (`{ 'lat': 51.27219908, 'lng': 0.51545620 }`).
 - `radius`: The radius around the location to search. Defaults to `50`.
 - `unit`: The unit of measurement for the search. Can be either `km` (kilometers) or `mi` (miles). Defaults to `km`.
 

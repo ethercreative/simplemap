@@ -202,11 +202,19 @@ class MapService extends Component
 			]
 		);
 
+		if (!is_array($query->orderBy)) {
+			$oldOrderBy = $query->orderBy;
+			$query->orderBy = [];
+		}
+
 		if (array_key_exists('location', $value)) {
 			$this->_searchLocation($query, $value);
 		} else if (array_key_exists('distance', $query->orderBy)) {
 			$this->_replaceOrderBy($query);
 		}
+
+		if (isset($oldOrderBy))
+			$query->orderBy = $oldOrderBy;
 
 		return;
 	}

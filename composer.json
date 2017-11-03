@@ -9,7 +9,7 @@
   },
   "autoload": {
     "psr-4": {
-      "ether\\SimpleMap\\": "src/"
+      "ether\\simplemap\\": "src/"
     }
   },
   "support": {
@@ -21,7 +21,7 @@
     "developer": "Ether Creative",
     "developerUrl": "https://ethercreative.co.uk",
 
-    "class": "ether\\SimpleMap\\SimpleMap",
+    "class": "ether\\simplemap\\SimpleMap",
     "schemaVersion": "3.0.0"
   }
 }

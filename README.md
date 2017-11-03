@@ -4,6 +4,8 @@
 A beautifully simple Google Map field type for Craft CMS. Full localization support, compatible with Matrix, supports 
 searching by location and sorting by distance.
 
+[Click here for the **Craft 3** version.](https://github.com/ethercreative/simplemap/tree/v3)
+
 ![How it looks](resources/preview.png)
 
 ## Installation

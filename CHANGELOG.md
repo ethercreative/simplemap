@@ -1,3 +1,3 @@
-## 3.0.0 - 2017-11-02
+## 3.0.0 - 2017-11-03
 ### Changed
 - Initial Craft 3 Release

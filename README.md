@@ -4,10 +4,9 @@
 A beautifully simple Google Map field type for **Craft 3**. Full localization support, compatible with Matrix, supports 
 searching by location and sorting by distance.
 
-![How it looks](resources/preview.png)
+[Click here for the **Craft 2.5** version.](https://github.com/ethercreative/simplemap/tree/v2)
 
-## Installation
-**`TODO`**
+![How it looks](resources/preview.png)
 
 ## Usage
 Create the field as you would any other.  
@@ -49,8 +48,6 @@ You can search for elements using the location specified in your map field. When
 You can access your browser API key in templates using `craft.simpleMap.apiKey`.
 
 ### Displaying a Map
-
-**`TODO: Update template variables`**
 
 This plugin does **not** generate a front-end map; how you do that and what map library you use is up to you. However, since we have received a lot of questions asking how to do so, here are a couple of examples.
   

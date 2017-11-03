@@ -431,10 +431,10 @@ class MapService extends Component
 		}
 
 		if ($unit == 'km') $distanceUnit = 111.045;
-		else $distanceUnit = 69.0;
+		else $distanceUnit = '69.0'; // String to force float in SQL
 
 		$this->searchLatLng = $location;
-		$this->searchDistanceUnit = $distanceUnit;
+		$this->searchDistanceUnit = (float)$distanceUnit;
 
 		$distanceSearch = "(
 			$distanceUnit
@@ -464,8 +464,6 @@ class MapService extends Component
 				"[[simplemap.lng]] <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
 			]
 		];
-
-		\Craft::dd([$distanceSearch, $restrict]);
 
 		if (array_key_exists('distance', $query->orderBy)) {
 			$this->_replaceOrderBy($query, $distanceSearch);

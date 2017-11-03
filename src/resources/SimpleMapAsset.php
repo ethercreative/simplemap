@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\SimpleMap\resources;
+namespace ether\simplemap\resources;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;

@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\SimpleMap\models;
+namespace ether\simplemap\models;
 
 use craft\base\Model;
 

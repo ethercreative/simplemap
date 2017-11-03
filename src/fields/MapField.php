@@ -1,14 +1,14 @@
 <?php
 
-namespace ether\SimpleMap\fields;
+namespace ether\simplemap\fields;
 
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
-use ether\SimpleMap\resources\SimpleMapAsset;
-use ether\SimpleMap\SimpleMap;
+use ether\simplemap\resources\SimpleMapAsset;
+use ether\simplemap\SimpleMap;
 
 class MapField extends Field implements PreviewableFieldInterface
 {

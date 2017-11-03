@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\SimpleMap;
+namespace ether\simplemap;
 
 use Craft;
 use craft\base\Plugin;
@@ -10,9 +10,9 @@ use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
-use ether\SimpleMap\fields\MapField;
-use ether\SimpleMap\models\Settings;
-use ether\SimpleMap\services\MapService;
+use ether\simplemap\fields\MapField;
+use ether\simplemap\models\Settings;
+use ether\simplemap\services\MapService;
 use yii\base\Event;
 
 /**

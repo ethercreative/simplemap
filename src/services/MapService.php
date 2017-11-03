@@ -1,15 +1,15 @@
 <?php
 
-namespace ether\SimpleMap\services;
+namespace ether\simplemap\services;
 
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use ether\SimpleMap\fields\MapField;
-use ether\SimpleMap\models\Map;
-use ether\SimpleMap\records\MapRecord;
-use ether\SimpleMap\SimpleMap;
+use ether\simplemap\fields\MapField;
+use ether\simplemap\models\Map;
+use ether\simplemap\records\MapRecord;
+use ether\simplemap\SimpleMap;
 use yii\base\Component;
 use yii\base\Exception;
 

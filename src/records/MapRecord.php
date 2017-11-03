@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\SimpleMap\records;
+namespace ether\simplemap\records;
 
 use craft\db\ActiveRecord;
 use craft\records\Element;

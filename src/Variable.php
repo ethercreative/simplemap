@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\SimpleMap;
+namespace ether\simplemap;
 
 class Variable {
 

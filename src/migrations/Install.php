@@ -1,9 +1,9 @@
 <?php
 
-namespace ether\SimpleMap\migrations;
+namespace ether\simplemap\migrations;
 
 use craft\db\Migration;
-use ether\SimpleMap\records\MapRecord;
+use ether\simplemap\records\MapRecord;
 
 class Install extends Migration
 {

@@ -23,7 +23,6 @@ class MapService extends Component
 	// -------------------------------------------------------------------------
 
 	public $searchLatLng;
-	public $searchEarthRad;
 	public $searchDistanceUnit;
 
 	// Private Props
@@ -196,11 +195,18 @@ class MapService extends Component
 		$query->join(
 			'JOIN',
 			"{$tableName} simplemap",
-			"[[elements.id]] = [[simplemap.ownerId]]"
+			[
+				'and',
+				'[[elements.id]] = [[simplemap.ownerId]]',
+				'[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
+			]
 		);
 
-		if (array_key_exists('location', $value))
+		if (array_key_exists('location', $value)) {
 			$this->_searchLocation($query, $value);
+		} else if (array_key_exists('distance', $query->orderBy)) {
+			$this->_replaceOrderBy($query);
+		}
 
 		return;
 	}
@@ -360,7 +366,7 @@ class MapService extends Component
 	 */
 	private function _calculateDistance (Map $map)
 	{
-		if (!$this->searchLatLng || !$this->searchEarthRad) return null;
+		if (!$this->searchLatLng || !$this->searchDistanceUnit) return null;
 
 		$lt1 = $this->searchLatLng['lat'];
 		$ln1 = $this->searchLatLng['lng'];
@@ -401,7 +407,9 @@ class MapService extends Component
 		if (!is_numeric($radius)) $radius = (float)$radius;
 		if (!is_numeric($radius)) $radius = 50.0;
 
-		if (!in_array($unit, array('km', 'mi'))) $unit = 'km';
+		if ($unit == 'miles') $unit = 'mi';
+		else if ($unit == 'kilometers') $unit = 'km';
+		else if (!in_array($unit, ['km', 'mi'])) $unit = 'km';
 
 		if (is_string($location))
 			$location = self::getLatLngFromAddress($location);
@@ -416,8 +424,9 @@ class MapService extends Component
 		}
 
 		if ($location == null) {
-			$query->addSelect("(0) AS [[distance]]");
-			$query->subQuery->addSelect("(0) AS [[distance]]");
+			if (array_key_exists('distance', $query->orderBy)) {
+				$this->_replaceOrderBy($query, false);
+			}
 			return;
 		}
 
@@ -427,22 +436,20 @@ class MapService extends Component
 		$this->searchLatLng = $location;
 		$this->searchDistanceUnit = $distanceUnit;
 
-		$haversine = "
-(
-	$distanceUnit
-	* DEGREES(
-		ACOS(
-			COS(RADIANS($location[lat]))
-			* COS(RADIANS([[simplemap.lat]]))
-			* COS(RADIANS($location[lng]) - RADIANS([[simplemap.lng]]))
-			+ SIN(RADIANS($location[lat]))
-			* SIN(RADIANS([[simplemap.lat]]))
-		)
-	)
-)
-";
+		$distanceSearch = "(
+			$distanceUnit
+			* DEGREES(
+				ACOS(
+					COS(RADIANS($location[lat]))
+					* COS(RADIANS([[simplemap.lat]]))
+					* COS(RADIANS($location[lng]) - RADIANS([[simplemap.lng]]))
+					+ SIN(RADIANS($location[lat]))
+					* SIN(RADIANS([[simplemap.lat]]))
+				)
+			)
+		)";
 
-		$haversine = str_replace(["\r", "\n", "\t"], '', $haversine);
+		$distanceSearch = str_replace(["\r", "\n", "\t"], '', $distanceSearch);
 
 		$restrict = [
 			'and',
@@ -458,13 +465,34 @@ class MapService extends Component
 			]
 		];
 
-		$query->addSelect($haversine . ' AS [[distance]]');
+		\Craft::dd([$distanceSearch, $restrict]);
+
+		if (array_key_exists('distance', $query->orderBy)) {
+			$this->_replaceOrderBy($query, $distanceSearch);
+		}
 
 		$query
 			->subQuery
-				->addSelect("(0) AS [[distance]]")
 				->andWhere($restrict)
-				->andWhere("$haversine <= $radius");
+				->andWhere("$distanceSearch <= $radius");
+	}
+
+	/**
+	 * Replaces the *distance* orderBy
+	 *
+	 * @param ElementQuery $query
+	 * @param bool|string  $distanceSearch
+	 */
+	private function _replaceOrderBy (ElementQuery $query, $distanceSearch = false)
+	{
+		$nextOrder = [];
+
+		foreach ($query->orderBy as $order => $sort) {
+			if ($order == 'distance' && $distanceSearch) $nextOrder[$distanceSearch] = $sort;
+			elseif ($order != 'distance') $nextOrder[$order] = $sort;
+		}
+
+		$query->orderBy($nextOrder);
 	}
 
 }

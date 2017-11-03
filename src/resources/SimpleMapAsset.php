@@ -13,7 +13,7 @@ class SimpleMapAsset extends AssetBundle
 	 */
 	public function init ()
 	{
-		$this->sourcePath = '@ether/SimpleMap/resources';
+		$this->sourcePath = '@ether/simplemap/resources';
 
 		$this->depends = [
 			CpAsset::class,

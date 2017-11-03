@@ -1,5 +1,5 @@
 {
-  "name": "ether/SimpleMap",
+  "name": "ether/simplemap",
   "description": "A beautifully simple Google Map field type.",
   "version": "3.0.0",
   "type": "craft-plugin",

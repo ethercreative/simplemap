@@ -46,4 +46,8 @@ return [
 	'Boundary Restriction' => 'Boundary Restriction',
 	'Restrict the auto-complete to within a specific square boundary'
 		=> 'Restrict the auto-complete to within a specific square boundary',
+
+	// Field validation
+	'Missing Lat/Lng' => 'Missing Lat/Lng',
+	'Missing Lat/Lng or valid address' => 'Missing Lat/Lng or valid address',
 ];

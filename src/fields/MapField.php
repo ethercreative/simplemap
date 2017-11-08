@@ -503,6 +503,16 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * @inheritdoc
 	 */
+	public function getElementValidationRules (): array
+	{
+		return [
+			MapValidator::class,
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
 		SimpleMap::$plugin->getMap()->modifyElementsQuery($query, $value);

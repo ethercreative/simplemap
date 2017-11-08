@@ -34,6 +34,8 @@ class MapService extends Component
 	/** @var string */
 	private static $_apiKey;
 
+	private static $_cachedAddressToLatLngs = [];
+
 	// Public Methods
 	// =========================================================================
 
@@ -49,6 +51,10 @@ class MapService extends Component
 	 */
 	public static function getLatLngFromAddress ($address)
 	{
+		if (array_key_exists($address, self::$_cachedAddressToLatLngs)) {
+			return self::$_cachedAddressToLatLngs[$address];
+		}
+
 		$browserApiKey = self::_getAPIKey();
 
 		if (!$browserApiKey) return null;
@@ -73,9 +79,12 @@ class MapService extends Component
 			);
 		}
 
-		if (empty($resp['results'])) return null;
+		if (empty($resp['results'])) $latLng = null;
+		else $latLng = $resp['results'][0]['geometry']['location'];
 
-		return $resp['results'][0]['geometry']['location'];
+		self::$_cachedAddressToLatLngs[$address] = $latLng;
+
+		return $latLng;
 	}
 
 	// Public Methods: Instance
@@ -130,8 +139,15 @@ class MapService extends Component
 		/** @var Map $value */
 		$value = $owner->getFieldValue($field->handle);
 
-		// FIXME: All instances of `$field` should be pointing to the value
-		// (except `$field->id`)
+		if (
+			(is_null($value->lat) || is_null($value->lng))
+			&& !is_null($value->address)
+		) {
+			if ($addressToLatLng = self::getLatLngFromAddress($value->address)) {
+				$value->lat = $addressToLatLng['lat'];
+				$value->lng = $addressToLatLng['lng'];
+			}
+		}
 
 		$lat = number_format((float)$value->lat, 9);
 		$lng = number_format((float)$value->lng, 9);

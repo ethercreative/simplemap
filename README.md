@@ -95,6 +95,10 @@ var map = new mapboxgl.Map({
 
 ## Changelog
 
+### 1.7.1
+- It is now possible to save the field using only an address (useful for saving via the front-end, requires Geocoding).
+- Improved the field's validation.
+
 ### 1.7.0
 - Improved the efficiency of the location search query.
 

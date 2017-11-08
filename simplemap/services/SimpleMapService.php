@@ -69,6 +69,45 @@ class SimpleMapService extends BaseApplicationComponent {
 	}
 
 	/**
+	 * Validates the field
+	 *
+	 * @param SimpleMap_MapFieldType $fieldType
+	 *
+	 * @return bool
+	 */
+	public function validateField (SimpleMap_MapFieldType $fieldType)
+	{
+		$owner = $fieldType->element;
+		$field = $fieldType->model;
+		$content = $fieldType->element->getContent();
+
+		$handle = $field->handle;
+		$data = $content->getAttribute($handle);
+
+		if (
+			!array_key_exists('lat', $data)
+			|| !array_key_exists('lng', $data)
+		) {
+			if (!array_key_exists('address', $data)) {
+				$owner->addError($handle, 'Missing lat/lng');
+				return false;
+			}
+
+			$addressToLatLng = self::getLatLngFromAddress($data['address']);
+			if ($addressToLatLng == null) {
+				$owner->addError($handle, 'Missing lat/lng or valid address');
+				return false;
+			}
+
+			$data['lat'] = $addressToLatLng['lat'];
+			$data['lng'] = $addressToLatLng['lng'];
+		}
+
+		$content->setAttribute($handle, $data);
+		return true;
+	}
+
+	/**
 	 * Save Map Field
 	 *
 	 * @param SimpleMap_MapFieldType $fieldType

@@ -347,6 +347,11 @@ class SimpleMap_MapFieldType extends BaseFieldType implements IPreviewableFieldT
 		));
 	}
 
+	public function validate ($value)
+	{
+		return craft()->simpleMap->validateField($this);
+	}
+
 	public function onAfterElementSave()
 	{
 		craft()->simpleMap->saveField($this);

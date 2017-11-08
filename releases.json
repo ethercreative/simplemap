@@ -174,5 +174,14 @@
     "notes": [
       "[Improved] Improved the efficiency of the location search query."
     ]
+  },
+  {
+    "version": "1.7.1",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.7.1.zip",
+    "date": "2017-11-08T16:05:00-08:00",
+    "notes": [
+      "[Added] It is now possible to save the field using only an address (useful for saving via the front-end, requires Geocoding)",
+      "[Improved] Improved the field's validation"
+    ]
   }
 ]

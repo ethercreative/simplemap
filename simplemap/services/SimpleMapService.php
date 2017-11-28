@@ -189,6 +189,7 @@ class SimpleMapService extends BaseApplicationComponent {
 	private function _searchLocation (DbCommand &$query, $params)
 	{
 		$location = $params['location'];
+		$country  = array_key_exists('country', $params) ? $params['country'] : null;
 		$radius   = array_key_exists('radius', $params) ? $params['radius'] : 50.0;
 		$unit     = array_key_exists('unit', $params) ? $params['unit'] : 'kilometers';
 
@@ -198,7 +199,7 @@ class SimpleMapService extends BaseApplicationComponent {
 		if (!in_array($unit, array('km', 'mi'))) $unit = 'km';
 
 		if (is_string($location))
-			$location = self::getLatLngFromAddress($location);
+			$location = self::getLatLngFromAddress($location, $country);
 		if (is_array($location)) {
 			if (!array_key_exists('lat', $location) ||
 			    !array_key_exists('lng', $location))
@@ -259,11 +260,13 @@ class SimpleMapService extends BaseApplicationComponent {
 	 * Find lat/lng from string address
 	 *
 	 * @param $address
+	 * @param string|null $country
+	 *
 	 * @return null|array
 	 *
 	 * TODO: Cache results?
 	 */
-	public static function getLatLngFromAddress ($address)
+	public static function getLatLngFromAddress ($address, $country = null)
 	{
 		$browserApiKey = self::getAPIKey();
 
@@ -272,6 +275,9 @@ class SimpleMapService extends BaseApplicationComponent {
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 		       . rawurlencode($address)
 		       . '&key=' . $browserApiKey;
+
+		if ($country)
+			$url .= '&components=country:' . rawurldecode($country);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

@@ -183,5 +183,14 @@
       "[Added] It is now possible to save the field using only an address (useful for saving via the front-end, requires Geocoding)",
       "[Improved] Improved the field's validation"
     ]
+  },
+  {
+    "version": "1.7.2",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.7.2.zip",
+    "date": "2017-11-28T14:10:00-08:00",
+    "notes": [
+      "[Added] Added ability to restrict location search by country",
+      "[Changed] New icon!"
+    ]
   }
 ]

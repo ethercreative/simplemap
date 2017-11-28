@@ -33,15 +33,17 @@ You can search for elements using the location specified in your map field. When
 
 ```twig
 {% set entries = craft.entries.myMapField({
-    location: 'Maidstone, Kent, UK',
+    location: 'Maidstone, Kent',
+    country: 'GB',
     radius: 100,
     unit: 'mi'
 }).orderBy('distance').all() %}
 ```
 
 - `location`: Can either be an address string (requires a Google Maps Geocoding API key) or a Lat Lng Array (`{ 'lat': 51.27219908, 'lng': 0.51545620 }`).
-- `radius`: The radius around the location to search. Defaults to `50`.
-- `unit`: The unit of measurement for the search. Can be either `km` (kilometers) or `mi` (miles). Defaults to `km`.
+- `country`: *Optional*. Restrict the search to a specific country (useful for non-specific searches, i.e. town name). Must be valid [2-letter ISO code](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) (recommended), or full country name.
+- `radius`: *Optional*. The radius around the location to search. Defaults to `50`.
+- `unit`: *Optional*. The unit of measurement for the search. Can be either `km` (kilometers) or `mi` (miles). Defaults to `km`.
 
 ### API Keys
 

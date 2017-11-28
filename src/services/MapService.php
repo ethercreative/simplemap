@@ -46,22 +46,26 @@ class MapService extends Component
 	 * Converts the given address to Lat/Lng
 	 *
 	 * @param string $address
+	 * @param string|null $country
 	 *
 	 * @return array|null
 	 */
-	public static function getLatLngFromAddress ($address)
+	public static function getLatLngFromAddress ($address, $country = null)
 	{
 		if (array_key_exists($address, self::$_cachedAddressToLatLngs)) {
 			return self::$_cachedAddressToLatLngs[$address];
 		}
 
-		$browserApiKey = self::_getAPIKey();
+		$apiKey = self::_getAPIKey();
 
-		if (!$browserApiKey) return null;
+		if (!$apiKey) return null;
 
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 		       . rawurlencode($address)
-		       . '&key=' . $browserApiKey;
+		       . '&key=' . $apiKey;
+
+		if ($country)
+			$url .= '&components=country:' . rawurldecode($country);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -421,6 +425,9 @@ class MapService extends Component
 	private function _searchLocation (ElementQuery $query, $value)
 	{
 		$location = $value['location'];
+		$country  = array_key_exists('country', $value)
+						? $value['country']
+						: null;
 		$radius   = array_key_exists('radius', $value)
 						? $value['radius']
 						: 50.0;
@@ -436,7 +443,7 @@ class MapService extends Component
 		else if (!in_array($unit, ['km', 'mi'])) $unit = 'km';
 
 		if (is_string($location))
-			$location = self::getLatLngFromAddress($location);
+			$location = self::getLatLngFromAddress($location, $country);
 
 		if (is_array($location)) {
 			if (

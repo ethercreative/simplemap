@@ -1,3 +1,10 @@
+## 3.0.4 - 2017-11-28
+### Added
+- Added ability to restrict location search by country
+
+### Changed
+- New icon!
+
 ## 3.0.3 - 2017-11-08
 ### Added
 - It's now possible to save the map field with only an address! Useful for populating the field from the front-end. (Requires the Geocoding API).

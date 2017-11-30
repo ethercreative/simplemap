@@ -36,6 +36,46 @@ class MapService extends Component
 
 	private static $_cachedAddressToLatLngs = [];
 
+	public static $parts = [
+		'room',
+		'floor',
+		'establishment',
+		'subpremise',
+		'premise',
+		'street_number',
+		'postal_code',
+		'street_address',
+		'colloquial_area',
+		'neighborhood',
+		'route',
+		'intersection',
+		'postal_town',
+		'sublocality_level_5',
+		'sublocality_level_4',
+		'sublocality_level_3',
+		'sublocality_level_2',
+		'sublocality_level_1',
+		'sublocality',
+		'locality',
+		'political',
+		'administrative_area_level_5',
+		'administrative_area_level_4',
+		'administrative_area_level_3',
+		'administrative_area_level_2',
+		'administrative_area_level_1',
+		'ward',
+		'country',
+		'parking',
+		'post_box',
+		'point_of_interest',
+		'natural_feature',
+		'park',
+		'airport',
+		'bus_station',
+		'train_station',
+		'transit_station',
+	];
+
 	// Public Methods
 	// =========================================================================
 
@@ -45,10 +85,11 @@ class MapService extends Component
 	/**
 	 * Converts the given address to Lat/Lng
 	 *
-	 * @param string $address
+	 * @param string      $address
 	 * @param string|null $country
 	 *
 	 * @return array|null
+	 * @throws Exception
 	 */
 	public static function getLatLngFromAddress ($address, $country = null)
 	{
@@ -122,6 +163,8 @@ class MapService extends Component
 		} else {
 			$model = new Map();
 		}
+
+		$model->parts = $this->_padParts($model);
 
 		$model->distance = $this->_calculateDistance($model);
 
@@ -414,6 +457,27 @@ class MapService extends Component
 				)
 			)
 		);
+	}
+
+	/**
+	 * Fills out the missing parts values
+	 *
+	 * @param Map $model
+	 *
+	 * @return array
+	 */
+	private function _padParts (Map $model)
+	{
+		$parts = $model->parts;
+
+		foreach (self::$parts as $part) {
+			if (!array_key_exists($part, $parts)) {
+				$parts[$part]            = '';
+				$parts[$part . '_short'] = '';
+			}
+		}
+
+		return $parts;
 	}
 
 	/**

@@ -49,6 +49,9 @@ class Map extends Model
 			if (property_exists($this, $key))
 				$this[$key] = $value;
 
+		if (is_string($this->parts))
+			$this->parts = json_decode($this->parts, true);
+
 		parent::__construct($config);
 	}
 

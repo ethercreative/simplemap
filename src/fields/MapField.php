@@ -8,7 +8,10 @@ use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\resources\SimpleMapAsset;
+use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
+use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\Type;
 
 class MapField extends Field implements PreviewableFieldInterface
 {
@@ -530,6 +533,65 @@ class MapField extends Field implements PreviewableFieldInterface
 	{
 		SimpleMap::$plugin->getMap()->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
+	}
+
+	// 3rd Party Support
+	// =========================================================================
+
+	// CraftQL
+	// -------------------------------------------------------------------------
+
+	/** @var ObjectType|null */
+	private static $_simpleMapGraphQLObject;
+
+	/**
+	 * I dunno, but it works.
+	 *
+	 * @return ObjectType
+	 */
+	private static function object() {
+		if (self::$_simpleMapGraphQLObject)
+			return self::$_simpleMapGraphQLObject;
+
+		$parts = [];
+
+		foreach (MapService::$parts as $part) {
+			$parts[$part] = Type::string();
+			$parts[$part . '_short'] = Type::string();
+		}
+
+		return self::$_simpleMapGraphQLObject = new ObjectType([
+			'name' => 'SimpleMap',
+			'fields' => [
+				'lat' => Type::string(),
+				'lng' => Type::string(),
+				'zoom' => Type::string(),
+				'address' => Type::string(),
+				'parts' => [
+					'type' => new ObjectType([
+						'name' => 'SimpleMapParts',
+						'fields' => $parts,
+					])
+				],
+			],
+		]);
+	}
+
+	/**
+	 * Support for CraftQL
+	 *
+	 * @see https://github.com/markhuot/craftql
+	 */
+	public function getGraphQLQueryFields ()
+	{
+		$field = $this->owner;
+
+		return [
+			$field->handle => [
+				'type' => self::object(),
+				'description' => $field->instructions,
+			]
+		];
 	}
 
 }

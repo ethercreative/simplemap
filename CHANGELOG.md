@@ -1,3 +1,11 @@
+## 3.1.0 - 2017-11-30
+### Added
+- [CraftQL](https://github.com/markhuot/craftql) support!
+- Added `craft.simpleMap.getLatLngFromAddress($addressString[, $country])`.
+
+### Improved
+- The maps `parts` now contains all available options from [here](https://developers.google.com/maps/documentation/geocoding/intro#Types) (including the `_small` variants). Any options without values are returned as empty strings.
+
 ## 3.0.4 - 2017-11-28
 ### Added
 - Added ability to restrict location search by country

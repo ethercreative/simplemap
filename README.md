@@ -113,6 +113,9 @@ Lat/Lng, to display it on a map.
 
 ## Changelog
 
+### 1.8.1
+- Fixed bug where maps didn't save
+
 ### 1.8.0
 - The maps `parts` now contains all available options from [here](https://developers.google.com/maps/documentation/geocoding/intro#Types) (including the `_small` variants). Any options without values are returned as empty strings.
 - Added `craft.simpleMap.getLatLngFromAddress($addressString[, $country])`.

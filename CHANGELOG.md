@@ -1,3 +1,7 @@
+## 3.1.1 - 2017-11-30
+### Fixed
+- Fixed bug where maps were failing to save.
+
 ## 3.1.0 - 2017-11-30
 ### Added
 - [CraftQL](https://github.com/markhuot/craftql) support!

@@ -468,7 +468,7 @@ class MapService extends Component
 	 */
 	private function _padParts (Map $model)
 	{
-		$parts = $model->parts;
+		$parts = $model->parts ?: [];
 
 		foreach (self::$parts as $part) {
 			if (!array_key_exists($part, $parts)) {

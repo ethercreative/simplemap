@@ -428,7 +428,7 @@ class SimpleMapService extends BaseApplicationComponent {
 
 	private function _padParts (SimpleMap_MapModel $model)
 	{
-		$parts = $model->parts;
+		$parts = $model->parts ?: [];
 
 		foreach (self::$_parts as $part) {
 			if (!array_key_exists($part, $parts)) {

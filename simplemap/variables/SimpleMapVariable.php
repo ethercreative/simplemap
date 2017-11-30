@@ -16,4 +16,9 @@ class SimpleMapVariable {
 		return craft()->plugins->getPlugin('simpleMap')->getSettings()->browserApiKey;
 	}
 
+	public function getLatLngFromAddress ($address, $country = null)
+	{
+		return SimpleMapService::getLatLngFromAddress($address, $country);
+	}
+
 }

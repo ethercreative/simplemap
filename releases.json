@@ -192,5 +192,14 @@
       "[Added] Added ability to restrict location search by country",
       "[Changed] New icon!"
     ]
+  },
+  {
+    "version": "1.8.0",
+    "downloadUrl": "https://github.com/ethercreative/simplemap/archive/v1.8.0.zip",
+    "date": "2017-11-30T10:47:00-08:00",
+    "notes": [
+      "[Added] Added `craft.simpleMap.getLatLngFromAddress($addressString[, $country])`.",
+      "[Improved] The maps `parts` now contains all available options from [here](https://developers.google.com/maps/documentation/geocoding/intro#Types) (including the `_small` variants). Any options without values are returned as empty strings."
+    ]
   }
 ]

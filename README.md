@@ -95,7 +95,27 @@ var map = new mapboxgl.Map({
 </script>
 ```
 
+### Converting an address to Lat/Lng
+If you need to convert a string address to a Lat/Lng you can do so using the 
+`craft.simpleMap.getLatLngFromAddress($addressString[, $country])` variable.
+An example of this would be wanting to convert a customers delivery address to a 
+Lat/Lng, to display it on a map.
+
+- `$address` - The string address you want to convert.
+- `$country` - *Optional.* Restrict the conversion to a specific country (useful for non-specific searches, i.e. town name). Must be valid [2-letter ISO code](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) (recommended), or full country name. 
+
+```twig
+{% set location = craft.simpleMap.getLatLngFromAddress("Ether Creative, Maidstone", "GB") %}
+
+{{ location.lat }}
+{{ location.lng }}
+```
+
 ## Changelog
+
+### 1.8.0
+- The maps `parts` now contains all available options from [here](https://developers.google.com/maps/documentation/geocoding/intro#Types) (including the `_small` variants). Any options without values are returned as empty strings.
+- Added `craft.simpleMap.getLatLngFromAddress($addressString[, $country])`.
 
 ### 1.7.2
 - Added ability to restrict location search by country

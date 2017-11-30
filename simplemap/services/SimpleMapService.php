@@ -12,6 +12,46 @@ class SimpleMapService extends BaseApplicationComponent {
 	public $searchEarthRad;
 	public $searchDistanceUnit;
 
+	private static $_parts = [
+		'room',
+		'floor',
+		'establishment',
+		'subpremise',
+		'premise',
+		'street_number',
+		'postal_code',
+		'street_address',
+		'colloquial_area',
+		'neighborhood',
+		'route',
+		'intersection',
+		'postal_town',
+		'sublocality_level_5',
+		'sublocality_level_4',
+		'sublocality_level_3',
+		'sublocality_level_2',
+		'sublocality_level_1',
+		'sublocality',
+		'locality',
+		'political',
+		'administrative_area_level_5',
+		'administrative_area_level_4',
+		'administrative_area_level_3',
+		'administrative_area_level_2',
+		'administrative_area_level_1',
+		'ward',
+		'country',
+		'parking',
+		'post_box',
+		'point_of_interest',
+		'natural_feature',
+		'park',
+		'airport',
+		'bus_station',
+		'train_station',
+		'transit_station',
+	];
+
 	// Public
 	// =========================================================================
 
@@ -62,6 +102,8 @@ class SimpleMapService extends BaseApplicationComponent {
 		{
 			$model = new SimpleMap_MapModel;
 		}
+
+		$model->parts = $this->_padParts($model);
 
 		$model->distance = $this->_calculateDistance($model);
 
@@ -382,6 +424,20 @@ class SimpleMapService extends BaseApplicationComponent {
 			)
 		);
 //		return ($this->searchEarthRad * acos(cos(deg2rad($lt1)) * cos(deg2rad($lt2)) * cos(deg2rad($ln2) - deg2rad($ln1)) + sin(deg2rad($lt1)) * sin(deg2rad($lt2))));
+	}
+
+	private function _padParts (SimpleMap_MapModel $model)
+	{
+		$parts = $model->parts;
+
+		foreach (self::$_parts as $part) {
+			if (!array_key_exists($part, $parts)) {
+				$parts[$part]            = '';
+				$parts[$part . '_short'] = '';
+			}
+		}
+
+		return $parts;
 	}
 
 	private function _formatLocaleForMap ($locale) {

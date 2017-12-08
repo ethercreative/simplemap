@@ -56,18 +56,30 @@ This plugin does **not** generate a front-end map; how you do that and what map 
 Using [Google Maps](https://developers.google.com/maps/documentation/javascript/tutorial):
 
 ```twig
-<div id="map"></div>
+<div id="map" style="height: 400px;"></div>
 <script>
-var map;
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: {
-      lat: {{ entry.myMapField.lat }},
-      lng: {{ entry.myMapField.lng }}
-    },
-    zoom: {{ entry.myMapField.zoom }}
-  });
-}
+  var map;
+  function initMap() {
+    // Display the map
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: {
+        lat: {{ entry.mapLocation.lat }},
+        lng: {{ entry.mapLocation.lng }}
+      },
+      zoom: {{ entry.mapLocation.zoom }}
+    });
+    
+    // Display the marker
+    var marker = new google.maps.Marker({
+      position: {
+        lat: {{ entry.mapLocation.lat }},
+        lng: {{ entry.mapLocation.lng }}
+      },
+      // A custom icon can be defined here, if desired
+      // icon: '/path/to/custom/icon.png',
+      map: map
+    });
+  }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ craft.simpleMap.apiKey }}&callback=initMap" async defer></script>
 ```

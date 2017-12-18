@@ -4,11 +4,11 @@ return [
 	'Map' => 'Map',
 
 	// Settings
-	'settingsApiKeyLabel' => 'Google Maps API Key',
-	'settingsAltApiKeyLabel' => 'Alternate Server API Key',
-	'settingsApiKeyInstructions'
+	'Google Maps API Key' => 'Google Maps API Key',
+	'Alternate Server API Key' => 'Alternate Server API Key',
+	'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
 		=> '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
-	'settingsAltApiKeyInstructions'
+	'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
 		=> 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
 
 	// Field settings

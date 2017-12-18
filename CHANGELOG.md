@@ -1,3 +1,8 @@
+## 3.1.2 - 2017-12-18
+### Fixed
+- Fixed settings not translating for non-English languages
+- Fixed boundary settings fields not accepting decimals
+
 ## 3.1.1 - 2017-11-30
 ### Fixed
 - Fixed bug where maps were failing to save.

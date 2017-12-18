@@ -49,7 +49,7 @@ class SimpleMapPlugin extends BasePlugin {
 
 	public function getReleaseFeedUrl()
 	{
-		return 'https://raw.githubusercontent.com/ethercreative/SimpleMap/master/releases.json';
+		return 'https://raw.githubusercontent.com/ethercreative/SimpleMap/v2/releases.json';
 	}
 
 	protected function defineSettings()

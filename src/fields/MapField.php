@@ -509,7 +509,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	public function getElementValidationRules (): array
 	{
 		return [
-			MapValidator::class,
+			[MapValidator::class, 'on' => Element::SCENARIO_LIVE],
 		];
 	}
 

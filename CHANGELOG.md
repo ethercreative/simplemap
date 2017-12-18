@@ -1,3 +1,7 @@
+## 3.1.3 - 2017-12-18
+### Fixed
+- Map fields no longer cause global sets to fail to save!
+
 ## 3.1.2 - 2017-12-18
 ### Fixed
 - Fixed settings not translating for non-English languages

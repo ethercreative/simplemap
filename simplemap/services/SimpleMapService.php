@@ -9,7 +9,6 @@ class SimpleMapService extends BaseApplicationComponent {
 	public $settings;
 
 	public $searchLatLng;
-	public $searchEarthRad;
 	public $searchDistanceUnit;
 
 	private static $_parts = [
@@ -403,7 +402,7 @@ class SimpleMapService extends BaseApplicationComponent {
 
 	private function _calculateDistance (SimpleMap_MapModel $model)
 	{
-		if (!$this->searchLatLng || !$this->searchEarthRad) return null;
+		if (!$this->searchLatLng || !$this->searchDistanceUnit) return null;
 
 		$lt1 = $this->searchLatLng['lat'];
 		$ln1 = $this->searchLatLng['lng'];

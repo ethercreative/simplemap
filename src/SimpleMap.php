@@ -76,6 +76,15 @@ class SimpleMap extends Plugin
 			CraftVariable::EVENT_INIT,
 			[$this, 'onRegisterVariable']
 		);
+
+		// CraftQL Support
+        if (class_exists(\markhuot\CraftQL\CraftQL::class)) {
+            Event::on(
+                MapField::class,
+                'craftQlGetFieldSchema',
+                [new \ether\simplemap\listeners\GetCraftQLSchema, 'handle']
+            );
+        }
 	}
 
 	// Craft: Settings

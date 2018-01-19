@@ -178,6 +178,8 @@ class MapService extends Component
 	 * @param ElementInterface $owner
 	 *
 	 * @return bool
+	 * @throws Exception
+	 * @throws \yii\base\InvalidConfigException
 	 */
 	public function saveField (MapField $field, ElementInterface $owner): bool
 	{
@@ -247,6 +249,7 @@ class MapService extends Component
 	 * @param                       $value
 	 *
 	 * @return null
+	 * @throws Exception
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
@@ -255,14 +258,22 @@ class MapService extends Component
 
 		$tableName = MapRecord::$tableName;
 
-		$query->join(
+		$on = [
+			'and',
+			'[[elements.id]] = [[simplemap.ownerId]]',
+			'[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
+		];
+
+		$query->query->join(
 			'JOIN',
 			"{$tableName} simplemap",
-			[
-				'and',
-				'[[elements.id]] = [[simplemap.ownerId]]',
-				'[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
-			]
+			$on
+		);
+
+		$query->subQuery->join(
+			'JOIN',
+			"{$tableName} simplemap",
+			$on
 		);
 
 		if (!is_array($query->orderBy)) {
@@ -321,6 +332,7 @@ class MapService extends Component
 	 * @param string|null $locale
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
 	private function _getPartsFromLatLng ($lat, $lng, $address, $locale)
 	{
@@ -485,6 +497,8 @@ class MapService extends Component
 	 *
 	 * @param ElementQuery $query
 	 * @param array        $value
+	 *
+	 * @throws Exception
 	 */
 	private function _searchLocation (ElementQuery $query, $value)
 	{

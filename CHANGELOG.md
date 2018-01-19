@@ -1,3 +1,12 @@
+## 3.2.0 - WIP
+### Fixed
+- Not #70 yet
+
+### Improved
+- Updated CraftQL support (via @markhuot)
+- Updated Mapbox example to use latest API
+- Improved address and lat/lng input sizing on smaller screens and in a HUD
+
 ## 3.1.3 - 2017-12-18
 ### Fixed
 - Map fields no longer cause global sets to fail to save!

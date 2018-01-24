@@ -1,13 +1,12 @@
 {
   "name": "ether/simplemap",
   "description": "A beautifully simple Google Map field type.",
-  "version": "3.1.3",
+  "version": "3.2.0",
   "type": "craft-plugin",
   "license": "MIT",
   "minimum-stability": "dev",
   "require": {
-    "craftcms/cms": "^3.0.0-beta.20",
-    "webonyx/graphql-php": "^0.10.0"
+    "craftcms/cms": "^3.0.0-beta.20"
   },
   "autoload": {
     "psr-4": {

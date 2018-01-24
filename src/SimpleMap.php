@@ -11,6 +11,7 @@ use craft\services\Fields;
 use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
 use ether\simplemap\fields\MapField;
+use ether\simplemap\listeners\GetCraftQLSchema;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
 use yii\base\Event;
@@ -76,6 +77,17 @@ class SimpleMap extends Plugin
 			CraftVariable::EVENT_INIT,
 			[$this, 'onRegisterVariable']
 		);
+
+		// CraftQL Support
+		/** @noinspection PhpUndefinedNamespaceInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		if (class_exists(\markhuot\CraftQL\CraftQL::class)) {
+            Event::on(
+                MapField::class,
+                'craftQlGetFieldSchema',
+                [new GetCraftQLSchema, 'handle']
+            );
+        }
 	}
 
 	// Craft: Settings

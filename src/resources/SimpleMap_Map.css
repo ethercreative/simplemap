@@ -24,7 +24,7 @@
 }
 
 .simplemap--lat-lng input {
-	width: 25.5ch;
+	width: 15.5ch;
 	margin: 0;
 	vertical-align: middle;
 	color: #caccce;
@@ -32,12 +32,9 @@
 
 .simplemap--lat-lng input:first-child {
 	border-right: none;
-	border-radius: 3px 0 0 3px;
 }
 
-.simplemap--lat-lng input:last-child {
-	border-radius: 0 3px 3px 0;
-}
+/* Responsive */
 
 @media (max-width: 900px) {
 	.simplemap--address-field {
@@ -51,4 +48,29 @@
 	.simplemap--lat-lng input {
 		width: 100%;
 	}
+}
+
+/* Hud */
+
+.hud .simplemap--address-wrap {
+	width: 30vw;
+	max-width: 100%;
+	padding: 0 !important;
+}
+
+.hud .simplemap--address-field {
+	display: block;
+}
+
+.hud .simplemap--address {
+	width: 100%;
+}
+
+.hud .simplemap--lat-lng {
+	width: 100%;
+	padding: 10px 0 0 0;
+}
+
+.hud .simplemap--lat-lng input {
+	width: 50%;
 }

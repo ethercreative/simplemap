@@ -1,3 +1,13 @@
+## 3.2.0 - 2018-01-25
+### Fixed
+- Fixed bug where pagination would error when querying via a map field. #70
+
+### Improved
+- Updated CraftQL support (via @markhuot)
+- Removed webonyx/graphql-php dependency #71
+- Improved address and lat/lng input sizing on smaller screens and in a HUD #73
+- Updated Mapbox example to use latest API #74
+
 ## 3.1.3 - 2017-12-18
 ### Fixed
 - Map fields no longer cause global sets to fail to save!

@@ -87,8 +87,8 @@ Using [Google Maps](https://developers.google.com/maps/documentation/javascript/
 And [Mapbox](https://www.mapbox.com/mapbox-gl-js/api/):
 
 ```twig
-<script src="https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css" rel="stylesheet" />
 
 <div id="map" style="width: 400px; height: 300px;"></div>
 <script>

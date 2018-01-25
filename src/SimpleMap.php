@@ -59,16 +59,9 @@ class SimpleMap extends Plugin
 
 		// Field Types
 		Event::on(
-			Fields::className(),
+			Fields::class,
 			Fields::EVENT_REGISTER_FIELD_TYPES,
 			[$this, 'onRegisterFieldTypes']
-		);
-
-		// Redirect to settings after install
-		Event::on(
-			Plugins::className(),
-			Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-			[$this, 'onAfterInstallPlugin']
 		);
 
 		// Variable
@@ -88,6 +81,18 @@ class SimpleMap extends Plugin
                 [new GetCraftQLSchema, 'handle']
             );
         }
+	}
+
+	public function afterInstall ()
+	{
+		parent::afterInstall();
+
+		if (Craft::$app->getRequest()->getIsConsoleRequest())
+			return;
+
+		Craft::$app->getResponse()->redirect(
+			UrlHelper::cpUrl('settings/plugins/simplemap')
+		)->send();
 	}
 
 	// Craft: Settings
@@ -122,16 +127,6 @@ class SimpleMap extends Plugin
 	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
 	{
 		$event->types[] = MapField::class;
-	}
-
-	public function onAfterInstallPlugin (PluginEvent $event)
-	{
-		if (!Craft::$app->getRequest()->getIsConsoleRequest()
-		    && ($event->plugin === $this)) {
-			Craft::$app->getResponse()->redirect(
-				UrlHelper::cpUrl('settings/plugins/simplemap')
-			)->send();
-		}
 	}
 
 	public function onRegisterVariable (Event $event)

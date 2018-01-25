@@ -1,3 +1,10 @@
+## 3.2.1 - WIP
+### Improved
+- Map height no longer jumps when page loads
+
+### Changed
+- Now using the plugins `afterInstall` function in favour of the plugin after install event
+
 ## 3.2.0 - 2018-01-25
 ### Fixed
 - Fixed bug where pagination would error when querying via a map field. #70

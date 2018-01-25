@@ -491,6 +491,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				'name'  => $this->handle,
 				'value' => $value,
 				'field' => $this,
+				'height'=> $this->height,
 			]
 		);
 	}

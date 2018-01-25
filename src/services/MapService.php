@@ -287,7 +287,8 @@ class MapService extends Component
 			$this->_replaceOrderBy($query);
 		}
 
-		if (isset($oldOrderBy))
+		if (array_key_exists('oldOrderBy', get_defined_vars()))
+			/** @noinspection PhpUndefinedVariableInspection */
 			$query->orderBy = $oldOrderBy;
 
 		return;

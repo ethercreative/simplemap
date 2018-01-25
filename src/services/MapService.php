@@ -255,15 +255,17 @@ class MapService extends Component
 
 		$tableName = MapRecord::$tableName;
 
-		$query->join(
-			'JOIN',
-			"{$tableName} simplemap",
-			[
-				'and',
-				'[[elements.id]] = [[simplemap.ownerId]]',
-				'[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
-			]
-		);
+		if (!is_array($query->join) || ! sizeof(array_filter($query->join,function($o) use ($tableName) { return $o[1] == "{$tableName} simplemap"; }))){
+            $query->join(
+                'JOIN',
+                "{$tableName} simplemap",
+                [
+                    'and',
+                    '[[elements.id]] = [[simplemap.ownerId]]',
+                    '[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
+                ]
+            );
+        }
 
 		if (!is_array($query->orderBy)) {
 			$oldOrderBy = $query->orderBy;

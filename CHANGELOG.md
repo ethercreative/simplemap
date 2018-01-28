@@ -1,9 +1,11 @@
 ## 3.2.1 - WIP
 ### Improved
 - Map height no longer jumps when page loads
+- Vastly improved the map fields settings UI/UX
 
 ### Changed
-- Now using the plugins `afterInstall` function in favour of the plugin after install event
+- Now using the plugins `afterInstall` function instead of the plugin after install event
+- The "Hide Lat/Lng" option is now true by default
 
 ## 3.2.0 - 2018-01-25
 ### Fixed

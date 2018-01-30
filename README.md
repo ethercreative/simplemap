@@ -1,6 +1,6 @@
-![Simple Map](resources/banner.jpg)
+![SimpleMap](resources/banner.jpg)
 
-# Simple Map
+# SimpleMap
 A beautifully simple Google Map field type for **Craft 3**. Full localization support, compatible with Matrix & [CraftQL](https://github.com/markhuot/craftql), supports 
 searching by location and sorting by distance.
 

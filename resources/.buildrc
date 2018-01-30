@@ -1,0 +1,21 @@
+{
+	"less": {
+		"ignore": true,
+		"input": "public/assets/less/style.less",
+		"output": "public/assets/css",
+		"watch": [
+			"public/assets/less/**/*"
+		]
+	},
+	"js": {
+		"ignore": false,
+		"input": "./js/SimpleMapSettings.js",
+		"output": "../src/resources/SimpleMapSettings.min.js",
+		"watch": [
+			"./js/**/*.js"
+		]
+	},
+	"browserSync": {
+		"ignore": true
+	}
+}

@@ -22,7 +22,11 @@
 </div>
 
 {% if not field.hideMap %}
-	<div id="{{ id }}" class="simplemap--map"></div>
+	<div
+		id="{{ id }}"
+		class="simplemap--map"
+		style="height:{{ height }}px"
+	></div>
 {% endif %}
 
 <input

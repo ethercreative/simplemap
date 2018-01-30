@@ -1,11 +1,21 @@
-## 3.2.0 - WIP
+## 3.2.1 - WIP
+### Improved
+- Map height no longer jumps when page loads
+- Vastly improved the map fields settings UI/UX
+
+### Changed
+- Now using the plugins `afterInstall` function instead of the plugin after install event
+- The "Hide Lat/Lng" option is now true by default
+
+## 3.2.0 - 2018-01-25
 ### Fixed
-- Not #70 yet
+- Fixed bug where pagination would error when querying via a map field. #70
 
 ### Improved
 - Updated CraftQL support (via @markhuot)
-- Updated Mapbox example to use latest API
-- Improved address and lat/lng input sizing on smaller screens and in a HUD
+- Removed webonyx/graphql-php dependency #71
+- Improved address and lat/lng input sizing on smaller screens and in a HUD #73
+- Updated Mapbox example to use latest API #74
 
 ## 3.1.3 - 2017-12-18
 ### Fixed

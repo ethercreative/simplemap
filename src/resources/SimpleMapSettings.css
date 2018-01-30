@@ -1,0 +1,57 @@
+.simplemap-settings--wrap {
+	overflow: hidden;
+	transition:
+		max-height 0.15s ease,
+		opacity 0.25s ease,
+		margin-bottom 0.25s ease;
+	transition-delay: 0s, 0.1s, 0s;
+}
+.simplemap-settings--wrap.hide {
+	max-height: 0 !important;
+	opacity: 0;
+	transition-delay: 0.1s, 0s, 0s;
+	margin-bottom: -24px;
+}
+
+.simplemap-settings--settings-map {
+	border-radius: 4px 4px 0 0;
+}
+
+.simplemap-settings--resize {
+	position: relative;
+
+	height: 25px;
+
+	background-color: #ebedef;
+	border-top: 1px solid #fff;
+	border-radius: 0 0 4px 4px;
+
+	cursor: ns-resize;
+	user-select: none;
+}
+
+.simplemap-settings--resize:after {
+	content: '.. .. .. ..';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	display: inline-block;
+	width: 11px;
+	height: 24px;
+	vertical-align: middle;
+
+	color: #cccccc;
+	font-size: 12px;
+	font-family: sans-serif;
+	line-height: 5px;
+	letter-spacing: 2px;
+
+	text-shadow: 1px 0 1px black;
+	transform: translate3d(-50%, -50%, 0) rotate(90deg);
+}
+
+.simplemap-settings--boundary-map {
+	height: 500px;
+	border-radius: 4px;
+}

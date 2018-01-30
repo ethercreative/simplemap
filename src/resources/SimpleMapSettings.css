@@ -54,7 +54,7 @@
 .simplemap-settings--boundary-map-wrap {
 	position: relative;
 	width: 100%;
-	padding-top: 75%;
+	height: calc(100vh - 200px);
 }
 
 .simplemap-settings--boundary-map {

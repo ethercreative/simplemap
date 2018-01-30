@@ -14,19 +14,23 @@ class SimpleMapSettings {
 		zoom: 15,
 		height: 400,
 		boundary: {
-			nw: { lat: 0, lng: 0 },
-			se: { lat: 0, lng: 0 },
+			ne: { lat: 0, lng: 0 },
+			sw: { lat: 0, lng: 0 },
 		}
 	};
 	
 	setup = false;
 	inputs = null;
+	boundaries = null;
 	
 	settingsMap = null;
 	settingsMapEl = null;
 	settingsMapWrap = null;
 	
 	boundaryMap = null;
+	boundaryButton = null;
+	drawingManager = null;
+	boundaryRectangle = null;
 	
 	mouseMoveLastPos = 0;
 	nextHeight = 0;
@@ -37,7 +41,9 @@ class SimpleMapSettings {
 	constructor (key, locale, namespacedId, mapSettings) {
 		this.namespacedId = namespacedId;
 		this.mapSettings = Object.keys(mapSettings).reduce((a, b) => {
-			a[b] = +mapSettings[b];
+			a[b] = b === "boundary"
+				? JSON.parse(mapSettings[b])
+				: +mapSettings[b];
 			return a;
 		}, {});
 		
@@ -48,14 +54,26 @@ class SimpleMapSettings {
 			height: document.getElementById(`${this.namespacedId}height`),
 		};
 		
+		this.boundaries = {
+			neLat: document.getElementById(`${this.namespacedId}boundaryRestrictionNELat`),
+			neLng: document.getElementById(`${this.namespacedId}boundaryRestrictionNELng`),
+			swLat: document.getElementById(`${this.namespacedId}boundaryRestrictionSWLat`),
+			swLng: document.getElementById(`${this.namespacedId}boundaryRestrictionSWLng`),
+		};
+		
+		this.boundaryButton =
+			document.getElementById(`${this.namespacedId}boundaryButton`);
+		
+		this.boundaryButton.addEventListener("click", this.onBoundaryButtonClick);
+		
 		// Load Google APIs if they aren"t already
 		if (typeof google === "undefined") {
 			if (!window.simpleMapsLoadingGoogle)
-				loadGoogleAPI(key, locale);
+				loadGoogleAPI(key, locale, true);
 		} else if (!google.maps || !google.maps.places) {
 			// Load Google Maps APIs if the aren"t already
 			if (!window.simpleMapsLoadingGoogle)
-				loadMapsApi(key, locale);
+				loadMapsApi(key, locale, true);
 		} else {
 			if (!this.setup)
 				this.setupMaps();
@@ -146,6 +164,46 @@ class SimpleMapSettings {
 		document.removeEventListener("mouseup", this.onResizeMouseUp);
 	};
 	
+	onBoundaryButtonClick = () => {
+		if (this.boundaries.neLat.value) {
+			this.drawingManager.setOptions({
+				drawingMode: null,
+			});
+			
+			this.boundaryRectangle.setMap(null);
+			this.boundaryRectangle = null;
+			
+			this.boundaries.neLat.value = "";
+			this.boundaries.neLng.value = "";
+			this.boundaries.swLat.value = "";
+			this.boundaries.swLng.value = "";
+			
+			this.boundaryButton.textContent = "Draw Boundaries";
+			return;
+		}
+		
+		this.drawingManager.setOptions({
+			drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+		});
+		this.drawingManager.setMap(this.boundaryMap);
+		this.boundaryButton.textContent = "Clear Boundaries";
+	};
+	
+	onDrawingComplete = rectangle => {
+		this.boundaryRectangle = rectangle;
+		this.hookBoundaryRectangleEvents();
+		
+		this.storeNextBounds(rectangle.getBounds());
+		
+		this.drawingManager.setOptions({
+			drawingMode: null,
+		});
+	};
+	
+	onRectangleEdit = () => {
+		this.storeNextBounds(this.boundaryRectangle.getBounds());
+	};
+	
 	// Actions
 	// =========================================================================
 	
@@ -197,8 +255,20 @@ class SimpleMapSettings {
 		const boundaryMapEl =
 			document.getElementById(`${this.namespacedId}boundaryMap`);
 		
-		// TODO: If we have boundaries, position the map to contain them.
-		// TODO: Add [Clear] button
+		this.drawingManager = new google.maps.drawing.DrawingManager({
+			drawingMode: null,
+			drawingControl: false,
+			rectangleOptions: {
+				// clickable: true,
+				editable: true,
+			}
+		});
+		
+		google.maps.event.addListener(
+			this.drawingManager,
+			"rectanglecomplete",
+			this.onDrawingComplete
+		);
 		
 		this.boundaryMap = new google.maps.Map(boundaryMapEl, {
 			zoom: this.mapSettings.zoom,
@@ -214,6 +284,41 @@ class SimpleMapSettings {
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 		});
 		
+		if (this.boundaries.neLat.value) {
+			this.boundaryRectangle = new google.maps.Rectangle({
+				bounds: {
+					north: +this.mapSettings.boundary.ne.lat,
+					east: +this.mapSettings.boundary.ne.lng,
+					south: +this.mapSettings.boundary.sw.lat,
+					west: +this.mapSettings.boundary.sw.lng,
+				},
+				map: this.boundaryMap,
+				editable: true,
+			});
+			
+			this.boundaryMap.fitBounds(this.boundaryRectangle.getBounds());
+			
+			this.hookBoundaryRectangleEvents();
+		}
+		
+	}
+	
+	hookBoundaryRectangleEvents () {
+		google.maps.event.addListener(
+			this.boundaryRectangle/*.getPath()*/,
+			"bounds_changed",
+			this.onRectangleEdit
+		);
+	}
+	
+	storeNextBounds (bounds) {
+		const ne = bounds.getNorthEast()
+			, sw = bounds.getSouthWest();
+		
+		this.boundaries.neLat.value = ne.lat();
+		this.boundaries.neLng.value = ne.lng();
+		this.boundaries.swLat.value = sw.lat();
+		this.boundaries.swLng.value = sw.lng();
 	}
 	
 	redrawMaps () {

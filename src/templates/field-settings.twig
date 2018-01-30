@@ -89,10 +89,19 @@
 >
 
 {% set boundaryMap %}
-	<div
-		id="boundaryMap"
-		class="simplemap-settings--boundary-map"
-	></div>
+	<button
+		id="boundaryButton"
+		class="simplemap-settings--boundary-button"
+		type="button"
+	>
+		{{ field.boundaryRestrictionNELat ? "Clear" : "Draw" }} Boundaries
+	</button>
+	<div class="simplemap-settings--boundary-map-wrap">
+		<div
+			id="boundaryMap"
+			class="simplemap-settings--boundary-map"
+		></div>
+	</div>
 {% endset %}
 {{ forms.field({
 	label: "Boundary Restriction"|t("simplemap"),

@@ -535,6 +535,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
+		// For whatever reason, this function can be
+		// run BEFORE SimpleMap has been initialized
+		if (!SimpleMap::$plugin)
+			return null;
+
 		SimpleMap::$plugin->getMap()->modifyElementsQuery($query, $value);
 
 		return null;

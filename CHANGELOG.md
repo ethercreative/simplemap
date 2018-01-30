@@ -1,7 +1,14 @@
-## 3.2.1 - WIP
+## 3.3.0 - 2018-01-30
+### Fixed
+- Added a fix for those annoying `Call to a member function getMap() on null` bugs
+
 ### Improved
 - Map height no longer jumps when page loads
 - Vastly improved the map fields settings UI/UX
+	- No more nasty text fields!
+	- Map height and position is now set by resizing and moving a map
+	- Auto-complete search bounds can now be drawn directly onto a map
+	- Radio buttons are now drop-downs
 
 ### Changed
 - Now using the plugins `afterInstall` function instead of the plugin after install event

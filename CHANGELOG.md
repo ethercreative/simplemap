@@ -1,3 +1,7 @@
+## 3.3.1 - 2018-01-30
+### Fixed
+- Fixed JS bug on settings page
+
 ## 3.3.0 - 2018-01-30
 ### Fixed
 - Added a fix for those annoying `Call to a member function getMap() on null` bugs

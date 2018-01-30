@@ -41,9 +41,10 @@ class SimpleMapSettings {
 	constructor (key, locale, namespacedId, mapSettings) {
 		this.namespacedId = namespacedId;
 		this.mapSettings = Object.keys(mapSettings).reduce((a, b) => {
+			const value = mapSettings[b];
 			a[b] = b === "boundary"
-				? JSON.parse(mapSettings[b])
-				: +mapSettings[b];
+				? typeof value === "string" ? JSON.parse(value) : value
+				: +value;
 			return a;
 		}, {});
 		

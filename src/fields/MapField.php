@@ -7,6 +7,8 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Json;
+use ether\simplemap\resources\MapSettingsAsset;
 use ether\simplemap\resources\SimpleMapAsset;
 use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
@@ -50,7 +52,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * @var bool - If true, the lat/lng inputs will not be displayed
 	 */
-	public $hideLatLng = false;
+	public $hideLatLng = true;
 
 	/**
 	 * @var string|null - The country to restrict the location search to
@@ -418,6 +420,36 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public function getSettingsHtml ()
 	{
+		$view         = \Craft::$app->getView();
+		$key          = SimpleMap::$plugin->getSettings()->apiKey;
+		$locale       = \Craft::$app->locale->id;
+		$namespacedId = $view->namespaceInputId('');
+		$boundary     = $this->_getBoundary();
+
+		if ($boundary === null) {
+			$emptyLatLng = [ 'lat' => 0, 'lng' => 0 ];
+			$boundary = [
+				'nw' => $emptyLatLng,
+				'se' => $emptyLatLng,
+			];
+		}
+
+		$settings = Json::encode([
+			'lat' => $this->lat,
+			'lng' => $this->lng,
+			'zoom' => $this->zoom,
+			'height' => $this->height,
+			'boundary' => $boundary,
+		]);
+
+		$view->registerAssetBundle(MapSettingsAsset::class);
+		$view->registerJs("new SimpleMapSettings(
+	'{$key}', 
+	'{$locale}',
+	'{$namespacedId}',
+	{$settings}
+);");
+
 		return \Craft::$app->getView()->renderTemplate(
 			'simplemap/field-settings',
 			[
@@ -443,24 +475,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		$id           = $view->formatInputId($this->handle);
 		$namespacedId = $view->namespaceInputId($id);
 
-		if (
-			$this->boundaryRestrictionNELat
-			&& $this->boundaryRestrictionNELng
-			&& $this->boundaryRestrictionSWLat
-			&& $this->boundaryRestrictionSWLng
-		) {
-			$ne = [
-				'lat' => $this->boundaryRestrictionNELat,
-				'lng' => $this->boundaryRestrictionNELng,
-			];
-
-			$sw = [
-				'lat' => $this->boundaryRestrictionSWLat,
-				'lng' => $this->boundaryRestrictionSWLng,
-			];
-
-			$this->boundary = json_encode(['ne' => $ne, 'sw' => $sw]);
-		}
+		if ($boundary = $this->_getBoundary())
+			$this->boundary = $boundary;
 
 		$key     = SimpleMap::$plugin->getSettings()->apiKey;
 		$locale  = $element ? $element->siteId : \Craft::$app->locale->id;
@@ -491,6 +507,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				'name'  => $this->handle,
 				'value' => $value,
 				'field' => $this,
+				'height'=> $this->height,
 			]
 		);
 	}
@@ -518,6 +535,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
+		// For whatever reason, this function can be
+		// run BEFORE SimpleMap has been initialized
+		if (!SimpleMap::$plugin)
+			return null;
+
 		SimpleMap::$plugin->getMap()->modifyElementsQuery($query, $value);
 
 		return null;
@@ -533,6 +555,33 @@ class MapField extends Field implements PreviewableFieldInterface
 	{
 		SimpleMap::$plugin->getMap()->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	private function _getBoundary ()
+	{
+		if (
+			$this->boundaryRestrictionNELat
+			&& $this->boundaryRestrictionNELng
+			&& $this->boundaryRestrictionSWLat
+			&& $this->boundaryRestrictionSWLng
+		) {
+			$ne = [
+				'lat' => $this->boundaryRestrictionNELat,
+				'lng' => $this->boundaryRestrictionNELng,
+			];
+
+			$sw = [
+				'lat' => $this->boundaryRestrictionSWLat,
+				'lng' => $this->boundaryRestrictionSWLng,
+			];
+
+			return json_encode(['ne' => $ne, 'sw' => $sw]);
+		}
+
+		return null;
 	}
 
 }

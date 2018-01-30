@@ -595,7 +595,7 @@ class MapService extends Component
 	{
 		$nextOrder = [];
 
-		foreach ($query->orderBy as $order => $sort) {
+		foreach ((array)$query->orderBy as $order => $sort) {
 			if ($order == 'distance' && $distanceSearch) $nextOrder[$distanceSearch] = $sort;
 			elseif ($order != 'distance') $nextOrder[$order] = $sort;
 		}

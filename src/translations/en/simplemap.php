@@ -25,27 +25,30 @@ return [
 	'The maps height in the input' => 'The maps height in the input',
 
 	'Hide Map' => 'Hide Map',
-	'When on, the map will be hidden leaving just the address auto-complete field'
-		=> 'When on, the map will be hidden leaving just the address auto-complete field',
+	'When on, the map will be hidden leaving just the address search field'
+		=> 'When on, the map will be hidden leaving just the address search field',
 
 	'Hide Lat/Lng' => 'Hide Lat/Lng',
 	'When on, the latitude & longitude fields will be hidden'
 		=> 'When on, the latitude & longitude fields will be hidden',
 
-	'County Restriction' => 'County Restriction',
-	'Restrict the auto-complete by a specific country'
-		=> 'Restrict the auto-complete by a specific country',
+	'Restrict by Country' => 'Restrict by Country',
+	'Restrict the address search to a specific country'
+		=> 'Restrict the address search to a specific country',
 
 	'Restrict by Type' => 'Restrict by Type',
-	'Restrict the auto-complete by a specific type'
-		=> 'Restrict the auto-complete by a specific type',
+	'Restrict the address search to a specific type'
+		=> 'Restrict the address search to a specific type',
 
 	'North-east Corner' => 'North-east Corner',
 	'South-west Corner' => 'South-west Corner',
 
 	'Boundary Restriction' => 'Boundary Restriction',
-	'Restrict the auto-complete to within a specific square boundary'
-		=> 'Restrict the auto-complete to within a specific square boundary',
+	'Restrict the address search to within a specific rectangular boundary'
+		=> 'Restrict the address search to within a specific rectangular boundary',
+
+	'Configure Map' => 'Configure Map',
+	'Move, zoom, and resize the map' => 'Move, zoom, and resize the map',
 
 	// Field validation
 	'Missing Lat/Lng' => 'Missing Lat/Lng',

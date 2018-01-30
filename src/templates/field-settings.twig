@@ -1,60 +1,8 @@
 {% import "_includes/forms" as forms %}
 
-<div class="field" id="lat-field">
-	<div class="heading">
-		<label id="lat-label" for="lat">{{ "Latitude"|t("simplemap") }}</label>
-		<div class="instructions">
-			<p>{{ "The maps default latitude"|t("simplemap") }}</p>
-		</div>
-	</div>
-	<div class="input ltr">
-		<input class="text" type="number" id="lat" size="10"
-		       step="0.000000001" name="lat"
-		       value="{{ field.lat }}"
-		       autocomplete="off" placeholder="51.272154">
-	</div>
-</div>
-
-<div class="field" id="lng-field">
-	<div class="heading">
-		<label id="lng-label" for="lng">{{ "Longitude"|t("simplemap") }}</label>
-		<div class="instructions">
-			<p>{{ "The maps default longitude"|t("simplemap") }}</p>
-		</div>
-	</div>
-	<div class="input ltr">
-		<input class="text" type="number" id="lng" size="10"
-		       step="0.000000001" name="lng"
-		       value="{{ field.lng }}"
-		       autocomplete="off" placeholder="0.514951">
-	</div>
-</div>
-
-{{ forms.textField({
-	label: "Zoom Level"|t("simplemap"),
-	instructions: "The default zoom level"|t("simplemap"),
-	placeholder: '12',
-	size: 2,
-	id: 'zoom',
-	name: 'zoom',
-	value: field.zoom,
-	type: 'number'
-}) }}
-
-{{ forms.textField({
-	label: "Height"|t("simplemap"),
-	instructions: "The maps height in the input"|t("simplemap"),
-	placeholder: '400',
-	size: 3,
-	id: 'height',
-	name: 'height',
-	value: field.height,
-	type: 'number'
-}) }}
-
 {{ forms.lightswitchField({
 	label: "Hide Map"|t("simplemap"),
-	instructions: "When on, the map will be hidden leaving just the address auto-complete field"|t("simplemap"),
+	instructions: "When on, the map will be hidden leaving just the address search field"|t("simplemap"),
 	id: 'hideMap',
 	name: 'hideMap',
 	on: field.hideMap
@@ -68,78 +16,94 @@
 	on: field.hideLatLng
 }) }}
 
+<input type="hidden" id="lat" name="lat" value="{{ field.lat }}">
+<input type="hidden" id="lng" name="lng" value="{{ field.lng }}">
+<input type="hidden" id="zoom" name="zoom" value="{{ field.zoom }}">
+<input type="hidden" id="height" name="height" value="{{ field.height }}">
+
+{% set settingsMap %}
+	<div
+		id="settingsMap"
+		class="simplemap-settings--settings-map"
+		style="height:{{ field.height }}px"
+	></div>
+	<div
+		id="settingsMapHeight"
+		class="simplemap-settings--resize"
+		title="Drag to resize"
+	></div>
+{% endset %}
+<div
+	id="settingsMapWrap"
+	class="simplemap-settings--wrap {{ field.hideMap ? 'hide' }}"
+>
+	{{ forms.field({
+		label: "Configure Map"|t("simplemap"),
+		instructions: "Move, zoom, and resize the map"|t("simplemap"),
+	}, settingsMap) }}
+</div>
+
 <hr>
 
 {{ forms.selectField({
-	label: "County Restriction"|t("simplemap"),
-	instructions: "Restrict the auto-complete by a specific country"|t("simplemap"),
+	label: "Restrict by Country"|t("simplemap"),
+	instructions: "Restrict the address search to a specific country"|t("simplemap"),
 	id: 'countryRestriction',
 	name: 'countryRestriction',
 	options: countries,
 	value: field.countryRestriction
 }) }}
 
-{{ forms.radioGroupField({
+{{ forms.selectField({
 	label: "Restrict by Type"|t("simplemap"),
-	instructions: "Restrict the auto-complete by a specific type"|t("simplemap"),
+	instructions: "Restrict the address search to a specific type"|t("simplemap"),
 	id: 'typeRestriction',
 	name: 'typeRestriction',
 	options: types,
 	value: field.typeRestriction
 }) }}
 
-{% set boundaryRestrictionInput %}
-	<label style="color:#8f98a3;font-size:13px;font-weight:600;display:block;margin-bottom:4px">
-		<span style="display:inline-block;margin-right:4px">
-			{{ "North-east Corner"|t("simplemap") }}:
-		</span>
-		<input
-			class="text"
-			type="number"
-			id="boundaryRestrictionNELat"
-			size="10" step="0.000000001"
-			name="boundaryRestrictionNELat"
-			value="{{ field.boundaryRestrictionNELat }}"
-			autocomplete="off"
-			placeholder="{{ 'Latitude'|t("simplemap") }}"
-		>
-		<input
-			class="text"
-			type="number"
-			id="boundaryRestrictionNELng"
-			size="10" step="0.000000001"
-			name="boundaryRestrictionNELng"
-			value="{{ field.boundaryRestrictionNELng }}"
-			autocomplete="off"
-			placeholder="{{ 'Longitude'|t("simplemap") }}"
-		>
-	</label>
-	<label style="color:#8f98a3;font-size:13px;font-weight:600;display:block">
-		{{ "South-west Corner"|t("simplemap") }}:
-		<input
-			class="text"
-			type="number"
-			id="boundaryRestrictionSWLat"
-			size="10" step="0.000000001"
-			name="boundaryRestrictionSWLat"
-			value="{{ field.boundaryRestrictionSWLat }}"
-			autocomplete="off"
-			placeholder="{{ 'Latitude'|t("simplemap") }}"
-		>
-		<input
-			class="text"
-			type="number"
-			id="boundaryRestrictionSWLng"
-			size="10" step="0.000000001"
-			name="boundaryRestrictionSWLng"
-			value="{{ field.boundaryRestrictionSWLng }}"
-			autocomplete="off"
-			placeholder="{{ 'Longitude'|t("simplemap") }}"
-		>
-	</label>
-{% endset %}
+<input
+	type="hidden"
+	id="boundaryRestrictionNELat"
+	name="boundaryRestrictionNELat"
+	value="{{ field.boundaryRestrictionNELat }}"
+>
+<input
+	type="hidden"
+	id="boundaryRestrictionNELng"
+	name="boundaryRestrictionNELng"
+	value="{{ field.boundaryRestrictionNELng }}"
+>
+<input
+	type="hidden"
+	id="boundaryRestrictionSWLat"
+	name="boundaryRestrictionSWLat"
+	value="{{ field.boundaryRestrictionSWLat }}"
+>
+<input
+	type="hidden"
+	id="boundaryRestrictionSWLng"
+	name="boundaryRestrictionSWLng"
+	value="{{ field.boundaryRestrictionSWLng }}"
+>
 
+{% set boundaryMap %}
+	<button
+		id="boundaryButton"
+		class="simplemap-settings--boundary-button"
+		type="button"
+	>
+		{{ field.boundaryRestrictionNELat ? "Clear" : "Draw" }} Boundaries
+	</button>
+	<div class="simplemap-settings--boundary-map-wrap">
+		<div
+			id="boundaryMap"
+			class="simplemap-settings--boundary-map"
+		></div>
+	</div>
+{% endset %}
 {{ forms.field({
 	label: "Boundary Restriction"|t("simplemap"),
-	instructions: "Restrict the auto-complete to within a specific square boundary"|t("simplemap"),
-}, boundaryRestrictionInput) }}
+	instructions: "Restrict the address search to within a specific rectangular boundary"|t("simplemap"),
+}, boundaryMap) }}

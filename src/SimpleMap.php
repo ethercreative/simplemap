@@ -59,14 +59,14 @@ class SimpleMap extends Plugin
 
 		// Field Types
 		Event::on(
-			Fields::className(),
+			Fields::class,
 			Fields::EVENT_REGISTER_FIELD_TYPES,
 			[$this, 'onRegisterFieldTypes']
 		);
 
 		// Redirect to settings after install
 		Event::on(
-			Plugins::className(),
+			Plugins::class,
 			Plugins::EVENT_AFTER_INSTALL_PLUGIN,
 			[$this, 'onAfterInstallPlugin']
 		);

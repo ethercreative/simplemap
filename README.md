@@ -17,6 +17,7 @@ The field type will return an array containing the following:
  - `zoom` - The zoom level of the map
  - `address` - The address of the selected location
  - `parts` - See below
+ - `distance` - The distance from the search location (in whatever unit you searched with). Will be empty if you aren't searching by location.
 
 This means you can use `{{ myMapField.lat }}`.
 

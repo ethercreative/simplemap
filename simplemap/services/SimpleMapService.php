@@ -120,10 +120,10 @@ class SimpleMapService extends BaseApplicationComponent {
 	{
 		$owner = $fieldType->element;
 		$field = $fieldType->model;
-		$content = $fieldType->element->getContent();
+		$content = $fieldType->element;
 
 		$handle = $field->handle;
-		$data = $content->getAttribute($handle);
+		$data = $content[$field->handle]->getAttributes();
 
 		if (
 			!array_key_exists('lat', $data)

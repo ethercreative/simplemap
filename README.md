@@ -113,6 +113,9 @@ Lat/Lng, to display it on a map.
 
 ## Changelog
 
+### 1.8.3
+- Fixed error when saving #92 #94 (via @taylordaughtry)
+
 ### 1.8.2
 - Fixed bug where distance was always `null`
 

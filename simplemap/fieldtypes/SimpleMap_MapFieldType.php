@@ -37,7 +37,9 @@ class SimpleMap_MapFieldType extends BaseFieldType implements IPreviewableFieldT
 			$boundary = JsonHelper::encode(array('ne' => $ne, 'sw' => $sw));
 		}
 
-		$key = craft()->plugins->getPlugin('SimpleMap')->getSettings()->browserApiKey;
+		$key = craft()->config->get('browserApiKey', 'simplemap');
+		if (!$key)
+			$key = craft()->plugins->getPlugin('SimpleMap')->getSettings()->browserApiKey;
 
 		$locale = $value ? $value->ownerLocale : craft()->language;
 

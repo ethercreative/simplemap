@@ -472,15 +472,20 @@ class SimpleMapService extends BaseApplicationComponent {
 		if (self::$apiKey)
 			return self::$apiKey;
 
-		$apiKey = craft()->plugins
-			          ->getPlugin('SimpleMap')
-			          ->getSettings()['serverApiKey'];
+		$apiKey = craft()->config->get('serverApiKey', 'simplemap');
 
-		if (!$apiKey) {
+		if (!$apiKey)
+			$apiKey = craft()->plugins
+				          ->getPlugin('SimpleMap')
+				          ->getSettings()['serverApiKey'];
+
+		if (!$apiKey)
+			$apiKey = craft()->config->get('browserApiKey', 'simplemap');
+
+		if (!$apiKey)
 			$apiKey = craft()->plugins
 				          ->getPlugin('SimpleMap')
 				          ->getSettings()['browserApiKey'];
-		}
 
 		if (!$apiKey) {
 			SimpleMapPlugin::log("Missing API Key", LogLevel::Error);

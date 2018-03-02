@@ -13,6 +13,11 @@ class SimpleMapVariable {
 	}
 
 	public function apiKey () {
+		$apiKey = craft()->config->get('browserApiKey', 'simplemap');
+
+		if ($apiKey)
+			return $apiKey;
+
 		return craft()->plugins->getPlugin('simpleMap')->getSettings()->browserApiKey;
 	}
 

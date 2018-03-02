@@ -5,9 +5,11 @@
 	instructions: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
 	id: 'browserApiKey',
 	name: 'browserApiKey',
-	value: settings.browserApiKey,
+	value: configFileSettings.browserApiKey ?: settings.browserApiKey,
 	type: 'text',
-	required: true
+	required: true,
+	readonly: configFileSettings.browserApiKey ? true : false,
+	warning: configFileSettings.browserApiKey ? "This is being overridden by the browserApiKey config setting." : ''
 }) }}
 
 {{ forms.textField({
@@ -15,7 +17,9 @@
 	instructions: 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
 	id: 'serverApiKey',
 	name: 'serverApiKey',
-	value: settings.serverApiKey,
+	value: configFileSettings.serverApiKey ?: settings.serverApiKey,
 	type: 'text',
-	required: false
+	required: false,
+	readonly: configFileSettings.serverApiKey ? true : false,
+	warning: configFileSettings.serverApiKey ? "This is being overridden by the browserApiKey config setting." : ''
 }) }}

@@ -60,10 +60,20 @@ class SimpleMapPlugin extends BasePlugin {
 		);
 	}
 
+	/**
+	 * @return null|string
+	 * @throws Exception
+	 */
 	public function getSettingsHtml()
 	{
+		$configFileSettings = [
+			'browserApiKey' => craft()->config->get('browserApiKey', 'simplemap'),
+			'serverApiKey' => craft()->config->get('serverApiKey', 'simplemap'),
+		];
+
 		return craft()->templates->render('simplemap/plugin-settings', array(
-			'settings' => $this->getSettings()
+			'settings' => $this->getSettings(),
+			'configFileSettings' => $configFileSettings,
 		));
 	}
 

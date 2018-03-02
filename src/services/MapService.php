@@ -257,22 +257,23 @@ class MapService extends Component
 		/** @var ElementQuery $query */
 
 		$tableName = MapRecord::$tableName;
+		$tableAlias = unqid('simplemap');
 
 		$on = [
 			'and',
-			'[[elements.id]] = [[simplemap.ownerId]]',
-			'[[elements_sites.siteId]] = [[simplemap.ownerSiteId]]',
+			'[[elements.id]] = [['.$tableAlias.'.ownerId]]',
+			'[[elements_sites.siteId]] = [['.$tableAlias.'.ownerSiteId]]',
 		];
 
 		$query->query->join(
 			'JOIN',
-			"{$tableName} simplemap",
+			"{$tableName} {$tableAlias}",
 			$on
 		);
 
 		$query->subQuery->join(
 			'JOIN',
-			"{$tableName} simplemap",
+			"{$tableName} {$tableAlias}",
 			$on
 		);
 
@@ -282,7 +283,7 @@ class MapService extends Component
 		}
 
 		if (array_key_exists('location', $value)) {
-			$this->_searchLocation($query, $value);
+			$this->_searchLocation($query, $value, $tableAlias);
 		} else if (array_key_exists('distance', $query->orderBy)) {
 			$this->_replaceOrderBy($query);
 		}
@@ -501,7 +502,7 @@ class MapService extends Component
 	 *
 	 * @throws Exception
 	 */
-	private function _searchLocation (ElementQuery $query, $value)
+	private function _searchLocation (ElementQuery $query, $value, $tableAlias)
 	{
 		$location = $value['location'];
 		$country  = array_key_exists('country', $value)
@@ -552,7 +553,7 @@ class MapService extends Component
 				ACOS(
 					COS(RADIANS($location[lat]))
 					* COS(RADIANS([[simplemap.lat]]))
-					* COS(RADIANS($location[lng]) - RADIANS([[simplemap.lng]]))
+					* COS(RADIANS($location[lng]) - RADIANS([[$tableAlias.lng]]))
 					+ SIN(RADIANS($location[lat]))
 					* SIN(RADIANS([[simplemap.lat]]))
 				)
@@ -565,13 +566,13 @@ class MapService extends Component
 			'and',
 			[
 				'and',
-				"[[simplemap.lat]] >= $location[lat] - ($radius / $distanceUnit)",
-				"[[simplemap.lat]] <= $location[lat] + ($radius / $distanceUnit)",
+				"[[$tableAlias.lat]] >= $location[lat] - ($radius / $distanceUnit)",
+				"[[$tableAlias.lat]] <= $location[lat] + ($radius / $distanceUnit)",
 			],
 			[
 				'and',
-				"[[simplemap.lng]] >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
-				"[[simplemap.lng]] <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"[[$tableAlias.lng]] >= $location[lng] - ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
+				"[[$tableAlias.lng]] <= $location[lng] + ($radius / ($distanceUnit * COS(RADIANS($location[lat]))))",
 			]
 		];
 

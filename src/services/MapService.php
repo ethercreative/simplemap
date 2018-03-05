@@ -257,7 +257,7 @@ class MapService extends Component
 		/** @var ElementQuery $query */
 
 		$tableName = MapRecord::$tableName;
-		$tableAlias = unqid('simplemap');
+		$tableAlias = 'simplemap' . bin2hex(openssl_random_pseudo_bytes(5));
 
 		$on = [
 			'and',
@@ -499,6 +499,7 @@ class MapService extends Component
 	 *
 	 * @param ElementQuery $query
 	 * @param array        $value
+	 * @param string       $tableAlias
 	 *
 	 * @throws Exception
 	 */
@@ -552,10 +553,10 @@ class MapService extends Component
 			* DEGREES(
 				ACOS(
 					COS(RADIANS($location[lat]))
-					* COS(RADIANS([[simplemap.lat]]))
+					* COS(RADIANS([[$tableAlias.lat]]))
 					* COS(RADIANS($location[lng]) - RADIANS([[$tableAlias.lng]]))
 					+ SIN(RADIANS($location[lat]))
-					* SIN(RADIANS([[simplemap.lat]]))
+					* SIN(RADIANS([[$tableAlias.lat]]))
 				)
 			)
 		)";

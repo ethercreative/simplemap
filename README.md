@@ -28,6 +28,10 @@ A list of the available values can be found [here](https://developers.google.com
 To access the short version of any part, append `_short` to the end of its name.  
 e.g. `{{ myMapField.country_short }}`.
 
+### Configuration
+
+You can configure the plugin either via the Craft CP or by duplicating the `config.php` file to `craft/config/simplemap.php`.
+
 ### Searching and Sorting
 
 You can search for elements using the location specified in your map field. When searching by your map field you also have the option to sort the results by distance.

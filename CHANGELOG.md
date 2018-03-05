@@ -1,3 +1,10 @@
+## 3.3.2 - 2018-03-05
+### Added
+- Added docs for using a config file to configure the plugin.
+
+### Fixed
+- Fixed JOIN alias issue when using the Element API plugin (via @idontmessabout)
+
 ## 3.3.1 - 2018-01-30
 ### Fixed
 - Fixed JS bug on settings page

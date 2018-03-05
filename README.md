@@ -118,8 +118,8 @@ In addition to the plugins settings withing the Craft CP, you can use a config f
 ## Changelog
 
 ### 1.8.3
-- Fixed error when saving #92 #94 (via @taylordaughtry)
 - Added ability to define settings via config file
+- Fixed error when saving #92 #94 (via @taylordaughtry)
 
 ### 1.8.2
 - Fixed bug where distance was always `null`

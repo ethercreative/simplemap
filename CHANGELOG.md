@@ -1,3 +1,7 @@
+## 3.3.3 - 2018-03-13
+### Fixed
+- Fixed a bug where SimpleMap would cause the `ResaveElements` job to error when triggered via console.
+
 ## 3.3.2 - 2018-03-05
 ### Added
 - Added docs for using a config file to configure the plugin.

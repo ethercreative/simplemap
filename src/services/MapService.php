@@ -156,7 +156,11 @@ class MapService extends Component
 			]
 		);
 
-		if (\Craft::$app->request->getIsPost() && $value) {
+		if (
+			!\Craft::$app->request->isConsoleRequest
+			&& \Craft::$app->request->isPost
+			&& $value
+		) {
 			$model = new Map($value);
 		} else if ($record) {
 			$model = new Map($record->getAttributes());

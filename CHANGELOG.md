@@ -1,3 +1,7 @@
+## 3.3.4 - 2018-08-29
+### Fixed
+- Fixed a bug where SimpleMap would not validate required fields.
+
 ## 3.3.3 - 2018-03-13
 ### Fixed
 - Fixed a bug where SimpleMap would cause the `ResaveElements` job to error when triggered via console.

@@ -444,7 +444,7 @@ class MapField extends Field implements PreviewableFieldInterface
 
 		$view->registerAssetBundle(MapSettingsAsset::class);
 		$view->registerJs("new SimpleMapSettings(
-	'{$key}', 
+	'{$key}',
 	'{$locale}',
 	'{$namespacedId}',
 	{$settings}
@@ -485,18 +485,18 @@ class MapField extends Field implements PreviewableFieldInterface
 		$view->registerAssetBundle(SimpleMapAsset::class);
 		$view->registerJs(
 			"new SimpleMap(
-	'{$key}', 
-	'{$namespacedId}', 
+	'{$key}',
+	'{$namespacedId}',
 	{
-		lat: '{$this->lat}', 
-		lng: '{$this->lng}', 
-		zoom: '{$this->zoom}', 
-		height: '{$this->height}', 
-		hideMap: {$hideMap}, 
-		country: '{$this->countryRestriction}', 
-		type: '{$this->typeRestriction}', 
+		lat: '{$this->lat}',
+		lng: '{$this->lng}',
+		zoom: '{$this->zoom}',
+		height: '{$this->height}',
+		hideMap: {$hideMap},
+		country: '{$this->countryRestriction}',
+		type: '{$this->typeRestriction}',
 		boundary: {$this->boundary}
-	}, 
+	},
 	'{$locale}'
 );");
 
@@ -528,6 +528,14 @@ class MapField extends Field implements PreviewableFieldInterface
 		return [
 			[MapValidator::class, 'on' => Element::SCENARIO_LIVE],
 		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function isValueEmpty($value, ElementInterface $element): bool
+	{
+	    return (!empty($value->lat) && !empty($value->lng)) || !empty($value->address) ? false : true;
 	}
 
 	/**

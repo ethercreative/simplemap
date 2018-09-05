@@ -1,6 +1,6 @@
-## 3.3.4 - 2018-08-29
+## 3.3.4 - 2018-09-05
 ### Fixed
-- Fixed a bug where SimpleMap would not validate required fields.
+- Fixed a bug where SimpleMap would not validate required fields. (via @samhibberd)
 
 ## 3.3.3 - 2018-03-13
 ### Fixed

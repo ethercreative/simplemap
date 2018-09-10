@@ -10,7 +10,6 @@ use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use ether\simplemap\resources\MapSettingsAsset;
 use ether\simplemap\resources\SimpleMapAsset;
-use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -540,6 +539,7 @@ class MapField extends Field implements PreviewableFieldInterface
 
 	/**
 	 * @inheritdoc
+	 * @throws \yii\base\Exception
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{

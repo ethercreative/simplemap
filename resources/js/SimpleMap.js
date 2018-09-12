@@ -6,16 +6,15 @@ class SimpleMap {
 	// Properties
 	// =========================================================================
 
-	service = null;
 	map = null;
 
 	constructor (type = "osm", apiKey = null) {
 		switch (type) {
 			case "mapbox":
-				this.service = new Mapbox(apiKey);
+				this.map = new Mapbox(apiKey);
 				break;
 			case "osm":
-				this.service = new OpenStreetMap();
+				this.map = new OpenStreetMap();
 				break;
 		}
 	}
@@ -30,7 +29,7 @@ class SimpleMap {
 	 * @param {{center:{lat:number, lng:number}, zoom: number}} start
 	 */
 	create (el, start) {
-		this.map = this.service.create(el, start);
+		this.map.create(el, start);
 	}
 
 }

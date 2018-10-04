@@ -6,7 +6,8 @@
   "license": "MIT",
   "minimum-stability": "dev",
   "require": {
-    "craftcms/cms": "^3.0.0-beta.20"
+    "craftcms/cms": "^3.0.0-beta.20",
+    "ether/craft-vue": "dev-master"
   },
   "autoload": {
     "psr-4": {

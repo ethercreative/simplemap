@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d34748c8-d331-449c-8ebb-546c2cfe15f9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Field.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/vue/Field.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/vue/Search.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/web/assets/FieldAsset.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webpack.mix.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/.buildrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/SimpleMap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/maps/Map.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/maps/Mapbox.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/maps/OpenStreetMap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fields/MapField.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/fields/MapField.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/SimpleMapAsset.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/SimpleMap_Map.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/SimpleMap_Map.js" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +32,7 @@
           <entry key="buildrc" value="1" />
           <entry key="env" value="1" />
           <entry key="gitattributes" value="1" />
-          <entry key="gitignore" value="3" />
+          <entry key="gitignore" value="4" />
           <entry key="hot" value="2" />
           <entry key="js" value="27" />
           <entry key="json" value="24" />
@@ -65,7 +49,7 @@
           <entry key="JavaScript" value="27" />
           <entry key="Markdown" value="3" />
           <entry key="PHP" value="30" />
-          <entry key="PLAIN_TEXT" value="7" />
+          <entry key="PLAIN_TEXT" value="8" />
           <entry key="Twig" value="1" />
           <entry key="Vue.js" value="3" />
         </counts>
@@ -73,12 +57,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitattributes" value="27" />
-          <entry key="gitignore" value="48" />
+          <entry key="gitignore" value="54" />
           <entry key="js" value="2419" />
           <entry key="json" value="70" />
           <entry key="md" value="85" />
           <entry key="php" value="436" />
           <entry key="twig" value="54" />
+          <entry key="txt" value="27" />
           <entry key="vue" value="1548" />
         </counts>
       </usages-collector>
@@ -88,7 +73,7 @@
           <entry key="JavaScript" value="2419" />
           <entry key="Markdown" value="85" />
           <entry key="PHP" value="436" />
-          <entry key="PLAIN_TEXT" value="75" />
+          <entry key="PLAIN_TEXT" value="108" />
           <entry key="Twig" value="54" />
           <entry key="Vue.js" value="1548" />
         </counts>
@@ -135,11 +120,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/vue/Search.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
-              <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+            <state relative-caret-position="373">
+              <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -155,6 +149,39 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="v3-dev" />
+              </list>
+            </value>
+          </entry>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/v3-dev" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -181,7 +208,6 @@
         <option value="$PROJECT_DIR$/resources/vue/Autocomplete.js" />
         <option value="$PROJECT_DIR$/resources/vue/AutoComplete.vue" />
         <option value="$PROJECT_DIR$/resources/js/Field.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/web/assets/FieldAsset.php" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/webpack.mix.js" />
@@ -189,6 +215,7 @@
         <option value="$PROJECT_DIR$/resources/vue/Field.vue" />
         <option value="$PROJECT_DIR$/src/fields/MapField.php" />
         <option value="$PROJECT_DIR$/resources/vue/Search.vue" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -312,24 +339,32 @@
       <workItem from="1538077655598" duration="29000" />
       <workItem from="1538509037540" duration="4350000" />
       <workItem from="1538516763056" duration="570000" />
-      <workItem from="1538681494278" duration="6667000" />
+      <workItem from="1538681494278" duration="6946000" />
     </task>
+    <task id="LOCAL-00001" summary="Started on new input">
+      <created>1538689192404</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1538689192404</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15834000" />
+    <option name="totallyTimeSpent" value="16113000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1145" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.5707763" visible="true" weight="0.23697917" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.5708447" visible="true" weight="0.23697917" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info id="Terminal" order="3" sideWeight="0.42922375" side_tool="true" visible="true" weight="0.23697917" />
+      <window_info id="Terminal" order="3" sideWeight="0.42915532" side_tool="true" visible="true" weight="0.23697917" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="1" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="2" weight="0.32968035" />
+      <window_info anchor="bottom" id="Version Control" order="2" visible="true" weight="0.32968035" />
       <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.32937956" />
@@ -357,7 +392,26 @@
                 <collection />
               </option>
               <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
+                <collection>
+                  <UserGroup>
+                    <option name="users">
+                      <list>
+                        <option value="v3-dev" />
+                      </list>
+                    </option>
+                  </UserGroup>
+                </collection>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="v3-dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
               </option>
               <option name="COLUMN_ORDER">
                 <list>
@@ -377,6 +431,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <ignored-roots>
       <path value="$PROJECT_DIR$/vendor/ether/craft-vue" />
       <path value="$PROJECT_DIR$/vendor/psr/http-message" />
@@ -387,6 +443,8 @@
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-feed" />
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-stdlib" />
     </ignored-roots>
+    <MESSAGE value="Started on new input" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started on new input" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../3.dev/vendor/craftcms/cms/src/base/Model.php">
@@ -581,13 +639,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="29" column="17" lean-forward="true" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/web/assets/dist/Field.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-652">
@@ -673,8 +724,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/vue/Search.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+        <state relative-caret-position="373">
+          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
         </state>
       </provider>
     </entry>

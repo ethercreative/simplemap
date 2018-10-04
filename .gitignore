@@ -28,3 +28,4 @@ vendor
 node_modules
 hot
 mix-manifest.json
+.idea

@@ -88,7 +88,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public $boundary = '""';
 
-	// Props: Private Static
+	// Props: Private
 	// -------------------------------------------------------------------------
 
 	/**
@@ -360,6 +360,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		['label' => 'Towns & Cities', 'value' => '(cities)'],
 	];
 
+	private $__apiKey;
+
 	// Public Functions
 	// =========================================================================
 
@@ -480,6 +482,12 @@ class MapField extends Field implements PreviewableFieldInterface
 		$key     = SimpleMap::$plugin->getSettings()->apiKey;
 		$locale  = $element ? $element->siteId : \Craft::$app->locale->id;
 		$hideMap = $this->hideMap ? 'true' : 'false';
+
+		$view->registerJsFile(
+			'https://maps.googleapis.com/maps/api/js?key='
+			. $this->_apiKey()
+			. '&libraries=places'
+		);
 
 		if (getenv('ETHER_ENVIRONMENT'))
 		{
@@ -605,6 +613,14 @@ class MapField extends Field implements PreviewableFieldInterface
 		}
 
 		return null;
+	}
+
+	private function _apiKey ()
+	{
+		if ($this->__apiKey)
+			return $this->__apiKey;
+
+		return $this->__apiKey = SimpleMap::$plugin->getSettings()->apiKey;
 	}
 
 }

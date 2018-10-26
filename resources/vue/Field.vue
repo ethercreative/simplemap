@@ -1,20 +1,20 @@
 <template>
 	<div :class="$style.wrap">
-		<search :class-name="$style.search" />
-
-		<img
-			src="https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/0.53532,51.27064,15.1,0,0/700x400@2x?access_token=pk.eyJ1IjoiZXRoZXJjcmVhdGl2ZSIsImEiOiJjaWhjMDQ4cDUwMDg0dm9ranV3ZWZtY3B2In0.KQKSKysuha7MW19Q_cCJCA"
-			alt=""
+		<search
+			:class-name="$style.search"
+			api-key="AIzaSyBYnMhGXLUVqhmVnwjaW1qEJYJEjAx0ohk"
 		/>
+		<x-map />
 	</div>
 </template>
 
 <script>
 	import Search from "./Search";
+	import XMap from "./Map";
 
 	export default {
-		name: "field",
-		components: { Search },
+		name: "Field",
+		components: { Search, XMap },
 	}
 </script>
 
@@ -26,12 +26,6 @@
 		border-radius: 2px;
 
 		overflow: hidden;
-
-		img {
-			width: 100%;
-			height: auto;
-			vertical-align: middle;
-		}
 	}
 
 	.search {

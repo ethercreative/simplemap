@@ -7,7 +7,8 @@
   "minimum-stability": "dev",
   "require": {
     "craftcms/cms": "^3.0.0-beta.20",
-    "ether/craft-vue": "dev-master"
+    "ether/craft-vue": "dev-master",
+    "guzzlehttp/guzzle": "~6.0"
   },
   "autoload": {
     "psr-4": {

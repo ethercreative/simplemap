@@ -3,3 +3,4 @@ CHANGELOG.md    export-ignore
 /resources      export-ignore
 .gitignore      export-ignore
 .gitattributes  export-ignore
+/.idea          export-ignore

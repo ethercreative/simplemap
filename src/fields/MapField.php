@@ -9,9 +9,8 @@ use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use ether\simplemap\resources\MapSettingsAsset;
-use ether\simplemap\resources\SimpleMapAsset;
-use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
+use ether\simplemap\web\assets\FieldAsset;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -89,7 +88,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public $boundary = '""';
 
-	// Props: Private Static
+	// Props: Private
 	// -------------------------------------------------------------------------
 
 	/**
@@ -361,6 +360,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		['label' => 'Towns & Cities', 'value' => '(cities)'],
 	];
 
+	private $__apiKey;
+
 	// Public Functions
 	// =========================================================================
 
@@ -467,7 +468,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$value,
 		ElementInterface $element = null
 	): string {
-
+		\ether\craftvue\CraftVue::register();
 		/** @var Element $element */
 
 		$view = \Craft::$app->getView();
@@ -482,34 +483,55 @@ class MapField extends Field implements PreviewableFieldInterface
 		$locale  = $element ? $element->siteId : \Craft::$app->locale->id;
 		$hideMap = $this->hideMap ? 'true' : 'false';
 
-		$view->registerAssetBundle(SimpleMapAsset::class);
-		$view->registerJs(
-			"new SimpleMap(
-	'{$key}',
-	'{$namespacedId}',
-	{
-		lat: '{$this->lat}',
-		lng: '{$this->lng}',
-		zoom: '{$this->zoom}',
-		height: '{$this->height}',
-		hideMap: {$hideMap},
-		country: '{$this->countryRestriction}',
-		type: '{$this->typeRestriction}',
-		boundary: {$this->boundary}
-	},
-	'{$locale}'
-);");
-
-		return $view->renderTemplate(
-			'simplemap/field-input',
-			[
-				'id'    => $id,
-				'name'  => $this->handle,
-				'value' => $value,
-				'field' => $this,
-				'height'=> $this->height,
-			]
+		$view->registerJsFile(
+			'https://maps.googleapis.com/maps/api/js?key='
+			. $this->_apiKey()
+			. '&libraries=places'
 		);
+
+		if (getenv('ETHER_ENVIRONMENT'))
+		{
+			$view->registerJsFile(
+				'https://localhost:8080/src/web/assets/dist/Field.js',
+				['async' => true]
+			);
+		}
+		else
+		{
+			$view->registerAssetBundle(FieldAsset::class);
+		}
+
+		return $view->renderString('<simplemap-field></simplemap-field>');
+
+		// TODO: Update me
+		// (perhaps just pass as props to Vue component in template string?)
+//		$view->registerJs(
+//			"new SimpleMap(
+//	'{$key}',
+//	'{$namespacedId}',
+//	{
+//		lat: '{$this->lat}',
+//		lng: '{$this->lng}',
+//		zoom: '{$this->zoom}',
+//		height: '{$this->height}',
+//		hideMap: {$hideMap},
+//		country: '{$this->countryRestriction}',
+//		type: '{$this->typeRestriction}',
+//		boundary: {$this->boundary}
+//	},
+//	'{$locale}'
+//);");
+//
+//		return $view->renderTemplate(
+//			'simplemap/field-input',
+//			[
+//				'id'    => $id,
+//				'name'  => $this->handle,
+//				'value' => $value,
+//				'field' => $this,
+//				'height'=> $this->height,
+//			]
+//		);
 	}
 
 	/**
@@ -540,6 +562,7 @@ class MapField extends Field implements PreviewableFieldInterface
 
 	/**
 	 * @inheritdoc
+	 * @throws \yii\base\Exception
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
@@ -590,6 +613,14 @@ class MapField extends Field implements PreviewableFieldInterface
 		}
 
 		return null;
+	}
+
+	private function _apiKey ()
+	{
+		if ($this->__apiKey)
+			return $this->__apiKey;
+
+		return $this->__apiKey = SimpleMap::$plugin->getSettings()->apiKey;
 	}
 
 }

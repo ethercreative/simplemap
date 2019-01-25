@@ -9,9 +9,13 @@
 namespace ether\simplemap;
 
 use craft\base\Plugin;
+use craft\events\RegisterComponentTypesEvent;
+use craft\services\Fields;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\fields\Map as MapField;
 use ether\simplemap\models\Settings;
+use yii\base\Event;
 
 /**
  * Class SimpleMap
@@ -34,7 +38,11 @@ class SimpleMap extends Plugin
 	{
 		parent::init();
 
-		//
+		Event::on(
+			Fields::class,
+			Fields::EVENT_REGISTER_FIELD_TYPES,
+			[$this, 'onRegisterFieldTypes']
+		);
 	}
 
 	// Settings
@@ -45,6 +53,11 @@ class SimpleMap extends Plugin
 		return new Settings();
 	}
 
+	/**
+	 * @return string|null
+	 * @throws \Twig_Error_Loader
+	 * @throws \yii\base\Exception
+	 */
 	protected function settingsHtml ()
 	{
 		return \Craft::$app->getView()->renderTemplate(
@@ -55,6 +68,14 @@ class SimpleMap extends Plugin
 				'geoServiceOptions' => GeoService::getSelectOptions(),
 			]
 		);
+	}
+
+	// Events
+	// =========================================================================
+
+	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
+	{
+		$event->types[] = MapField::class;
 	}
 
 	// Helpers

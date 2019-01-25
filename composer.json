@@ -26,6 +26,6 @@
     "developerUrl": "https://ethercreative.co.uk",
 
     "class": "ether\\simplemap\\SimpleMap",
-    "schemaVersion": "3.0.0"
+    "schemaVersion": "3.1.0"
   }
 }

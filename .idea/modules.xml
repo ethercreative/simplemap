@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/../../3.dev/.idea/3.dev.iml" filepath="$PROJECT_DIR$/../../3.dev/.idea/3.dev.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/SimpleMap for Craft CMS.iml" filepath="$PROJECT_DIR$/.idea/SimpleMap for Craft CMS.iml" />
-    </modules>
-  </component>
-</project>

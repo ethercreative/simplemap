@@ -1,56 +1,63 @@
 <?php
+/**
+ * SimpleMap for Craft CMS
+ *
+ * @link      https://ethercreative.co.uk
+ * @copyright Copyright (c) 2019 Ether Creative
+ */
 
 return [
-	'Map' => 'Map',
-
 	// Settings
-	'Google Maps API Key' => 'Google Maps API Key',
-	'Alternate Server API Key' => 'Alternate Server API Key',
-	'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
-		=> '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
-	'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
-		=> 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
+	// =========================================================================
 
-	// Field settings
-	'Latitude' => 'Latitude',
-	'The maps default latitude' => 'The maps default latitude',
+	'Map Tiles' => 'Map Tiles',
+	'Select the style of map tiles.' => 'Select the style of map tiles.',
 
-	'Longitude' => 'Longitude',
-	'The maps default longitude' => 'The maps default longitude',
+	'Map Token' => 'Map Token',
+	'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).' =>
+		'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).',
 
-	'Zoom Level' => 'Zoom Level',
-	'The default zoom level' => 'The default zoom level',
+	'Geo Service' => 'Geo Service',
+	'Select the service to be used for Geo-coding.' =>
+		'Select the service to be used for Geo-coding.',
 
-	'Height' => 'Height',
-	'The maps height in the input' => 'The maps height in the input',
+	'Geo Token' => 'Geo Token',
+	'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)' =>
+		'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)',
 
-	'Hide Map' => 'Hide Map',
-	'When on, the map will be hidden leaving just the address search field'
-		=> 'When on, the map will be hidden leaving just the address search field',
+	// Settings: Map Tiles Options
+	// -------------------------------------------------------------------------
 
-	'Hide Lat/Lng' => 'Hide Lat/Lng',
-	'When on, the latitude & longitude fields will be hidden'
-		=> 'When on, the latitude & longitude fields will be hidden',
+	'Open Source' => 'Open Source',
 
-	'Restrict by Country' => 'Restrict by Country',
-	'Restrict the address search to a specific country'
-		=> 'Restrict the address search to a specific country',
+	'Wikimedia' => 'Wikimedia',
 
-	'Restrict by Type' => 'Restrict by Type',
-	'Restrict the address search to a specific type'
-		=> 'Restrict the address search to a specific type',
+	'OpenStreetMap' => 'OpenStreetMap',
 
-	'North-east Corner' => 'North-east Corner',
-	'South-west Corner' => 'South-west Corner',
+	'Carto: Voyager' => 'Carto: Voyager',
+	'Carto: Positron' => 'Carto: Positron',
+	'Carto: Dark Matter' => 'Carto: Dark Matter',
 
-	'Boundary Restriction' => 'Boundary Restriction',
-	'Restrict the address search to within a specific rectangular boundary'
-		=> 'Restrict the address search to within a specific rectangular boundary',
+	'Requires API Key (Token)' => 'Requires API Key (Token)',
 
-	'Configure Map' => 'Configure Map',
-	'Move, zoom, and resize the map' => 'Move, zoom, and resize the map',
+	'Mapbox: Outdoors' => 'Mapbox: Outdoors',
+	'Mapbox: Streets' => 'Mapbox: Streets',
+	'Mapbox: Light' => 'Mapbox: Light',
+	'Mapbox: Dark' => 'Mapbox: Dark',
 
-	// Field validation
-	'Missing Lat/Lng' => 'Missing Lat/Lng',
-	'Missing Lat/Lng or valid address' => 'Missing Lat/Lng or valid address',
+	'Google Maps: Roadmap' => 'Google Maps: Roadmap',
+	'Google Maps: Terrain' => 'Google Maps: Terrain',
+	'Google Maps: Hybrid' => 'Google Maps: Hybrid',
+
+	'Apple MapKit: Default' => 'Apple MapKit: Default',
+	'Apple MapKit: Hybrid' => 'Apple MapKit: Hybrid',
+
+	// Settings: Geo Service Options
+	// -------------------------------------------------------------------------
+
+	'Nominatim' => 'Nominatim',
+	'Mapbox' => 'Mapbox',
+	'Google Maps' => 'Google Maps',
+	'Apple MapKit' => 'Apple MapKit',
+
 ];

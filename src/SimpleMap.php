@@ -1,43 +1,31 @@
 <?php
+/**
+ * SimpleMap for Craft CMS
+ *
+ * @link      https://ethercreative.co.uk
+ * @copyright Copyright (c) 2019 Ether Creative
+ */
 
 namespace ether\simplemap;
 
-use Craft;
 use craft\base\Plugin;
-use craft\events\PluginEvent;
-use craft\events\RegisterComponentTypesEvent;
-use craft\helpers\UrlHelper;
-use craft\services\Fields;
-use craft\services\Plugins;
-use craft\web\twig\variables\CraftVariable;
-use ether\simplemap\fields\MapField;
-use ether\simplemap\listeners\GetCraftQLSchema;
+use ether\simplemap\enums\GeoService;
+use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
-use ether\simplemap\services\MapService;
-use yii\base\Event;
 
 /**
  * Class SimpleMap
  *
- * @package ether\SimpleMap
+ * @author  Ether Creative
+ * @package ether\simplemap
  */
 class SimpleMap extends Plugin
 {
 
-	// Props
+	// Properties
 	// =========================================================================
 
-	// Props: Public Static
-	// -------------------------------------------------------------------------
-
-	/** @var SimpleMap */
-	public static $plugin;
-
-	// Props: Public Instance
-	// -------------------------------------------------------------------------
-
-	public $changelogUrl = 'https://raw.githubusercontent.com/ethercreative/simplemap/v3/CHANGELOG.md';
-	public $downloadUrl = 'https://github.com/ethercreative/simplemap/archive/v3.zip';
+	public $hasCpSettings = true;
 
 	// Craft
 	// =========================================================================
@@ -45,95 +33,36 @@ class SimpleMap extends Plugin
 	public function init ()
 	{
 		parent::init();
-		self::$plugin = $this;
 
-		// Components
-		// ---------------------------------------------------------------------
-
-		$this->setComponents([
-			'map' => MapService::class,
-		]);
-
-		// Register Events
-		// ---------------------------------------------------------------------
-
-		// Field Types
-		Event::on(
-			Fields::class,
-			Fields::EVENT_REGISTER_FIELD_TYPES,
-			[$this, 'onRegisterFieldTypes']
-		);
-
-		// Variable
-		Event::on(
-			CraftVariable::class,
-			CraftVariable::EVENT_INIT,
-			[$this, 'onRegisterVariable']
-		);
-
-		// CraftQL Support
-		/** @noinspection PhpUndefinedNamespaceInspection */
-		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-		if (class_exists(\markhuot\CraftQL\CraftQL::class)) {
-            Event::on(
-                MapField::class,
-                'craftQlGetFieldSchema',
-                [new GetCraftQLSchema, 'handle']
-            );
-        }
+		//
 	}
 
-	public function afterInstall ()
-	{
-		parent::afterInstall();
-
-		if (Craft::$app->getRequest()->getIsConsoleRequest())
-			return;
-
-		Craft::$app->getResponse()->redirect(
-			UrlHelper::cpUrl('settings/plugins/simplemap')
-		)->send();
-	}
-
-	// Craft: Settings
-	// -------------------------------------------------------------------------
-
-	public $hasCpSettings = true;
+	// Settings
+	// =========================================================================
 
 	protected function createSettingsModel ()
 	{
 		return new Settings();
 	}
 
-	protected function settingsHtml()
+	protected function settingsHtml ()
 	{
 		return \Craft::$app->getView()->renderTemplate(
 			'simplemap/settings',
-			[ 'settings' => $this->getSettings() ]
+			[
+				'settings' => $this->getSettings(),
+				'mapTileOptions' => MapTiles::getSelectOptions(),
+				'geoServiceOptions' => GeoService::getSelectOptions(),
+			]
 		);
 	}
 
-	// Components
+	// Helpers
 	// =========================================================================
 
-	public function getMap (): MapService
+	public static function t ($message, $params = [])
 	{
-		return $this->map;
-	}
-
-	// Events
-	// =========================================================================
-
-	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
-	{
-		$event->types[] = MapField::class;
-	}
-
-	public function onRegisterVariable (Event $event)
-	{
-		/** @var CraftVariable $variable */
-		$variable = $event->sender;
-		$variable->set('simpleMap', Variable::class);
+		return \Craft::t('simplemap', $message, $params);
 	}
 
 }

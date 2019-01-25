@@ -1,21 +1,41 @@
 <?php
+/**
+ * SimpleMap for Craft CMS
+ *
+ * @link      https://ethercreative.co.uk
+ * @copyright Copyright (c) 2019 Ether Creative
+ */
 
 namespace ether\simplemap\models;
 
 use craft\base\Model;
+use ether\simplemap\enums\GeoService;
+use ether\simplemap\enums\MapTiles;
 
+/**
+ * Class Settings
+ *
+ * @author  Ether Creative
+ * @package ether\simplemap\models
+ */
 class Settings extends Model
 {
 
-	public $apiKey = '';
-	public $unrestrictedApiKey = '';
+	// Properties
+	// =========================================================================
 
-	public function rules ()
-	{
-		return [
-			['apiKey', 'required'],
-			[['apiKey', 'unrestrictedApiKey'], 'string'],
-		];
-	}
+	// Properties: Map
+	// -------------------------------------------------------------------------
+
+	public $mapTiles = MapTiles::Wikimedia;
+
+	public $mapToken = '';
+
+	// Properties: Geo-coding
+	// -------------------------------------------------------------------------
+
+	public $geoService = GeoService::Nominatim;
+
+	public $geoToken = '';
 
 }

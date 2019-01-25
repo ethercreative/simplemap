@@ -1,7 +1,5 @@
 ## [Unreleased] 3.4.0
-### Added
-- Support for OpenStreetMap
-- Support for Mapbox
+...
 
 ## 3.3.4 - 2018-09-05
 ### Fixed

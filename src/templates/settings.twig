@@ -1,21 +1,40 @@
-{% import "_includes/forms" as forms %}
+{% import '_includes/forms' as forms %}
 
-{{ forms.textField({
-	label: "Google Maps API Key"|t("simplemap"),
-	instructions: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'|t("simplemap"),
-	id: 'apiKey',
-	name: 'apiKey',
-	value: settings.apiKey,
-	type: 'text',
-	required: true
+<h2>Map</h2>
+
+{# TODO: Add examples of the styles #}
+{{ forms.selectField({
+	first: true,
+	name: 'mapTiles',
+	label: 'Map Tiles'|t('simplemap'),
+	instructions: 'Select the style of map tiles.'|t('simplemap'),
+	options: mapTileOptions,
+	value: settings.mapTiles,
 }) }}
 
+{# TODO: Add instructions on how to get API keys for each service #}
 {{ forms.textField({
-	label: "Alternate Server API Key"|t("simplemap"),
-	instructions: 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'|t("simplemap"),
-	id: 'unrestrictedApiKey',
-	name: 'unrestrictedApiKey',
-	value: settings.unrestrictedApiKey,
-	type: 'text',
-	required: false
+	name: 'mapToken',
+	label: 'Map Token'|t('simplemap'),
+	instructions: 'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).'|t('simplemap'),
+	value: settings.mapToken,
+}) }}
+
+<h2>Geo-Coding</h2>
+
+{# TODO: Link to the services? #}
+{{ forms.selectField({
+	name: 'geoService',
+	label: 'Geo Service'|t('simplemap'),
+	instructions: 'Select the service to be used for Geo-coding.'|t('simplemap'),
+	options: geoServiceOptions,
+	value: settings.geoService,
+}) }}
+
+{# TODO: Add instructions on how to get API keys for each service #}
+{{ forms.textField({
+	name: 'geoToken',
+	label: 'Geo Token'|t('simplemap'),
+	instructions: 'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)'|t('simplemap'),
+	value: settings.geoToken,
 }) }}

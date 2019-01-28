@@ -10,8 +10,11 @@ namespace ether\simplemap\fields;
 
 use craft\base\ElementInterface;
 use craft\base\Field;
+use ether\simplemap\enums\GeoService;
+use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
+use Mapkit\JWT;
 
 /**
  * Class Map
@@ -121,7 +124,79 @@ class Map extends Field
 			'Search for a location',
 		]);
 
-		return '<simple-map></simple-map>';
+		/** @var Settings $settings */
+		$settings = SimpleMap::getInstance()->getSettings();
+
+		$opts = [
+			'config' => [
+				'geoService' => $settings->geoService,
+				'geoToken' => $this->_getToken(
+					$settings->geoToken,
+					$settings->geoService
+				),
+			],
+			'value' => [
+				'address' => '',
+			],
+		];
+
+		if ($settings->geoService === GeoService::GoogleMaps)
+		{
+			$view->registerJsFile(
+				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
+				$settings->geoToken
+			);
+		}
+		elseif ($settings->geoService === GeoService::AppleMapKit)
+		{
+			$view->registerJsFile(
+				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+			);
+		}
+
+		/** @noinspection PhpComposerExtensionStubsInspection */
+		return new \Twig_Markup(
+			'<simple-map><script type="application/json">' . json_encode($opts) . '</script></simple-map>',
+			'utf-8'
+		);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	private function _getToken (string $token, string $service)
+	{
+		switch ($service)
+		{
+			case GeoService::AppleMapKit:
+				list($privateKey, $keyId, $teamId) = explode(',', $token);
+
+				$privateKey = str_replace(
+					'-----BEGIN PRIVATE KEY-----',
+					'',
+					$privateKey
+				);
+
+				$privateKey = str_replace(
+					'-----END PRIVATE KEY-----',
+					'',
+					$privateKey
+				);
+
+				$privateKey = str_replace(' ', PHP_EOL, $privateKey);
+				$privateKey =
+					'-----BEGIN PRIVATE KEY-----' . PHP_EOL .
+					trim($privateKey) . PHP_EOL .
+					'-----END PRIVATE KEY-----';
+
+				return JWT::getToken(
+					trim($privateKey),
+					trim($keyId),
+					trim($teamId)
+				);
+			default:
+				return $token;
+		}
 	}
 
 }

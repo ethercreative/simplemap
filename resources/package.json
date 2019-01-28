@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "vue": "^2.5.21",
+    "vue-autosuggest": "^1.8.1",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0"
   },
@@ -48,7 +49,11 @@
       "no-mixed-spaces-and-tabs": [0],
       "comma-dangle": [0],
       "padded-blocks": [0],
-      "no-trailing-spaces": [0]
+      "no-trailing-spaces": [0],
+      "curly": [0],
+      "comma-style": [0],
+      "one-var": [0],
+      "handle-callback-err": [0]
     },
     "parserOptions": {
       "parser": "typescript-eslint-parser"

@@ -54,8 +54,9 @@ abstract class MapTiles
 	const GoogleHybrid = 'google.hybrid';
 
 	// Apple MapKit
-	const MapKitDefault = 'mapkit.default';
-	const MapKitHybrid = 'mapkit.hybrid';
+	const MapKitStandard  = 'mapkit.standard';
+	const MapKitSatellite = 'mapkit.satellite';
+	const MapKitHybrid    = 'mapkit.hybrid';
 
 	// Methods
 	// =========================================================================
@@ -84,8 +85,9 @@ abstract class MapTiles
 			self::GoogleTerrain => SimpleMap::t('Google Maps: Terrain'),
 			self::GoogleHybrid => SimpleMap::t('Google Maps: Hybrid'),
 
-			self::MapKitDefault => SimpleMap::t('Apple MapKit: Default'),
-			self::MapKitHybrid => SimpleMap::t('Apple MapKit: Hybrid'),
+			self::MapKitStandard  => SimpleMap::t('Apple MapKit: Standard'),
+			self::MapKitSatellite => SimpleMap::t('Apple MapKit: Satellite'),
+			self::MapKitHybrid    => SimpleMap::t('Apple MapKit: Hybrid'),
 		];
 	}
 

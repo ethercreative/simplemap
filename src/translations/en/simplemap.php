@@ -75,7 +75,8 @@ return [
 	'Google Maps: Terrain' => 'Google Maps: Terrain',
 	'Google Maps: Hybrid' => 'Google Maps: Hybrid',
 
-	'Apple MapKit: Default' => 'Apple MapKit: Default',
+	'Apple MapKit: Standard' => 'Apple MapKit: Standard',
+	'Apple MapKit: Satellite' => 'Apple MapKit: Satellite',
 	'Apple MapKit: Hybrid' => 'Apple MapKit: Hybrid',
 
 	// Settings: Geo Service Options

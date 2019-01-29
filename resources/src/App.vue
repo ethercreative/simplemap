@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<Search
+			v-if="!config.hideSearch"
 			:name="config.name"
 			:service="config.geoService"
 			:token="config.geoToken"
@@ -8,13 +9,16 @@
 			@selected="onSearchSelected"
 		/>
 
-		<img
-			src="https://s14-eu5.startpage.com/cgi-bin/serveimage?url=https:%2F%2Fcartoblography.files.wordpress.com%2F2013%2F07%2Fmapbox-streets-london.jpg&sp=7b474f7c3a2e924530a505ea4825463a"
-			alt="Map"
-			style="width: calc(100% - 2px);height: 400px;vertical-align: middle;object-fit: cover;margin-top: 14px;border-radius: 2px 2px 0 0;border: 1px solid rgba(0, 0, 20, 0.1)"
+		<Map
+			v-if="!config.hideMap"
+			:tiles="config.mapTiles"
+			:token="config.mapToken"
+			:latLng="{ lat: value.lat, lng: value.lng }"
+			:zoom="config.zoom"
 		/>
 
-		<Parts
+		<Address
+			v-if="!config.hideAddress"
 			:name="config.name"
 			:value="value"
 		/>
@@ -24,13 +28,15 @@
 <script lang="js">
 	import { Component, Vue } from 'vue-property-decorator';
 	import Search from './components/Search';
-	import Parts from './components/Parts';
+	import Address from './components/Address';
+	import Map from './components/Map';
 	import GeoService from './enums/GeoService';
 
 	@Component({
 		components: {
 			Search,
-			Parts,
+			Address,
+			Map,
 		},
 	})
 	export default class App extends Vue {
@@ -40,6 +46,10 @@
 
 		config = {
 			name: '',
+			zoom: 15,
+			hideSearch: false,
+			hideMap: false,
+			hideAddress: false,
 			mapTiles: 'wikimedia',
 			mapToken: '',
 			geoService: 'nominatim',

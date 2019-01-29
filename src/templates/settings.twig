@@ -131,8 +131,8 @@
 	// =========================================================================
 
 	const mapTiles = document.getElementById('settings-mapTiles')
-		, mapTileNonMapKit = document.getElementById('settings-geoService-nonMapKit')
-		, mapTileMapKit = document.getElementById('settings-geoService-mapKit');
+		, mapTileNonMapKit = document.getElementById('settings-mapTiles-nonMapKit')
+		, mapTileMapKit = document.getElementById('settings-mapTiles-mapKit');
 
 	const mapIsMapKit = mapTiles.value.indexOf('mapKit') > -1;
 	setInputs(mapTileNonMapKit, !mapIsMapKit);

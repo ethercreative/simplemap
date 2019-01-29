@@ -66,7 +66,7 @@
 			},
 		}
 	})
-	export default class Parts extends Vue {
+	export default class Address extends Vue {
 
 		// Properties
 		// =====================================================================

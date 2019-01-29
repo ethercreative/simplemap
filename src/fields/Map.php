@@ -10,7 +10,9 @@ namespace ether\simplemap\fields;
 
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\PreviewableFieldInterface;
 use ether\simplemap\enums\GeoService;
+use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
@@ -22,7 +24,7 @@ use Mapkit\JWT;
  * @author  Ether Creative
  * @package ether\simplemap\fields
  */
-class Map extends Field
+class Map extends Field implements PreviewableFieldInterface
 {
 
 	// Properties
@@ -137,19 +139,52 @@ class Map extends Field
 		$opts = [
 			'config' => [
 				'name' => $view->namespaceInputName($this->handle),
+				'zoom' => $this->zoom,
+				'hideSearch' => $this->hideSearch,
+				'hideMap' => $this->hideMap,
+				'hideAddress' => $this->hideAddress,
+
+				'mapTiles' => $settings->mapTiles,
+				'mapToken' => $this->_getToken(
+					$settings->mapToken,
+					$settings->mapTiles
+				),
+
 				'geoService' => $settings->geoService,
 				'geoToken' => $this->_getToken(
 					$settings->geoToken,
 					$settings->geoService
 				),
 			],
+
+			// TODO: Defaults / settings
 			'value' => [
 				'address' => '',
-				'lat' => 0,
-				'lng' => 0,
+				'lat' => $this->lat,
+				'lng' => $this->lng,
 				'parts' => [],
 			],
 		];
+
+		// Map Services
+		// ---------------------------------------------------------------------
+
+		if (strpos($settings->mapTiles, 'google') !== false)
+		{
+			$view->registerJsFile(
+				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
+				$settings->mapToken
+			);
+		}
+		elseif (strpos($settings->mapTiles, 'mapkit') !== false)
+		{
+			$view->registerJsFile(
+				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+			);
+		}
+
+		// Geo Services
+		// ---------------------------------------------------------------------
 
 		if ($settings->geoService === GeoService::GoogleMaps)
 		{
@@ -172,6 +207,11 @@ class Map extends Field
 		);
 	}
 
+	// TODO: This
+	public function getTableAttributeHtml ($value, ElementInterface $element): string {
+		return parent::getTableAttributeHtml($value, $element);
+	}
+
 	// Helpers
 	// =========================================================================
 
@@ -188,6 +228,9 @@ class Map extends Field
 		switch ($service)
 		{
 			case GeoService::AppleMapKit:
+			case MapTiles::MapKitStandard:
+			case MapTiles::MapKitSatellite:
+			case MapTiles::MapKitHybrid:
 				return JWT::getToken(
 					trim($token['privateKey']),
 					trim($token['keyId']),

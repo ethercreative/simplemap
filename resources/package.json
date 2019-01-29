@@ -36,10 +36,25 @@
     ],
     "rules": {
       "no-tabs": "off",
-      "indent": "off"
+      "indent": "off",
+      "padded-blocks": "off",
+      "comma-dangle": "off",
+      "arrow-parens": "off",
+      "space-before-function-paren": "off",
+      "no-underscore-dangle": "off",
+      "no-param-reassign": "off",
+      "nonblock-statement-body-position": "off",
+      "func-names": "off",
+      "prefer-template": "off",
+      "lines-between-class-members": "off",
+      "class-methods-use-this": "off",
+      "curly": "off"
     },
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "babel-eslint",
+      "ecmaFeatures": {
+        "legacyDecorators": true
+      }
     }
   },
   "postcss": {

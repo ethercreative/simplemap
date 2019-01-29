@@ -1,10 +1,15 @@
 {% import '_includes/forms' as forms %}
 
+{# === Map === #}
+
 <h2>{{ 'Map'|t('simplemap') }}</h2>
+
+{# --- Map: Tiles --- #}
 
 {# TODO: Add examples of the styles #}
 {{ forms.selectField({
 	first: true,
+	id: 'mapTiles',
 	name: 'mapTiles',
 	label: 'Map Tiles'|t('simplemap'),
 	instructions: 'Select the style of map tiles.'|t('simplemap'),
@@ -12,18 +17,54 @@
 	value: settings.mapTiles,
 }) }}
 
-{# TODO: Add instructions on how to get API keys for each service #}
-{{ forms.textField({
-	name: 'mapToken',
-	label: 'Map Token'|t('simplemap'),
-	instructions: 'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).'|t('simplemap'),
-	value: settings.mapToken,
-}) }}
+{# --- Map: Token --- #}
 
-<h2>Geo-Coding</h2>
+{# TODO: Add instructions on how to get API keys for each service #}
+{% set mapTokenIterable = settings.mapToken is iterable %}
+{% set mapIsMapKit = 'mapkit' in settings.mapTiles %}
+
+<div style="{{ mapIsMapKit ? 'display:none' }}" id="mapTiles-nonMapKit">
+	{{ forms.textField({
+		name: 'mapToken',
+		label: 'Map Token'|t('simplemap'),
+		instructions: 'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).'|t('simplemap'),
+		value: not mapTokenIterable ? settings.mapToken,
+	}) }}
+</div>
+
+<div style="{{ not mapIsMapKit ? 'display:none' }}" id="mapTiles-mapKit">
+	{{ forms.textareaField({
+		name: 'mapToken[privateKey]',
+		label: 'Private Key'|t('simplemap'),
+		rows: 6,
+		instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+		value: mapTokenIterable ? settings.mapToken.privateKey,
+	}) }}
+
+	{{ forms.textField({
+		name: 'mapToken[keyId]',
+		label: 'Key ID'|t('simplemap'),
+		instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+		value: mapTokenIterable ? settings.mapToken.keyId,
+	}) }}
+
+	{{ forms.textField({
+		name: 'mapToken[teamId]',
+		label: 'Team ID'|t('simplemap'),
+		instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+		value: mapTokenIterable ? settings.mapToken.teamId,
+	}) }}
+</div>
+
+{# === Geo === #}
+
+<h2>{{ 'Geo-Coding'|t('simplemap') }}</h2>
+
+{# --- Geo: Service --- #}
 
 {# TODO: Link to the services? #}
 {{ forms.selectField({
+	id: 'geoService',
 	name: 'geoService',
 	label: 'Geo Service'|t('simplemap'),
 	instructions: 'Select the service to be used for Geo-coding.'|t('simplemap'),
@@ -31,10 +72,110 @@
 	value: settings.geoService,
 }) }}
 
+{# --- Geo: Token --- #}
+
 {# TODO: Add instructions on how to get API keys for each service #}
-{{ forms.textField({
-	name: 'geoToken',
-	label: 'Geo Token'|t('simplemap'),
-	instructions: 'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)'|t('simplemap'),
-	value: settings.geoToken,
-}) }}
+{% set geoTokenIterable = settings.geoToken is iterable %}
+{% set geoIsMapKit = settings.geoService == 'apple' %}
+
+<div style="{{ geoIsMapKit ? 'display:none' }}" id="geoService-nonMapKit">
+	{{ forms.textField({
+		name: 'geoToken',
+		label: 'Geo Token'|t('simplemap'),
+		instructions: 'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)'|t('simplemap'),
+		value: not geoTokenIterable ? settings.geoToken,
+	}) }}
+</div>
+
+<div style="{{ not geoIsMapKit ? 'display:none' }}" id="geoService-mapKit">
+	{{ forms.textareaField({
+		name: 'geoToken[privateKey]',
+		label: 'Private Key'|t('simplemap'),
+		rows: 6,
+		instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+		value: geoTokenIterable ? settings.geoToken.privateKey,
+	}) }}
+
+	{{ forms.textField({
+		name: 'geoToken[keyId]',
+		label: 'Key ID'|t('simplemap'),
+		instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+		value: geoTokenIterable ? settings.geoToken.keyId,
+	}) }}
+
+	{{ forms.textField({
+		name: 'geoToken[teamId]',
+		label: 'Team ID'|t('simplemap'),
+		instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+		value: geoTokenIterable ? settings.geoToken.teamId,
+	}) }}
+</div>
+
+<script>
+	function setInputs (parent, enable = true) {
+		const inputs = parent.querySelectorAll('input, textarea');
+
+		for (let i = 0, l = inputs.length; i < l; ++i) {
+			const input = inputs[i];
+			if (enable && input.dataset.hasOwnProperty('name')) {
+				input.setAttribute('name', input.dataset.name);
+				input.removeAttribute('data-name');
+			} else if (!enable && !input.dataset.hasOwnProperty('name')) {
+				input.setAttribute('data-name', input.getAttribute('name'));
+				input.removeAttribute('name');
+			}
+		}
+	}
+
+	// Map
+	// =========================================================================
+
+	const mapTiles = document.getElementById('settings-mapTiles')
+		, mapTileNonMapKit = document.getElementById('settings-geoService-nonMapKit')
+		, mapTileMapKit = document.getElementById('settings-geoService-mapKit');
+
+	const mapIsMapKit = mapTiles.value.indexOf('mapKit') > -1;
+	setInputs(mapTileNonMapKit, !mapIsMapKit);
+	setInputs(mapTileMapKit, mapIsMapKit);
+
+	mapTiles.addEventListener('change', e => {
+		const mapIsMapKit = e.target.value.indexOf('mapkit') > -1;
+
+		if (mapIsMapKit) {
+			mapTileNonMapKit.style.display = 'none';
+			mapTileMapKit.style.display = 'block';
+		} else {
+			mapTileNonMapKit.style.display = 'block';
+			mapTileMapKit.style.display = 'none';
+		}
+
+		setInputs(mapTileNonMapKit, !mapIsMapKit);
+		setInputs(mapTileMapKit, mapIsMapKit);
+	});
+
+	// Geo
+	// =========================================================================
+
+	const geoService = document.getElementById('settings-geoService')
+		, geoServiceNonMapKit = document.getElementById('settings-geoService-nonMapKit')
+		, geoServiceMapKit = document.getElementById('settings-geoService-mapKit');
+
+	const geoIsMapKit = geoService.value === 'apple';
+	setInputs(geoServiceNonMapKit, !geoIsMapKit);
+	setInputs(geoServiceMapKit, geoIsMapKit);
+
+	geoService.addEventListener('change', e => {
+		const geoIsMapKit = e.target.value === 'apple';
+
+		if (geoIsMapKit) {
+			geoServiceNonMapKit.style.display = 'none';
+			geoServiceMapKit.style.display = 'block';
+		} else {
+			geoServiceNonMapKit.style.display = 'block';
+			geoServiceMapKit.style.display = 'none';
+		}
+
+		setInputs(geoServiceNonMapKit, !geoIsMapKit);
+		setInputs(geoServiceMapKit, geoIsMapKit);
+	});
+</script>

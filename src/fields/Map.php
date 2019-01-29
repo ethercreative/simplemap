@@ -164,35 +164,15 @@ class Map extends Field
 	// Helpers
 	// =========================================================================
 
-	private function _getToken (string $token, string $service)
+	private function _getToken ($token, string $service)
 	{
 		switch ($service)
 		{
 			case GeoService::AppleMapKit:
-				list($privateKey, $keyId, $teamId) = explode(',', $token);
-
-				$privateKey = str_replace(
-					'-----BEGIN PRIVATE KEY-----',
-					'',
-					$privateKey
-				);
-
-				$privateKey = str_replace(
-					'-----END PRIVATE KEY-----',
-					'',
-					$privateKey
-				);
-
-				$privateKey = str_replace(' ', PHP_EOL, $privateKey);
-				$privateKey =
-					'-----BEGIN PRIVATE KEY-----' . PHP_EOL .
-					trim($privateKey) . PHP_EOL .
-					'-----END PRIVATE KEY-----';
-
 				return JWT::getToken(
-					trim($privateKey),
-					trim($keyId),
-					trim($teamId)
+					trim($token['privateKey']),
+					trim($token['keyId']),
+					trim($token['teamId'])
 				);
 			default:
 				return $token;

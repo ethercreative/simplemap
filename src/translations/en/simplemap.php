@@ -12,6 +12,7 @@ return [
 	// =========================================================================
 
 	'Map' => 'Map',
+	'Geo-Coding' => 'Geo-Coding',
 
 	'Search for a location' => 'Search for a location',
 
@@ -32,6 +33,15 @@ return [
 	'Geo Token' => 'Geo Token',
 	'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)' =>
 		'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)',
+
+	'Private Key' => 'Private Key',
+	'Paste the contents of your private key files below.' => 'Paste the contents of your private key files below.',
+
+	'Key ID' => 'Key ID',
+	'The ID of the key associated with your private key.' => 'The ID of the key associated with your private key.',
+
+	'Team ID' => 'Team ID',
+	'The team ID that created the key ID and private key.' => 'The team ID that created the key ID and private key.',
 
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------

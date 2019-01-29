@@ -25,7 +25,7 @@
 			defaultValue: String,
 		},
 	})
-	export default class Search extends Vue {
+	export default class Search extends Vue {//
 
 		// Properties
 		// =====================================================================
@@ -53,9 +53,9 @@
 		mounted () {
 			if (this.service === GeoService.GoogleMaps) {
 				this.google = {
-					service: new google.maps.places.AutocompleteService(),
-					session: new google.maps.places.AutocompleteSessionToken(),
-					places: new google.maps.places.PlacesService(
+					service: new window.google.maps.places.AutocompleteService(),
+					session: new window.google.maps.places.AutocompleteSessionToken(),
+					places: new window.google.maps.places.PlacesService(
 						document.createElement('div')
 					),
 				};
@@ -240,9 +240,7 @@
 		 * @param item
 		 * @returns {*|string}
 		 */
-		renderSuggestion ({ item }) {
-			return item.address;
-		}
+		renderSuggestion = ({ item }) => item.address;
 
 		// Helpers
 		// =====================================================================
@@ -254,9 +252,7 @@
 		 * @param suggestion
 		 * @returns {string}
 		 */
-		getSuggestionValue (suggestion) {
-			return suggestion.item.address;
-		}
+		getSuggestionValue = suggestion => suggestion.item.address;
 
 		/**
 		 * Gets the details about the given place

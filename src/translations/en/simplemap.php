@@ -16,6 +16,14 @@ return [
 
 	'Search for a location' => 'Search for a location',
 
+	'Name / Number' => 'Name / Number',
+	'Street Address' => 'Street Address',
+	'Town / City' => 'Town / City',
+	'Postcode' => 'Postcode',
+	'County' => 'County',
+	'State' => 'State',
+	'Country' => 'Country',
+
 	// Settings
 	// =========================================================================
 

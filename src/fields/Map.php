@@ -122,6 +122,13 @@ class Map extends Field
 		$view->registerAssetBundle(MapAsset::class);
 		$view->registerTranslations('simplemap', [
 			'Search for a location',
+			'Name / Number',
+			'Street Address',
+			'Town / City',
+			'Postcode',
+			'County',
+			'State',
+			'Country',
 		]);
 
 		/** @var Settings $settings */
@@ -138,6 +145,9 @@ class Map extends Field
 			],
 			'value' => [
 				'address' => '',
+				'lat' => 0,
+				'lng' => 0,
+				'parts' => [],
 			],
 		];
 

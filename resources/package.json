@@ -49,7 +49,10 @@
       "lines-between-class-members": "off",
       "class-methods-use-this": "off",
       "curly": "off",
-      "prefer-destructuring": "off"
+      "prefer-destructuring": "off",
+      "no-trailing-spaces": "off",
+      "import/extensions": "off",
+      "max-len": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

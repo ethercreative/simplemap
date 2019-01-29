@@ -5,8 +5,6 @@ export default class Parts {
 	// Properties
 	// =========================================================================
 
-	_raw = null;
-
 	number = '';
 	address = '';
 	city = '';
@@ -16,8 +14,6 @@ export default class Parts {
 	country = '';
 
 	constructor (parts, service) {
-		this._raw = parts;
-
 		switch (service) {
 			case GeoService.Nominatim:
 				this._nominatim(parts);

@@ -16,16 +16,13 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-plugin-typescript": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/eslint-config-typescript": "^3.2.0",
+    "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
-    "typescript": "~3.1.1",
     "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
@@ -35,28 +32,14 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "@vue/standard",
-      "@vue/typescript"
+      "@vue/airbnb"
     ],
     "rules": {
-      "eqeqeq": [1, "smart"],
-      "semi": [1, "always"],
-      "no-loop-func": [2],
-      "no-unused-vars": [1],
-      "no-console": [1],
-      "no-tabs": [0],
-      "indent": [0],
-      "no-mixed-spaces-and-tabs": [0],
-      "comma-dangle": [0],
-      "padded-blocks": [0],
-      "no-trailing-spaces": [0],
-      "curly": [0],
-      "comma-style": [0],
-      "one-var": [0],
-      "handle-callback-err": [0]
+      "no-tabs": "off",
+      "indent": "off"
     },
     "parserOptions": {
-      "parser": "typescript-eslint-parser"
+      "parser": "babel-eslint"
     }
   },
   "postcss": {

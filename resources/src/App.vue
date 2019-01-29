@@ -25,6 +25,8 @@
 		// =====================================================================
 
 		config = {
+			mapTiles: 'wikimedia',
+			mapToken: '',
 			geoService: 'nominatim',
 			geoToken: '',
 		};
@@ -46,7 +48,10 @@
 			this.config = config;
 			this.value = value;
 
-			if (config.geoService === GeoService.AppleMapKit) {
+			if (
+				// TODO: Also if using MapKit tiles
+				config.geoService === GeoService.AppleMapKit
+			) {
 				window.mapkit.init({
 					authorizationCallback: done => done(config.geoToken),
 				});

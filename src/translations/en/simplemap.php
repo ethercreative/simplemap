@@ -18,13 +18,6 @@ return [
 	// Settings
 	// =========================================================================
 
-	'Apple MapKit Usage' => 'Apple MapKit Usage',
-	'To use Apple MapKit enter the following pieces of information in this order, comma separated, into the appropriate token fields: `Private Key`, `Key ID`, `Team ID`.' =>
-		'To use Apple MapKit enter the following pieces of information in this order, comma separated, into the appropriate token fields: `Private Key`, `Key ID`, `Team ID`.',
-	'`Private Key`: The contents of your private key file' => '`Private Key`: The contents of your private key file',
-	'`Key ID`: Key ID provided by Apple' => '`Key ID`: Key ID provided by Apple',
-	'`Team ID`: Apple Developer Team Identifier' => '`Team ID`: Apple Developer Team Identifier',
-
 	'Map Tiles' => 'Map Tiles',
 	'Select the style of map tiles.' => 'Select the style of map tiles.',
 

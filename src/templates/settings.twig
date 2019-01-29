@@ -1,34 +1,5 @@
 {% import '_includes/forms' as forms %}
 
-<style>
-	.simplemap-warning {
-		padding: 14px;
-
-		background-color: rgba(231, 92, 18, 0.1);
-		border: 1px solid #e78640;
-		border-radius: 3px;
-	}
-
-	.simplemap-warning p {
-		margin: 0 !important;
-	}
-
-	.simplemap-warning p:first-child {
-		margin-bottom: 0.5em !important;
-	}
-
-	.simplemap-warning code {
-		font-weight: bold;
-	}
-</style>
-<div class="simplemap-warning">
-	<p><strong>{{ 'Apple MapKit Usage'|t('simplemap') }}</strong></p>
-	{{ 'To use Apple MapKit enter the following pieces of information in this order, comma separated, into the appropriate token fields: `Private Key`, `Key ID`, `Team ID`.'|t('simplemap')|md }}
-	{{ '`Private Key`: The contents of your private key file'|t('simplemap')|md }}
-	{{ '`Key ID`: Key ID provided by Apple'|t('simplemap')|md }}
-	{{ '`Team ID`: Apple Developer Team Identifier'|t('simplemap')|md }}
-</div>
-
 <h2>{{ 'Map'|t('simplemap') }}</h2>
 
 {# TODO: Add examples of the styles #}

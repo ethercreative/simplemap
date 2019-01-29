@@ -129,6 +129,7 @@ class Map extends Field
 
 		$opts = [
 			'config' => [
+				'name' => $view->namespaceInputName($this->handle),
 				'geoService' => $settings->geoService,
 				'geoToken' => $this->_getToken(
 					$settings->geoToken,
@@ -164,6 +165,14 @@ class Map extends Field
 	// Helpers
 	// =========================================================================
 
+	/**
+	 * Parses the token based off the given service
+	 *
+	 * @param string|array $token
+	 * @param string $service
+	 *
+	 * @return false|string
+	 */
 	private function _getToken ($token, string $service)
 	{
 		switch ($service)

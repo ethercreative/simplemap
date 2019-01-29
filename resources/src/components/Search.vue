@@ -20,12 +20,13 @@
 			VueAutosuggest,
 		},
 		props: {
+			name: String,
 			service: String,
 			token: String,
 			defaultValue: String,
 		},
 	})
-	export default class Search extends Vue {//
+	export default class Search extends Vue {
 
 		// Properties
 		// =====================================================================
@@ -44,6 +45,7 @@
 				class: 'text nicetext fullwidth',
 				placeholder: t('Search for a location'),
 				initialValue: this.initialValue,
+				name: this.name + '[address]',
 			};
 		}
 
@@ -62,6 +64,8 @@
 			} else if (this.service === GeoService.AppleMapKit) {
 				this.apple = {
 					Search: new window.mapkit.Search(),
+					Geocoder: new window.mapkit.Geocoder(),
+					Coordinate: window.mapkit.Coordinate,
 				};
 			}
 		}
@@ -80,8 +84,6 @@
 				this.suggestions = [{ data: [] }];
 				return;
 			}
-
-			text = encodeURI(text);
 
 			let suggestions = [];
 
@@ -113,10 +115,10 @@
 		 */
 		async searchNominatim (query) {
 			const params = new URLSearchParams({
+				q: query,
 				format: 'jsonv2',
 				limit: 5,
 				addressdetails: 1,
-				q: query,
 			}).toString();
 
 			const data = await fetch(
@@ -152,7 +154,7 @@
 				address: result.place_name,
 				lat: result.center[1],
 				lng: result.center[0],
-				parts: new Parts(result.context, GeoService.Mapbox),
+				parts: new Parts(result, GeoService.Mapbox),
 			}));
 		}
 
@@ -165,16 +167,16 @@
 		async searchGoogle (query) {
 			return new Promise(resolve => {
 				this.google.service.getPlacePredictions({
-					input: decodeURI(query),
+					input: query,
 					sessionToken: this.google.session,
 				}, predictions => {
-					resolve(predictions.map(result => ({
+					if (!predictions)
+						return resolve([]);
+
+					return resolve(predictions.map(result => ({
 						__placeId: result.place_id,
 						address: result.description,
-						// See Search::getGooglePlaceDetails() for the below:
-						// lat
-						// lng
-						// parts
+						// See Search::getGooglePlaceDetails() for `lat`, `lng`, and `parts`
 					})));
 				});
 			});
@@ -188,11 +190,12 @@
 		 */
 		async searchApple (query) {
 			return new Promise(resolve => {
-				this.apple.Search.autocomplete(decodeURI(query), (err, data) => {
+				this.apple.Search.autocomplete(query, (err, data) => {
 					resolve(data.results.slice(0, 5).map(result => ({
 						address: result.displayLines.join(', '),
 						lat: result.coordinate.latitude,
 						lng: result.coordinate.longitude,
+						// There's no way to get detailed address information from MapKit :(
 						parts: new Parts(null, GeoService.AppleMapKit),
 					})));
 				});
@@ -220,9 +223,14 @@
 		/**
 		 * When an item from the autocomplete is selected
 		 *
-		 * @param item
+		 * @param selected
 		 */
-		async onSelected ({ item }) {
+		async onSelected (selected) {
+			if (!selected)
+				return;
+
+			let item = selected.item;
+
 			if (this.service === GeoService.GoogleMaps)
 				item = await this.getGooglePlaceDetails(item.__placeId, item);
 

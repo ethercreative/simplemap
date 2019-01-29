@@ -48,7 +48,8 @@
       "prefer-template": "off",
       "lines-between-class-members": "off",
       "class-methods-use-this": "off",
-      "curly": "off"
+      "curly": "off",
+      "prefer-destructuring": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<Search
+			:name="config.name"
 			:service="config.geoService"
 			:token="config.geoToken"
 			:default-value="value.address"
@@ -25,6 +26,7 @@
 		// =====================================================================
 
 		config = {
+			name: '',
 			mapTiles: 'wikimedia',
 			mapToken: '',
 			geoService: 'nominatim',

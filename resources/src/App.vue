@@ -4,8 +4,8 @@
 			v-if="!config.hideSearch"
 			:name="config.name"
 			:service="config.geoService"
-			:token="config.geoToken"
 			:default-value="value.address"
+			:geo="geo"
 			@selected="onSearchSelected"
 		/>
 
@@ -15,6 +15,7 @@
 			:token="config.mapToken"
 			:latLng="{ lat: value.lat, lng: value.lng }"
 			:zoom="config.zoom"
+			@change="onMapChange"
 		/>
 
 		<Address
@@ -30,7 +31,7 @@
 	import Search from './components/Search';
 	import Address from './components/Address';
 	import Map from './components/Map';
-	import GeoService from './enums/GeoService';
+	import Geo from './common/Geo';
 
 	@Component({
 		components: {
@@ -63,6 +64,8 @@
 			parts: {},
 		};
 
+		geo = null;
+
 		// Vue
 		// =====================================================================
 
@@ -76,14 +79,7 @@
 			this.config = config;
 			this.value = value;
 
-			if (
-				// TODO: Also if using MapKit tiles
-				config.geoService === GeoService.AppleMapKit
-			) {
-				window.mapkit.init({
-					authorizationCallback: done => done(config.geoToken),
-				});
-			}
+			this.geo = new Geo(config);
 		}
 
 		// Events
@@ -91,6 +87,10 @@
 
 		onSearchSelected (item) {
 			this.value = item;
+		}
+
+		onMapChange (latLng) {
+			console.log(latLng);
 		}
 
 	}

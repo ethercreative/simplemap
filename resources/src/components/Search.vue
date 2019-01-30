@@ -58,8 +58,9 @@
 
 			return function (text) {
 				clearTimeout(to);
-				to = setTimeout(() => {
-					that.geo.search(text);
+				to = setTimeout(async () => {
+					const data = await that.geo.search(text);
+					that.suggestions = [{ data }];
 				}, 500);
 			};
 		}

@@ -23,6 +23,8 @@
 			:name="config.name"
 			:value="value"
 		/>
+
+		<pre>{{ JSON.stringify(value, null, 4) }}</pre>
 	</div>
 </template>
 
@@ -32,6 +34,8 @@
 	import Address from './components/Address';
 	import Map from './components/Map';
 	import Geo from './common/Geo';
+	import GeoService from './enums/GeoService';
+	import Parts from './models/Parts';
 
 	@Component({
 		components: {
@@ -61,7 +65,7 @@
 			address: '',
 			lat: 0,
 			lng: 0,
-			parts: {},
+			parts: new Parts(),
 		};
 
 		geo = null;
@@ -89,8 +93,23 @@
 			this.value = item;
 		}
 
-		onMapChange (latLng) {
-			console.log(latLng);
+		async onMapChange (latLng) {
+			switch (this.config.geoService) {
+				case GeoService.Nominatim:
+					this.value = await this.geo.reverseNominatim(latLng);
+					break;
+				case GeoService.Mapbox:
+					this.value = await this.geo.reverseMapbox(latLng);
+					break;
+				case GeoService.GoogleMaps:
+					this.value = await this.geo.reverseGoogle(latLng);
+					break;
+				case GeoService.AppleMapKit:
+					this.value = await this.geo.reverseApple(latLng);
+					break;
+				default:
+					throw new Error('Unknown geo service: ' + this.config.geoService);
+			}
 		}
 
 	}

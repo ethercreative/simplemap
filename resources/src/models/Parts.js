@@ -39,7 +39,7 @@ export default class Parts {
 	 * @private
 	 */
 	_nominatim (parts) {
-		this.number = parts.house_number;
+		this.number = parts.house_number || parts.post_office;
 		this.address = parts.road;
 		this.city = parts.city || parts.town;
 		this.postcode = parts.postcode;

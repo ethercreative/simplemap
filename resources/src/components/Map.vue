@@ -94,6 +94,8 @@
 				this.map.addLayer(tileLayer);
 			}
 
+			this.map.on('zoom', this.onZoom);
+
 			this.setMarker();
 		}
 
@@ -128,6 +130,13 @@
 		onLatChange () {
 			this.map.flyTo(this.latLng);
 			this.setMarker();
+		}
+
+		/**
+		 * Listens to map zoom event and triggers component zoom event.
+		 */
+		onZoom () {
+			this.$emit('zoom', this.map.getZoom());
 		}
 
 		// Helpers

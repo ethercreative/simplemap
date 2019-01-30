@@ -2,44 +2,44 @@
 	<div :class="$style.grid">
 		<Input
 			:label="labels.number"
-			:name="name + '[number]'"
 			:value="value.parts.number"
+			@input="onInput('number', $event)"
 		/>
 
 		<Input
 			:label="labels.address"
-			:name="name + '[address]'"
 			:value="value.parts.address"
+			@input="onInput('address', $event)"
 		/>
 
 		<Input
 			:label="labels.city"
-			:name="name + '[city]'"
 			:value="value.parts.city"
+			@input="onInput('city', $event)"
 		/>
 
 		<Input
 			:label="labels.postcode"
-			:name="name + '[postcode]'"
 			:value="value.parts.postcode"
+			@input="onInput('postcode', $event)"
 		/>
 
 		<Input
 			:label="labels.county"
-			:name="name + '[county]'"
 			:value="value.parts.county"
+			@input="onInput('county', $event)"
 		/>
 
 		<Input
 			:label="labels.state"
-			:name="name + '[state]'"
 			:value="value.parts.state"
+			@input="onInput('state', $event)"
 		/>
 
 		<Input
 			:label="labels.country"
-			:name="name + '[country]'"
 			:value="value.parts.country"
+			@input="onInput('country', $event)"
 		/>
 	</div>
 </template>
@@ -54,7 +54,6 @@
 			Input,
 		},
 		props: {
-			name: String,
 			value: {
 				type: Object,
 				default: {
@@ -80,6 +79,16 @@
 			state: t('State'),
 			country: t('Country'),
 		};
+
+		// Events
+		// =====================================================================
+
+		onInput (name, e) {
+			this.$emit('changed', {
+				name,
+				value: e.target.value,
+			});
+		}
 
 	}
 </script>

@@ -5,11 +5,12 @@
 		:get-suggestion-value="getSuggestionValue"
 		:input-props="inputProps"
 		@selected="onSelected"
+		ref="self"
 	/>
 </template>
 
 <script lang="jsx">
-	import { Component, Vue } from 'vue-property-decorator';
+	import { Component, Vue, Watch } from 'vue-property-decorator';
 	import { VueAutosuggest } from 'vue-autosuggest';
 	import { t } from '../filters/craft';
 	import GeoService from '../enums/GeoService';
@@ -21,7 +22,6 @@
 		},
 		props: {
 			geo: Geo,
-			name: String,
 			service: String,
 			defaultValue: String,
 		},
@@ -42,7 +42,6 @@
 				class: 'text nicetext fullwidth',
 				placeholder: t('Search for a location'),
 				initialValue: this.initialValue,
-				name: this.name + '[address]',
 			};
 		}
 
@@ -80,6 +79,11 @@
 				item = await this.geo.getGooglePlaceDetails(item.__placeId, item);
 
 			this.$emit('selected', item);
+		}
+
+		@Watch('defaultValue')
+		onDefaultValueChange () {
+			this.$refs.self.$el.firstElementChild.value = this.defaultValue;
 		}
 
 		// Render

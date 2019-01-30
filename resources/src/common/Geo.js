@@ -102,7 +102,10 @@ export default class Geo {
 			address: result.display_name,
 			lat: result.lat,
 			lng: result.lon,
-			parts: new Parts(result.address, GeoService.Nominatim),
+			parts: new Parts({
+				...result.address,
+				type: result.type,
+			}, GeoService.Nominatim),
 		}));
 	}
 
@@ -199,9 +202,12 @@ export default class Geo {
 
 		return {
 			address: result.display_name,
-			lat: result.lat,
-			lng: result.lon,
-			parts: new Parts(result.address, GeoService.Nominatim),
+			lat,
+			lng,
+			parts: new Parts({
+				...result.address,
+				type: result.type,
+			}, GeoService.Nominatim),
 		};
 	}
 
@@ -227,8 +233,8 @@ export default class Geo {
 
 		return {
 			address: feature.place_name,
-			lat: feature.center[1],
-			lng: feature.center[0],
+			lat,
+			lng,
 			parts: new Parts(feature, GeoService.Mapbox),
 		};
 	}
@@ -274,8 +280,8 @@ export default class Geo {
 
 					resolve({
 						address: result.formattedAddress,
-						lat: result.coordinate.latitude,
-						lng: result.coordinate.longitude,
+						lat,
+						lng,
 						// There's no way to get detailed address information from MapKit :(
 						parts: new Parts(null, GeoService.AppleMapKit),
 					});

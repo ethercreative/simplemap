@@ -8,6 +8,7 @@
 			:name="name"
 			:value="value"
 			class="text nicetext fullwidth"
+			@input="$emit('input', $event)"
 		/>
 	</label>
 </template>

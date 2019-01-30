@@ -2,7 +2,6 @@
 	<div>
 		<Search
 			v-if="!config.hideSearch"
-			:name="config.name"
 			:service="config.geoService"
 			:default-value="value.address"
 			:geo="geo"
@@ -14,17 +13,22 @@
 			:tiles="config.mapTiles"
 			:token="config.mapToken"
 			:latLng="{ lat: value.lat, lng: value.lng }"
-			:zoom="config.zoom"
+			:zoom="value.zoom"
 			@change="onMapChange"
+			@zoom="onZoom"
 		/>
 
 		<Address
 			v-if="!config.hideAddress"
-			:name="config.name"
 			:value="value"
+			@changed="onPartChange"
 		/>
 
-		<pre>{{ JSON.stringify(value, null, 4) }}</pre>
+		<input
+			type="hidden"
+			:name="this.config.name"
+			:value="JSON.stringify(value)"
+		/>
 	</div>
 </template>
 
@@ -51,7 +55,6 @@
 
 		config = {
 			name: '',
-			zoom: 15,
 			hideSearch: false,
 			hideMap: false,
 			hideAddress: false,
@@ -63,6 +66,7 @@
 
 		value = {
 			address: '',
+			zoom: 15,
 			lat: 0,
 			lng: 0,
 			parts: new Parts(),
@@ -82,6 +86,7 @@
 
 			this.config = config;
 			this.value = value;
+			this.value.parts = Parts.from(value.parts);
 
 			this.geo = new Geo(config);
 		}
@@ -110,6 +115,16 @@
 				default:
 					throw new Error('Unknown geo service: ' + this.config.geoService);
 			}
+		}
+
+		onZoom (zoom) {
+			this.value.zoom = zoom;
+		}
+
+		onPartChange ({ name, value }) {
+			this.value.parts[name] = value;
+			this.value.address =
+				Object.values(this.value.parts).filter(Boolean).join(', ');
 		}
 
 	}

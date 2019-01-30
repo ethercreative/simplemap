@@ -58,7 +58,8 @@
       "max-len": "off",
       "comma-style": "off",
       "import/prefer-default-export": "off",
-      "one-var": "off"
+      "one-var": "off",
+      "operator-linebreak": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

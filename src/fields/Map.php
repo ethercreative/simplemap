@@ -139,7 +139,6 @@ class Map extends Field implements PreviewableFieldInterface
 		$opts = [
 			'config' => [
 				'name' => $view->namespaceInputName($this->handle),
-				'zoom' => $this->zoom,
 				'hideSearch' => $this->hideSearch,
 				'hideMap' => $this->hideMap,
 				'hideAddress' => $this->hideAddress,
@@ -162,6 +161,7 @@ class Map extends Field implements PreviewableFieldInterface
 				'address' => '',
 				'lat' => $this->lat,
 				'lng' => $this->lng,
+				'zoom' => $this->zoom,
 				'parts' => [],
 			],
 		];

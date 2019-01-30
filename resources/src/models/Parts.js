@@ -29,6 +29,26 @@ export default class Parts {
 		}
 	}
 
+	/**
+	 * Create from existing parts (i.e. from server)
+	 *
+	 * @param parts
+	 * @return {Parts}
+	 */
+	static from (parts) {
+		const p = new Parts();
+
+		p.number = parts.number || '';
+		p.address = parts.address || '';
+		p.city = parts.city || '';
+		p.postcode = parts.postcode || '';
+		p.county = parts.county || '';
+		p.state = parts.state || '';
+		p.country = parts.country || '';
+
+		return p;
+	}
+
 	// Helpers
 	// =========================================================================
 
@@ -39,12 +59,42 @@ export default class Parts {
 	 * @private
 	 */
 	_nominatim (parts) {
-		this.number = parts.house_number || parts.post_office;
-		this.address = parts.road;
-		this.city = parts.city || parts.town;
+		this.number = [
+			parts.house_number,
+			parts.address29,
+			[
+				'pedestrian',
+				'footway',
+				'path',
+				'road',
+				'neighbourhood',
+				'suburb',
+				'village',
+				'town',
+				'city_district',
+				'city',
+			].indexOf(parts.type) === -1 ? parts[parts.type] : null,
+		].filter(Boolean).join(', ');
+		this.address = [
+			parts.pedestrian,
+			parts.footway,
+			parts.path,
+			parts.road,
+			parts.neighbourhood,
+			parts.suburb,
+		].filter(Boolean).join(', ');
+		this.city = [
+			parts.village,
+			parts.town,
+			parts.city_district,
+			parts.city,
+		].filter(Boolean).join(', ');
 		this.postcode = parts.postcode;
 		this.county = parts.county;
-		this.state = parts.state;
+		this.state = [
+			parts.state_district,
+			parts.state,
+		].filter(Boolean).join(', ');
 		this.country = parts.country;
 	}
 

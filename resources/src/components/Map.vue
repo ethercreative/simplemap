@@ -1,5 +1,5 @@
 <template>
-	<div ref="map" :class="$style.map"></div>
+	<div :class="$style.map"></div>
 </template>
 
 <script lang="js">
@@ -8,7 +8,6 @@
 	// TODO: Only load mutants in if they're needed
 	import 'leaflet.gridlayer.googlemutant';
 	import 'leaflet.mapkitmutant';
-	import 'leaflet/dist/leaflet.css';
 	import MapTiles from '../enums/MapTiles';
 
 	@Component({
@@ -78,7 +77,7 @@
 		// =====================================================================
 
 		mounted () {
-			this.map = L.map(this.$refs.map, {
+			this.map = L.map(this.$el, {
 				minZoom: 3,
 			}).setView(this.latLng, this.zoom);
 

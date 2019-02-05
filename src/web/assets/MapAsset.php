@@ -38,6 +38,7 @@ class MapAsset extends AssetBundle
 		{
 			$this->css = [
 				'css/app.css',
+				'https://unpkg.com/leaflet@1.4.0/dist/leaflet.css',
 			];
 
 			$this->js = [

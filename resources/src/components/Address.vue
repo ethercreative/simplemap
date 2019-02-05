@@ -105,8 +105,16 @@
 		border-top: none;
 		border-radius: 0 0 2px 2px;
 
+		@media only screen and (max-width: 998px) {
+			grid-template-columns: 1fr;
+		}
+
 		label:last-child:nth-child(odd) {
 			grid-column: span 2;
+
+			@media only screen and (max-width: 998px) {
+				grid-column: span 1;
+			}
 		}
 	}
 </style>

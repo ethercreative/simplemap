@@ -28,16 +28,16 @@ class Install extends Migration
 		$this->createTable(
 			Map::TableName,
 			[
-				'id'      => $this->primaryKey(),
-				'ownerId' => $this->integer()->notNull(),
-				'siteId'  => $this->integer()->notNull(),
-				'fieldId' => $this->integer()->notNull(),
+				'id'          => $this->primaryKey(),
+				'ownerId'     => $this->integer()->notNull(),
+				'ownerSiteId' => $this->integer()->notNull(),
+				'fieldId'     => $this->integer()->notNull(),
 
 				'lat'     => $this->decimal(11, 9),
 				'lng'     => $this->decimal(12, 9),
 				'zoom'    => $this->integer(2),
 				'address' => $this->string(255),
-				'parts'   => $this->text(),
+				'parts'   => $this->_json(),
 
 				'dateCreated' => $this->dateTime()->notNull(),
 				'dateUpdated' => $this->dateTime()->notNull(),
@@ -50,7 +50,7 @@ class Install extends Migration
 		$this->createIndex(
 			null,
 			Map::TableName,
-			['ownerId', 'siteId', 'fieldId'],
+			['ownerId', 'ownerSiteId', 'fieldId'],
 			true
 		);
 
@@ -80,7 +80,7 @@ class Install extends Migration
 		$this->addForeignKey(
 			null,
 			Map::TableName,
-			['siteId'],
+			['ownerSiteId'],
 			Table::SITES,
 			['id'],
 			'CASCADE'
@@ -99,6 +99,14 @@ class Install extends Migration
 	public function safeDown ()
 	{
 		$this->dropTableIfExists(Map::TableName);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	private function _json ()
+	{
+		return $this->db->getDriverName() === 'mysql' ? $this->longText() : $this->json();
 	}
 
 }

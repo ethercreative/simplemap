@@ -19,7 +19,7 @@ use yii\db\ActiveQueryInterface;
  *
  * @property int    $id
  * @property int    $ownerId
- * @property int    $siteId
+ * @property int    $ownerSiteId
  * @property int    $fieldId
  * @property float  $lat
  * @property float  $lng
@@ -51,9 +51,9 @@ class Map extends ActiveRecord
 		return $this->hasOne(Element::class, ['id' => 'ownerId']);
 	}
 
-	public function getSite (): ActiveQueryInterface
+	public function getOwnerSite (): ActiveQueryInterface
 	{
-		return $this->hasOne(Site::class, ['id' => 'siteId']);
+		return $this->hasOne(Site::class, ['id' => 'ownerSiteId']);
 	}
 
 	public function getField (): ActiveQueryInterface

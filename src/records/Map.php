@@ -37,6 +37,7 @@ class Map extends ActiveRecord
 	// =========================================================================
 
 	const TableName = '{{%simplemaps}}';
+	const TableNameClean = 'simplemaps';
 	
 	// Methods
 	// =========================================================================

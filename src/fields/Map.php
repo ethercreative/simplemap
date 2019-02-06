@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\fields;
 
+use craft\base\EagerLoadingFieldInterface;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
@@ -24,7 +25,7 @@ use Mapkit\JWT;
  * @author  Ether Creative
  * @package ether\simplemap\fields
  */
-class Map extends Field implements PreviewableFieldInterface
+class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldInterface
 {
 
 	// Properties
@@ -74,6 +75,14 @@ class Map extends Field implements PreviewableFieldInterface
 	public static function hasContentColumn (): bool
 	{
 		return false;
+	}
+
+	public static function supportedTranslationMethods (): array
+	{
+		return [
+			self::TRANSLATION_METHOD_NONE,
+			self::TRANSLATION_METHOD_SITE,
+		];
 	}
 
 	// Methods: Instance
@@ -207,9 +216,32 @@ class Map extends Field implements PreviewableFieldInterface
 		);
 	}
 
-	// TODO: This
+	/**
+	 * @inheritdoc
+	 *
+	 * TODO: This
+	 *
+	 * @param mixed            $value
+	 * @param ElementInterface $element
+	 *
+	 * @return string
+	 */
 	public function getTableAttributeHtml ($value, ElementInterface $element): string {
 		return parent::getTableAttributeHtml($value, $element);
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * TODO: This
+	 *
+	 * @param array $sourceElements
+	 *
+	 * @return array|false|void
+	 */
+	public function getEagerLoadingMap (array $sourceElements)
+	{
+		// TODO: Implement getEagerLoadingMap() method.
 	}
 
 	// Helpers

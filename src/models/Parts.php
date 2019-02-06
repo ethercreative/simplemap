@@ -21,24 +21,24 @@ class Parts
 	// =========================================================================
 
 	/** @var string */
-	public $number;
+	public $number = '';
 
 	/** @var string */
-	public $address;
+	public $address = '';
 
 	/** @var string */
-	public $city;
+	public $city = '';
 
 	/** @var string */
-	public $postcode;
+	public $postcode = '';
 
 	/** @var string */
-	public $county;
+	public $county = '';
 
 	/** @var string */
-	public $state;
+	public $state = '';
 
 	/** @var string */
-	public $country;
+	public $country = '';
 
 }

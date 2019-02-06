@@ -56,6 +56,17 @@ class Map extends Element
 	// Methods
 	// =========================================================================
 
+	public function __construct (array $config = [])
+	{
+		parent::__construct($config);
+
+		if ($this->address === null)
+			$this->address = '';
+
+		if ($this->parts === null)
+			$this->parts = new Parts();
+	}
+
 	// Methods: Static
 	// -------------------------------------------------------------------------
 
@@ -84,6 +95,9 @@ class Map extends Element
 		return false;
 	}
 
+	/**
+	 * @return ElementQueryInterface|MapQuery
+	 */
 	public static function find (): ElementQueryInterface
 	{
 		return new MapQuery(static::class);

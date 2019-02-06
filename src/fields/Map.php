@@ -9,6 +9,7 @@
 namespace ether\simplemap\fields;
 
 use craft\base\EagerLoadingFieldInterface;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
@@ -17,6 +18,7 @@ use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
+use ether\simplemap\elements\Map as MapElement;
 use Mapkit\JWT;
 
 /**
@@ -114,13 +116,48 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		return $rules;
 	}
 
+	/**
+	 * @param MapElement|null $value
+	 * @param ElementInterface|Element|null $element
+	 *
+	 * @return MapElement
+	 */
+	public function normalizeValue ($value, ElementInterface $element = null)
+	{
+		if ($value instanceof MapElement)
+			return $value;
+
+		$query = MapElement::find()
+			->fieldId($this->id)
+			->siteId($element->siteId ?? null);
+
+		if ($element && $element->id)
+			$query->ownerId($element->id);
+
+		$map = $query->one();
+
+		if ($map === null)
+		{
+			if (is_array($value))
+				$map = new MapElement($value);
+			else
+				$map = new MapElement([
+					'lat' => $this->lat,
+					'lng' => $this->lng,
+					'zoom' => $this->zoom,
+				]);
+		}
+
+		return $map;
+	}
+
 	public function getSettingsHtml ()
 	{
 		return 'TODO: Map field settings';
 	}
 
 	/**
-	 * @param                       $value
+	 * @param MapElement $value
 	 * @param ElementInterface|null $element
 	 *
 	 * @return string
@@ -147,9 +184,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 		$opts = [
 			'config' => [
-				'name' => $view->namespaceInputName($this->handle),
-				'hideSearch' => $this->hideSearch,
-				'hideMap' => $this->hideMap,
+				'name'        => $view->namespaceInputName($this->handle),
+				'hideSearch'  => $this->hideSearch,
+				'hideMap'     => $this->hideMap,
 				'hideAddress' => $this->hideAddress,
 
 				'mapTiles' => $settings->mapTiles,
@@ -159,19 +196,18 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 				),
 
 				'geoService' => $settings->geoService,
-				'geoToken' => $this->_getToken(
+				'geoToken'   => $this->_getToken(
 					$settings->geoToken,
 					$settings->geoService
 				),
 			],
 
-			// TODO: Defaults / settings
 			'value' => [
-				'address' => '',
-				'lat' => $this->lat,
-				'lng' => $this->lng,
-				'zoom' => $this->zoom,
-				'parts' => [],
+				'address' => $value->address,
+				'lat'     => $value->lat,
+				'lng'     => $value->lng,
+				'zoom'    => $value->zoom,
+				'parts'   => $value->parts,
 			],
 		];
 
@@ -226,8 +262,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 *
 	 * @return string
 	 */
-	public function getTableAttributeHtml ($value, ElementInterface $element): string {
-		return parent::getTableAttributeHtml($value, $element);
+	public function getTableAttributeHtml ($value, ElementInterface $element): string
+	{
+		return $this->normalizeValue($value, $element)->address;
 	}
 
 	/**

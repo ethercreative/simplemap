@@ -9,6 +9,7 @@
 	import 'leaflet.gridlayer.googlemutant';
 	import 'leaflet.mapkitmutant';
 	import MapTiles from '../enums/MapTiles';
+	import 'leaflet/dist/leaflet.css';
 
 	@Component({
 		props: {
@@ -126,7 +127,10 @@
 		 * accordingly
 		 */
 		@Watch('latLng', { deep: true })
-		onLatChange () {
+		onLatChange (next, old) {
+			if (next.lat === old.lat && next.lng === old.lng)
+				return;
+
 			this.map.flyTo(this.latLng);
 			this.setMarker();
 		}

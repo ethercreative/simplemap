@@ -10,7 +10,7 @@
 </template>
 
 <script lang="jsx">
-	import { Component, Vue, Watch } from 'vue-property-decorator';
+	import { Component, Vue } from 'vue-property-decorator';
 	import { VueAutosuggest } from 'vue-autosuggest';
 	import { t } from '../filters/craft';
 	import GeoService from '../enums/GeoService';
@@ -79,11 +79,6 @@
 				item = await this.geo.getGooglePlaceDetails(item.__placeId, item);
 
 			this.$emit('selected', item);
-		}
-
-		@Watch('defaultValue')
-		onDefaultValueChange () {
-			this.$refs.self.$el.firstElementChild.value = this.defaultValue;
 		}
 
 		// Render

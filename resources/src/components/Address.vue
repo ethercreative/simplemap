@@ -1,6 +1,12 @@
 <template>
 	<div :class="$style.grid">
 		<Input
+			:label="labels.fullAddress"
+			:value="value.address"
+			@input="onInput('fullAddress', $event)"
+		/>
+
+		<Input
 			:label="labels.number"
 			:value="value.parts.number"
 			@input="onInput('number', $event)"
@@ -63,6 +69,7 @@
 					parts: {},
 				},
 			},
+			fullAddressDirty: Boolean,
 		}
 	})
 	export default class Address extends Vue {
@@ -71,6 +78,7 @@
 		// =====================================================================
 
 		labels = {
+			fullAddress: t('Full Address'),
 			number: t('Name / Number'),
 			address: t('Street Address'),
 			city: t('Town / City'),
@@ -109,7 +117,8 @@
 			grid-template-columns: 1fr;
 		}
 
-		label:last-child:nth-child(odd) {
+		label:first-child,
+		label:last-child:nth-child(even) {
 			grid-column: span 2;
 
 			@media only screen and (max-width: 998px) {

@@ -32,6 +32,7 @@ const MapTiles = {
 
 	// Apple MapKit
 	MapKitStandard: 'mapkit.standard',
+	MapKitMutedStandard: 'mapkit.muted',
 	MapKitSatellite: 'mapkit.satellite',
 	MapKitHybrid: 'mapkit.hybrid',
 };

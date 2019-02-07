@@ -74,6 +74,8 @@
 
 		geo = null;
 
+		fullAddressDirty = false;
+
 		// Vue
 		// =====================================================================
 
@@ -119,6 +121,7 @@
 			}
 			
 			this.value.zoom = zoom;
+			this.fullAddressDirty = false;
 		}
 
 		onZoom (zoom) {
@@ -126,9 +129,16 @@
 		}
 
 		onPartChange ({ name, value }) {
-			this.value.parts[name] = value;
-			this.value.address =
-				Object.values(this.value.parts).filter(Boolean).join(', ');
+			if (name === 'fullAddress') {
+				this.value.address = value;
+				this.fullAddressDirty = value !== '';
+			} else {
+				this.value.parts[name] = value;
+
+				if (this.value.address === '' || !this.fullAddressDirty) {
+					this.value.address = Object.values(this.value.parts).filter(Boolean).join(', ');
+				}
+			}
 		}
 
 	}

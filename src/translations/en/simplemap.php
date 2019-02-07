@@ -16,6 +16,7 @@ return [
 
 	'Search for a location' => 'Search for a location',
 
+	'Full Address' => 'Full Address',
 	'Name / Number' => 'Name / Number',
 	'Street Address' => 'Street Address',
 	'Town / City' => 'Town / City',
@@ -76,6 +77,7 @@ return [
 	'Google Maps: Hybrid' => 'Google Maps: Hybrid',
 
 	'Apple MapKit: Standard' => 'Apple MapKit: Standard',
+	'Apple MapKit: Muted Standard' => 'Apple MapKit: Muted Standard',
 	'Apple MapKit: Satellite' => 'Apple MapKit: Satellite',
 	'Apple MapKit: Hybrid' => 'Apple MapKit: Hybrid',
 

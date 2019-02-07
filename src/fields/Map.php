@@ -298,6 +298,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		{
 			case GeoService::AppleMapKit:
 			case MapTiles::MapKitStandard:
+			case MapTiles::MapKitMutedStandard:
 			case MapTiles::MapKitSatellite:
 			case MapTiles::MapKitHybrid:
 				return JWT::getToken(

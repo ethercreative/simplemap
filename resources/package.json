@@ -59,7 +59,8 @@
       "comma-style": "off",
       "import/prefer-default-export": "off",
       "one-var": "off",
-      "operator-linebreak": "off"
+      "operator-linebreak": "off",
+      "no-multi-spaces": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

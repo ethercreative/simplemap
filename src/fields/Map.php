@@ -288,7 +288,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 * Parses the token based off the given service
 	 *
 	 * @param string|array $token
-	 * @param string $service
+	 * @param string       $service
 	 *
 	 * @return false|string
 	 */

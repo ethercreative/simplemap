@@ -5,13 +5,13 @@ export default class Parts {
 	// Properties
 	// =========================================================================
 
-	number = '';
-	address = '';
-	city = '';
+	number   = '';
+	address  = '';
+	city     = '';
 	postcode = '';
-	county = '';
-	state = '';
-	country = '';
+	county   = '';
+	state    = '';
+	country  = '';
 
 	constructor (parts, service) {
 		switch (service) {
@@ -38,13 +38,13 @@ export default class Parts {
 	static from (parts) {
 		const p = new Parts();
 
-		p.number = parts.number || '';
-		p.address = parts.address || '';
-		p.city = parts.city || '';
+		p.number   = parts.number || '';
+		p.address  = parts.address || '';
+		p.city     = parts.city || '';
 		p.postcode = parts.postcode || '';
-		p.county = parts.county || '';
-		p.state = parts.state || '';
-		p.country = parts.country || '';
+		p.county   = parts.county || '';
+		p.state    = parts.state || '';
+		p.country  = parts.country || '';
 
 		return p;
 	}
@@ -59,7 +59,7 @@ export default class Parts {
 	 * @private
 	 */
 	_nominatim (parts) {
-		this.number = [
+		this.number = this._join([
 			parts.house_number,
 			parts.address29,
 			[
@@ -74,27 +74,32 @@ export default class Parts {
 				'city_district',
 				'city',
 			].indexOf(parts.type) === -1 ? parts[parts.type] : null,
-		].filter(Boolean).join(', ');
-		this.address = [
+		]);
+
+		this.address = this._join([
 			parts.pedestrian,
 			parts.footway,
 			parts.path,
 			parts.road,
 			parts.neighbourhood,
 			parts.suburb,
-		].filter(Boolean).join(', ');
-		this.city = [
+		]);
+
+		this.city = this._join([
 			parts.village,
 			parts.town,
 			parts.city_district,
 			parts.city,
-		].filter(Boolean).join(', ');
+		]);
+
 		this.postcode = parts.postcode;
 		this.county = parts.county;
-		this.state = [
+
+		this.state = this._join([
 			parts.state_district,
 			parts.state,
-		].filter(Boolean).join(', ');
+		]);
+
 		this.country = parts.country;
 	}
 
@@ -115,13 +120,13 @@ export default class Parts {
 			[parts.place_type[0]]: parts.text,
 		});
 
-		this.number = parts.number;
-		this.address = parts.address;
-		this.city = parts.place;
+		this.number   = parts.number;
+		this.address  = parts.address;
+		this.city     = parts.place;
 		this.postcode = parts.postcode;
-		this.county = parts.district;
-		this.state = parts.region;
-		this.country = parts.country;
+		this.county   = parts.district;
+		this.state    = parts.region;
+		this.country  = parts.country;
 	}
 
 	/**
@@ -138,13 +143,13 @@ export default class Parts {
 			return a;
 		}, {});
 
-		this.number = [
+		this.number = this._join([
 			parts.subpremise,
 			parts.premise,
 			parts.street_number,
-		].filter(Boolean).join(', ');
+		]);
 
-		this.address = [
+		this.address = this._join([
 			parts.route,
 			parts.neighborhood,
 			parts.sublocality_level_5,
@@ -153,17 +158,31 @@ export default class Parts {
 			parts.sublocality_level_2,
 			parts.sublocality_level_1,
 			parts.sublocality,
-		].filter(Boolean).join(', ');
+		]);
 
-		this.city = [
+		this.city = this._join([
 			parts.postal_town,
 			parts.locality,
-		].filter(Boolean).join(', ');
+		]);
 
 		this.postcode = parts.postal_code || parts.postal_code_prefix;
 		this.county = parts.administrative_area_level_2;
 		this.state = parts.administrative_area_level_1;
 		this.country = parts.country;
+	}
+
+	// Helpers
+	// =========================================================================
+
+	/**
+	 * Filters and joins the given array
+	 *
+	 * @param {array} parts
+	 * @return {string}
+	 * @private
+	 */
+	_join (parts) {
+		return parts.filter(Boolean).join(', ');
 	}
 
 }

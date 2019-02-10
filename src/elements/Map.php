@@ -65,6 +65,9 @@ class Map extends Element
 
 		if ($this->parts === null)
 			$this->parts = new Parts();
+
+		if (is_array($this->parts))
+			$this->parts = Parts::from($this->parts);
 	}
 
 	// Methods: Static

@@ -127,14 +127,16 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		if ($value instanceof MapElement)
 			return $value;
 
-		$query = MapElement::find()
-			->fieldId($this->id)
-			->siteId($element->siteId ?? null);
+		$map = null;
 
-		if ($element && $element->id)
-			$query->ownerId($element->id);
-
-		$map = $query->one();
+		if ($element)
+		{
+			$map = MapElement::find()
+				->fieldId($this->id)
+				->siteId($element->siteId)
+				->ownerId($element->id)
+				->one();
+		}
 
 		if ($map === null)
 		{

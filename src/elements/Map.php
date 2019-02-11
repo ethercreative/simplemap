@@ -68,7 +68,7 @@ class Map extends Element
 			$this->parts = new Parts();
 
 		else if (is_string($this->parts))
-			$this->parts = Json::decodeIfJson($this->parts);
+			$this->parts = Parts::from(Json::decodeIfJson($this->parts));
 
 		else if (is_array($this->parts))
 			$this->parts = Parts::from($this->parts);

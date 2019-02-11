@@ -316,7 +316,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 			->all();
 
 		return [
-			'elementType' => MapRecord::class,
+			'elementType' => MapElement::class,
 			'map' => $map,
 			'criteria' => ['fieldId' => $this->id],
 		];

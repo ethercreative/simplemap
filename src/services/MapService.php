@@ -11,6 +11,7 @@ namespace ether\simplemap\services;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\helpers\Json;
 use ether\simplemap\fields\Map;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
@@ -49,6 +50,7 @@ class MapService extends Component
 			{
 				$record = MapRecord::findOne([
 					'id' => $value->id,
+					'ownerSiteId' => $element->site->id,
 				]);
 			}
 

@@ -16,7 +16,6 @@ use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
-use craft\records\MatrixBlock;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
@@ -135,22 +134,32 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		if ($value instanceof ElementQueryInterface)
 			return $value->one();
 
+		if (is_string($value))
+			$value = Json::decodeIfJson($value);
+
 		$map = null;
 
 		if ($element)
 		{
+			/** @var MapElement $map */
 			$map = MapElement::find()
 				->fieldId($this->id)
 				->siteId($element->siteId)
 				->ownerId($element->id)
 				->one();
+
+			if ($value)
+			{
+				$map->lat     = $value['lat'];
+				$map->lng     = $value['lng'];
+				$map->zoom    = $value['zoom'];
+				$map->address = $value['address'];
+				$map->parts   = $value['parts'];
+			}
 		}
 
 		if ($map === null)
 		{
-			if (is_string($value))
-				$value = Json::decodeIfJson($value);
-
 			if (is_array($value))
 				$map = new MapElement($value);
 			else
@@ -307,7 +316,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 			->all();
 
 		return [
-			'elementType' => MatrixBlock::class,
+			'elementType' => MapRecord::class,
 			'map' => $map,
 			'criteria' => ['fieldId' => $this->id],
 		];

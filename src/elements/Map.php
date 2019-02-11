@@ -10,6 +10,7 @@ namespace ether\simplemap\elements;
 
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Json;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
 use ether\simplemap\SimpleMap;
@@ -65,6 +66,9 @@ class Map extends Element
 
 		if ($this->parts === null)
 			$this->parts = new Parts();
+
+		if (is_string($this->parts))
+			$this->parts = Json::decodeIfJson($this->parts);
 
 		if (is_array($this->parts))
 			$this->parts = Parts::from($this->parts);

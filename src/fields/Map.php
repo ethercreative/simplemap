@@ -13,12 +13,17 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
+use craft\db\Query;
+use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Json;
+use craft\records\MatrixBlock;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
 use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\records\Map as MapRecord;
 use Mapkit\JWT;
 
 /**
@@ -127,6 +132,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		if ($value instanceof MapElement)
 			return $value;
 
+		if ($value instanceof ElementQueryInterface)
+			return $value->one();
+
 		$map = null;
 
 		if ($element)
@@ -140,6 +148,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 		if ($map === null)
 		{
+			if (is_string($value))
+				$value = Json::decodeIfJson($value);
+
 			if (is_array($value))
 				$map = new MapElement($value);
 			else
@@ -160,7 +171,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 	/**
 	 * @param MapElement $value
-	 * @param ElementInterface|null $element
+	 * @param ElementInterface|Element|null $element
 	 *
 	 * @return string
 	 * @throws \yii\base\InvalidConfigException
@@ -183,6 +194,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
+
+		if ($element !== null && $element->hasEagerLoadedElements($this->handle))
+			$value = $element->getEagerLoadedElements($this->handle);
 
 		$opts = [
 			'config' => [
@@ -257,7 +271,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	/**
 	 * @inheritdoc
 	 *
-	 * TODO: This
+	 * TODO: This (make it look fancy)
 	 *
 	 * @param mixed            $value
 	 * @param ElementInterface $element
@@ -272,15 +286,40 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	/**
 	 * @inheritdoc
 	 *
-	 * TODO: This
-	 *
 	 * @param array $sourceElements
 	 *
-	 * @return array|false|void
+	 * @return array
 	 */
 	public function getEagerLoadingMap (array $sourceElements)
 	{
-		// TODO: Implement getEagerLoadingMap() method.
+		$sourceElementIds = [];
+
+		foreach ($sourceElements as $sourceElement)
+			$sourceElementIds[] = $sourceElement->id;
+
+		$map = (new Query())
+			->select(['ownerId as source', 'id as target'])
+			->from([MapRecord::TableName])
+			->where([
+				'fieldId' => $this->id,
+				'ownerId' => $sourceElementIds,
+			])
+			->all();
+
+		return [
+			'elementType' => MatrixBlock::class,
+			'map' => $map,
+			'criteria' => ['fieldId' => $this->id],
+		];
+	}
+
+	// Methods: Events
+	// -------------------------------------------------------------------------
+
+	public function afterElementSave (ElementInterface $element, bool $isNew)
+	{
+		SimpleMap::getInstance()->map->saveField($this, $element);
+		parent::afterElementSave($element, $isNew);
 	}
 
 	// Helpers

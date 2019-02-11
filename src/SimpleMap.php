@@ -15,6 +15,7 @@ use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\Map as MapField;
 use ether\simplemap\models\Settings;
+use ether\simplemap\services\MapService;
 use yii\base\Event;
 
 /**
@@ -22,6 +23,7 @@ use yii\base\Event;
  *
  * @author  Ether Creative
  * @package ether\simplemap
+ * @property MapService $map
  */
 class SimpleMap extends Plugin
 {
@@ -37,6 +39,10 @@ class SimpleMap extends Plugin
 	public function init ()
 	{
 		parent::init();
+
+		$this->setComponents([
+			'map' => MapService::class,
+		]);
 
 		Event::on(
 			Fields::class,

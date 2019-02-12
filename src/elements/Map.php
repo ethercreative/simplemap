@@ -31,6 +31,9 @@ class Map extends Element
 	public $id;
 
 	/** @var int */
+	public $elementId;
+
+	/** @var int */
 	public $ownerId;
 
 	/** @var int */

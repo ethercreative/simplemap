@@ -148,7 +148,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 				->ownerId($element->id)
 				->one();
 
-			if ($value)
+			if ($map && $value)
 			{
 				$map->lat     = $value['lat'];
 				$map->lng     = $value['lng'];

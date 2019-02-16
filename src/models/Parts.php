@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\models;
 
+use craft\helpers\Json;
 use ether\simplemap\enums\GeoService;
 
 /**
@@ -46,8 +47,14 @@ class Parts
 	// Methods
 	// =========================================================================
 
-	public function __construct (array $parts = [], string $service = '')
+	public function __construct ($parts = null, string $service = null)
 	{
+		if ($parts === null)
+			return $this;
+
+		else if (is_string($parts))
+			return new self(Json::decodeIfJson($parts));
+
 		switch ($service)
 		{
 			case GeoService::Nominatim:
@@ -59,32 +66,14 @@ class Parts
 			case GeoService::GoogleMaps:
 				$this->_google($parts);
 				break;
+			default:
+				if ($this->_isLegacy($parts))
+					return new PartsLegacy($parts);
+
+				$this->_fromArray($parts);
 		}
-	}
 
-	// Methods: Static
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Creates a new Parts from the given array
-	 *
-	 * @param array $parts
-	 *
-	 * @return Parts
-	 */
-	public static function from ($parts)
-	{
-		$p = new self();
-
-		$p->number   = $parts['number'] ?? '';
-		$p->address  = $parts['address'] ?? '';
-		$p->city     = $parts['city'] ?? '';
-		$p->postcode = $parts['postcode'] ?? '';
-		$p->county   = $parts['county'] ?? '';
-		$p->state    = $parts['state'] ?? '';
-		$p->country  = $parts['country'] ?? '';
-
-		return $p;
+		return $this;
 	}
 
 	// Methods: Private
@@ -223,13 +212,48 @@ class Parts
 	/**
 	 * Filters and joins the given array
 	 *
-	 * @param $parts
+	 * @param array $parts
 	 *
 	 * @return string
 	 */
-	private function _join ($parts)
+	private function _join (array $parts)
 	{
 		return implode(', ', array_filter($parts));
+	}
+
+	/**
+	 * Populates Parts from the given array
+	 *
+	 * @param array $parts
+	 */
+	private function _fromArray (array $parts)
+	{
+		$this->number   = $parts['number'] ?? '';
+		$this->address  = $parts['address'] ?? '';
+		$this->city     = $parts['city'] ?? '';
+		$this->postcode = $parts['postcode'] ?? '';
+		$this->county   = $parts['county'] ?? '';
+		$this->state    = $parts['state'] ?? '';
+		$this->country  = $parts['country'] ?? '';
+	}
+
+	/**
+	 * Determines if the given array of parts contains legacy data
+	 *
+	 * @param array $parts
+	 *
+	 * @return bool
+	 */
+	private function _isLegacy (array $parts)
+	{
+		$keys = PartsLegacy::$legacyKeys;
+		$count = 0;
+
+		foreach ($keys as $key)
+			if (isset($parts[$key]) || array_key_exists($key, $parts))
+				$count++;
+
+		return count($keys) === $count;
 	}
 
 }

@@ -10,7 +10,6 @@ namespace ether\simplemap\elements;
 
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
-use craft\helpers\Json;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
 use ether\simplemap\SimpleMap;

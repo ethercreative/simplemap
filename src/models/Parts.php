@@ -52,8 +52,8 @@ class Parts
 		if ($parts === null)
 			return $this;
 
-		else if (is_string($parts))
-			return new self(Json::decodeIfJson($parts));
+		if (is_string($parts))
+			$parts = Json::decodeIfJson($parts);
 
 		switch ($service)
 		{
@@ -72,8 +72,6 @@ class Parts
 
 				$this->_fromArray($parts);
 		}
-
-		return $this;
 	}
 
 	// Methods: Private

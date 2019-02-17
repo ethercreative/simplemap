@@ -247,13 +247,12 @@ class Parts
 	private function _isLegacy (array $parts)
 	{
 		$keys = PartsLegacy::$legacyKeys;
-		$count = 0;
 
 		foreach ($keys as $key)
 			if (isset($parts[$key]) || array_key_exists($key, $parts))
-				$count++;
+				return true;
 
-		return count($keys) === $count;
+		return false;
 	}
 
 }

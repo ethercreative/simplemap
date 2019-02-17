@@ -139,7 +139,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 		$map = null;
 
-		if ($element)
+		if ($element && $element->id)
 		{
 			/** @var MapElement $map */
 			$map = MapElement::find()

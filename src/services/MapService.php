@@ -288,7 +288,7 @@ class MapService extends Component
 
 		if (array_key_exists('location', $value)) {
 			$this->_searchLocation($query, $value, $tableAlias);
-		} else if (array_key_exists('distance', $query->orderBy)) {
+		} else if ($this->_shouldReplaceOrderBy($query)) {
 			$this->_replaceOrderBy($query);
 		}
 
@@ -540,7 +540,7 @@ class MapService extends Component
 		}
 
 		if ($location == null) {
-			if (array_key_exists('distance', $query->orderBy)) {
+			if ($this->_shouldReplaceOrderBy($query)) {
 				$this->_replaceOrderBy($query, false);
 			}
 			return;
@@ -581,7 +581,7 @@ class MapService extends Component
 			]
 		];
 
-		if (array_key_exists('distance', $query->orderBy)) {
+		if ($this->_shouldReplaceOrderBy($query)) {
 			$this->_replaceOrderBy($query, $distanceSearch);
 		}
 
@@ -603,10 +603,35 @@ class MapService extends Component
 
 		foreach ((array)$query->orderBy as $order => $sort) {
 			if ($order == 'distance' && $distanceSearch) $nextOrder[$distanceSearch] = $sort;
+			elseif (preg_match('/COS\(RADIANS\(.*\)\)/',$order) && preg_match('/SIN\(RADIANS\(.*\)\)/',$order) && $distanceSearch) $nextOrder[$distanceSearch] = $sort;
 			elseif ($order != 'distance') $nextOrder[$order] = $sort;
 		}
 
 		$query->orderBy($nextOrder);
 	}
+
+    /**
+     * Check if the order by clause should be replaced.
+     * @param ElementQueryInterface $query
+     * @return bool
+     */
+    private function _shouldReplaceOrderBy(ElementQueryInterface $query): bool
+    {
+        if ($query->orderBy == 'distance' ){
+            return true;
+        }
+        if (is_array($query->orderBy)) {
+            $keys = array_keys($query->orderBy);
+            foreach ($keys as $key) {
+                if ('distance' == $key) {
+                    return true;
+                }
+                if (preg_match('/COS\(RADIANS\(.*\)\)/',$key) && preg_match('/SIN\(RADIANS\(.*\)\)/',$key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

@@ -1,3 +1,7 @@
+## 3.3.5 - 2019-02-17
+### Fixed
+- Fixed an issue with sorting by distance when using the Solspace Calendar plugin. (via @bighoho123)
+
 ## 3.3.4 - 2018-09-05
 ### Fixed
 - Fixed a bug where SimpleMap would not validate required fields. (via @samhibberd)

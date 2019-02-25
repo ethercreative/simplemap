@@ -51,7 +51,7 @@ class Install extends Migration
 		$this->createIndex(
 			null,
 			Map::TableName,
-			['ownerId', 'ownerSiteId', 'fieldId'],
+			['ownerId', 'ownerSiteId', 'fieldId', 'elementId'],
 			true
 		);
 

@@ -173,6 +173,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 				]);
 		}
 
+		$handle = $this->handle;
+		$element->$handle = $map;
+
 		return $map;
 	}
 

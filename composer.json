@@ -7,7 +7,9 @@
   "minimum-stability": "dev",
   "require": {
     "craftcms/cms": "^3.1.0",
-    "mapkit/jwt": "^1.1.2"
+    "mapkit/jwt": "^1.1.2",
+    "guzzlehttp/guzzle": "^6.3.3",
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {

@@ -328,6 +328,20 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		];
 	}
 
+	/**
+	 * @param ElementQueryInterface $query
+	 * @param                       $value
+	 *
+	 * @return bool|false|null
+	 * @throws \yii\db\Exception
+	 */
+	public function modifyElementsQuery (ElementQueryInterface $query, $value)
+	{
+		SimpleMap::getInstance()->map->modifyElementsQuery($query, $value);
+
+		return null;
+	}
+
 	// Methods: Events
 	// -------------------------------------------------------------------------
 

@@ -128,7 +128,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 */
 	public function normalizeValue ($value, ElementInterface $element = null)
 	{
-		if (is_array($value))
+		if (is_array($value) && !empty($value))
 			$value = $value[0];
 
 		if ($value instanceof MapElement)

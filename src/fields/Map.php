@@ -128,6 +128,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 */
 	public function normalizeValue ($value, ElementInterface $element = null)
 	{
+		if (is_array($value))
+			$value = $value[0];
+
 		if ($value instanceof MapElement)
 			return $value;
 
@@ -325,6 +328,13 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	// Methods: Events
 	// -------------------------------------------------------------------------
 
+	/**
+	 * @param ElementInterface $element
+	 * @param bool             $isNew
+	 *
+	 * @throws \Throwable
+	 * @throws \yii\db\Exception
+	 */
 	public function afterElementSave (ElementInterface $element, bool $isNew)
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);

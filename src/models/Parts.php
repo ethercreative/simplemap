@@ -176,7 +176,26 @@ class Parts
 
 				return $a;
 			},
-			[]
+			[
+				'subpremise' => '',
+				'premise' => '',
+				'street_number' => '',
+				'route' => '',
+				'neighborhood' => '',
+				'sublocality_level_5' => '',
+				'sublocality_level_4' => '',
+				'sublocality_level_3' => '',
+				'sublocality_level_2' => '',
+				'sublocality_level_1' => '',
+				'sublocality' => '',
+				'postal_town' => '',
+				'locality' => '',
+				'postal_code' => '',
+				'postal_code_prefix' => '',
+				'administrative_area_level_2' => '',
+				'administrative_area_level_1' => '',
+				'country' => '',
+			]
 		);
 
 		$this->number = $this->_join([

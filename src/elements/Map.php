@@ -12,6 +12,7 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
+use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
 
 /**
@@ -56,6 +57,9 @@ class Map extends Element
 	/** @var Parts */
 	public $parts;
 
+	/** @var float|null */
+	public $distance = null;
+
 	// Methods
 	// =========================================================================
 
@@ -67,6 +71,8 @@ class Map extends Element
 			$this->address = '';
 
 		$this->parts = new Parts($this->parts);
+
+		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
 	}
 
 	// Methods: Static

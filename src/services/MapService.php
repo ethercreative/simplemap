@@ -26,6 +26,15 @@ use ether\simplemap\records\Map as MapRecord;
 class MapService extends Component
 {
 
+	// Properties
+	// =========================================================================
+
+	private $_location;
+	private $_distance;
+
+	// Methods
+	// =========================================================================
+
 	/**
 	 * @param Map              $field
 	 * @param ElementInterface|Element $element
@@ -79,6 +88,38 @@ class MapService extends Component
 		}
 
 		$transaction->commit();
+	}
+
+	/**
+	 * Returns the distance from the search origin (if one exists)
+	 *
+	 * @param MapElement $map
+	 *
+	 * @return float|int|null
+	 */
+	public function getDistance (MapElement $map)
+	{
+		if (!$this->_location || !$this->_distance)
+			return null;
+
+		$originLat = $this->_location['lat'];
+		$originLng = $this->_location['lng'];
+
+		$targetLat = $map->lat;
+		$targetLng = $map->lng;
+
+		return (
+			$this->_distance *
+			rad2deg(
+				acos(
+					cos(deg2rad($originLat)) *
+					cos(deg2rad($targetLat)) *
+					cos(deg2rad($originLng) - deg2rad($targetLng)) +
+					sin(deg2rad($originLat)) *
+					sin(deg2rad($targetLat))
+				)
+			)
+		);
 	}
 
 	/**
@@ -172,6 +213,10 @@ class MapService extends Component
 
 		// Base Distance
 		$distance = $unit === 'km' ? '111.045' : '69.0';
+
+		// Store for populating search result distance
+		$this->_location = $location;
+		$this->_distance = (float) $distance;
 
 		// Search Query
 		$search = str_replace(["\r", "\n", "\t"], '', "(

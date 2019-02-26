@@ -67,9 +67,6 @@ class Parts
 				$this->_google($parts);
 				break;
 			default:
-				if ($this->_isLegacy($parts))
-					return new PartsLegacy($parts);
-
 				$this->_fromArray($parts);
 		}
 	}
@@ -165,38 +162,23 @@ class Parts
 	 */
 	private function _google ($parts)
 	{
-		$parts = array_reduce(
-			$parts,
-			function ($a, $part) {
-				if (!is_array($part) || empty($part['types']))
+		if (!$this->_isAssoc($parts))
+		{
+			$parts = array_reduce(
+				$parts,
+				function ($a, $part) {
+					$key     = $part['types'][0];
+					$a[$key] = $part['long_name'];
+
 					return $a;
+				},
+				[]
+			);
+		}
 
-				$key = $part['types'][0];
-				$a[$key] = $part['long_name'];
-
-				return $a;
-			},
-			[
-				'subpremise' => '',
-				'premise' => '',
-				'street_number' => '',
-				'route' => '',
-				'neighborhood' => '',
-				'sublocality_level_5' => '',
-				'sublocality_level_4' => '',
-				'sublocality_level_3' => '',
-				'sublocality_level_2' => '',
-				'sublocality_level_1' => '',
-				'sublocality' => '',
-				'postal_town' => '',
-				'locality' => '',
-				'postal_code' => '',
-				'postal_code_prefix' => '',
-				'administrative_area_level_2' => '',
-				'administrative_area_level_1' => '',
-				'country' => '',
-			]
-		);
+		foreach (PartsLegacy::$legacyKeys as $key)
+			if (!array_key_exists($key, $parts))
+				$parts[$key] = '';
 
 		$this->number = $this->_join([
 			$parts['subpremise'],
@@ -230,6 +212,26 @@ class Parts
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Determines if the given array of parts contains legacy data
+	 *
+	 * @param array $parts
+	 *
+	 * @return bool
+	 */
+	public static function isLegacy (array $parts)
+	{
+		$keys = PartsLegacy::$legacyKeys;
+
+		unset($keys[array_search('country', $keys)]);
+
+		foreach ($keys as $key)
+			if (isset($parts[$key]) || array_key_exists($key, $parts))
+				return true;
+
+		return false;
+	}
+
+	/**
 	 * Filters and joins the given array
 	 *
 	 * @param array $parts
@@ -258,21 +260,16 @@ class Parts
 	}
 
 	/**
-	 * Determines if the given array of parts contains legacy data
+	 * Returns true if the given array is associative
 	 *
-	 * @param array $parts
+	 * @param array $arr
 	 *
 	 * @return bool
 	 */
-	private function _isLegacy (array $parts)
+	private function _isAssoc (array $arr)
 	{
-		$keys = PartsLegacy::$legacyKeys;
-
-		foreach ($keys as $key)
-			if (isset($parts[$key]) || array_key_exists($key, $parts))
-				return true;
-
-		return false;
+		if ([] === $arr) return false;
+		return array_keys($arr) !== range(0, count($arr) - 1);
 	}
 
 }

@@ -85,7 +85,7 @@ class m190226_143809_craft3_upgrade extends Migration
 			    'lng'         => $row['lng'],
 			    'zoom'        => $row['zoom'],
 			    'address'     => $row['address'],
-			    'parts'       => $row['parts'],
+			    'parts'       => Json::decodeIfJson($row['parts']),
 		    ]);
 
 	    	$elements->saveElement($map, false);
@@ -104,6 +104,8 @@ class m190226_143809_craft3_upgrade extends Migration
 
 		    $record->save();
 	    }
+
+	    $this->dropTable('{{%simplemap_maps}}');
 
 	    // 2. Update old field types
 	    $rows = (new Query())

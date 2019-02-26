@@ -34,6 +34,7 @@ class PartsLegacy extends Parts
 		'airport',
 		'bus_station',
 		'colloquial_area',
+		'country',
 		'establishment',
 		'floor',
 		'intersection',
@@ -46,6 +47,7 @@ class PartsLegacy extends Parts
 		'political',
 		'post_box',
 		'postal_code',
+		'postal_code_prefix',
 		'postal_town',
 		'premise',
 		'room',
@@ -54,6 +56,9 @@ class PartsLegacy extends Parts
 		'street_number',
 		'sublocality',
 		'sublocality_level_1',
+		'sublocality_level_2',
+		'sublocality_level_3',
+		'sublocality_level_4',
 		'sublocality_level_5',
 		'subpremise',
 		'train_station',
@@ -83,6 +88,7 @@ class PartsLegacy extends Parts
 	public $political;
 	public $post_box;
 	public $postal_code;
+	public $postal_code_prefix;
 	public $postal_town;
 	public $premise;
 	public $room;
@@ -91,6 +97,9 @@ class PartsLegacy extends Parts
 	public $street_number;
 	public $sublocality;
 	public $sublocality_level_1;
+	public $sublocality_level_2;
+	public $sublocality_level_3;
+	public $sublocality_level_4;
 	public $sublocality_level_5;
 	public $subpremise;
 	public $train_station;
@@ -116,6 +125,7 @@ class PartsLegacy extends Parts
 	public $political_short;
 	public $post_box_short;
 	public $postal_code_short;
+	public $postal_code_prefix_short;
 	public $postal_town_short;
 	public $premise_short;
 	public $room_short;
@@ -124,6 +134,9 @@ class PartsLegacy extends Parts
 	public $street_number_short;
 	public $sublocality_short;
 	public $sublocality_level_1_short;
+	public $sublocality_level_2_short;
+	public $sublocality_level_3_short;
+	public $sublocality_level_4_short;
 	public $sublocality_level_5_short;
 	public $subpremise_short;
 	public $train_station_short;

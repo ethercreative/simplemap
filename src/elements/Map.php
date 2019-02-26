@@ -12,6 +12,7 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
+use ether\simplemap\models\PartsLegacy;
 use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
 
@@ -70,7 +71,10 @@ class Map extends Element
 		if ($this->address === null)
 			$this->address = '';
 
-		$this->parts = new Parts($this->parts);
+		if (Parts::isLegacy((array) $this->parts))
+			$this->parts = new PartsLegacy($this->parts);
+		else
+			$this->parts = new Parts($this->parts);
 
 		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
 	}

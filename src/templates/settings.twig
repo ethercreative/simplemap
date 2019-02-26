@@ -88,6 +88,15 @@
 </div>
 
 <div style="{{ not geoIsMapKit ? 'display:none' }}" id="geoService-mapKit">
+	<div class="field">
+		<div class="warning">
+			<p style="display:inline-block;vertical-align:top">
+				<strong>{{ 'Notice'|t('simplemap') }}</strong><br>
+				{{ 'MapKit does not support individual address parts.'|t('simplemap') }}
+			</p>
+		</div>
+	</div>
+
 	{{ forms.textareaField({
 		name: 'geoToken[privateKey]',
 		label: 'Private Key'|t('simplemap'),

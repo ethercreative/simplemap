@@ -52,6 +52,9 @@ return [
 	'Team ID' => 'Team ID',
 	'The team ID that created the key ID and private key.' => 'The team ID that created the key ID and private key.',
 
+	'Notice' => 'Notice',
+	'MapKit does not support individual address parts.' => 'MapKit does not support individual address parts.',
+
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------
 

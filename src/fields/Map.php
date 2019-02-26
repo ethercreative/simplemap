@@ -16,14 +16,13 @@ use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
+use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\models\Settings;
+use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
-use Mapkit\JWT;
 
 /**
  * Class Map
@@ -221,13 +220,13 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 				'hideAddress' => $this->hideAddress,
 
 				'mapTiles' => $settings->mapTiles,
-				'mapToken' => $this->_getToken(
+				'mapToken' => GeoService::getToken(
 					$settings->mapToken,
 					$settings->mapTiles
 				),
 
 				'geoService' => $settings->geoService,
-				'geoToken'   => $this->_getToken(
+				'geoToken'   => GeoService::getToken(
 					$settings->geoToken,
 					$settings->geoService
 				),
@@ -262,14 +261,14 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		// Geo Services
 		// ---------------------------------------------------------------------
 
-		if ($settings->geoService === GeoService::GoogleMaps)
+		if ($settings->geoService === GeoEnum::GoogleMaps)
 		{
 			$view->registerJsFile(
 				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
 				$settings->geoToken
 			);
 		}
-		elseif ($settings->geoService === GeoService::AppleMapKit)
+		elseif ($settings->geoService === GeoEnum::AppleMapKit)
 		{
 			$view->registerJsFile(
 				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
@@ -356,36 +355,6 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
-	}
-
-	// Helpers
-	// =========================================================================
-
-	/**
-	 * Parses the token based off the given service
-	 *
-	 * @param string|array $token
-	 * @param string       $service
-	 *
-	 * @return false|string
-	 */
-	private function _getToken ($token, string $service)
-	{
-		switch ($service)
-		{
-			case GeoService::AppleMapKit:
-			case MapTiles::MapKitStandard:
-			case MapTiles::MapKitMutedStandard:
-			case MapTiles::MapKitSatellite:
-			case MapTiles::MapKitHybrid:
-				return JWT::getToken(
-					trim($token['privateKey']),
-					trim($token['keyId']),
-					trim($token['teamId'])
-				);
-			default:
-				return $token;
-		}
 	}
 
 }

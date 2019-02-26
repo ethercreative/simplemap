@@ -51,7 +51,10 @@ abstract class GeoService
 
 			self::Mapbox => SimpleMap::t('Mapbox'),
 			self::GoogleMaps => SimpleMap::t('Google Maps'),
-			self::AppleMapKit => SimpleMap::t('Apple MapKit'),
+
+			// MapKit lacks both separate address parts on the front-end, and
+			// any sort of server-side API, so it's disabled for now.
+			//self::AppleMapKit => SimpleMap::t('Apple MapKit'),
 		];
 	}
 

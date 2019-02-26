@@ -1,0 +1,27 @@
+{% import '_includes/forms' as forms %}
+
+{{ map }}
+
+{{ forms.lightswitchField({
+	label: 'Hide Search'|t('simplemap'),
+	instructions: 'Hide the location search field'|t('simplemap'),
+	id: 'hideSearch',
+	name: 'hideSearch',
+	on: field.hideSearch
+}) }}
+
+{{ forms.lightswitchField({
+	label: 'Hide Map'|t('simplemap'),
+	instructions: 'Hide the map'|t('simplemap'),
+	id: 'hideMap',
+	name: 'hideMap',
+	on: field.hideMap
+}) }}
+
+{{ forms.lightswitchField({
+	label: 'Hide Address'|t('simplemap'),
+	instructions: 'Hide the address fields'|t('simplemap'),
+	id: 'hideAddress',
+	name: 'hideAddress',
+	on: field.hideAddress
+}) }}

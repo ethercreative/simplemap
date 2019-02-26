@@ -14,6 +14,7 @@ use craft\services\Fields;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\Map as MapField;
+use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
 use yii\base\Event;
@@ -49,6 +50,15 @@ class SimpleMap extends Plugin
 			Fields::EVENT_REGISTER_FIELD_TYPES,
 			[$this, 'onRegisterFieldTypes']
 		);
+
+		if (class_exists(\markhuot\CraftQL\CraftQL::class))
+		{
+			Event::on(
+				MapField::class,
+				'craftQlGetFieldSchema',
+				[new GetCraftQLSchema, 'handle']
+			);
+		}
 	}
 
 	// Settings

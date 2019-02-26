@@ -25,6 +25,18 @@ return [
 	'State' => 'State',
 	'Country' => 'Country',
 
+	// Field: Settings
+	// -------------------------------------------------------------------------
+
+	'Hide Search' => 'Hide Search',
+	'Hide the location search field' => 'Hide the location search field',
+
+	'Hide Map' => 'Hide Map',
+	'Hide the map' => 'Hide the map',
+
+	'Hide Address' => 'Hide Address',
+	'Hide the address fields' => 'Hide the address fields',
+
 	// Settings
 	// =========================================================================
 

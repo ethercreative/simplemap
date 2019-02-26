@@ -130,7 +130,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 */
 	public function normalizeValue ($value, ElementInterface $element = null)
 	{
-		if (is_array($value) && !empty($value))
+		if (is_array($value) && !empty($value[0]))
 			$value = $value[0];
 
 		if ($value instanceof MapElement)
@@ -183,6 +183,8 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 	/**
 	 * @return string|\Twig_Markup|null
+	 * @throws \Twig_Error_Loader
+	 * @throws \yii\base\Exception
 	 * @throws \yii\base\InvalidConfigException
 	 */
 	public function getSettingsHtml ()
@@ -193,16 +195,33 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		$value->lng  = $this->lng;
 		$value->zoom = $this->zoom;
 
+		$originalHandle      = $this->handle;
+		$originalHideSearch  = $this->hideSearch;
+		$originalHideMap     = $this->hideMap;
+		$originalHideAddress = $this->hideAddress;
+
 		$this->handle      = '__settings__';
 		$this->hideSearch  = false;
 		$this->hideMap     = false;
 		$this->hideAddress = true;
 
-		/** @noinspection PhpComposerExtensionStubsInspection */
-		return new \Twig_Markup(
+		$mapField = new \Twig_Markup(
 			$this->_renderMap($value, true),
 			'utf-8'
 		);
+
+		$this->handle      = $originalHandle;
+		$this->hideSearch  = $originalHideSearch;
+		$this->hideMap     = $originalHideMap;
+		$this->hideAddress = $originalHideAddress;
+
+		$view = \Craft::$app->getView();
+
+		/** @noinspection PhpComposerExtensionStubsInspection */
+		return $view->renderTemplate('simplemap/field-settings', [
+			'map' => $mapField,
+			'field' => $this,
+		]);
 	}
 
 	/**

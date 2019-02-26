@@ -28,7 +28,26 @@
 			type="hidden"
 			:name="this.config.name"
 			:value="JSON.stringify(value)"
+			v-if="!config.isSettings"
 		/>
+
+		<Fragment v-if="config.isSettings">
+			<input
+				type="hidden"
+				:name="this.config.name.replace('__settings__', 'lat')"
+				:value="value.lat"
+			/>
+			<input
+				type="hidden"
+				:name="this.config.name.replace('__settings__', 'lng')"
+				:value="value.lng"
+			/>
+			<input
+				type="hidden"
+				:name="this.config.name.replace('__settings__', 'zoom')"
+				:value="value.zoom"
+			/>
+		</Fragment>
 	</div>
 </template>
 
@@ -41,11 +60,19 @@
 	import GeoService from './enums/GeoService';
 	import Parts from './models/Parts';
 
+	const Fragment = {
+		functional: true,
+		render (h, ctx) {
+			return ctx.children;
+		}
+	};
+
 	@Component({
 		components: {
 			Search,
 			Address,
 			Map,
+			Fragment,
 		},
 	})
 	export default class App extends Vue {
@@ -54,6 +81,7 @@
 		// =====================================================================
 
 		config = {
+			isSettings: false,
 			name: '',
 			hideSearch: false,
 			hideMap: false,

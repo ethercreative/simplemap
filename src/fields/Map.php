@@ -190,7 +190,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		$value->lng  = $this->lng;
 		$value->zoom = $this->zoom;
 
-		$this->handle      = 'settings';
+		$this->handle      = '__settings__';
 		$this->hideSearch  = false;
 		$this->hideMap     = false;
 		$this->hideAddress = true;
@@ -280,6 +280,18 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 
 	// Methods: Events
 	// -------------------------------------------------------------------------
+
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeSave (bool $isNew): bool
+	{
+		$this->lat  = (float) $this->lat;
+		$this->lng  = (float) $this->lng;
+		$this->zoom = (int) $this->zoom;
+
+		return parent::beforeSave($isNew);
+	}
 
 	/**
 	 * @param ElementInterface $element

@@ -105,6 +105,10 @@ class Install extends Migration
 			['id'],
 			'CASCADE'
 		);
+
+		// Upgrade from Craft 2
+		if ($this->db->tableExists('{{%simplemap_maps}}'))
+			(new m190226_143809_craft3_upgrade())->safeUp();
 	}
 
 	public function safeDown ()

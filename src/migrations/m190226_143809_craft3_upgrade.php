@@ -88,7 +88,7 @@ class m190226_143809_craft3_upgrade extends Migration
 			    'parts'       => $row['parts'],
 		    ]);
 
-	    	$elements->saveElement($map);
+	    	$elements->saveElement($map, false);
 
 		    $record              = new Map();
 		    $record->elementId   = $map->id;
@@ -130,7 +130,7 @@ class m190226_143809_craft3_upgrade extends Migration
 			    	Table::FIELDS,
 				    [
 				    	'type' => MapField::class,
-					    'settings' => $newSettings,
+					    'settings' => Json::encode($newSettings),
 				    ],
 				    compact('id')
 			    )
@@ -140,6 +140,10 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	/**
 	 * Upgrade from SimpleMap (3.3.x)
+	 *
+	 * @throws \Throwable
+	 * @throws \craft\errors\ElementNotFoundException
+	 * @throws \yii\base\Exception
 	 */
     private function _upgrade3 ()
     {
@@ -185,6 +189,35 @@ class m190226_143809_craft3_upgrade extends Migration
 		    $record->parts   = $map->parts;
 
 		    $record->save();
+	    }
+
+	    // 4. Update field settings
+	    $rows = (new Query())
+		    ->select(['id', 'settings'])
+		    ->from(Table::FIELDS)
+		    ->where(['type' => MapField::class])
+		    ->all();
+
+	    foreach ($rows as $row)
+	    {
+		    $id          = $row['id'];
+		    $oldSettings = Json::decodeIfJson($row['settings']);
+
+		    $newSettings = [
+			    'lat'     => $oldSettings['lat'],
+			    'lng'     => $oldSettings['lng'],
+			    'zoom'    => $oldSettings['zoom'],
+			    'country' => strtoupper($oldSettings['countryRestriction']),
+			    'hideMap' => $oldSettings['hideMap'],
+		    ];
+
+		    $this->db->createCommand()
+				->update(
+					Table::FIELDS,
+					[ 'settings' => Json::encode($newSettings) ],
+					compact('id')
+				)
+				->execute();
 	    }
     }
 

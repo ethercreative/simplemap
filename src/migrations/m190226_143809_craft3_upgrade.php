@@ -219,13 +219,17 @@ class m190226_143809_craft3_upgrade extends Migration
 	 *
 	 * @return \craft\models\Site
 	 */
-	private function getSiteByLocale (string $locale)
+	private function getSiteByLocale ($locale)
 	{
+		$sites = \Craft::$app->sites;
+
+		if ($locale === null)
+			return static::$sitesByOldLocale[$locale] = $sites->primarySite;
+
 		if (array_key_exists($locale, static::$sitesByOldLocale))
 			return static::$sitesByOldLocale[$locale];
 
 		$handle = $this->locale2handle($locale);
-		$sites = \Craft::$app->sites;
 
 		$siteId = (new Query())
 			->select('id')

@@ -168,6 +168,9 @@ class Parts
 		$parts = array_reduce(
 			$parts,
 			function ($a, $part) {
+				if (!is_array($part) || empty($part['types']))
+					return $a;
+
 				$key = $part['types'][0];
 				$a[$key] = $part['long_name'];
 

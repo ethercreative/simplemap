@@ -87,6 +87,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		return [
 			self::TRANSLATION_METHOD_NONE,
 			self::TRANSLATION_METHOD_SITE,
+			self::TRANSLATION_METHOD_SITE_GROUP,
+			self::TRANSLATION_METHOD_LANGUAGE,
+			self::TRANSLATION_METHOD_CUSTOM,
 		];
 	}
 

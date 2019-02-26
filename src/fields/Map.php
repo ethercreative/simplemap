@@ -178,9 +178,28 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		return $map;
 	}
 
+	/**
+	 * @return string|\Twig_Markup|null
+	 * @throws \yii\base\InvalidConfigException
+	 */
 	public function getSettingsHtml ()
 	{
-		return 'TODO: Map field settings';
+		$value = new MapElement();
+
+		$value->lat  = $this->lat;
+		$value->lng  = $this->lng;
+		$value->zoom = $this->zoom;
+
+		$this->handle      = 'settings';
+		$this->hideSearch  = false;
+		$this->hideMap     = false;
+		$this->hideAddress = true;
+
+		/** @noinspection PhpComposerExtensionStubsInspection */
+		return new \Twig_Markup(
+			$this->_renderMap($value, true),
+			'utf-8'
+		);
 	}
 
 	/**
@@ -192,100 +211,18 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	 */
 	public function getInputHtml ($value, ElementInterface $element = null): string
 	{
-		$view = \Craft::$app->getView();
-
-		$view->registerAssetBundle(MapAsset::class);
-		$view->registerTranslations('simplemap', [
-			'Search for a location',
-			'Name / Number',
-			'Street Address',
-			'Town / City',
-			'Postcode',
-			'County',
-			'State',
-			'Country',
-		]);
-
-		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings();
-
 		if ($element !== null && $element->hasEagerLoadedElements($this->handle))
 			$value = $element->getEagerLoadedElements($this->handle);
 
-		$opts = [
-			'config' => [
-				'name'        => $view->namespaceInputName($this->handle),
-				'hideSearch'  => $this->hideSearch,
-				'hideMap'     => $this->hideMap,
-				'hideAddress' => $this->hideAddress,
-
-				'mapTiles' => $settings->mapTiles,
-				'mapToken' => GeoService::getToken(
-					$settings->mapToken,
-					$settings->mapTiles
-				),
-
-				'geoService' => $settings->geoService,
-				'geoToken'   => GeoService::getToken(
-					$settings->geoToken,
-					$settings->geoService
-				),
-			],
-
-			'value' => [
-				'address' => $value->address,
-				'lat'     => $value->lat,
-				'lng'     => $value->lng,
-				'zoom'    => $value->zoom,
-				'parts'   => $value->parts,
-			],
-		];
-
-		// Map Services
-		// ---------------------------------------------------------------------
-
-		if (strpos($settings->mapTiles, 'google') !== false)
-		{
-			$view->registerJsFile(
-				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
-				$settings->mapToken
-			);
-		}
-		elseif (strpos($settings->mapTiles, 'mapkit') !== false)
-		{
-			$view->registerJsFile(
-				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
-			);
-		}
-
-		// Geo Services
-		// ---------------------------------------------------------------------
-
-		if ($settings->geoService === GeoEnum::GoogleMaps)
-		{
-			$view->registerJsFile(
-				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
-				$settings->geoToken
-			);
-		}
-		elseif ($settings->geoService === GeoEnum::AppleMapKit)
-		{
-			$view->registerJsFile(
-				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
-			);
-		}
-
 		/** @noinspection PhpComposerExtensionStubsInspection */
 		return new \Twig_Markup(
-			'<simple-map><script type="application/json">' . json_encode($opts) . '</script></simple-map>',
+			$this->_renderMap($value),
 			'utf-8'
 		);
 	}
 
 	/**
 	 * @inheritdoc
-	 *
-	 * TODO: This (make it look fancy)
 	 *
 	 * @param mixed            $value
 	 * @param ElementInterface $element
@@ -355,6 +292,106 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	/**
+	 * Renders the map input
+	 *
+	 * @param      $value
+	 * @param bool $isSettings
+	 *
+	 * @return string
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	private function _renderMap ($value, $isSettings = false)
+	{
+		$view = \Craft::$app->getView();
+
+		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
+		$view->registerAssetBundle(MapAsset::class);
+		$view->registerTranslations('simplemap', [
+			'Search for a location',
+			'Name / Number',
+			'Street Address',
+			'Town / City',
+			'Postcode',
+			'County',
+			'State',
+			'Country',
+		]);
+
+		/** @var Settings $settings */
+		$settings = SimpleMap::getInstance()->getSettings();
+
+		$opts = [
+			'config' => [
+				'isSettings' => $isSettings,
+
+				'name'        => $view->namespaceInputName($this->handle),
+				'hideSearch'  => $this->hideSearch,
+				'hideMap'     => $this->hideMap,
+				'hideAddress' => $this->hideAddress,
+
+				'mapTiles' => $settings->mapTiles,
+				'mapToken' => GeoService::getToken(
+					$settings->mapToken,
+					$settings->mapTiles
+				),
+
+				'geoService' => $settings->geoService,
+				'geoToken'   => GeoService::getToken(
+					$settings->geoToken,
+					$settings->geoService
+				),
+			],
+
+			'value' => [
+				'address' => $value->address,
+				'lat'     => $value->lat,
+				'lng'     => $value->lng,
+				'zoom'    => $value->zoom,
+				'parts'   => $value->parts,
+			],
+		];
+
+		// Map Services
+		// ---------------------------------------------------------------------
+
+		if (strpos($settings->mapTiles, 'google') !== false)
+		{
+			$view->registerJsFile(
+				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
+				$settings->mapToken
+			);
+		}
+		elseif (strpos($settings->mapTiles, 'mapkit') !== false)
+		{
+			$view->registerJsFile(
+				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+			);
+		}
+
+		// Geo Services
+		// ---------------------------------------------------------------------
+
+		if ($settings->geoService === GeoEnum::GoogleMaps)
+		{
+			$view->registerJsFile(
+				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
+				$settings->geoToken
+			);
+		}
+		elseif ($settings->geoService === GeoEnum::AppleMapKit)
+		{
+			$view->registerJsFile(
+				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+			);
+		}
+
+		return '<simple-map><script type="application/json">' . json_encode($opts) . '</script></simple-map>';
 	}
 
 }

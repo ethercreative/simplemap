@@ -97,6 +97,16 @@
 			this.map.on('zoom', this.onZoom);
 
 			this.setMarker();
+
+			// Re-draw the map if it was hidden
+			const io = new IntersectionObserver(entries => {
+				if (entries[0].intersectionRatio <= 0)
+					return;
+
+				this.map.invalidateSize(true);
+			});
+
+			io.observe(this.$el);
 		}
 
 		// Actions

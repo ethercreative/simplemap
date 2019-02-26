@@ -9,7 +9,8 @@
     "craftcms/cms": "^3.1.0",
     "mapkit/jwt": "^1.1.2",
     "guzzlehttp/guzzle": "^6.3.3",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
@@ -24,7 +25,7 @@
   },
   "extra": {
     "handle": "simplemap",
-    "name": "SimpleMap",
+    "name": "Maps",
     "developer": "Ether Creative",
     "developerUrl": "https://ethercreative.co.uk",
 

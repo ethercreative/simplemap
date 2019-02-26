@@ -5,6 +5,7 @@ namespace ether\simplemap\migrations;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
+use craft\helpers\Json;
 use craft\validators\HandleValidator;
 use ether\simplemap\records\Map;
 use ether\simplemap\elements\Map as MapElement;
@@ -106,18 +107,32 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	    // 2. Update old field types
 	    $rows = (new Query())
-		    ->select('id')
+		    ->select(['id', 'settings'])
 		    ->from(Table::FIELDS)
 		    ->where(['type' => 'SimpleMap_Map'])
-		    ->column();
+		    ->all();
 
 	    foreach ($rows as $row)
 	    {
+	    	$id = $row['id'];
+	    	$oldSettings = Json::decodeIfJson($row['settings']);
+
+	    	$newSettings = [
+			    'lat'     => $oldSettings['lat'],
+			    'lng'     => $oldSettings['lng'],
+			    'zoom'    => $oldSettings['zoom'],
+			    'country' => strtoupper($oldSettings['countryRestriction']),
+			    'hideMap' => $oldSettings['hideMap'],
+		    ];
+
 		    $this->db->createCommand()
-			    ->upsert(
+			    ->update(
 			    	Table::FIELDS,
-				    ['type' => MapField::class],
-				    ['id' => $row]
+				    [
+				    	'type' => MapField::class,
+					    'settings' => $newSettings,
+				    ],
+				    compact('id')
 			    )
 			    ->execute();
 	    }
@@ -128,8 +143,49 @@ class m190226_143809_craft3_upgrade extends Migration
 	 */
     private function _upgrade3 ()
     {
-	    // TODO:
-	    //   - Upgrade old map data
+	    $craft    = \Craft::$app;
+	    $elements = $craft->elements;
+
+	    // 1. Store the old data
+	    $rows = (new Query())
+		    ->select([
+		    	'ownerId',
+			    'ownerSiteId',
+			    'fieldId',
+			    'lat',
+			    'lng',
+			    'zoom',
+			    'address',
+			    'parts',
+		    ])
+		    ->from(Map::TableName)
+		    ->all();
+
+	    // 2. Re-create the table
+	    $this->dropTable(Map::TableName);
+	    (new Install())->safeUp();
+
+	    // 3. Store the old data as new
+	    foreach ($rows as $row)
+	    {
+		    $map = new MapElement($row);
+
+		    $elements->saveElement($map);
+
+		    $record              = new Map();
+		    $record->elementId   = $map->id;
+		    $record->ownerId     = $map->ownerId;
+		    $record->ownerSiteId = $map->ownerSiteId;
+		    $record->fieldId     = $map->fieldId;
+
+		    $record->lat     = $map->lat;
+		    $record->lng     = $map->lng;
+		    $record->zoom    = $map->zoom;
+		    $record->address = $map->address;
+		    $record->parts   = $map->parts;
+
+		    $record->save();
+	    }
     }
 
     // Helpers

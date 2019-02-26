@@ -28,6 +28,10 @@ return [
 	// Field: Settings
 	// -------------------------------------------------------------------------
 
+	'Initial Location' => 'Initial Location',
+	'The initial location and zoom that will show in the map field' =>
+		'The initial location and zoom that will show in the map field',
+
 	'Hide Search' => 'Hide Search',
 	'Hide the location search field' => 'Hide the location search field',
 
@@ -36,6 +40,11 @@ return [
 
 	'Hide Address' => 'Hide Address',
 	'Hide the address fields' => 'Hide the address fields',
+
+	'All Countries' => 'All Countries',
+	'Preferred Country' => 'Preferred Country',
+	'When searching for a location, results in this country will take precedence' =>
+		'When searching for a location, results in this country will take precedence',
 
 	// Settings
 	// =========================================================================

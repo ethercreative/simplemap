@@ -1,6 +1,9 @@
 {% import '_includes/forms' as forms %}
 
-{{ map }}
+{{ forms.field({
+	label: 'Initial Location'|t('simplemap'),
+	instructions: 'The initial location and zoom that will show in the map field'|t('simplemap'),
+}, map) }}
 
 {{ forms.lightswitchField({
 	label: 'Hide Search'|t('simplemap'),
@@ -24,4 +27,13 @@
 	id: 'hideAddress',
 	name: 'hideAddress',
 	on: field.hideAddress
+}) }}
+
+{{ forms.selectField({
+	label: 'Preferred Country'|t('simplemap'),
+	instructions: 'When searching for a location, results in this country will take precedence'|t('simplemap'),
+	id: 'country',
+	name: 'country',
+	options: countries,
+	value: field.country,
 }) }}

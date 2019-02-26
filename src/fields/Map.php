@@ -52,6 +52,11 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	public $zoom = 15;
 
 	/**
+	 * @var string - The preferred country when searching
+	 */
+	public $country = null;
+
+	/**
 	 * @var bool - If true, the location search will not be displayed
 	 */
 	public $hideSearch = false;
@@ -196,11 +201,13 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		$value->zoom = $this->zoom;
 
 		$originalHandle      = $this->handle;
+		$originalCountry     = $this->country;
 		$originalHideSearch  = $this->hideSearch;
 		$originalHideMap     = $this->hideMap;
 		$originalHideAddress = $this->hideAddress;
 
 		$this->handle      = '__settings__';
+		$this->country     = null;
 		$this->hideSearch  = false;
 		$this->hideMap     = false;
 		$this->hideAddress = true;
@@ -211,16 +218,22 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		);
 
 		$this->handle      = $originalHandle;
+		$this->country     = $originalCountry;
 		$this->hideSearch  = $originalHideSearch;
 		$this->hideMap     = $originalHideMap;
 		$this->hideAddress = $originalHideAddress;
 
 		$view = \Craft::$app->getView();
 
+		$countries = array_merge([
+			'*' => SimpleMap::t('All Countries'),
+		], GeoService::$countries);
+
 		/** @noinspection PhpComposerExtensionStubsInspection */
 		return $view->renderTemplate('simplemap/field-settings', [
 			'map' => $mapField,
 			'field' => $this,
+			'countries' => $countries,
 		]);
 	}
 
@@ -312,6 +325,9 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		$this->lng  = (float) $this->lng;
 		$this->zoom = (int) $this->zoom;
 
+		if ($this->country === '*')
+			$this->country = null;
+
 		return parent::beforeSave($isNew);
 	}
 
@@ -365,6 +381,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 				'isSettings' => $isSettings,
 
 				'name'        => $view->namespaceInputName($this->handle),
+				'country'     => $this->country,
 				'hideSearch'  => $this->hideSearch,
 				'hideMap'     => $this->hideMap,
 				'hideAddress' => $this->hideAddress,

@@ -6,6 +6,7 @@ export default class Geo {
 	// Properties
 	// =========================================================================
 
+	country = null;
 	service = null;
 	token = null;
 
@@ -15,7 +16,8 @@ export default class Geo {
 	// Constructor
 	// =========================================================================
 
-	constructor ({ geoService: service, geoToken: token }) {
+	constructor ({ country, geoService: service, geoToken: token }) {
+		this.country = country ? country.toLowerCase() : null;
 		this.service = service;
 		this.token = token;
 
@@ -92,6 +94,7 @@ export default class Geo {
 			format: 'jsonv2',
 			limit: 5,
 			addressdetails: 1,
+			countrycodes: this.country,
 		}).toString();
 
 		const data = await fetch(
@@ -120,6 +123,7 @@ export default class Geo {
 			types: 'address,country,postcode,place,locality,district,neighborhood',
 			limit: 5,
 			access_token: this.token,
+			country: this.country,
 		}).toString();
 
 		const data = await fetch(
@@ -145,6 +149,9 @@ export default class Geo {
 			this.google.service.getPlacePredictions({
 				input: query,
 				sessionToken: this.google.session,
+				componentRestrictions: {
+					country: this.country,
+				},
 			}, predictions => {
 				if (!predictions)
 					return resolve([]);
@@ -175,6 +182,7 @@ export default class Geo {
 					parts: new Parts(null, GeoService.AppleMapKit),
 				})));
 			});
+			// TODO: Workout how to support preferred country
 		});
 	}
 

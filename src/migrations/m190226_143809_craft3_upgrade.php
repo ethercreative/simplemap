@@ -6,10 +6,15 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
 use craft\helpers\Json;
+use craft\services\Plugins;
 use craft\validators\HandleValidator;
+use ether\simplemap\enums\GeoService;
+use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Settings;
 use ether\simplemap\records\Map;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\fields\Map as MapField;
+use ether\simplemap\SimpleMap;
 
 /**
  * m190226_143809_craft3_upgrade migration.
@@ -67,7 +72,12 @@ class m190226_143809_craft3_upgrade extends Migration
     	$craft = \Craft::$app;
     	$elements = $craft->elements;
 
-	    // 1. Update the old data
+    	// Delete the old plugin row
+	    $this->delete(Table::PLUGINS, ['handle' => 'simple-map']);
+
+	    // Update the old data
+	    echo '    > Start map data upgrade' . PHP_EOL;
+
 	    $rows = (new Query())
 		    ->select('*')
 		    ->from('{{%simplemap_maps}}')
@@ -75,6 +85,8 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	    foreach ($rows as $row)
 	    {
+		    echo '    > Upgrade map value ' . $row['address'] . PHP_EOL;
+
 	    	$site = $this->getSiteByLocale($row['ownerLocale']);
 
 	    	$map = new MapElement([
@@ -107,15 +119,19 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	    $this->dropTable('{{%simplemap_maps}}');
 
-	    // 2. Update old field types
+	    // Update old field types
+	    echo '    > Upgrade map field type upgrade' . PHP_EOL;
+
 	    $rows = (new Query())
-		    ->select(['id', 'settings'])
+		    ->select(['id', 'settings', 'handle'])
 		    ->from(Table::FIELDS)
 		    ->where(['type' => 'SimpleMap_Map'])
 		    ->all();
 
 	    foreach ($rows as $row)
 	    {
+		    echo '    > Upgrade map field ' . $row['handle'] . PHP_EOL;
+
 	    	$id = $row['id'];
 	    	$oldSettings = Json::decodeIfJson($row['settings']);
 
@@ -138,6 +154,9 @@ class m190226_143809_craft3_upgrade extends Migration
 			    )
 			    ->execute();
 	    }
+
+	    // Update the plugin settings
+	    $this->updatePluginSettings();
     }
 
 	/**
@@ -153,6 +172,8 @@ class m190226_143809_craft3_upgrade extends Migration
 	    $elements = $craft->elements;
 
 	    // 1. Store the old data
+	    echo '    > Start map data upgrade' . PHP_EOL;
+
 	    $rows = (new Query())
 		    ->select([
 		    	'ownerId',
@@ -174,6 +195,8 @@ class m190226_143809_craft3_upgrade extends Migration
 	    // 3. Store the old data as new
 	    foreach ($rows as $row)
 	    {
+		    echo '    > Upgrade map value ' . $row['address'] . PHP_EOL;
+
 		    $map = new MapElement($row);
 
 		    $elements->saveElement($map);
@@ -194,14 +217,18 @@ class m190226_143809_craft3_upgrade extends Migration
 	    }
 
 	    // 4. Update field settings
+	    echo '    > Upgrade map field type upgrade' . PHP_EOL;
+
 	    $rows = (new Query())
-		    ->select(['id', 'settings'])
+		    ->select(['id', 'settings', 'handle'])
 		    ->from(Table::FIELDS)
 		    ->where(['type' => MapField::class])
 		    ->all();
 
 	    foreach ($rows as $row)
 	    {
+		    echo '    > Upgrade map field ' . $row['handle'] . PHP_EOL;
+
 		    $id          = $row['id'];
 		    $oldSettings = Json::decodeIfJson($row['settings']);
 
@@ -221,6 +248,8 @@ class m190226_143809_craft3_upgrade extends Migration
 				)
 				->execute();
 	    }
+
+	    $this->updatePluginSettings();
     }
 
     // Helpers
@@ -276,6 +305,51 @@ class m190226_143809_craft3_upgrade extends Migration
 			return static::$sitesByOldLocale[$locale] = $sites->getSiteById($siteId[0]);
 
 		return static::$sitesByOldLocale[$locale] = $sites->primarySite;
+	}
+
+	/**
+	 * Updates the plugins settings
+	 * @throws \craft\errors\InvalidPluginException
+	 */
+	private function updatePluginSettings ()
+	{
+		echo '    > Upgrade Maps settings' . PHP_EOL;
+
+		/** @var Settings $settings */
+		$settings = SimpleMap::getInstance()->getSettings()->toArray();
+		$newSettings = SimpleMap::getInstance()->getSettings()->toArray();
+
+		$craft2Settings = \Craft::$app->projectConfig->get(
+			Plugins::CONFIG_PLUGINS_KEY . '.simple-map.settings'
+		);
+
+		if (is_array($craft2Settings) && !empty($craft2Settings))
+			$settings = $craft2Settings;
+
+		if ($settings['serverApiKey'])
+		{
+			$newSettings['geoService'] = GeoService::GoogleMaps;
+			$newSettings['geoToken'] = $settings['serverApiKey'];
+		}
+
+		if ($settings['browserApiKey'])
+		{
+			$newSettings['mapTiles'] = MapTiles::GoogleRoadmap;
+			$newSettings['mapToken'] = $settings['browserApiKey'];
+
+			if (!$settings['serverApiKey'])
+			{
+				$newSettings['geoService'] = GeoService::GoogleMaps;
+				$newSettings['geoToken'] = $settings['browserApiKey'];
+			}
+		}
+
+		\Craft::$app->plugins->savePluginSettings(
+			SimpleMap::getInstance(),
+			$newSettings
+		);
+
+		\Craft::$app->plugins->enablePlugin(SimpleMap::getInstance()->handle);
 	}
 
 }

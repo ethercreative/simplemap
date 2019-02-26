@@ -24,6 +24,12 @@ class Settings extends Model
 	// Properties
 	// =========================================================================
 
+	/** @deprecated  */
+	public $browserApiKey;
+
+	/** @deprecated  */
+	public $serverApiKey;
+
 	// Properties: Map
 	// -------------------------------------------------------------------------
 

@@ -313,6 +313,14 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		return null;
 	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function isValueEmpty ($value, ElementInterface $element): bool
+	{
+		return empty($value->lat) && empty($value->lng);
+	}
+
 	// Methods: Events
 	// -------------------------------------------------------------------------
 

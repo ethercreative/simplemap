@@ -115,6 +115,11 @@ class Map extends Element
 		return new MapQuery(static::class);
 	}
 
+	public function isValueEmpty (): bool
+	{
+		return empty($this->lat) && empty($this->lng);
+	}
+
 	// Methods: Instance
 	// -------------------------------------------------------------------------
 

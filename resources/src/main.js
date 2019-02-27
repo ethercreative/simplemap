@@ -1,11 +1,14 @@
-import Vue from 'vue';
 import App from './App.vue';
 import { t } from './filters/craft';
 
-Vue.config.productionTip = false;
+const VueSimpleMapPlugin = {
+	install (Vue) {
+		Vue.config.productionTip = false;
 
-Vue.filter('t', t);
+		Vue.filter('t', t);
+		Vue.component('simple-map', App);
+	}
+};
 
-new Vue({
-  render: h => h(App),
-}).$mount('simple-map');
+if (typeof window !== 'undefined' && window.Vue)
+	window.Vue.use(VueSimpleMapPlugin);

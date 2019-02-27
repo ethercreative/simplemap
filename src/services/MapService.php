@@ -44,6 +44,9 @@ class MapService extends Component
 	 */
 	public function saveField (Map $field, ElementInterface $element)
 	{
+		if ($element instanceof MapElement)
+			return;
+
 		$craft = \Craft::$app;
 
 		$transaction = $craft->getDb()->beginTransaction();

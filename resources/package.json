@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/web-component-wrapper": "^1.2.0",
     "leaflet": "^1.4.0",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.mapkitmutant": "^0.3.0",

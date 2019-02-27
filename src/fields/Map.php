@@ -360,8 +360,11 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 	{
 		$view = \Craft::$app->getView();
 
+		$containerId = $this->id . '-container';
+		$vueContainerId = $view->namespaceInputId($containerId);
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
 		$view->registerAssetBundle(MapAsset::class);
+		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
 		$view->registerTranslations('simplemap', [
 			'Search for a location',
 			'Name / Number',
@@ -442,7 +445,7 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 			);
 		}
 
-		return '<simple-map><script type="application/json">' . json_encode($opts) . '</script></simple-map>';
+		return '<div id="' . $containerId . '"><simple-map options=\'' . json_encode($opts) . '\'></simple-map></div>';
 	}
 
 }

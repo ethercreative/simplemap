@@ -68,6 +68,11 @@
 	};
 
 	@Component({
+		props: {
+			options: {
+				type: String,
+			},
+		},
 		components: {
 			Search,
 			Address,
@@ -108,11 +113,7 @@
 		// =====================================================================
 
 		created () {
-			// Passing this as a prop isn't working so we're having to do it
-			// manually :(
-			const { config, value } = JSON.parse(
-				this.$parent.$el.firstElementChild.textContent
-			);
+			const { config, value } = JSON.parse(this.$props.options);
 
 			this.config = config;
 			this.value = value;

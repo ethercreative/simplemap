@@ -11,12 +11,14 @@ namespace ether\simplemap;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\services\Fields;
+use craft\web\twig\variables\CraftVariable;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\Map as MapField;
 use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
+use ether\simplemap\web\Variable;
 use yii\base\Event;
 
 /**
@@ -49,6 +51,12 @@ class SimpleMap extends Plugin
 			Fields::class,
 			Fields::EVENT_REGISTER_FIELD_TYPES,
 			[$this, 'onRegisterFieldTypes']
+		);
+
+		Event::on(
+			CraftVariable::class,
+			CraftVariable::EVENT_INIT,
+			[$this, 'onRegisterVariable']
 		);
 
 		if (class_exists(\markhuot\CraftQL\CraftQL::class))
@@ -92,6 +100,18 @@ class SimpleMap extends Plugin
 	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
 	{
 		$event->types[] = MapField::class;
+	}
+
+	/**
+	 * @param Event $event
+	 *
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	public function onRegisterVariable (Event $event)
+	{
+		/** @var CraftVariable $variable */
+		$variable = $event->sender;
+		$variable->set('simpleMap', Variable::class);
 	}
 
 	// Helpers

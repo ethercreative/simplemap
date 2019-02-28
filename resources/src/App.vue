@@ -126,7 +126,10 @@
 		// =====================================================================
 
 		onSearchSelected (item) {
-			this.value = item;
+			this.value = {
+				...this.value,
+				...item,
+			};
 		}
 
 		async onMapChange (latLng) {

@@ -55,7 +55,14 @@ class MapService extends Component
 		{
 			/** @var MapElement $value */
 			$value = $element->getFieldValue($field->handle);
-			$craft->elements->saveElement($value);
+			if (!$craft->elements->saveElement($value))
+			{
+				foreach ($value->getErrors() as $error)
+					$element->addError($field->handle, $error[0]);
+
+				$transaction->rollBack();
+				return;
+			}
 
 			$record = null;
 

@@ -367,9 +367,38 @@ export default class Geo {
 		});
 	}
 
-	getHerePlaceDetails (locationId, item) {
-		console.log(locationId, item);
-		// TODO: this
+	/**
+	 * Gets the details about the given location
+	 *
+	 * @param {string} locationId
+	 * @param {Object} item
+	 * @return {Promise<*>}
+	 */
+	async getHerePlaceDetails (locationId, item) {
+		const params = new URLSearchParams({
+			app_id: this.token.appId,
+			app_code: this.token.appCode,
+			locationid: locationId,
+			jsonattributes: 1,
+			gen: 9,
+			language: 'en',
+		}).toString();
+
+		const data = await fetch(
+			'https://geocoder.api.here.com/6.2/geocode.json?' + params
+		).then(res => res.json());
+
+		const place = data.response.view[0].result[0].location;
+
+		return {
+			...item,
+			lat: place.displayPosition.latitude,
+			lng: place.displayPosition.longitude,
+			parts: new Parts(
+				place.address,
+				GeoService.Here
+			),
+		};
 	}
 
 }

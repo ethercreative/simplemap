@@ -24,6 +24,9 @@ export default class Parts {
 			case GeoService.GoogleMaps:
 				this._google(parts);
 				break;
+			case GeoService.Here:
+				this._here(parts);
+				break;
 			default:
 				return this;
 		}
@@ -169,6 +172,35 @@ export default class Parts {
 		this.county = parts.administrative_area_level_2;
 		this.state = parts.administrative_area_level_1;
 		this.country = parts.country;
+	}
+
+	/**
+	 * Parse Here parts
+	 *
+	 * @param parts
+	 * @private
+	 */
+	_here (parts) {
+		parts = {
+			...parts,
+			...parts.additionalData.reduce((a, b) => {
+				a[b.key] = b.value;
+				return a;
+			}, {}),
+		};
+
+		delete parts.additionalData;
+
+		this.number = parts.houseNumber || '';
+		this.address = this._join([
+			parts.street,
+			parts.district,
+		]);
+		this.city = parts.city || '';
+		this.postcode = parts.postalCode || '';
+		this.county = parts.CountyName || parts.county || '';
+		this.state = parts.StateName || parts.state || '';
+		this.country = parts.CountryName || parts.country || '';
 	}
 
 	// Helpers

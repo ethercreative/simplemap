@@ -75,8 +75,15 @@
 
 			let item = selected.item;
 
-			if (this.service === GeoService.GoogleMaps)
-				item = await this.geo.getGooglePlaceDetails(item.__placeId, item);
+			// eslint-disable-next-line default-case
+			switch (this.service) {
+				case GeoService.GoogleMaps:
+					item = await this.geo.getGooglePlaceDetails(item.__placeId, item);
+					break;
+				case GeoService.Here:
+					item = await this.geo.getHerePlaceDetails(item.__placeId, item);
+					break;
+			}
 
 			this.$emit('selected', item);
 		}

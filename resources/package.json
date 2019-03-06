@@ -61,7 +61,8 @@
       "import/prefer-default-export": "off",
       "one-var": "off",
       "operator-linebreak": "off",
-      "no-multi-spaces": "off"
+      "no-multi-spaces": "off",
+      "no-prototype-builtins": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

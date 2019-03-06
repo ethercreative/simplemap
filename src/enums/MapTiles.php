@@ -59,6 +59,16 @@ abstract class MapTiles
 	const MapKitSatellite     = 'mapkit.satellite';
 	const MapKitHybrid        = 'mapkit.hybrid';
 
+	// Here
+	const HereNormalDay        = 'here.normal.day';
+	const HereNormalDayGrey    = 'here.normal.day.grey';
+	const HereNormalDayTransit = 'here.normal.day.transit';
+	const HereReduced          = 'here.reduced.day';
+	const HerePedestrian       = 'here.pedestrian.day';
+	const HereTerrain          = 'here.terrain.day';
+	const HereSatellite        = 'here.satellite.day';
+	const HereHybrid           = 'here.hybrid.day';
+
 	// Methods
 	// =========================================================================
 
@@ -90,6 +100,15 @@ abstract class MapTiles
 			self::MapKitMutedStandard  => SimpleMap::t('Apple MapKit: Muted Standard'),
 			self::MapKitSatellite      => SimpleMap::t('Apple MapKit: Satellite'),
 			self::MapKitHybrid         => SimpleMap::t('Apple MapKit: Hybrid'),
+
+			self::HereNormalDay        => SimpleMap::t('Here: Normal Day'),
+			self::HereNormalDayGrey    => SimpleMap::t('Here: Normal Day Grey'),
+			self::HereNormalDayTransit => SimpleMap::t('Here: Normal Day Transit'),
+			self::HereReduced          => SimpleMap::t('Here: Reduced'),
+			self::HerePedestrian       => SimpleMap::t('Here: Pedestrian'),
+			self::HereTerrain          => SimpleMap::t('Here: Terrain'),
+			self::HereSatellite        => SimpleMap::t('Here: Satellite'),
+			self::HereHybrid           => SimpleMap::t('Here: Hybrid'),
 		];
 	}
 

@@ -75,6 +75,9 @@ export default class Geo {
 			case GeoService.AppleMapKit:
 				suggestions = await this.searchApple(text);
 				break;
+			case GeoService.Here:
+				suggestions = await this.searchHere(text);
+				break;
 			default:
 				throw new Error('Unknown geocoding service: ' + this.service);
 		}
@@ -159,7 +162,7 @@ export default class Geo {
 				return resolve(predictions.map(result => ({
 					__placeId: result.place_id,
 					address: result.description,
-					// See Search::getGooglePlaceDetails() for `lat`, `lng`, and `parts`
+					// See Geo::getGooglePlaceDetails() for `lat`, `lng`, and `parts`
 				})));
 			});
 		});
@@ -184,6 +187,35 @@ export default class Geo {
 			});
 			// TODO: Workout how to support preferred country
 		});
+	}
+
+	/**
+	 * Search using Here
+	 *
+	 * @param {string} query
+	 * @return {Promise<*>}
+	 */
+	async searchHere (query) {
+		const params = new URLSearchParams({
+			app_id: this.token.appId,
+			app_code: this.token.appCode,
+			query,
+			country: this.country.toUpperCase(),
+			maxresults: 5,
+		}).toString();
+
+		const data = await fetch(
+			'https://autocomplete.geocoder.api.here.com/6.2/suggest.json?' + params
+		).then(res => res.json());
+
+		if (!data.hasOwnProperty('suggestions'))
+			return [];
+
+		return data.suggestions.map(suggestion => ({
+			__placeId: suggestion.locationId,
+			address: suggestion.label,
+			// See Geo::getHerePlaceDetails() for `lat`, `lng`, and `parts`
+		}));
 	}
 
 	// Actions: Reverse
@@ -298,6 +330,11 @@ export default class Geo {
 		});
 	}
 
+	reverseHere ({ lat, lng }) {
+		console.log(lat, lng);
+		// TODO: this
+	}
+
 	// Helpers
 	// =========================================================================
 
@@ -328,6 +365,11 @@ export default class Geo {
 				});
 			});
 		});
+	}
+
+	getHerePlaceDetails (locationId, item) {
+		console.log(locationId, item);
+		// TODO: this
 	}
 
 }

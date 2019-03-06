@@ -148,6 +148,9 @@
 				case GeoService.AppleMapKit:
 					this.value = await this.geo.reverseApple(latLng);
 					break;
+				case GeoService.Here:
+					this.value = await this.geo.reverseHere(latLng);
+					break;
 				default:
 					throw new Error('Unknown geo service: ' + this.config.geoService);
 			}

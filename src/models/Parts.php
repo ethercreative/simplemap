@@ -66,6 +66,9 @@ class Parts
 			case GeoService::GoogleMaps:
 				$this->_google($parts);
 				break;
+			case GeoService::Here:
+				$this->_here($parts);
+				break;
 			default:
 				$this->_fromArray($parts);
 		}
@@ -206,6 +209,16 @@ class Parts
 		$this->county = $parts['administrative_area_level_2'];
 		$this->state = $parts['administrative_area_level_1'];
 		$this->country = $parts['country'];
+	}
+
+	/**
+	 * Parse Here parts
+	 *
+	 * @param $parts
+	 */
+	private function _here ($parts)
+	{
+		// TODO: this
 	}
 
 	// Methods: Helpers

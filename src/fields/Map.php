@@ -387,12 +387,17 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
 
+		$country = $this->country;
+		// Convert ISO2 to ISO3 for Here autocomplete
+		if ($country && $settings->geoService === GeoEnum::Here)
+			$country = GeoService::$countriesIso3[$country];
+
 		$opts = [
 			'config' => [
 				'isSettings' => $isSettings,
 
 				'name'        => $view->namespaceInputName($this->handle),
-				'country'     => $this->country,
+				'country'     => $country,
 				'hideSearch'  => $this->hideSearch,
 				'hideMap'     => $this->hideMap,
 				'hideAddress' => $this->hideAddress,

@@ -37,6 +37,8 @@ abstract class GeoService
 
 	const AppleMapKit = 'apple';
 
+	const Here = 'here';
+
 	// Helpers
 	// =========================================================================
 
@@ -56,6 +58,8 @@ abstract class GeoService
 			// on the front-end, and any sort of server-side API, so it's
 			// disabled for now.
 //			self::AppleMapKit => SimpleMap::t('Apple MapKit'),
+
+			self::Here => SimpleMap::t('Here'),
 		];
 	}
 

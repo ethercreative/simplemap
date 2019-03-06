@@ -76,6 +76,12 @@ return [
 	'Notice' => 'Notice',
 	'MapKit does not support individual address parts.' => 'MapKit does not support individual address parts.',
 
+	'App ID' => 'App ID',
+	'Your Here app ID.' => 'Your Here app ID.',
+
+	'App Code' => 'App Code',
+	'Your Here app code.' => 'Your Here app code.',
+
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------
 
@@ -105,6 +111,15 @@ return [
 	'Apple MapKit: Satellite' => 'Apple MapKit: Satellite',
 	'Apple MapKit: Hybrid' => 'Apple MapKit: Hybrid',
 
+	'Here: Normal Day' => 'Here: Normal Day',
+	'Here: Normal Day Grey' => 'Here: Normal Day Grey',
+	'Here: Normal Day Transit' => 'Here: Normal Day Transit',
+	'Here: Reduced' => 'Here: Reduced',
+	'Here: Pedestrian' => 'Here: Pedestrian',
+	'Here: Terrain' => 'Here: Terrain',
+	'Here: Satellite' => 'Here: Satellite',
+	'Here: Hybrid' => 'Here: Hybrid',
+
 	// Settings: Geo Service Options
 	// -------------------------------------------------------------------------
 
@@ -112,5 +127,6 @@ return [
 	'Mapbox' => 'Mapbox',
 	'Google Maps' => 'Google Maps',
 	'Apple MapKit' => 'Apple MapKit',
+	'Here' => 'Here',
 
 ];

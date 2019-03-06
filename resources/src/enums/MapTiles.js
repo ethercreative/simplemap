@@ -35,6 +35,16 @@ const MapTiles = {
 	MapKitMutedStandard: 'mapkit.muted',
 	MapKitSatellite: 'mapkit.satellite',
 	MapKitHybrid: 'mapkit.hybrid',
+
+	// Here
+	HereNormalDay: 'here.normal.day',
+	HereNormalDayGrey: 'here.normal.day.grey',
+	HereNormalDayTransit: 'here.normal.day.transit',
+	HereReduced: 'here.reduced.day',
+	HerePedestrian: 'here.pedestrian.day',
+	HereTerrain: 'here.terrain.day',
+	HereSatellite: 'here.satellite.day',
+	HereHybrid: 'here.hybrid.day',
 };
 
 export default MapTiles;

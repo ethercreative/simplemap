@@ -14,7 +14,7 @@
 	@Component({
 		props: {
 			tiles: String,
-			token: String,
+			token: [String, Object],
 			latLng: Object,
 			zoom: Number,
 		}
@@ -32,7 +32,8 @@
 
 		get tileLayer () {
 			const scale = L.Browser.retina ? '@2x.png' : '.png'
-				, style = this.tiles.split('.')[1];
+				, hereScale = L.Browser.retina ? '512' : '256'
+				, style = this.tiles.split(/\.(.+)/)[1];
 
 			switch (this.tiles) {
 				case MapTiles.Wikimedia:
@@ -58,7 +59,25 @@
 				case MapTiles.MapboxDark:
 					return {
 						url: `https://api.tiles.mapbox.com/v4/mapbox.${style}/{z}/{x}/{y}${scale}?access_token=${this.token}`,
-						attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
+						attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://www.mapbox.com/" target="_blank" rel="noreferrer">Mapbox</a>',
+					};
+				case MapTiles.HereNormalDay:
+				case MapTiles.HereNormalDayGrey:
+				case MapTiles.HereNormalDayTransit:
+				case MapTiles.HereReduced:
+				case MapTiles.HerePedestrian:
+					return {
+						url: `https://{s}.base.maps.api.here.com/maptile/2.1/maptile/newest/${style}/{z}/{x}/{y}/${hereScale}/png8?app_id=${this.token.appId}&app_code=${this.token.appCode}`,
+						attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://here.com/" target="_blank" rel="noreferrer">Here</a>',
+						subdomains: '1234',
+					};
+				case MapTiles.HereTerrain:
+				case MapTiles.HereSatellite:
+				case MapTiles.HereHybrid:
+					return {
+						url: `https://{s}.aerial.maps.api.here.com/maptile/2.1/maptile/newest/${style}/{z}/{x}/{y}/${hereScale}/png8?app_id=${this.token.appId}&app_code=${this.token.appCode}`,
+						attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://here.com/" target="_blank" rel="noreferrer">Here</a>',
+						subdomains: '1234',
 					};
 				default:
 					throw new Error('Unknown map tiles service: ' + this.tiles);
@@ -89,7 +108,10 @@
 			} else {
 				const tileLayer = L.tileLayer(
 					this.tileLayer.url,
-					{ attribution: this.tileLayer.attr }
+					{
+						attribution: this.tileLayer.attr,
+						subdomains: this.tileLayer.subdomains,
+					}
 				);
 				this.map.addLayer(tileLayer);
 			}

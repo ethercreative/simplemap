@@ -3,6 +3,7 @@ const GeoService = {
 	Mapbox: 'mapbox',
 	GoogleMaps: 'google',
 	AppleMapKit: 'apple',
+	Here: 'here',
 };
 
 export default GeoService;

@@ -152,4 +152,10 @@ class Map extends Element
 		return $rules;
 	}
 
+	public function afterSave (bool $isNew)
+	{
+		// Do nothing (fixes an issue with map fields in matrix causing infinite
+		// loop of saving for no apparent reason)
+	}
+
 }

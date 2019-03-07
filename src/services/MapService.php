@@ -57,11 +57,6 @@ class MapService extends Component
 			/** @var MapElement $value */
 			$value = $element->getFieldValue($field->handle);
 
-			// FIXME: Saving the map if it's in a matrix block causes the matrix
-			//   block to be resaved, triggering an infinite loop of saving :(
-			if ($element instanceof MatrixBlock)
-				\Craft::dd($value);
-
 			if (!$craft->elements->saveElement($value))
 			{
 				foreach ($value->getErrors() as $error)

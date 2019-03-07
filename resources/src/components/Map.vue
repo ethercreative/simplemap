@@ -108,10 +108,7 @@
 			} else {
 				const tileLayer = L.tileLayer(
 					this.tileLayer.url,
-					{
-						attribution: this.tileLayer.attr,
-						subdomains: this.tileLayer.subdomains,
-					}
+					this.tileLayer
 				);
 				this.map.addLayer(tileLayer);
 			}

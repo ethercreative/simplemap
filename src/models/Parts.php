@@ -218,7 +218,24 @@ class Parts
 	 */
 	private function _here ($parts)
 	{
-		// TODO: this
+		$parts = array_merge(
+			$parts,
+			array_reduce($parts['additionalData'], function ($a, $b) {
+				$a[$b['key']] = $b['value'];
+				return $a;
+			}, [])
+		);
+
+		$this->number   = $parts['number'];
+		$this->address  = $this->_join([
+			$parts['street'],
+			$parts['district'],
+		]);
+		$this->city     = $parts['city'];
+		$this->postcode = $parts['postalCode'];
+		$this->county   = $parts['CountyName'] ?? $parts['county'];
+		$this->state    = $parts['StateName'] ?? $parts['state'];
+		$this->country  = $parts['CountryName'] ?? $parts['country'];
 	}
 
 	// Methods: Helpers

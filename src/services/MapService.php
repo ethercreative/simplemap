@@ -13,7 +13,6 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use craft\elements\MatrixBlock;
 use ether\simplemap\fields\Map;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
@@ -68,21 +67,23 @@ class MapService extends Component
 
 			$record = null;
 
-			if ($value->id)
+			if ($value->elementId)
 			{
 				$record = MapRecord::findOne([
-					'elementId' => $value->id,
-					'ownerSiteId' => $element->site->id,
+					'elementId' => $value->elementId,
+					'ownerSiteId' => $value->ownerSiteId,
 				]);
 			}
 
 			if ($record === null)
+			{
 				$record = new MapRecord();
 
-			$record->elementId = $value->id;
-			$record->ownerId = $element->id;
-			$record->ownerSiteId = $element->site->id;
-			$record->fieldId = $field->id;
+				$record->elementId = $value->elementId;
+				$record->ownerId = $element->id;
+				$record->ownerSiteId = $element->site->id;
+				$record->fieldId = $field->id;
+			}
 
 			$record->lat = $value->lat;
 			$record->lng = $value->lng;

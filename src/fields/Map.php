@@ -460,7 +460,13 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 			);
 		}
 
-		return '<div id="' . $containerId . '"><simple-map options=\'' . json_encode($opts) . '\'></simple-map></div>';
+		$options = preg_replace(
+			'/\'/',
+			'&#039;',
+			json_encode($opts)
+		);
+
+		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'></simple-map></div>';
 	}
 
 }

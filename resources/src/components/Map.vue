@@ -106,9 +106,14 @@
 			} else if (this.tiles.indexOf('mapkit') > -1) {
 				this._mapKitMutant();
 			} else {
+				const opts = { attribution: this.tileLayer.attr };
+
+				if (this.tileLayer.subdomains)
+					opts.subdomains = this.tileLayer.subdomains;
+
 				const tileLayer = L.tileLayer(
 					this.tileLayer.url,
-					this.tileLayer
+					opts
 				);
 				this.map.addLayer(tileLayer);
 			}

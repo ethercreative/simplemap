@@ -9,6 +9,7 @@ export default class Geo {
 	country = null;
 	service = null;
 	token = null;
+	locale = null;
 
 	google = { service: null, session: null };
 	apple = { Search: null };
@@ -16,10 +17,11 @@ export default class Geo {
 	// Constructor
 	// =========================================================================
 
-	constructor ({ country, geoService: service, geoToken: token }) {
+	constructor ({ country, geoService: service, geoToken: token, locale }) {
 		this.country = country ? country.toLowerCase() : null;
 		this.service = service;
 		this.token = token;
+		this.locale = locale;
 
 		if (service === GeoService.GoogleMaps) {
 			this.google = {
@@ -98,6 +100,7 @@ export default class Geo {
 			limit: 5,
 			addressdetails: 1,
 			countrycodes: this.country,
+			'accept-language': this.locale,
 		}).toString();
 
 		const data = await fetch(
@@ -127,6 +130,7 @@ export default class Geo {
 			limit: 5,
 			access_token: this.token,
 			country: this.country,
+			language: this.locale,
 		}).toString();
 
 		const data = await fetch(
@@ -202,6 +206,7 @@ export default class Geo {
 			query,
 			country: this.country.toUpperCase(),
 			maxresults: 5,
+			language: this.locale,
 		}).toString();
 
 		const data = await fetch(
@@ -234,6 +239,7 @@ export default class Geo {
 			lon: lng,
 			format: 'jsonv2',
 			addressdetails: 1,
+			'accept-language': this.locale,
 		}).toString();
 
 		const result = await fetch(
@@ -263,6 +269,7 @@ export default class Geo {
 			types: 'address,country,postcode,place,locality,district,neighborhood',
 			limit: 1,
 			access_token: this.token,
+			language: this.locale,
 		}).toString();
 
 		const result = await fetch(
@@ -345,6 +352,7 @@ export default class Geo {
 			jsonattributes: 1,
 			limit: 1,
 			prox: `${lat},${lng},1`,
+			language: this.locale,
 		});
 
 		const { response } = await fetch(
@@ -407,7 +415,7 @@ export default class Geo {
 			locationid: locationId,
 			jsonattributes: 1,
 			gen: 9,
-			language: 'en',
+			language: this.locale,
 		}).toString();
 
 		const data = await fetch(

@@ -413,6 +413,8 @@ class Map extends Field implements EagerLoadingFieldInterface, PreviewableFieldI
 					$settings->geoToken,
 					$settings->geoService
 				),
+
+				'locale' => \Craft::$app->locale->getLanguageID(),
 			],
 
 			'value' => [

@@ -95,6 +95,7 @@
 			mapToken: '',
 			geoService: 'nominatim',
 			geoToken: '',
+			locale: 'en',
 		};
 
 		value = {

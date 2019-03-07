@@ -330,9 +330,35 @@ export default class Geo {
 		});
 	}
 
-	reverseHere ({ lat, lng }) {
-		console.log(lat, lng);
-		// TODO: this
+	/**
+	 * Lookup the given lat/lng using Here
+	 *
+	 * @param lat
+	 * @param lng
+	 * @return {Promise<{address: *, lng: *, parts: Parts, lat: *}>}
+	 */
+	async reverseHere ({ lat, lng }) {
+		const params = new URLSearchParams({
+			app_id: this.token.appId,
+			app_code: this.token.appCode,
+			mode: 'retrieveAddresses',
+			jsonattributes: 1,
+			limit: 1,
+			prox: `${lat},${lng},1`,
+		});
+
+		const { response } = await fetch(
+			'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json?' + params
+		).then(res => res.json());
+
+		const { address } = response.view[0].result[0].location;
+
+		return {
+			address: address.label,
+			lat,
+			lng,
+			parts: new Parts(address, GeoService.Here),
+		};
 	}
 
 	// Helpers

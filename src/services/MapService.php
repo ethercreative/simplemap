@@ -13,6 +13,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
+use craft\elements\MatrixBlock;
 use ether\simplemap\fields\Map;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
@@ -55,6 +56,12 @@ class MapService extends Component
 		{
 			/** @var MapElement $value */
 			$value = $element->getFieldValue($field->handle);
+
+			// FIXME: Saving the map if it's in a matrix block causes the matrix
+			//   block to be resaved, triggering an infinite loop of saving :(
+			if ($element instanceof MatrixBlock)
+				\Craft::dd($value);
+
 			if (!$craft->elements->saveElement($value))
 			{
 				foreach ($value->getErrors() as $error)

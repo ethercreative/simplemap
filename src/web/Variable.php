@@ -43,6 +43,7 @@ class Variable
 	 *
 	 * @deprecated as of 3.4.0
 	 * @return string
+	 * @throws \craft\errors\DeprecationException
 	 */
 	public function getApiKey ()
 	{

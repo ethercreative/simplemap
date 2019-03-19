@@ -118,6 +118,7 @@ class SimpleMap extends Plugin
 		/** @var CraftVariable $variable */
 		$variable = $event->sender;
 		$variable->set('simpleMap', Variable::class);
+		$variable->set('maps', Variable::class);
 	}
 
 	// Helpers

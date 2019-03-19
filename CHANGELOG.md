@@ -6,6 +6,7 @@
 - SimpleMap is now Maps! We've re-written the plugin from the ground-up while 
 keeping it backwards compatible (even back to Craft 2!)
 - Maps is now powered by Vue!
+- New icon yo
 
 ### Added 
 - OpenStreetMap Support and map tiles

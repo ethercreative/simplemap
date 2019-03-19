@@ -138,7 +138,7 @@ Lat/Lng, to display it on a map.
 
 ## Roadmap
 
-> Coming Soon ™️
+> Coming Soon™
 
 - Output Static Maps
 - Output Dynamic Maps

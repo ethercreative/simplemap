@@ -53,16 +53,16 @@ return [
 	'Select the style of map tiles.' => 'Select the style of map tiles.',
 
 	'Map Token' => 'Map Token',
-	'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).' =>
-		'Add the API key for map tiles service you are using (leave blank if you\'re using an open source tile set).',
+	'Add the API key for map tiles service you are using.' =>
+		'Add the API key for map tiles service you are using.',
 
 	'Geo Service' => 'Geo Service',
 	'Select the service to be used for Geo-coding.' =>
 		'Select the service to be used for Geo-coding.',
 
 	'Geo Token' => 'Geo Token',
-	'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)' =>
-		'Add the API key for the geo-coding service (leave blank if you\'re using an open source service)',
+	'Add the API key for the geo-coding service.' =>
+		'Add the API key for the geo-coding service.',
 
 	'Private Key' => 'Private Key',
 	'Paste the contents of your private key files below.' => 'Paste the contents of your private key files below.',
@@ -128,5 +128,16 @@ return [
 	'Google Maps' => 'Google Maps',
 	'Apple MapKit' => 'Apple MapKit',
 	'Here' => 'Here',
+
+	// Settings: Info
+	// -------------------------------------------------------------------------
+
+	'Getting API Keys' => 'Getting API Keys',
+	'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.' =>
+		'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.',
+	'You can use the same key for both map tiles and geo service, no configuration needed!' =>
+		'You can use the same key for both map tiles and geo service, no configuration needed!',
+	'We currently only support Apple MapKit for map tiles only.' =>
+		'We currently only support Apple MapKit for map tiles only.',
 
 ];

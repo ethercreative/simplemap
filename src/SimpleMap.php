@@ -43,6 +43,11 @@ class SimpleMap extends Plugin
 	{
 		parent::init();
 
+		\Craft::setAlias(
+			'simplemapimages',
+			__DIR__ . '/web/assets/imgs'
+		);
+
 		$this->setComponents([
 			'map' => MapService::class,
 		]);

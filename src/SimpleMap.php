@@ -84,8 +84,9 @@ class SimpleMap extends Plugin
 
 	/**
 	 * @return string|null
-	 * @throws \Twig_Error_Loader
-	 * @throws \yii\base\Exception
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 */
 	protected function settingsHtml ()
 	{

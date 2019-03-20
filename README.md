@@ -26,13 +26,10 @@ Maps supports the following map tiles:
 </details>
 <details>
   <summary>Carto (Voyager, Positron, Dark Matter)</summary>
-  
-  <div style="display:flex">
-         
-   ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
-   ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
-   ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
-  </div>
+          
+  ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
+  ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
+  ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
 </details>
 <details>
   <summary>Mapbox (Outdoors, Streets, Dark, Light)</summary>
@@ -70,6 +67,7 @@ Maps supports the following map tiles:
   ![Here Hybrid](./src/web/assets/imgs/here-hybrid-day.png)
 </details>
 
+  
 And these geo-coding services:
 
 - [Nominatim (OpenStreetMap)](https://nominatim.openstreetmap.org/)

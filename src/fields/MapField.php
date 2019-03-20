@@ -71,6 +71,39 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public $hideAddress = false;
 
+	/**
+	 * @deprecated 
+	 */
+	public $hideLatLng;
+	/**
+	 * @deprecated
+	 */
+	public $countryRestriction;
+	/**
+	 * @deprecated
+	 */
+	public $typeRestriction;
+	/**
+	 * @deprecated
+	 */
+	public $boundaryRestrictionNELat;
+	/**
+	 * @deprecated
+	 */
+	public $boundaryRestrictionNELng;
+	/**
+	 * @deprecated
+	 */
+	public $boundaryRestrictionSWLat;
+	/**
+	 * @deprecated
+	 */
+	public $boundaryRestrictionSWLng;
+	/**
+	 * @deprecated
+	 */
+	public $boundary = '""';
+
 	// Methods
 	// =========================================================================
 
@@ -100,6 +133,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 	// Methods: Instance
 	// -------------------------------------------------------------------------
+
+	public function setCountryRestriction ($value)
+	{
+		$this->country = $value;
+	}
 
 	public function rules ()
 	{

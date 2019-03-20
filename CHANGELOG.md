@@ -1,3 +1,7 @@
+## 3.4.2 - 2019-03-20
+### Fixed
+- Fixed issue setting old field settings after upgrade.
+
 ## 3.4.1 - 2019-03-20
 ### Fixed
 - Fixed an issue where the map field class broke after upgrading.

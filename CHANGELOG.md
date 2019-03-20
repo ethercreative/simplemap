@@ -1,4 +1,4 @@
-## [Unreleased] 3.4.0
+## 3.4.0 - 2019-03-20
 
 > {warning} This is a major update, we strongly recommend taking a database backup before updating!
 

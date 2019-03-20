@@ -220,6 +220,6 @@ Lat/Lng, to display it on a map.
 
 > Coming Soon™
 
-- Output Static Maps
-- Output Dynamic Maps
+- Static Maps template output
+- Dynamic Maps template output
 - Support env in settings

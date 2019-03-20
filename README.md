@@ -27,9 +27,12 @@ Maps supports the following map tiles:
 <details>
   <summary>Carto (Voyager, Positron, Dark Matter)</summary>
   
-  ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
-  ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
-  ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+  <div style="display:flex">
+         
+   ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
+   ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
+   ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+  </div>
 </details>
 <details>
   <summary>Mapbox (Outdoors, Streets, Dark, Light)</summary>
@@ -37,7 +40,7 @@ Maps supports the following map tiles:
   ![Mapbox Outdoors](./src/web/assets/imgs/mapbox-outdoors.png)
   ![Mapbox Streets](./src/web/assets/imgs/mapbox-streets.png)
   ![Mapbox Dark](./src/web/assets/imgs/mapbox-dark.png)
-  ![Mapbox Light](./src/web/assets/imgs/mapbox-Light.png)
+  ![Mapbox Light](./src/web/assets/imgs/mapbox-light.png)
 </details>
 <details>
   <summary>Google Maps (Roadmap, Terrain, Hybrid)</summary>

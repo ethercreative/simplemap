@@ -1,4 +1,7 @@
+![Maps](./resources/imgs/map-banner.jpg)
+
 # Maps
+
 A beautifully simple map field type for Craft CMS 3.
 
 Maps offers full mutli-site support, compatibility with Matrix and 
@@ -19,7 +22,7 @@ Maps supports the following map tiles:
 
   [Wikimedia](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use) | | | 
   --- | --- | ---  
-  ![Wikimedia](./src/web/assets/imgs/wikimedia.png) | |
+  ![Wikimedia](./src/web/assets/imgs/wikimedia.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
   Wikimedia | | 
 </details>
 <details>
@@ -27,7 +30,7 @@ Maps supports the following map tiles:
   
   [OpenStreetMap](https://www.openstreetmap.org) | | | 
   --- | --- | ---
-  ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png) | |
+  ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
   OpenStreetMap | | 
 </details>
 <details>

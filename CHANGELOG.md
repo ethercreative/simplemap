@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fixed issue when `cp-field-inspect` plugin is installed (fixes #127)
+- Fixed `elementId cannot be null` error on saving new entries with map fields (fixes #126)
 
 ## 3.4.2 - 2019-03-20
 ### Fixed

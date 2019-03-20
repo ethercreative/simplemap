@@ -68,10 +68,12 @@ class MapService extends Component
 
 			$record = null;
 
-			if ($value->elementId)
+			$targetId = $value->elementId ?? $value->id;
+
+			if ($targetId)
 			{
 				$record = MapRecord::findOne([
-					'elementId' => $value->elementId,
+					'elementId' => $targetId,
 					'ownerSiteId' => $value->ownerSiteId,
 				]);
 			}
@@ -80,7 +82,7 @@ class MapService extends Component
 			{
 				$record = new MapRecord();
 
-				$record->elementId = $value->elementId;
+				$record->elementId = $targetId;
 				$record->ownerId = $element->id;
 				$record->ownerSiteId = $element->site->id;
 				$record->fieldId = $field->id;

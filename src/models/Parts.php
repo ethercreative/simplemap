@@ -248,8 +248,11 @@ class Parts
 	 *
 	 * @return bool
 	 */
-	public static function isLegacy (array $parts)
+	public static function isLegacy (array $parts = null)
 	{
+		if ($parts === null)
+			return false;
+
 		$keys = PartsLegacy::$legacyKeys;
 
 		unset($keys[array_search('country', $keys)]);

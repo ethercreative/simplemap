@@ -13,7 +13,7 @@ use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Settings;
 use ether\simplemap\records\Map;
 use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\fields\Map as MapField;
+use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\SimpleMap;
 
 /**

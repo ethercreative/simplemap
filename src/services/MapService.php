@@ -13,7 +13,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use ether\simplemap\fields\Map;
+use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
 
@@ -36,13 +36,13 @@ class MapService extends Component
 	// =========================================================================
 
 	/**
-	 * @param Map              $field
+	 * @param MapField                 $field
 	 * @param ElementInterface|Element $element
 	 *
 	 * @throws \Throwable
 	 * @throws \yii\db\Exception
 	 */
-	public function saveField (Map $field, ElementInterface $element)
+	public function saveField (MapField $field, ElementInterface $element)
 	{
 		if ($element instanceof MapElement)
 			return;

@@ -1,3 +1,7 @@
+## 3.4.1 - 2019-03-20
+### Fixed
+- Fixed an issue where the map field class broke after upgrading.
+
 ## 3.4.0 - 2019-03-20
 
 > {warning} This is a major update, we strongly recommend taking a database backup before updating!

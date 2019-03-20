@@ -14,7 +14,7 @@ use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
-use ether\simplemap\fields\Map as MapField;
+use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;

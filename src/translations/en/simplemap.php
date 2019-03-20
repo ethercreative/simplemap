@@ -1,56 +1,143 @@
 <?php
+/**
+ * SimpleMap for Craft CMS
+ *
+ * @link      https://ethercreative.co.uk
+ * @copyright Copyright (c) 2019 Ether Creative
+ */
 
 return [
+
+	// Field
+	// =========================================================================
+
 	'Map' => 'Map',
+	'Geo-Coding' => 'Geo-Coding',
 
-	// Settings
-	'Google Maps API Key' => 'Google Maps API Key',
-	'Alternate Server API Key' => 'Alternate Server API Key',
-	'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
-		=> '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
-	'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'
-		=> 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>',
+	'Search for a location' => 'Search for a location',
 
-	// Field settings
-	'Latitude' => 'Latitude',
-	'The maps default latitude' => 'The maps default latitude',
+	'Full Address' => 'Full Address',
+	'Name / Number' => 'Name / Number',
+	'Street Address' => 'Street Address',
+	'Town / City' => 'Town / City',
+	'Postcode' => 'Postcode',
+	'County' => 'County',
+	'State' => 'State',
+	'Country' => 'Country',
 
-	'Longitude' => 'Longitude',
-	'The maps default longitude' => 'The maps default longitude',
+	// Field: Settings
+	// -------------------------------------------------------------------------
 
-	'Zoom Level' => 'Zoom Level',
-	'The default zoom level' => 'The default zoom level',
+	'Initial Location' => 'Initial Location',
+	'The initial location and zoom that will show in the map field' =>
+		'The initial location and zoom that will show in the map field',
 
-	'Height' => 'Height',
-	'The maps height in the input' => 'The maps height in the input',
+	'Hide Search' => 'Hide Search',
+	'Hide the location search field' => 'Hide the location search field',
 
 	'Hide Map' => 'Hide Map',
-	'When on, the map will be hidden leaving just the address search field'
-		=> 'When on, the map will be hidden leaving just the address search field',
+	'Hide the map' => 'Hide the map',
 
-	'Hide Lat/Lng' => 'Hide Lat/Lng',
-	'When on, the latitude & longitude fields will be hidden'
-		=> 'When on, the latitude & longitude fields will be hidden',
+	'Hide Address' => 'Hide Address',
+	'Hide the address fields' => 'Hide the address fields',
 
-	'Restrict by Country' => 'Restrict by Country',
-	'Restrict the address search to a specific country'
-		=> 'Restrict the address search to a specific country',
+	'All Countries' => 'All Countries',
+	'Preferred Country' => 'Preferred Country',
+	'When searching for a location, results in this country will take precedence' =>
+		'When searching for a location, results in this country will take precedence',
 
-	'Restrict by Type' => 'Restrict by Type',
-	'Restrict the address search to a specific type'
-		=> 'Restrict the address search to a specific type',
+	// Settings
+	// =========================================================================
 
-	'North-east Corner' => 'North-east Corner',
-	'South-west Corner' => 'South-west Corner',
+	'Map Tiles' => 'Map Tiles',
+	'Select the style of map tiles.' => 'Select the style of map tiles.',
 
-	'Boundary Restriction' => 'Boundary Restriction',
-	'Restrict the address search to within a specific rectangular boundary'
-		=> 'Restrict the address search to within a specific rectangular boundary',
+	'Map Token' => 'Map Token',
+	'Add the API key for map tiles service you are using.' =>
+		'Add the API key for map tiles service you are using.',
 
-	'Configure Map' => 'Configure Map',
-	'Move, zoom, and resize the map' => 'Move, zoom, and resize the map',
+	'Geo Service' => 'Geo Service',
+	'Select the service to be used for Geo-coding.' =>
+		'Select the service to be used for Geo-coding.',
 
-	// Field validation
-	'Missing Lat/Lng' => 'Missing Lat/Lng',
-	'Missing Lat/Lng or valid address' => 'Missing Lat/Lng or valid address',
+	'Geo Token' => 'Geo Token',
+	'Add the API key for the geo-coding service.' =>
+		'Add the API key for the geo-coding service.',
+
+	'Private Key' => 'Private Key',
+	'Paste the contents of your private key files below.' => 'Paste the contents of your private key files below.',
+
+	'Key ID' => 'Key ID',
+	'The ID of the key associated with your private key.' => 'The ID of the key associated with your private key.',
+
+	'Team ID' => 'Team ID',
+	'The team ID that created the key ID and private key.' => 'The team ID that created the key ID and private key.',
+
+	'Notice' => 'Notice',
+	'MapKit does not support individual address parts.' => 'MapKit does not support individual address parts.',
+
+	'App ID' => 'App ID',
+	'Your Here app ID.' => 'Your Here app ID.',
+
+	'App Code' => 'App Code',
+	'Your Here app code.' => 'Your Here app code.',
+
+	// Settings: Map Tiles Options
+	// -------------------------------------------------------------------------
+
+	'Open Source' => 'Open Source',
+
+	'Wikimedia' => 'Wikimedia',
+
+	'OpenStreetMap' => 'OpenStreetMap',
+
+	'Carto: Voyager' => 'Carto: Voyager',
+	'Carto: Positron' => 'Carto: Positron',
+	'Carto: Dark Matter' => 'Carto: Dark Matter',
+
+	'Requires API Key (Token)' => 'Requires API Key (Token)',
+
+	'Mapbox: Outdoors' => 'Mapbox: Outdoors',
+	'Mapbox: Streets' => 'Mapbox: Streets',
+	'Mapbox: Light' => 'Mapbox: Light',
+	'Mapbox: Dark' => 'Mapbox: Dark',
+
+	'Google Maps: Roadmap' => 'Google Maps: Roadmap',
+	'Google Maps: Terrain' => 'Google Maps: Terrain',
+	'Google Maps: Hybrid' => 'Google Maps: Hybrid',
+
+	'Apple MapKit: Standard' => 'Apple MapKit: Standard',
+	'Apple MapKit: Muted Standard' => 'Apple MapKit: Muted Standard',
+	'Apple MapKit: Satellite' => 'Apple MapKit: Satellite',
+	'Apple MapKit: Hybrid' => 'Apple MapKit: Hybrid',
+
+	'Here: Normal Day' => 'Here: Normal Day',
+	'Here: Normal Day Grey' => 'Here: Normal Day Grey',
+	'Here: Normal Day Transit' => 'Here: Normal Day Transit',
+	'Here: Reduced' => 'Here: Reduced',
+	'Here: Pedestrian' => 'Here: Pedestrian',
+	'Here: Terrain' => 'Here: Terrain',
+	'Here: Satellite' => 'Here: Satellite',
+	'Here: Hybrid' => 'Here: Hybrid',
+
+	// Settings: Geo Service Options
+	// -------------------------------------------------------------------------
+
+	'Nominatim' => 'Nominatim',
+	'Mapbox' => 'Mapbox',
+	'Google Maps' => 'Google Maps',
+	'Apple MapKit' => 'Apple MapKit',
+	'Here' => 'Here',
+
+	// Settings: Info
+	// -------------------------------------------------------------------------
+
+	'Getting API Keys' => 'Getting API Keys',
+	'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.' =>
+		'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.',
+	'You can use the same key for both map tiles and geo service, no configuration needed!' =>
+		'You can use the same key for both map tiles and geo service, no configuration needed!',
+	'We currently only support Apple MapKit for map tiles only.' =>
+		'We currently only support Apple MapKit for map tiles only.',
+
 ];

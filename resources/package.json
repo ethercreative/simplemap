@@ -1,0 +1,85 @@
+{
+  "name": "simplemap",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@vue/web-component-wrapper": "^1.2.0",
+    "leaflet": "^1.4.0",
+    "leaflet.gridlayer.googlemutant": "^0.8.0",
+    "leaflet.mapkitmutant": "^0.3.0",
+    "vue": "^2.5.21",
+    "vue-autosuggest": "^1.8.1",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-plugin-eslint": "^3.3.0",
+    "@vue/cli-service": "^3.3.0",
+    "@vue/eslint-config-airbnb": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/airbnb"
+    ],
+    "rules": {
+      "no-tabs": "off",
+      "indent": "off",
+      "padded-blocks": "off",
+      "comma-dangle": "off",
+      "arrow-parens": "off",
+      "space-before-function-paren": "off",
+      "no-underscore-dangle": "off",
+      "no-param-reassign": "off",
+      "nonblock-statement-body-position": "off",
+      "func-names": "off",
+      "prefer-template": "off",
+      "lines-between-class-members": "off",
+      "class-methods-use-this": "off",
+      "curly": "off",
+      "prefer-destructuring": "off",
+      "no-trailing-spaces": "off",
+      "import/extensions": "off",
+      "max-len": "off",
+      "comma-style": "off",
+      "import/prefer-default-export": "off",
+      "one-var": "off",
+      "operator-linebreak": "off",
+      "no-multi-spaces": "off",
+      "no-prototype-builtins": "off",
+      "object-curly-newline": "off"
+    },
+    "parserOptions": {
+      "parser": "babel-eslint",
+      "ecmaFeatures": {
+        "legacyDecorators": true
+      }
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

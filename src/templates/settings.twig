@@ -1,21 +1,272 @@
-{% import "_includes/forms" as forms %}
+{% import '_includes/forms' as forms %}
 
-{{ forms.textField({
-	label: "Google Maps API Key"|t("simplemap"),
-	instructions: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'|t("simplemap"),
-	id: 'apiKey',
-	name: 'apiKey',
-	value: settings.apiKey,
-	type: 'text',
-	required: true
-}) }}
+{% macro tokenValue (token, key) -%}
+	{%- if token is iterable and key in token|keys -%}
+		{{- token[key] -}}
+	{%- endif -%}
+{%- endmacro %}
+{% import _self as _ %}
 
-{{ forms.textField({
-	label: "Alternate Server API Key"|t("simplemap"),
-	instructions: 'If you are using the above API key publically and need to add restrictions to it, you will need to pass an unrestricted API key here for exclusive use by the server. <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Get an API key.</a>'|t("simplemap"),
-	id: 'unrestrictedApiKey',
-	name: 'unrestrictedApiKey',
-	value: settings.unrestrictedApiKey,
-	type: 'text',
-	required: false
-}) }}
+<div class="spinner" id="simpleMapSpinner"></div>
+<div id="simpleMap" style="display: none">
+
+	{# === Map === #}
+
+	<h2>{{ 'Map'|t('simplemap') }}</h2>
+
+	<div class="simplemap-tiles">
+		<div>
+			{# --- Map: Tiles --- #}
+
+			{{ forms.selectField({
+				first: true,
+				id: 'mapTiles',
+				name: 'mapTiles',
+				label: 'Map Tiles'|t('simplemap'),
+				instructions: 'Select the style of map tiles.'|t('simplemap'),
+				options: mapTileOptions,
+				value: settings.mapTiles,
+			})|replace('<select', '<select v-model="mapTiles"')|raw }}
+
+			{# --- Map: Token --- #}
+
+			{% set mapTokenIterable = settings.mapToken is iterable %}
+
+			<div v-if="mapTilesSimple && requiresMapToken">
+				{{ forms.textField({
+					name: 'mapToken',
+					label: 'Map Token'|t('simplemap'),
+					instructions: 'Add the API key for map tiles service you are using.'|t('simplemap'),
+					value: not mapTokenIterable ? settings.mapToken,
+				}) }}
+			</div>
+
+			<div v-if="mapTiles.indexOf('mapkit') > -1">
+				{{ forms.textareaField({
+					name: 'mapToken[privateKey]',
+					label: 'Private Key'|t('simplemap'),
+					rows: 6,
+					instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+					value: _.tokenValue(settings.mapToken, 'privateKey'),
+				}) }}
+
+				{{ forms.textField({
+					name: 'mapToken[keyId]',
+					label: 'Key ID'|t('simplemap'),
+					instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+					value: _.tokenValue(settings.mapToken, 'keyId'),
+				}) }}
+
+				{{ forms.textField({
+					name: 'mapToken[teamId]',
+					label: 'Team ID'|t('simplemap'),
+					instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+					value: _.tokenValue(settings.mapToken, 'teamId'),
+				}) }}
+			</div>
+
+			<div v-if="mapTiles.indexOf('here') > -1">
+				{{ forms.textField({
+					name: 'mapToken[appId]',
+					label: 'App ID'|t('simplemap'),
+					instructions: 'Your Here app ID.'|t('simplemap'),
+					value: _.tokenValue(settings.mapToken, 'appId'),
+				}) }}
+
+				{{ forms.textField({
+					name: 'mapToken[appCode]',
+					label: 'App Code'|t('simplemap'),
+					instructions: 'Your Here app code.'|t('simplemap'),
+					value: _.tokenValue(settings.mapToken, 'appCode'),
+				}) }}
+			</div>
+		</div>
+
+		<div>
+			{% for key, label in mapTileOptions if label is not iterable %}
+				<img
+					src="{{ craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.png', true) }}"
+					alt="{{ label }}"
+					v-if="mapTiles === '{{ key }}'"
+				/>
+			{% endfor %}
+		</div>
+	</div>
+
+	{# === Geo === #}
+
+	<br v-if="requiresMapToken" />
+	<h2>{{ 'Geo-Coding'|t('simplemap') }}</h2>
+
+	{# --- Geo: Service --- #}
+
+	{{ forms.selectField({
+		id: 'geoService',
+		name: 'geoService',
+		label: 'Geo Service'|t('simplemap'),
+		instructions: 'Select the service to be used for Geo-coding.'|t('simplemap'),
+		options: geoServiceOptions,
+		value: settings.geoService,
+	}) |replace('<select', '<select v-model="geoService"')|raw}}
+
+	{# --- Geo: Token --- #}
+
+	{% set geoTokenIterable = settings.geoToken is iterable %}
+
+	<div v-if="geoServiceSimple && requiresGeoToken">
+		{{ forms.textField({
+			name: 'geoToken',
+			label: 'Geo Token'|t('simplemap'),
+			instructions: 'Add the API key for the geo-coding service.'|t('simplemap'),
+			value: not geoTokenIterable ? settings.geoToken,
+		}) }}
+	</div>
+
+	<div v-if="geoService.indexOf('mapkit') > -1">
+		<div class="field">
+			<div class="warning">
+				<p style="display:inline-block;vertical-align:top">
+					<strong>{{ 'Notice'|t('simplemap') }}</strong><br>
+					{{ 'MapKit does not support individual address parts.'|t('simplemap') }}
+				</p>
+			</div>
+		</div>
+
+		{{ forms.textareaField({
+			name: 'geoToken[privateKey]',
+			label: 'Private Key'|t('simplemap'),
+			rows: 6,
+			instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+			value: _.tokenValue(settings.geoToken, 'privateKey'),
+		}) }}
+
+		{{ forms.textField({
+			name: 'geoToken[keyId]',
+			label: 'Key ID'|t('simplemap'),
+			instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+			value: _.tokenValue(settings.geoToken, 'keyId'),
+		}) }}
+
+		{{ forms.textField({
+			name: 'geoToken[teamId]',
+			label: 'Team ID'|t('simplemap'),
+			instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+			value: _.tokenValue(settings.geoToken, 'teamId'),
+		}) }}
+	</div>
+
+	<div v-if="geoService.indexOf('here') > -1">
+		{{ forms.textField({
+			name: 'geoToken[appId]',
+			label: 'App ID'|t('simplemap'),
+			instructions: 'Your Here app ID.'|t('simplemap'),
+			value: _.tokenValue(settings.geoToken, 'appId'),
+		}) }}
+
+		{{ forms.textField({
+			name: 'geoToken[appCode]',
+			label: 'App Code'|t('simplemap'),
+			instructions: 'Your Here app code.'|t('simplemap'),
+			value: _.tokenValue(settings.geoToken, 'appCode'),
+		}) }}
+	</div>
+
+	{# === Info === #}
+
+	<hr>
+
+	<p><strong>{{ 'Getting API Keys'|t('simplemap') }}</strong></p>
+	<ul>
+		<li>
+			<a href="https://cloud.google.com/maps-platform/#get-started" target="_blank" rel="nofollow">{{ 'Google Maps'|t('simplemap') }}</a>
+			&mdash; {{ 'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.'|md|striptags('<strong>')|raw }}
+		</li>
+		<li>
+			<a href="https://docs.mapbox.com/help/how-mapbox-works/access-tokens/" target="_blank" rel="nofollow">{{ 'Mapbox'|t('simplemap') }}</a>
+			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('simplemap') }}
+		</li>
+		<li>
+			<a href="https://developer.apple.com/documentation/mapkitjs/setting_up_mapkit_js" target="_blank" rel="nofollow">{{ 'Apple MapKit'|t('simplemap') }}</a>
+			&mdash; {{ 'We currently only support Apple MapKit for map tiles only.'|t('simplemap') }}
+		</li>
+		<li>
+			<a href="https://developer.here.com/" target="_blank" rel="nofollow">{{ 'Here'|t('simplemap') }}</a>
+			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('simplemap') }}
+		</li>
+	</ul>
+
+</div>
+
+{% do craft.app.view.registerAssetBundle('craft\\web\\assets\\vue\\VueAsset') %}
+{% js %}
+new Vue({
+	el: '#content',
+	data () {
+		return {
+			mapTiles: '{{ settings.mapTiles }}',
+			geoService: '{{ settings.geoService }}',
+		};
+	},
+	mounted () {
+		document.getElementById('settings-simpleMapSpinner').style.display = 'none';
+		document.getElementById('settings-simpleMap').style.display = 'block';
+	},
+	computed: {
+		requiresMapToken () {
+			return !(
+				this.mapTiles.indexOf('wikimedia') > -1 ||
+				this.mapTiles.indexOf('openstreetmap') > -1 ||
+				this.mapTiles.indexOf('carto') > -1
+			);
+		},
+		mapTilesSimple () {
+			return (
+				this.mapTiles.indexOf('mapkit') === -1 &&
+				this.mapTiles.indexOf('here') === -1
+			);
+		},
+		requiresGeoToken () {
+			return !(
+				this.geoService.indexOf('nominatim') > -1
+			);
+		},
+		geoServiceSimple () {
+			return (
+				this.geoService.indexOf('mapkit') === -1 &&
+				this.geoService.indexOf('here') === -1
+			);
+		}
+	}
+});
+{% endjs %}
+
+{% css %}
+.simplemap-tiles {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+}
+
+.simplemap-tiles > div:first-child {
+	flex-grow: 999;
+	padding-right: 24px;
+}
+
+.simplemap-tiles img {
+	width: 100%;
+	max-width: 250px;
+	vertical-align: middle;
+	border-radius: 5px;
+}
+
+@media only screen and (max-width: 1224px) {
+	.simplemap-tiles {
+		display: block;
+	}
+
+	.simplemap-tiles > div:first-child {
+		padding-right: 0;
+		padding-bottom: 24px;
+	}
+}
+{% endcss %}

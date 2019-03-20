@@ -1,26 +1,37 @@
 <?php
+/**
+ * SimpleMap for Craft CMS
+ *
+ * @link      https://ethercreative.co.uk
+ * @copyright Copyright (c) 2019 Ether Creative
+ */
 
 namespace ether\simplemap\migrations;
 
 use craft\db\Migration;
-use ether\simplemap\records\MapRecord;
+use craft\db\Table;
+use ether\simplemap\records\Map;
 
+/**
+ * Class Install
+ *
+ * @author  Ether Creative
+ * @package ether\simplemap\migrations
+ */
 class Install extends Migration
 {
 
 	public function safeUp ()
 	{
-		// 1. Create new table
-		// ---------------------------------------------------------------------
-
-		// Table
+		// Create
 
 		$this->createTable(
-			MapRecord::$tableName,
+			Map::TableName,
 			[
 				'id'          => $this->primaryKey(),
+				'elementId'   => $this->integer()->notNull(),
 				'ownerId'     => $this->integer()->notNull(),
-				'ownerSiteId' => $this->integer()->notNull(),
+				'ownerSiteId' => $this->integer(),
 				'fieldId'     => $this->integer()->notNull(),
 
 				'lat'     => $this->decimal(11, 9),
@@ -39,31 +50,48 @@ class Install extends Migration
 
 		$this->createIndex(
 			null,
-			MapRecord::$tableName,
-			['ownerId', 'ownerSiteId', 'fieldId'],
+			Map::TableName,
+			['ownerId', 'ownerSiteId', 'fieldId', 'elementId'],
 			true
 		);
 
-		$this->createIndex(null, MapRecord::$tableName, ['lat'], false);
-		$this->createIndex(null, MapRecord::$tableName, ['lng'], false);
+		$this->createIndex(
+			null,
+			Map::TableName,
+			['lat']
+		);
+
+		$this->createIndex(
+			null,
+			Map::TableName,
+			['lng']
+		);
 
 		// Relations
 
 		$this->addForeignKey(
 			null,
-			MapRecord::$tableName,
+			Map::TableName,
+			['elementId'],
+			Table::ELEMENTS,
+			['id'],
+			'CASCADE'
+		);
+
+		$this->addForeignKey(
+			null,
+			Map::TableName,
 			['ownerId'],
-			'{{%elements}}',
+			Table::ELEMENTS,
 			['id'],
-			'CASCADE',
-			null
+			'CASCADE'
 		);
 
 		$this->addForeignKey(
 			null,
-			MapRecord::$tableName,
+			Map::TableName,
 			['ownerSiteId'],
-			'{{%sites}}',
+			Table::SITES,
 			['id'],
 			'CASCADE',
 			'CASCADE'
@@ -71,33 +99,21 @@ class Install extends Migration
 
 		$this->addForeignKey(
 			null,
-			MapRecord::$tableName,
+			Map::TableName,
 			['fieldId'],
-			'{{%fields}}',
+			Table::FIELDS,
 			['id'],
-			'CASCADE',
 			'CASCADE'
 		);
 
-		// 2. Transfer data from old table to new (if old exists)
-		// ---------------------------------------------------------------------
-		// TODO
-
-		// 3. Remove the old table (if exists)
-		// ---------------------------------------------------------------------
-		// TODO
-
-		return true;
+		// Upgrade from Craft 2
+		if ($this->db->tableExists('{{%simplemap_maps}}'))
+			(new m190226_143809_craft3_upgrade())->safeUp();
 	}
 
 	public function safeDown ()
 	{
-		$this->dropTableIfExists(MapRecord::$tableName);
-
-		// TODO: Should we handle moving the data back to the old table, or
-		// TODO(cont.): will Craft handle that using a backup?
-
-		return true;
+		$this->dropTableIfExists(Map::TableName);
 	}
 
 }

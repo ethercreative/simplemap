@@ -1,6 +1,12 @@
 <?php
 
+use ether\simplemap\enums\GeoService;
+use ether\simplemap\enums\MapTiles;
+
 return [
-	'apiKey' => '',
-	'unrestrictedApiKey' => '',
+	'mapTiles' => MapTiles::Wikimedia,
+	'mapToken' => '',
+
+	'geoService' => GeoService::Nominatim,
+	'geoToken' => '',
 ];

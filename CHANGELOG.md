@@ -1,6 +1,34 @@
-## 3.3.5 - 2019-02-17
+## [Unreleased] 3.4.0
+
+> {warning} This is a major update, we strongly recommend taking a database backup before updating!
+
+### Changed
+- SimpleMap is now Maps! We've re-written the plugin from the ground-up while 
+keeping it backwards compatible (even back to Craft 2!)
+- Maps is now powered by Vue!
+- New icon yo
+
+### Added 
+- OpenStreetMap Support and map tiles
+- Mapbox Support and map tiles
+- Apple MapKit Map Tiles
+- Here Maps Support and map tiles
+- Wikimedia Map Tiles
+- Carto Map Tiles
+- Address inputs for manually settings address parts data.
+
+### Improved
+- We've normalized the map "Parts", so you'll always know what data you have available.
+- CraftQL support: you can now query and mutate Maps fields via Graph!
+- Field Customization: It's now possible to hide the location search, map, and address inputs.
+
 ### Fixed
-- Fixed an issue with sorting by distance when using the Solspace Calendar plugin. (via @bighoho123)
+- Maps are now multi-site aware and can be translated.
+
+### Removed
+- Removed lat/lng inputs from field
+- Removed restrict by type
+- Removed boundary restriction
 
 ## 3.3.4 - 2018-09-05
 ### Fixed

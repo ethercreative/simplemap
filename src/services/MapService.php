@@ -16,6 +16,7 @@ use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\models\Parts;
 use ether\simplemap\records\Map as MapRecord;
 
 /**
@@ -93,6 +94,8 @@ class MapService extends Component
 			$record->zoom = $value->zoom;
 			$record->address = $value->address;
 			$record->parts = $value->parts;
+
+			$this->_populateMissingData($record);
 
 			$record->save();
 		}
@@ -292,6 +295,37 @@ class MapService extends Component
 		}
 
 		$query->orderBy($nextOrder);
+	}
+
+	/**
+	 * Populates any missing location data
+	 *
+	 * @param MapRecord $record
+	 *
+	 * @throws \yii\db\Exception
+	 */
+	private function _populateMissingData (MapRecord $record)
+	{
+		// Missing Lat / Lng
+		if (!($record->lat && $record->lng) && $record->address)
+		{
+			$latLng = GeoService::latLngFromAddress($record->address);
+			$record->lat = $latLng['lat'];
+			$record->lng = $latLng['lng'];
+		}
+
+		// Missing address
+		if (!$record->address && ($record->lat && $record->lng))
+		{
+			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
+			$record->address = $loc['address'];
+			$record->parts = new Parts(
+				array_merge(
+					(array) $record->parts,
+					$loc['parts']
+				)
+			);
+		}
 	}
 
 }

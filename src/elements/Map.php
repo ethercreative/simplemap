@@ -14,7 +14,6 @@ use craft\helpers\Json;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
 use ether\simplemap\models\PartsLegacy;
-use ether\simplemap\services\MapService;
 use ether\simplemap\SimpleMap;
 
 /**

@@ -223,6 +223,7 @@ Lat/Lng, to display it on a map.
 - Static Maps template output
 - Dynamic Maps template output
 - Support env in settings
+- FeedMe support
 
 ### Support Maps
 

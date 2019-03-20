@@ -12,6 +12,7 @@ use craft\base\Component;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Parts;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
@@ -608,6 +609,50 @@ class GeoService extends Component
 		}
 	}
 
+	/**
+	 * Find an address from the given lat/lng
+	 *
+	 * @param float $lat
+	 * @param float $lng
+	 *
+	 * @return array|null - Returns the address and associated parts
+	 * @throws Exception
+	 */
+	public static function addressFromLatLng ($lat, $lng)
+	{
+		/** @var Settings $settings */
+		$settings = SimpleMap::getInstance()->getSettings();
+		$token    =
+			static::getToken($settings->geoToken, $settings->geoService);
+
+		switch ($settings->geoService)
+		{
+			case GeoEnum::Here:
+				return static::_addressFromLatLng_Here(
+					$token,
+					$lat, $lng
+				);
+			case GeoEnum::GoogleMaps:
+				return static::_addressFromLatLng_Google(
+					$token,
+					$lat, $lng
+				);
+			case GeoEnum::Mapbox:
+				return static::_addressFromLatLng_Mapbox(
+					$token,
+					$lat, $lng
+				);
+			case GeoEnum::Nominatim:
+				return static::_addressFromLatLng_Nominatim(
+					$lat, $lng
+				);
+			default:
+				throw new Exception(
+					'Unknown geo-coding service: ' . $settings->geoService
+				);
+		}
+	}
+
 	// Private Methods
 	// =========================================================================
 
@@ -718,6 +763,99 @@ class GeoService extends Component
 		return [
 			'lat' => $data[0]['lat'],
 			'lng' => $data[0]['lon'],
+		];
+	}
+
+	// Address from Lat/Lng
+	// -------------------------------------------------------------------------
+
+	private static function _addressFromLatLng_Here ($token, $lat, $lng)
+	{
+		$url = 'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json';
+		$url .= '?app_id=' . $token['appId'];
+		$url .= '&app_code=' . $token['appCode'];
+		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&mode=retrieveAddresses&limit=1&jsonattributes=1';
+		$url .= '&prox=' . rawurlencode($lat) . ',' . rawurldecode($lng) . ',1';
+
+		$data = (string) static::_client()->get($url)->getBody();
+		$data = Json::decodeIfJson($data);
+
+		if (!is_array($data) || empty($data['Response']['View']))
+			return null;
+
+		$pos = $data['Response']['View'][0]['Result'][0]['Location'];
+
+		return [
+			'address' => $pos['label'],
+			'parts' => new Parts($pos, GeoEnum::Here),
+		];
+	}
+
+	private static function _addressFromLatLng_Google ($token, $lat, $lng)
+	{
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json';
+		$url .= '?latlng=' . rawurlencode($lat) . ',' . rawurldecode($lng);
+		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&key=' . $token;
+
+		$data = (string) static::_client()->get($url)->getBody();
+		$data = Json::decodeIfJson($data);
+
+		if (!is_array($data) || empty($data['results']))
+			return null;
+
+		$pos = $data['results'][0];
+
+		return [
+			'address' => $pos['formatted_address'],
+			'parts' => new Parts($pos['address_components'], GeoEnum::GoogleMaps),
+		];
+	}
+
+	private static function _addressFromLatLng_Mapbox ($token, $lat, $lng)
+	{
+		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
+		$url .= rawurlencode($lng) . ',' . rawurldecode($lat) . '.json?limit=1';
+		$url .= '&types=address,country,postcode,place,locality,district,neighborhood';
+		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&access_token=' . $token;
+
+		$data = (string) static::_client()->get($url)->getBody();
+		$data = Json::decodeIfJson($data);
+
+		if (!is_array($data) || empty($data['features']))
+			return null;
+
+		$feature = $data['features'][0];
+
+		return [
+			'address' => $feature['place_name'],
+			'parts' => new Parts($feature, GeoEnum::Mapbox),
+		];
+	}
+
+	private static function _addressFromLatLng_Nominatim ($lat, $lng)
+	{
+		$url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&addressdetails=1';
+		$url .= '&accept-language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&lat=' . rawurlencode($lat) . '&lon=' . rawurldecode($lng);
+
+		$data = (string) static::_client()->get($url)->getBody();
+		$data = Json::decodeIfJson($data);
+
+		if (!is_array($data) || empty($data))
+			return null;
+
+		return [
+			'address' => $data['display_name'],
+			'parts' => new Parts(
+				array_merge(
+					$data['address'],
+					['type' => $data['type']]
+				),
+				GeoEnum::Nominatim
+			),
 		];
 	}
 

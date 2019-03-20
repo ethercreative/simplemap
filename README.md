@@ -16,55 +16,67 @@ Maps supports the following map tiles:
 
 <details>
   <summary>Wikimedia</summary>
-  
-  ![Wikimedia](./src/web/assets/imgs/wikimedia.png)
+
+  [Wikimedia](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use) | | | 
+  --- | --- | ---  
+  ![Wikimedia](./src/web/assets/imgs/wikimedia.png) | |
+  Wikimedia | | 
 </details>
 <details>
   <summary>OpenStreetMap</summary>
   
-  ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png)
+  [OpenStreetMap](https://www.openstreetmap.org) | | | 
+  --- | --- | ---
+  ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png) | |
+  OpenStreetMap | | 
 </details>
 <details>
   <summary>Carto (Voyager, Positron, Dark Matter)</summary>
-          
-  ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
-  ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
-  ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+ 
+  [Carto](https://carto.com/location-data-services/basemaps/) | | | 
+  --- | --- | ---
+  ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png) | ![Carto Positron](./src/web/assets/imgs/carto-light_all.png) | ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+  Voyager | Positron | Dark Matter
 </details>
 <details>
   <summary>Mapbox (Outdoors, Streets, Dark, Light)</summary>
-  
-  ![Mapbox Outdoors](./src/web/assets/imgs/mapbox-outdoors.png)
-  ![Mapbox Streets](./src/web/assets/imgs/mapbox-streets.png)
-  ![Mapbox Dark](./src/web/assets/imgs/mapbox-dark.png)
-  ![Mapbox Light](./src/web/assets/imgs/mapbox-light.png)
+
+  [Mapbox](https://www.mapbox.com) | | | 
+  --- | --- | ---  
+  ![Mapbox Outdoors](./src/web/assets/imgs/mapbox-outdoors.png) | ![Mapbox Streets](./src/web/assets/imgs/mapbox-streets.png) | ![Mapbox Dark](./src/web/assets/imgs/mapbox-dark.png)
+  Outdoors | Streets | Dark
+  ![Mapbox Light](./src/web/assets/imgs/mapbox-light.png) | |
+  Light | |
 </details>
 <details>
   <summary>Google Maps (Roadmap, Terrain, Hybrid)</summary>
-  
-  ![Google Roadmap](./src/web/assets/imgs/google-roadmap.png)
-  ![Google Terrain](./src/web/assets/imgs/google-terrain.png)
-  ![Google Hybrid](./src/web/assets/imgs/google-hybrid.png)
+
+  [Google Maps](https://www.google.com/maps) | | | 
+  --- | --- | ---  
+  ![Google Roadmap](./src/web/assets/imgs/google-roadmap.png) | ![Google Terrain](./src/web/assets/imgs/google-terrain.png) | ![Google Hybrid](./src/web/assets/imgs/google-hybrid.png)
+  Roadmap | Terrain | Hybrid
 </details>
 <details>
   <summary>Apple MapKit (Standard, Muted, Satellite, Hybrid)</summary>
-  
-  ![MapKit Standard](./src/web/assets/imgs/mapkit-standard.png)
-  ![MapKit Muted](./src/web/assets/imgs/mapkit-muted.png)
-  ![MapKit Satellite](./src/web/assets/imgs/mapkit-satellite.png)
-  ![MapKit Hybrid](./src/web/assets/imgs/mapkit-hybrid.png)
+
+  [Apple MapKit](https://developer.apple.com/maps/mapkitjs/) | | | 
+  --- | --- | ---  
+  ![MapKit Standard](./src/web/assets/imgs/mapkit-standard.png) | ![MapKit Muted](./src/web/assets/imgs/mapkit-muted.png) | ![MapKit Satellite](./src/web/assets/imgs/mapkit-satellite.png)
+  Standard | Muted | Satellite
+  ![MapKit Hybrid](./src/web/assets/imgs/mapkit-hybrid.png) | |
+  Hybrid | |  
 </details>
 <details>
   <summary>Here (Day, Day Grey, Day Transit, Reduced, Pedestrian, Terrain, Satellite, Hybrid)</summary>
   
-  ![Here Day](./src/web/assets/imgs/here-normal-day.png)
-  ![Here Day Grey](./src/web/assets/imgs/here-normal-day-grey.png)
-  ![Here Day Transit](./src/web/assets/imgs/here-normal-day-transit.png)
-  ![Here Reduced](./src/web/assets/imgs/here-reduced-day.png)
-  ![Here Pedestrian](./src/web/assets/imgs/here-pedestrian-day.png)
-  ![Here Terrain](./src/web/assets/imgs/here-terrain-day.png)
-  ![Here Satellite](./src/web/assets/imgs/here-satellite-day.png)
-  ![Here Hybrid](./src/web/assets/imgs/here-hybrid-day.png)
+  [Here](https://www.here.com/) | | | 
+  --- | --- | ---
+  ![Here Day](./src/web/assets/imgs/here-normal-day.png) | ![Here Day Grey](./src/web/assets/imgs/here-normal-day-grey.png) | ![Here Day Transit](./src/web/assets/imgs/here-normal-day-transit.png)
+  Day | Day Grey | Day Transit
+  ![Here Reduced](./src/web/assets/imgs/here-reduced-day.png) | ![Here Pedestrian](./src/web/assets/imgs/here-pedestrian-day.png) | ![Here Terrain](./src/web/assets/imgs/here-terrain-day.png)
+  Reduced | Pedestrian | Terrain
+  ![Here Satellite](./src/web/assets/imgs/here-satellite-day.png) | ![Here Hybrid](./src/web/assets/imgs/here-hybrid-day.png) |
+  Satellite | Hybrid |
 </details>
 
   

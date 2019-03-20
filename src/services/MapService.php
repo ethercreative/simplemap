@@ -13,6 +13,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
+use ether\simplemap\elements\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
@@ -204,6 +205,8 @@ class MapService extends Component
 		// Normalize location
 		if (is_string($location))
 			$location = GeoService::latLngFromAddress($location, $country);
+		else if ($location instanceof Map)
+			$location = ['lat' => $location->lat, 'lng' => $location->lng];
 		else if (!is_array($location) || !isset($location['lat'], $location['lng']))
 			$location = null;
 

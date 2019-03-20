@@ -230,8 +230,9 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 	/**
 	 * @return string|\Twig_Markup|null
-	 * @throws \Twig_Error_Loader
-	 * @throws \yii\base\Exception
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 * @throws \yii\base\InvalidConfigException
 	 */
 	public function getSettingsHtml ()

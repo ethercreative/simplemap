@@ -351,6 +351,9 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
+		if (!SimpleMap::getInstance())
+			return null;
+
 		SimpleMap::getInstance()->map->modifyElementsQuery($query, $value);
 
 		return null;

@@ -2,6 +2,9 @@
 ### Changed
 - You can now pass a map to the location query (fixes #99)
 
+### Fixed
+- Fixed issue when `cp-field-inspect` plugin is installed (fixes #127)
+
 ## 3.4.2 - 2019-03-20
 ### Fixed
 - Fixed issue setting old field settings after upgrade.

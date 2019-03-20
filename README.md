@@ -147,7 +147,7 @@ You can access your front-end map token in templates using `craft.maps.mapToken`
 
 ### Displaying a Map
 
-This plugin does (currently) **not** generate a front-end map; how you do that and what map library you use is up to you. However, since we have received a lot of questions asking how to do so, here are a couple of examples.
+This plugin (currently) does **not** generate a front-end map; how you do that and what map library you use is up to you. However, since we have received a lot of questions asking how to do so, here are a couple of examples.
   
 Using [Google Maps](https://developers.google.com/maps/documentation/javascript/tutorial):
 
@@ -177,7 +177,7 @@ Using [Google Maps](https://developers.google.com/maps/documentation/javascript/
     });
   }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ craft.simpleMap.apiKey }}&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ craft.maps.mapToken }}&callback=initMap" async defer></script>
 ```
 
 And [Mapbox](https://www.mapbox.com/mapbox-gl-js/api/):
@@ -188,7 +188,7 @@ And [Mapbox](https://www.mapbox.com/mapbox-gl-js/api/):
 
 <div id="map" style="width: 400px; height: 300px;"></div>
 <script>
-mapboxgl.accessToken = "YOUR_API_KEY";
+mapboxgl.accessToken = "{{ craft.maps.mapToken }}";
 var map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/streets-v9",

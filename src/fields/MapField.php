@@ -76,6 +76,10 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public $hideLatLng;
 	/**
+	 * @deprecated 
+	 */
+	public $height;
+	/**
 	 * @deprecated
 	 */
 	public $countryRestriction;

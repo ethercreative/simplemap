@@ -10,6 +10,63 @@ services.
 
 ![Maps Field](./resources/imgs/field-preview.png)
 
+## Map Tiles and Geo
+
+Maps supports the following map tiles:
+
+<details>
+    <summary>Wikimedia</summary>
+    ![Wikimedia](./src/web/assets/imgs/wikimedia.png)
+</details>
+<details>
+    <summary>OpenStreetMap</summary>
+    ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png)
+</details>
+<details>
+    <summary>Carto (Voyager, Positron, Dark Matter)</summary>
+    ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png)
+    ![Carto Positron](./src/web/assets/imgs/carto-light_all.png)
+    ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+</details>
+<details>
+    <summary>Mapbox (Outdoors, Streets, Dark, Light)</summary>
+    ![Mapbox Outdoors](./src/web/assets/imgs/mapbox-outdoors.png)
+    ![Mapbox Streets](./src/web/assets/imgs/mapbox-streets.png)
+    ![Mapbox Dark](./src/web/assets/imgs/mapbox-dark.png)
+    ![Mapbox Light](./src/web/assets/imgs/mapbox-Light.png)
+</details>
+<details>
+    <summary>Google Maps (Roadmap, Terrain, Hybrid)</summary>
+    ![Google Roadmap](./src/web/assets/imgs/google-roadmap.png)
+    ![Google Terrain](./src/web/assets/imgs/google-terrain.png)
+    ![Google Hybrid](./src/web/assets/imgs/google-hybrid.png)
+</details>
+<details>
+    <summary>Apple MapKit (Standard, Muted, Satellite, Hybrid)</summary>
+    ![MapKit Standard](./src/web/assets/imgs/mapkit-standard.png)
+    ![MapKit Muted](./src/web/assets/imgs/mapkit-muted.png)
+    ![MapKit Satellite](./src/web/assets/imgs/mapkit-satellite.png)
+    ![MapKit Hybrid](./src/web/assets/imgs/mapkit-hybrid.png)
+</details>
+<details>
+    <summary>Here (Day, Day Grey, Day Transit, Reduced, Pedestrian, Terrain, Satellite, Hybrid)</summary>
+    ![Here Day](./src/web/assets/imgs/here-normal-day.png)
+    ![Here Day Grey](./src/web/assets/imgs/here-normal-day-grey.png)
+    ![Here Day Transit](./src/web/assets/imgs/here-normal-day-transit.png)
+    ![Here Reduced](./src/web/assets/imgs/here-reduced-day.png)
+    ![Here Pedestrian](./src/web/assets/imgs/here-pedestrian-day.png)
+    ![Here Terrain](./src/web/assets/imgs/here-terrain-day.png)
+    ![Here Satellite](./src/web/assets/imgs/here-satellite-day.png)
+    ![Here Hybrid](./src/web/assets/imgs/here-hybrid-day.png)
+</details>
+
+And these geo-coding services:
+
+- [Nominatim (OpenStreetMap)](https://nominatim.openstreetmap.org/)
+- [Mapbox](https://www.mapbox.com/)
+- [Google Maps](https://www.google.com/maps)
+- [Here](https://www.here.com/)
+
 ## Usage
 Create the field as you would any other.  
 The field type will return an array containing the following:

@@ -95,12 +95,12 @@ class m190226_143809_craft3_upgrade extends Migration
 			    'fieldId'     => $row['fieldId'],
 			    'lat'         => $row['lat'],
 			    'lng'         => $row['lng'],
-			    'zoom'        => $row['zoom'],
+			    'zoom'        => $row['zoom'] ?? 15,
 			    'address'     => $row['address'],
 			    'parts'       => Json::decodeIfJson($row['parts']),
 		    ]);
 
-	    	$elements->saveElement($map, false);
+		    $elements->saveElement($map, false);
 
 		    $record              = new Map();
 		    $record->elementId   = $map->id;
@@ -138,7 +138,7 @@ class m190226_143809_craft3_upgrade extends Migration
 	    	$newSettings = [
 			    'lat'     => $oldSettings['lat'],
 			    'lng'     => $oldSettings['lng'],
-			    'zoom'    => $oldSettings['zoom'],
+			    'zoom'    => $oldSettings['zoom'] ?? 15,
 			    'country' => strtoupper($oldSettings['countryRestriction']),
 			    'hideMap' => $oldSettings['hideMap'],
 		    ];
@@ -199,7 +199,10 @@ class m190226_143809_craft3_upgrade extends Migration
 
 		    $map = new MapElement($row);
 
-		    $elements->saveElement($map);
+		    if (!$map->zoom)
+		    	$map->zoom = 15;
+
+		    $elements->saveElement($map, false);
 
 		    $record              = new Map();
 		    $record->elementId   = $map->id;
@@ -235,7 +238,7 @@ class m190226_143809_craft3_upgrade extends Migration
 		    $newSettings = [
 			    'lat'     => $oldSettings['lat'],
 			    'lng'     => $oldSettings['lng'],
-			    'zoom'    => $oldSettings['zoom'],
+			    'zoom'    => $oldSettings['zoom'] ?? 15,
 			    'country' => strtoupper($oldSettings['countryRestriction']),
 			    'hideMap' => $oldSettings['hideMap'],
 		    ];
@@ -324,23 +327,28 @@ class m190226_143809_craft3_upgrade extends Migration
 		);
 
 		if (is_array($craft2Settings) && !empty($craft2Settings))
-			$settings = $craft2Settings;
-
-		if ($settings['serverApiKey'])
 		{
-			$newSettings['geoService'] = GeoService::GoogleMaps;
-			$newSettings['geoToken'] = $settings['serverApiKey'];
+			$settings = [
+				'apiKey' => $craft2Settings['browserApiKey'],
+				'unrestrictedApiKey' => $craft2Settings['serverApiKey'],
+			];
 		}
 
-		if ($settings['browserApiKey'])
+		if ($settings['unrestrictedApiKey'])
+		{
+			$newSettings['geoService'] = GeoService::GoogleMaps;
+			$newSettings['geoToken'] = $settings['unrestrictedApiKey'];
+		}
+
+		if ($settings['apiKey'])
 		{
 			$newSettings['mapTiles'] = MapTiles::GoogleRoadmap;
-			$newSettings['mapToken'] = $settings['browserApiKey'];
+			$newSettings['mapToken'] = $settings['apiKey'];
 
-			if (!$settings['serverApiKey'])
+			if (!$settings['unrestrictedApiKey'])
 			{
 				$newSettings['geoService'] = GeoService::GoogleMaps;
-				$newSettings['geoToken'] = $settings['browserApiKey'];
+				$newSettings['geoToken'] = $settings['apiKey'];
 			}
 		}
 

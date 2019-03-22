@@ -30,6 +30,12 @@ class Settings extends Model
 	/** @deprecated  */
 	public $serverApiKey;
 
+	/** @deprecated  */
+	public $apiKey;
+
+	/** @deprecated  */
+	public $unrestrictedApiKey;
+
 	// Properties: Map
 	// -------------------------------------------------------------------------
 

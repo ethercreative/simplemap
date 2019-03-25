@@ -366,7 +366,10 @@ class MapService extends Component
 		{
 			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
 			$record->address = $loc['address'];
-			$record->parts   = $loc['parts'];
+			$record->parts   = array_merge(
+				array_filter((array) $loc['parts']),
+				array_filter((array) $record->parts),
+			);
 		}
 	}
 

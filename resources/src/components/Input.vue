@@ -7,6 +7,7 @@
 			:type="type"
 			:name="name"
 			:value="value"
+			:disabled="disabled"
 			class="text nicetext fullwidth"
 			@input="$emit('input', $event)"
 		/>
@@ -25,6 +26,7 @@
 				default: 'text',
 			},
 			value: [String, Number],
+			disabled: Boolean,
 		}
 	})
 	export default class Input extends Vue {

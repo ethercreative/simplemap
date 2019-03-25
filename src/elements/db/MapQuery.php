@@ -104,13 +104,7 @@ class MapQuery extends ElementQuery
 	{
 		$table = Map::TableNameClean;
 
-		$joinTable = "{{%{$table}}} {$table}";
-		$this->query->innerJoin(
-			$joinTable, "[[{$table}.elementId]] = [[subquery.elementsId]]"
-		);
-		$this->subQuery->innerJoin(
-			$joinTable, "[[{$table}.elementId]] = [[elements.id]]"
-		);
+		$this->joinElementTable($table);
 
 		$this->query->select($table . '.*');
 

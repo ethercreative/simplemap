@@ -103,7 +103,7 @@ class m190226_143809_craft3_upgrade extends Migration
 		    $elements->saveElement($map, false);
 
 		    $record              = new Map();
-		    $record->elementId   = $map->id;
+		    $record->id          = $map->id;
 		    $record->ownerId     = $map->ownerId;
 		    $record->ownerSiteId = $map->ownerSiteId;
 		    $record->fieldId     = $map->fieldId;
@@ -205,7 +205,7 @@ class m190226_143809_craft3_upgrade extends Migration
 		    $elements->saveElement($map, false);
 
 		    $record              = new Map();
-		    $record->elementId   = $map->id;
+		    $record->id          = $map->id;
 		    $record->ownerId     = $map->ownerId;
 		    $record->ownerSiteId = $map->ownerSiteId;
 		    $record->fieldId     = $map->fieldId;

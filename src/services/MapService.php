@@ -39,14 +39,14 @@ class MapService extends Component
 
 	/**
 	 * @param MapField                 $field
-	 * @param ElementInterface|Element $element
+	 * @param ElementInterface|Element $owner
 	 *
 	 * @throws \Throwable
 	 * @throws \yii\db\Exception
 	 */
-	public function saveField (MapField $field, ElementInterface $element)
+	public function saveField (MapField $field, ElementInterface $owner)
 	{
-		if ($element instanceof MapElement)
+		if ($owner instanceof MapElement)
 			return;
 
 		$craft = \Craft::$app;
@@ -55,13 +55,13 @@ class MapService extends Component
 
 		try
 		{
-			/** @var MapElement $value */
-			$value = $element->getFieldValue($field->handle);
+			/** @var MapElement $map */
+			$map = $owner->getFieldValue($field->handle);
 
-			if (!$craft->elements->saveElement($value))
+			if (!$craft->elements->saveElement($map, true, !$owner->propagating))
 			{
-				foreach ($value->getErrors() as $error)
-					$element->addError($field->handle, $error[0]);
+				foreach ($map->getErrors() as $error)
+					$owner->addError($field->handle, $error[0]);
 
 				$transaction->rollBack();
 				return;
@@ -69,31 +69,23 @@ class MapService extends Component
 
 			$record = null;
 
-			$targetId = $value->elementId ?? $value->id;
-
-			if ($targetId)
-			{
-				$record = MapRecord::findOne([
-					'elementId' => $targetId,
-					'ownerSiteId' => $value->ownerSiteId,
-				]);
-			}
+			$record = MapRecord::findOne($map->id);
 
 			if ($record === null)
 			{
 				$record = new MapRecord();
 
-				$record->elementId = $targetId;
-				$record->ownerId = $element->id;
-				$record->ownerSiteId = $element->site->id;
+				$record->id = $map->id;
+				$record->ownerId = $owner->id;
+				$record->ownerSiteId = $owner->site->id;
 				$record->fieldId = $field->id;
 			}
 
-			$record->lat = $value->lat;
-			$record->lng = $value->lng;
-			$record->zoom = $value->zoom;
-			$record->address = $value->address;
-			$record->parts = $value->parts;
+			$record->lat = $map->lat;
+			$record->lng = $map->lng;
+			$record->zoom = $map->zoom;
+			$record->address = $map->address;
+			$record->parts = $map->parts;
 
 			$this->_populateMissingData($record);
 
@@ -312,19 +304,6 @@ class MapService extends Component
 			$latLng = GeoService::latLngFromAddress($record->address);
 			$record->lat = $latLng['lat'];
 			$record->lng = $latLng['lng'];
-		}
-
-		// Missing address
-		if (!$record->address && ($record->lat && $record->lng))
-		{
-			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
-			$record->address = $loc['address'];
-			$record->parts = new Parts(
-				array_merge(
-					(array) $record->parts,
-					$loc['parts']
-				)
-			);
 		}
 	}
 

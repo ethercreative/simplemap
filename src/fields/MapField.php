@@ -445,9 +445,9 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 				'name'        => $view->namespaceInputName($this->handle),
 				'country'     => $country,
-				'hideSearch'  => $this->hideSearch,
-				'hideMap'     => $this->hideMap,
-				'hideAddress' => $this->hideAddress,
+				'hideSearch'  => (bool) $this->hideSearch,
+				'hideMap'     => (bool) $this->hideMap,
+				'hideAddress' => (bool) $this->hideAddress,
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(
@@ -470,6 +470,14 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 				'lng'     => $value->lng,
 				'zoom'    => $value->zoom,
 				'parts'   => $value->parts,
+			],
+
+			'defaultValue' => [
+				'address' => null,
+				'lat'     => $this->lat,
+				'lng'     => $this->lng,
+				'zoom'    => $this->zoom,
+				'parts'   => null,
 			],
 		];
 

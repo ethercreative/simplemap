@@ -1,3 +1,11 @@
+## 3.4.6 - 2019-03-25
+### Added
+- Added "Clear" button
+- Always show full address field even if address block is hidden
+
+### Fixed
+- The really shitty element stuff. Is good now. I think.
+
 ## 3.4.5 - 2019-03-25
 ### Fixed
 - Fixed maps failing to get value after save

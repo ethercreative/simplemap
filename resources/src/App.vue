@@ -19,14 +19,16 @@
 		/>
 
 		<Address
-			v-if="!config.hideAddress"
+			v-if="!config.isSettings"
+			:hide="config.hideAddress"
 			:value="value"
 			@changed="onPartChange"
+			@clear="onClear"
 		/>
 
 		<input
 			type="hidden"
-			:name="this.config.name"
+			:name="config.name"
 			:value="JSON.stringify(value)"
 			v-if="!config.isSettings"
 		/>
@@ -34,17 +36,17 @@
 		<Fragment v-if="config.isSettings">
 			<input
 				type="hidden"
-				:name="this.config.name.replace('__settings__', 'lat')"
+				:name="config.name.replace('__settings__', 'lat')"
 				:value="value.lat"
 			/>
 			<input
 				type="hidden"
-				:name="this.config.name.replace('__settings__', 'lng')"
+				:name="config.name.replace('__settings__', 'lng')"
 				:value="value.lng"
 			/>
 			<input
 				type="hidden"
-				:name="this.config.name.replace('__settings__', 'zoom')"
+				:name="config.name.replace('__settings__', 'zoom')"
 				:value="value.zoom"
 			/>
 		</Fragment>
@@ -59,13 +61,7 @@
 	import Geo from './common/Geo';
 	import GeoService from './enums/GeoService';
 	import Parts from './models/Parts';
-
-	const Fragment = {
-		functional: true,
-		render (h, ctx) {
-			return ctx.children;
-		}
-	};
+	import Fragment from './components/Fragment';
 
 	@Component({
 		props: {
@@ -110,15 +106,18 @@
 
 		fullAddressDirty = false;
 
+		defaultValue = null;
+
 		// Vue
 		// =====================================================================
 
 		created () {
-			const { config, value } = JSON.parse(this.$props.options);
+			const { config, value, defaultValue } = JSON.parse(this.$props.options);
 
 			this.config = config;
 			this.value = value;
 			this.value.parts = Parts.from(value.parts);
+			this.defaultValue = defaultValue;
 
 			this.geo = new Geo(config);
 		}
@@ -175,6 +174,10 @@
 					this.value.address = Object.values(this.value.parts).filter(Boolean).join(', ');
 				}
 			}
+		}
+
+		onClear () {
+			this.value = { ...this.defaultValue };
 		}
 
 	}

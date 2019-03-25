@@ -84,6 +84,32 @@ class Parts
 	 */
 	private function _nominatim (array $parts)
 	{
+		// Add any missing values
+		$keys = [
+			'house_number',
+			'address29',
+			'type',
+			'pedestrian',
+			'footway',
+			'path',
+			'road',
+			'neighbourhood',
+			'suburb',
+			'village',
+			'town',
+			'city_district',
+			'city',
+			'postcode',
+			'county',
+			'state_district',
+			'state',
+			'country',
+		];
+
+		foreach ($keys as $key)
+			if (!array_key_exists($key, $parts))
+				$parts[$key] = null;
+
 		$this->number = $this->_join([
 			$parts['house_number'],
 			$parts['address29'],

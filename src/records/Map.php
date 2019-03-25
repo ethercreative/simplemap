@@ -18,7 +18,6 @@ use yii\db\ActiveQueryInterface;
  * Class Map
  *
  * @property int    $id
- * @property int    $elementId
  * @property int    $ownerId
  * @property int    $ownerSiteId
  * @property int    $fieldId
@@ -50,7 +49,7 @@ class Map extends ActiveRecord
 
 	public function getElement (): ActiveQueryInterface
 	{
-		return $this->hasOne(Element::class, ['id' => 'elementId']);
+		return $this->hasOne(Element::class, ['id' => 'id']);
 	}
 
 	public function getOwner (): ActiveQueryInterface

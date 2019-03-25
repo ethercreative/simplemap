@@ -29,7 +29,6 @@ class Install extends Migration
 			Map::TableName,
 			[
 				'id'          => $this->primaryKey(),
-				'elementId'   => $this->integer()->notNull(),
 				'ownerId'     => $this->integer()->notNull(),
 				'ownerSiteId' => $this->integer(),
 				'fieldId'     => $this->integer()->notNull(),
@@ -51,7 +50,7 @@ class Install extends Migration
 		$this->createIndex(
 			null,
 			Map::TableName,
-			['ownerId', 'ownerSiteId', 'fieldId', 'elementId'],
+			['ownerId', 'ownerSiteId', 'fieldId'],
 			true
 		);
 
@@ -72,7 +71,7 @@ class Install extends Migration
 		$this->addForeignKey(
 			null,
 			Map::TableName,
-			['elementId'],
+			['id'],
 			Table::ELEMENTS,
 			['id'],
 			'CASCADE'

@@ -11,6 +11,7 @@ namespace ether\simplemap\elements;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
+use craft\records\Site;
 use ether\simplemap\elements\db\MapQuery;
 use ether\simplemap\models\Parts;
 use ether\simplemap\models\PartsLegacy;
@@ -30,9 +31,6 @@ class Map extends Element
 
 	/** @var int */
 	public $id;
-
-	/** @var int */
-	public $elementId;
 
 	/** @var int */
 	public $ownerId;
@@ -110,6 +108,11 @@ class Map extends Element
 		return false;
 	}
 
+	public function getSupportedSites (): array
+	{
+		return Site::find()->select('id')->column();
+	}
+
 	/**
 	 * @return ElementQueryInterface|MapQuery
 	 */
@@ -153,12 +156,6 @@ class Map extends Element
 		];
 
 		return $rules;
-	}
-
-	public function afterSave (bool $isNew)
-	{
-		// Do nothing (fixes an issue with map fields in matrix causing infinite
-		// loop of saving for no apparent reason)
 	}
 
 }

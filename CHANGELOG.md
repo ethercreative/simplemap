@@ -1,3 +1,7 @@
+## [Unreleased] 3.4.8
+### Fixed
+- Fix error when migrating a field from Craft 2 when `countryRestriction` isn't set
+
 ## 3.4.7 - 2019-03-25
 ### Fixed
 - Fixed JS error when clearing field

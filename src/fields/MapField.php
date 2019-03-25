@@ -412,7 +412,6 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	public function afterElementDelete (ElementInterface $element)
 	{
 		SimpleMap::getInstance()->map->softDeleteField($this, $element);
-
 		parent::afterElementDelete($element);
 	}
 

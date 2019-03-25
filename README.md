@@ -123,6 +123,10 @@ have access to all the old parts from Google.
 You can configure the plugin either via the Craft CP or by duplicating the 
 `config.php` file to `config/simplemap.php`.
 
+### Eager-loading
+
+Maps are stored as elements and can be eager-loaded! See the [Craft 3 docs on Eager-Loading](https://docs.craftcms.com/v3/dev/eager-loading-elements.html).
+
 ### Searching and Sorting
 
 You can search for elements using the location specified in your map field. When searching by your map field you also have the option to sort the results by distance.

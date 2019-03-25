@@ -57,6 +57,10 @@ class MapService extends Component
 			/** @var MapElement $map */
 			$map = $owner->getFieldValue($field->handle);
 
+			$map->fieldId = $field->id;
+			$map->ownerId = $owner->id;
+			$map->ownerSiteId = $owner->siteId;
+
 			if (!$craft->elements->saveElement($map, true, true))
 			{
 				foreach ($map->getErrors() as $error)
@@ -65,30 +69,6 @@ class MapService extends Component
 				$transaction->rollBack();
 				return;
 			}
-
-			$record = null;
-
-			$record = MapRecord::findOne($map->id);
-
-			if ($record === null)
-			{
-				$record = new MapRecord();
-
-				$record->id = $map->id;
-				$record->ownerId = $owner->id;
-				$record->ownerSiteId = $owner->site->id;
-				$record->fieldId = $field->id;
-			}
-
-			$record->lat = $map->lat;
-			$record->lng = $map->lng;
-			$record->zoom = $map->zoom;
-			$record->address = $map->address;
-			$record->parts = $map->parts;
-
-			$this->_populateMissingData($record);
-
-			$record->save();
 		}
 		catch (\Throwable $e)
 		{
@@ -98,6 +78,80 @@ class MapService extends Component
 		}
 
 		$transaction->commit();
+	}
+
+	/**
+	 * @param MapField         $field
+	 * @param ElementInterface $owner
+	 *
+	 * @throws \Throwable
+	 */
+	public function softDeleteField (MapField $field, ElementInterface $owner)
+	{
+		/** @var MapElement $map */
+		$map = $owner->getFieldValue($field->handle);
+
+		\Craft::$app->getElements()->deleteElement($map);
+	}
+
+	/**
+	 * @param MapField         $field
+	 * @param ElementInterface $owner
+	 *
+	 * @throws \Throwable
+	 * @throws \yii\base\Exception
+	 */
+	public function restoreField (MapField $field, ElementInterface $owner)
+	{
+		/** @var MapElement $map */
+		$map = $owner->getFieldValue($field->handle);
+
+		\Craft::$app->getElements()->restoreElement($map);
+	}
+
+	/**
+	 * @param MapElement $map
+	 * @param            $ownerId
+	 * @param            $ownerSiteId
+	 * @param            $fieldId
+	 * @param            $isNew
+	 *
+	 * @throws \yii\db\Exception
+	 * @throws \Exception
+	 */
+	public function saveRecord (MapElement $map, $ownerId, $ownerSiteId, $fieldId, $isNew)
+	{
+		if ($isNew)
+		{
+			$record = null;
+		}
+		else
+		{
+			$record = MapRecord::findOne($map->id);
+
+			if (!$record)
+				throw new \Exception('Invalid map ID: ' . $map->id);
+		}
+
+		if ($record === null)
+		{
+			$record = new MapRecord();
+
+			$record->id          = $map->id;
+			$record->ownerId     = $ownerId;
+			$record->ownerSiteId = $ownerSiteId;
+			$record->fieldId     = $fieldId;
+		}
+
+		$record->lat     = $map->lat;
+		$record->lng     = $map->lng;
+		$record->zoom    = $map->zoom;
+		$record->address = $map->address;
+		$record->parts   = $map->parts;
+
+		$this->_populateMissingData($record);
+
+		$record->save(false);
 	}
 
 	/**
@@ -150,6 +204,7 @@ class MapService extends Component
 		$on = [
 			'and',
 			'[[elements.id]] = [[' . $alias . '.ownerId]]',
+			'[[elements.dateDeleted]] IS NULL',
 			'[[elements_sites.siteId]] = [[' . $alias . '.ownerSiteId]]',
 		];
 

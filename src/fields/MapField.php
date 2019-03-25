@@ -199,6 +199,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 				->fieldId($this->id)
 				->ownerSiteId($element->siteId)
 				->ownerId($element->id)
+				->trashed($element->trashed)
 				->one();
 
 			if ($map && $value)
@@ -222,6 +223,10 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 					'zoom' => $this->zoom,
 				]);
 		}
+
+		$map->ownerId = $element->id;
+		$map->ownerSiteId = $element->siteId;
+		$map->fieldId = $this->id;
 
 		$handle = $this->handle;
 		$element->$handle = $map;
@@ -387,7 +392,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	}
 
 	/**
-	 * @param ElementInterface $element
+	 * @param ElementInterface|Element $element
 	 * @param bool             $isNew
 	 *
 	 * @throws \Throwable
@@ -397,6 +402,30 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
+	}
+
+	/**
+	 * @param ElementInterface|Element $element
+	 *
+	 * @throws \Throwable
+	 */
+	public function afterElementDelete (ElementInterface $element)
+	{
+		SimpleMap::getInstance()->map->softDeleteField($this, $element);
+
+		parent::afterElementDelete($element);
+	}
+
+	/**
+	 * @param ElementInterface|Element $element
+	 *
+	 * @throws \Throwable
+	 * @throws \yii\base\Exception
+	 */
+	public function afterElementRestore (ElementInterface $element)
+	{
+		SimpleMap::getInstance()->map->restoreField($this, $element);
+		parent::afterElementRestore($element);
 	}
 
 	// Helpers

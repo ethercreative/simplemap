@@ -158,4 +158,22 @@ class Map extends Element
 		return $rules;
 	}
 
+	/**
+	 * @param bool $isNew
+	 *
+	 * @throws \yii\db\Exception
+	 */
+	public function afterSave (bool $isNew)
+	{
+		SimpleMap::getInstance()->map->saveRecord(
+			$this,
+			$this->ownerId,
+			$this->ownerSiteId,
+			$this->fieldId,
+			$isNew
+		);
+
+		parent::afterSave($isNew);
+	}
+
 }

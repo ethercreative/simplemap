@@ -1,6 +1,9 @@
 ## [Unreleased] 3.4.8
 ### Fixed
 - Fix error when migrating a field from Craft 2 when `countryRestriction` isn't set
+- Location search excludes elements that have been soft-deleted
+- Fixed issue restoring trashed elements that have a map field
+- Map field elements are trashed and deleted correctly
 
 ## 3.4.7 - 2019-03-25
 ### Fixed

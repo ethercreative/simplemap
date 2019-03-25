@@ -13,6 +13,7 @@ use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\Parts;
+use ether\simplemap\models\PartsLegacy;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
@@ -809,7 +810,7 @@ class GeoService extends Component
 
 		return [
 			'address' => $pos['formatted_address'],
-			'parts' => new Parts($pos['address_components'], GeoEnum::GoogleMaps),
+			'parts' => new PartsLegacy($pos['address_components']),
 		];
 	}
 

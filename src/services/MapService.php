@@ -16,6 +16,7 @@ use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\models\Parts;
 use ether\simplemap\records\Map as MapRecord;
 
 /**
@@ -358,6 +359,14 @@ class MapService extends Component
 			$latLng = GeoService::latLngFromAddress($record->address);
 			$record->lat = $latLng['lat'];
 			$record->lng = $latLng['lng'];
+		}
+
+		// Missing address / parts
+		if (!$record->address && ($record->lat && $record->lng))
+		{
+			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
+			$record->address = $loc['address'];
+			$record->parts   = $loc['parts'];
 		}
 	}
 

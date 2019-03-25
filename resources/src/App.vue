@@ -118,6 +118,7 @@
 			this.value = value;
 			this.value.parts = Parts.from(value.parts);
 			this.defaultValue = defaultValue;
+			this.defaultValue.parts = new Parts();
 
 			this.geo = new Geo(config);
 		}

@@ -17,6 +17,7 @@ use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
+use ether\simplemap\models\Parts;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
@@ -422,6 +423,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
 		$view->registerTranslations('simplemap', [
 			'Search for a location',
+			'Clear',
 			'Name / Number',
 			'Street Address',
 			'Town / City',

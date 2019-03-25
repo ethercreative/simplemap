@@ -13,7 +13,7 @@
 				@click="onClear()"
 				type="button"
 			>
-				Clear
+				{{labels.clear}}
 			</button>
 		</div>
 
@@ -94,6 +94,7 @@
 		// =====================================================================
 
 		labels = {
+			clear: t('Clear'),
 			fullAddress: t('Full Address'),
 			number: t('Name / Number'),
 			address: t('Street Address'),

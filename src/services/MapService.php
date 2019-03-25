@@ -16,7 +16,6 @@ use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\models\Parts;
 use ether\simplemap\records\Map as MapRecord;
 
 /**
@@ -58,7 +57,7 @@ class MapService extends Component
 			/** @var MapElement $map */
 			$map = $owner->getFieldValue($field->handle);
 
-			if (!$craft->elements->saveElement($map, true, !$owner->propagating))
+			if (!$craft->elements->saveElement($map, true, true))
 			{
 				foreach ($map->getErrors() as $error)
 					$owner->addError($field->handle, $error[0]);

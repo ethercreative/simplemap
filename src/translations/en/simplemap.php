@@ -15,6 +15,7 @@ return [
 	'Geo-Coding' => 'Geo-Coding',
 
 	'Search for a location' => 'Search for a location',
+	'Clear' => 'Clear',
 
 	'Full Address' => 'Full Address',
 	'Name / Number' => 'Name / Number',

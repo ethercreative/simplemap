@@ -1,3 +1,11 @@
+## 3.4.7 - 2019-03-25
+### Fixed
+- Fixed JS error when clearing field
+- Fixed missing parts when using Google maps for geo-coding
+
+### Improved
+- Clear button now translatable
+
 ## 3.4.6 - 2019-03-25
 ### Added
 - Added "Clear" button

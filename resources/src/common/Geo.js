@@ -1,5 +1,6 @@
 import GeoService from '../enums/GeoService';
 import Parts from '../models/Parts';
+import PartsLegacy from '../models/PartsLegacy';
 
 export default class Geo {
 
@@ -302,9 +303,8 @@ export default class Geo {
 				resolve({
 					address: result.formatted_address,
 					...latLng,
-					parts: new Parts(
-						result.address_components,
-						GeoService.GoogleMaps
+					parts: new PartsLegacy(
+						result.address_components
 					),
 				});
 			});
@@ -392,9 +392,8 @@ export default class Geo {
 					address: item.address,
 					lat: place.geometry.location.lat(),
 					lng: place.geometry.location.lng(),
-					parts: new Parts(
-						place.address_components,
-						GeoService.GoogleMaps
+					parts: new PartsLegacy(
+						place.address_components
 					),
 				});
 			});

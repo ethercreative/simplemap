@@ -195,8 +195,9 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		{
 			/** @var MapElement $map */
 			$map = MapElement::find()
+				->anyStatus()
 				->fieldId($this->id)
-				->siteId($element->siteId)
+				->ownerSiteId($element->siteId)
 				->ownerId($element->id)
 				->one();
 

@@ -13,7 +13,7 @@
 			:tiles="config.mapTiles"
 			:token="config.mapToken"
 			:latLng="{ lat: value.lat, lng: value.lng }"
-			:zoom="value.zoom"
+			:zoom="+value.zoom"
 			@change="onMapChange"
 			@zoom="onZoom"
 		/>

@@ -58,7 +58,7 @@ class MapQuery extends ElementQuery
 		$this->ownerSiteId = $value;
 
 		if ($value && strtolower($value) !== ':empty:')
-			$this->siteId = (int) $value;
+			$this->ownerSiteId = (int) $value;
 
 		return $this;
 	}
@@ -104,7 +104,13 @@ class MapQuery extends ElementQuery
 	{
 		$table = Map::TableNameClean;
 
-		$this->joinElementTable($table);
+		$joinTable = "{{%{$table}}} {$table}";
+		$this->query->innerJoin(
+			$joinTable, "[[{$table}.elementId]] = [[subquery.elementsId]]"
+		);
+		$this->subQuery->innerJoin(
+			$joinTable, "[[{$table}.elementId]] = [[elements.id]]"
+		);
 
 		$this->query->select($table . '.*');
 

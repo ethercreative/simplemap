@@ -1,3 +1,11 @@
+## 3.4.5 - 2019-03-25
+### Fixed
+- Fixed maps failing to get value after save
+
+### Changed
+- Using Google Maps geo service will result in legacy parts always being used, 
+meaning you can access all available address components.
+
 ## 3.4.4 - 2019-03-22
 ### Fixed
 - Fixed some issues when upgrading from older versions of Maps. We recommend 

@@ -368,7 +368,7 @@ class MapService extends Component
 			$record->address = $loc['address'];
 			$record->parts   = array_merge(
 				array_filter((array) $loc['parts']),
-				array_filter((array) $record->parts),
+				array_filter((array) $record->parts)
 			);
 		}
 	}

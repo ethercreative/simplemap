@@ -16,7 +16,6 @@ use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\models\Parts;
 use ether\simplemap\records\Map as MapRecord;
 
 /**
@@ -42,43 +41,26 @@ class MapService extends Component
 	 * @param ElementInterface|Element $owner
 	 *
 	 * @throws \Throwable
-	 * @throws \yii\db\Exception
 	 */
 	public function saveField (MapField $field, ElementInterface $owner)
 	{
 		if ($owner instanceof MapElement)
 			return;
 
-		$craft = \Craft::$app;
+		/** @var MapElement $map */
+		$map = $owner->getFieldValue($field->handle);
 
-		$transaction = $craft->getDb()->beginTransaction();
+		$map->fieldId     = $field->id;
+		$map->ownerId     = $owner->id;
+		$map->ownerSiteId = $owner->siteId;
 
-		try
+		if (!\Craft::$app->elements->saveElement($map, true, true))
 		{
-			/** @var MapElement $map */
-			$map = $owner->getFieldValue($field->handle);
+			foreach ($map->getErrors() as $error)
+				$owner->addError($field->handle, $error[0]);
 
-			$map->fieldId = $field->id;
-			$map->ownerId = $owner->id;
-			$map->ownerSiteId = $owner->siteId;
-
-			if (!$craft->elements->saveElement($map, true, true))
-			{
-				foreach ($map->getErrors() as $error)
-					$owner->addError($field->handle, $error[0]);
-
-				$transaction->rollBack();
-				return;
-			}
+			return;
 		}
-		catch (\Throwable $e)
-		{
-			$transaction->rollBack();
-
-			throw $e;
-		}
-
-		$transaction->commit();
 	}
 
 	/**

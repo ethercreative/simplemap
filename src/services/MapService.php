@@ -247,7 +247,8 @@ class MapService extends Component
 		if ($location === null)
 			return false;
 
-		list('lat' => $lat, 'lng' => $lng) = $location;
+		$lat = $location['lat'];
+		$lng = $location['lng'];
 
 		// Normalize radius
 		if (!is_numeric($radius))

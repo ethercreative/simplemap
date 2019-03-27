@@ -64,6 +64,8 @@ class SimpleMap extends Plugin
 			[$this, 'onRegisterVariable']
 		);
 
+		/** @noinspection PhpUndefinedNamespaceInspection */
+		/** @noinspection PhpUndefinedClassInspection */
 		if (class_exists(\markhuot\CraftQL\CraftQL::class))
 		{
 			Event::on(

@@ -4,6 +4,8 @@
 - Location search excludes elements that have been soft-deleted
 - Fixed issue restoring trashed elements that have a map field
 - Map field elements are trashed and deleted correctly
+- Fixed syntax issue on PHP <7.1.0
+- Fixed error during repair migration when element doesn't exist
 
 ## 3.4.7 - 2019-03-25
 ### Fixed

@@ -6,6 +6,7 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
 use ether\simplemap\records\Map;
+use ether\simplemap\elements\Map as MapElement;
 
 /**
  * m190325_130533_repair_map_elements migration.
@@ -30,11 +31,21 @@ class m190325_130533_repair_map_elements extends Migration
 	        ->from(Map::TableName)
 	        ->all();
 
+        $validMapElementIds = (new Query())
+	        ->select('id')
+	        ->from(Table::ELEMENTS)
+	        ->where(['=', 'type', MapElement::class])
+	        ->column();
+
         $this->dropTable(Map::TableName);
 	    (new Install())->safeUp();
 
         foreach ($rows as $row)
         {
+        	// Skip any rows that don't have a matching element
+        	if (!in_array($row['id'], $validMapElementIds))
+        		continue;
+
 	        echo '    > Fix map value ' . $row['address'] . PHP_EOL;
 
 	        $record              = new Map();

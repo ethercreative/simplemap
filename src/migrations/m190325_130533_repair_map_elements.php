@@ -43,13 +43,13 @@ class m190325_130533_repair_map_elements extends Migration
         foreach ($rows as $row)
         {
         	// Skip any rows that don't have a matching element
-        	if (!in_array($row['id'], $validMapElementIds))
+        	if (!in_array($row['elementId'], $validMapElementIds))
         		continue;
 
 	        echo '    > Fix map value ' . $row['address'] . PHP_EOL;
 
 	        $record              = new Map();
-	        $record->id          = $row['id'];
+	        $record->id          = $row['elementId'];
 	        $record->ownerId     = $row['ownerId'];
 	        $record->ownerSiteId = $row['ownerSiteId'];
 	        $record->fieldId     = $row['fieldId'];

@@ -1,4 +1,4 @@
-## [Unreleased] 3.4.8
+## 3.4.8 - 2019-04-01
 ### Added
 - Added option to show lat / lng fields
 

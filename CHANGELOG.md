@@ -1,3 +1,7 @@
+## [Unreleased] 3.4.8
+### Improved
+- Scrolling to zoom disabled on map
+
 ## 3.4.8 - 2019-03-27
 ### Fixed
 - Fix error when migrating a field from Craft 2 when `countryRestriction` isn't set

@@ -99,6 +99,7 @@
 		mounted () {
 			this.map = L.map(this.$el, {
 				minZoom: 3,
+				scrollWheelZoom: false,
 			}).setView(this.latLng, this.zoom);
 
 			if (this.tiles.indexOf('google') > -1) {

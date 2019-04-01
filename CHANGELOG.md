@@ -6,6 +6,7 @@
 - Fixed map not validating correctly
 - Fixed wrong map value being shown on element index with multiple sites
 - Fixed missing table prefix in map element query
+- Fixed migration issue when upgrading due to duplicate element IDs
 
 ### Improved
 - Scrolling to zoom disabled on map

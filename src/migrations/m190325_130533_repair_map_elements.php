@@ -29,6 +29,7 @@ class m190325_130533_repair_map_elements extends Migration
         $rows = (new Query())
 	        ->select('*')
 	        ->from(Map::TableName)
+	        ->orderBy('dateUpdated DESC')
 	        ->all();
 
         $validMapElementIds = (new Query())
@@ -40,11 +41,17 @@ class m190325_130533_repair_map_elements extends Migration
         $this->dropTable(Map::TableName);
 	    (new Install())->safeUp();
 
+	    $updatedElementIds = [];
+
         foreach ($rows as $row)
         {
         	// Skip any rows that don't have a matching element
         	if (!in_array($row['elementId'], $validMapElementIds))
         		continue;
+
+        	// Skip and duplicate elements
+	        if (in_array($row['elementId'], $updatedElementIds))
+	        	continue;
 
 	        echo '    > Fix map value ' . $row['address'] . PHP_EOL;
 
@@ -61,6 +68,8 @@ class m190325_130533_repair_map_elements extends Migration
 	        $record->parts   = $row['parts'];
 
 	        $record->save(false);
+
+	        $updatedElementIds[] = $record->id;
         }
 
 	    return true;

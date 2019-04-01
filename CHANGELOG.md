@@ -2,6 +2,7 @@
 ### Fixed
 - Fixed map not validating correctly
 - Fixed wrong map value being shown on element index with multiple sites
+- Fixed missing table prefix in map element query
 
 ### Improved
 - Scrolling to zoom disabled on map

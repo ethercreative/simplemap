@@ -29,6 +29,14 @@
 	on: field.hideAddress
 }) }}
 
+{{ forms.lightswitchField({
+	label: 'Show Latitude / Longitude'|t('simplemap'),
+	instructions: 'Show the latitude / longitude fields'|t('simplemap'),
+	id: 'showLatLng',
+	name: 'showLatLng',
+	on: field.showLatLng
+}) }}
+
 {{ forms.selectField({
 	label: 'Preferred Country'|t('simplemap'),
 	instructions: 'When searching for a location, results in this country will take precedence'|t('simplemap'),

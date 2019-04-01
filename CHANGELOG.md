@@ -1,4 +1,7 @@
 ## [Unreleased] 3.4.8
+### Added
+- Added option to show lat / lng fields
+
 ### Fixed
 - Fixed map not validating correctly
 - Fixed wrong map value being shown on element index with multiple sites

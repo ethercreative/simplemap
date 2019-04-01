@@ -21,6 +21,7 @@
 		<Address
 			v-if="!config.isSettings"
 			:hide="config.hideAddress"
+			:showLatLng="config.showLatLng"
 			:value="val"
 			@changed="onPartChange"
 			@clear="onClear"
@@ -87,6 +88,7 @@
 			hideSearch: false,
 			hideMap: false,
 			hideAddress: false,
+			showLatLng: false,
 			mapTiles: 'wikimedia',
 			mapToken: '',
 			geoService: 'nominatim',
@@ -173,8 +175,10 @@
 
 		onPartChange ({ name, value }) {
 			if (name === 'fullAddress') {
-				this.value.address = value;
+				this.value.address    = value;
 				this.fullAddressDirty = value !== '';
+			} else if (name === 'lat' || name === 'lng') {
+				this.value[name] = value;
 			} else {
 				this.value.parts[name] = value;
 

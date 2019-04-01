@@ -80,6 +80,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	public $hideAddress = false;
 
 	/**
+	 * @var bool - If true, show the lat/lng fields
+	 */
+	public $showLatLng = false;
+
+	/**
 	 * @deprecated 
 	 */
 	public $hideLatLng;
@@ -484,6 +489,8 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 			'County',
 			'State',
 			'Country',
+			'Latitude',
+			'Longitude',
 		]);
 
 		/** @var Settings $settings */
@@ -503,6 +510,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 				'hideSearch'  => (bool) $this->hideSearch,
 				'hideMap'     => (bool) $this->hideMap,
 				'hideAddress' => (bool) $this->hideAddress,
+				'showLatLng'  => (bool) $this->showLatLng,
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(

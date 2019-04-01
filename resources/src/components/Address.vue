@@ -17,6 +17,19 @@
 			</button>
 		</div>
 
+		<Fragment v-if="showLatLng">
+			<Input
+				:label="labels.lat"
+				:value="value.lat"
+				@input="onInput('lat', $event)"
+			/>
+			<Input
+				:label="labels.lng"
+				:value="value.lng"
+				@input="onInput('lng', $event)"
+			/>
+		</Fragment>
+
 		<Fragment v-if="!hide">
 			<Input
 				:label="labels.number"
@@ -84,6 +97,7 @@
 					parts: {},
 				},
 			},
+			showLatLng: Boolean,
 			fullAddressDirty: Boolean,
 			hide: Boolean,
 		}
@@ -103,6 +117,8 @@
 			county: t('County'),
 			state: t('State'),
 			country: t('Country'),
+			lat: t('Latitude'),
+			lng: t('Longitude'),
 		};
 
 		// Events

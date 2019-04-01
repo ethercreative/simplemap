@@ -26,6 +26,9 @@ return [
 	'State' => 'State',
 	'Country' => 'Country',
 
+	'Latitude' => 'Latitude',
+	'Longitude' => 'Longitude',
+
 	// Field: Settings
 	// -------------------------------------------------------------------------
 
@@ -41,6 +44,9 @@ return [
 
 	'Hide Address' => 'Hide Address',
 	'Hide the address fields' => 'Hide the address fields',
+
+	'Show Latitude / Longitude' => 'Show Latitude / Longitude',
+	'Show the latitude / longitude fields' => 'Show the latitude / longitude fields',
 
 	'All Countries' => 'All Countries',
 	'Preferred Country' => 'Preferred Country',

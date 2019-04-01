@@ -156,7 +156,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$rules = parent::rules();
 
 		$rules[] = [
-			['lat', 'lng', 'zoom'],
+			['zoom'],
 			'required',
 		];
 
@@ -226,8 +226,8 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 				$map = new MapElement($value);
 			else
 				$map = new MapElement([
-					'lat' => $this->lat,
-					'lng' => $this->lng,
+					'lat' => null,
+					'lng' => null,
 					'zoom' => $this->zoom,
 				]);
 		}
@@ -336,9 +336,13 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	public function getEagerLoadingMap (array $sourceElements)
 	{
 		$sourceElementIds = [];
+		$sourceSiteIds = [];
 
 		foreach ($sourceElements as $sourceElement)
+		{
 			$sourceElementIds[] = $sourceElement->id;
+			$sourceSiteIds[] = $sourceElement->siteId;
+		}
 
 		$map = (new Query())
 			->select(['ownerId as source', 'id as target'])
@@ -346,6 +350,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 			->where([
 				'fieldId' => $this->id,
 				'ownerId' => $sourceElementIds,
+				'ownerSiteId' => $sourceSiteIds,
 			])
 			->all();
 

@@ -1,9 +1,11 @@
 ## [Unreleased] 3.4.8
 ### Fixed
 - Fixed map not validating correctly
+- Fixed wrong map value being shown on element index with multiple sites
 
 ### Improved
 - Scrolling to zoom disabled on map
+- Clearing the map will no longer store the default data
 
 ## 3.4.8 - 2019-03-27
 ### Fixed

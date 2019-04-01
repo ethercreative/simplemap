@@ -139,7 +139,7 @@ class Map extends Element
 		$rules = parent::rules();
 
 		$rules[] = [
-			['lat', 'lng', 'zoom'],
+			['zoom'],
 			'required',
 		];
 		$rules[] = [

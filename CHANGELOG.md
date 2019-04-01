@@ -1,4 +1,7 @@
 ## [Unreleased] 3.4.8
+### Fixed
+- Fixed map not validating correctly
+
 ### Improved
 - Scrolling to zoom disabled on map
 

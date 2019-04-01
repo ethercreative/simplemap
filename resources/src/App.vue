@@ -3,7 +3,7 @@
 		<Search
 			v-if="!config.hideSearch"
 			:service="config.geoService"
-			:default-value="value.address"
+			:default-value="val.address"
 			:geo="geo"
 			@selected="onSearchSelected"
 		/>
@@ -12,8 +12,8 @@
 			v-if="!config.hideMap"
 			:tiles="config.mapTiles"
 			:token="config.mapToken"
-			:latLng="{ lat: value.lat, lng: value.lng }"
-			:zoom="+value.zoom"
+			:latLng="{ lat: val.lat, lng: val.lng }"
+			:zoom="+val.zoom"
 			@change="onMapChange"
 			@zoom="onZoom"
 		/>
@@ -21,7 +21,7 @@
 		<Address
 			v-if="!config.isSettings"
 			:hide="config.hideAddress"
-			:value="value"
+			:value="val"
 			@changed="onPartChange"
 			@clear="onClear"
 		/>
@@ -97,8 +97,8 @@
 		value = {
 			address: '',
 			zoom: 15,
-			lat: 0,
-			lng: 0,
+			lat: null,
+			lng: null,
 			parts: new Parts(),
 		};
 
@@ -107,6 +107,13 @@
 		fullAddressDirty = false;
 
 		defaultValue = null;
+
+		// Getters
+		// =====================================================================
+
+		get val () {
+			return this.value.lat === null ? this.defaultValue : this.value;
+		}
 
 		// Vue
 		// =====================================================================
@@ -178,7 +185,13 @@
 		}
 
 		onClear () {
-			this.value = { ...this.defaultValue };
+			this.value = {
+				address: '',
+				zoom: 15,
+				lat: null,
+				lng: null,
+				parts: new Parts(),
+			};
 		}
 
 	}

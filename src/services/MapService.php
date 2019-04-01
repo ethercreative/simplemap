@@ -14,8 +14,8 @@ use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\elements\Map;
-use ether\simplemap\fields\MapField;
 use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\fields\MapField;
 use ether\simplemap\records\Map as MapRecord;
 
 /**
@@ -37,6 +37,25 @@ class MapService extends Component
 	// =========================================================================
 
 	/**
+	 * @param MapField         $field
+	 * @param ElementInterface|Element $owner
+	 *
+	 * @return bool
+	 */
+	public function validateField (MapField $field, ElementInterface $owner)
+	{
+		/** @var MapElement $map */
+		$map = $owner->getFieldValue($field->handle);
+
+		$valid = $map->validate();
+
+		foreach ($map->getErrors() as $error)
+			$owner->addError($field->handle, $error[0]);
+
+		return $valid;
+	}
+
+	/**
 	 * @param MapField                 $field
 	 * @param ElementInterface|Element $owner
 	 *
@@ -54,13 +73,7 @@ class MapService extends Component
 		$map->ownerId     = $owner->id;
 		$map->ownerSiteId = $owner->siteId;
 
-		if (!\Craft::$app->elements->saveElement($map, true, true))
-		{
-			foreach ($map->getErrors() as $error)
-				$owner->addError($field->handle, $error[0]);
-
-			return;
-		}
+		\Craft::$app->elements->saveElement($map, true, true);
 	}
 
 	/**

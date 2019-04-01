@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\fields;
 
+use Craft;
 use craft\base\EagerLoadingFieldInterface;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -23,6 +24,13 @@ use ether\simplemap\SimpleMap;
 use ether\simplemap\web\assets\MapAsset;
 use ether\simplemap\elements\Map as MapElement;
 use ether\simplemap\records\Map as MapRecord;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Map
@@ -235,11 +243,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	}
 
 	/**
-	 * @return string|\Twig_Markup|null
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
-	 * @throws \yii\base\InvalidConfigException
+	 * @return string|Markup|null
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
+	 * @throws InvalidConfigException
 	 */
 	public function getSettingsHtml ()
 	{
@@ -261,7 +269,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$this->hideMap     = false;
 		$this->hideAddress = true;
 
-		$mapField = new \Twig_Markup(
+		$mapField = new Markup(
 			$this->_renderMap($value, true),
 			'utf-8'
 		);
@@ -272,7 +280,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$this->hideMap     = $originalHideMap;
 		$this->hideAddress = $originalHideAddress;
 
-		$view = \Craft::$app->getView();
+		$view = Craft::$app->getView();
 
 		$countries = array_merge([
 			'*' => SimpleMap::t('All Countries'),
@@ -291,7 +299,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 * @param ElementInterface|Element|null $element
 	 *
 	 * @return string
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
 	 */
 	public function getInputHtml ($value, ElementInterface $element = null): string
 	{
@@ -299,7 +307,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 			$value = $element->getEagerLoadedElements($this->handle);
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
-		return new \Twig_Markup(
+		return new Markup(
 			$this->_renderMap($value),
 			'utf-8'
 		);
@@ -395,8 +403,21 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 * @param ElementInterface|Element $element
 	 * @param bool             $isNew
 	 *
-	 * @throws \Throwable
-	 * @throws \yii\db\Exception
+	 * @return bool
+	 */
+	public function beforeElementSave (ElementInterface $element, bool $isNew): bool
+	{
+		if (!SimpleMap::getInstance()->map->validateField($this, $element))
+			return false;
+
+		return parent::beforeElementSave($element, $isNew);
+	}
+
+	/**
+	 * @param ElementInterface|Element $element
+	 * @param bool             $isNew
+	 *
+	 * @throws Throwable
 	 */
 	public function afterElementSave (ElementInterface $element, bool $isNew)
 	{
@@ -407,7 +428,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	/**
 	 * @param ElementInterface|Element $element
 	 *
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function afterElementDelete (ElementInterface $element)
 	{
@@ -418,8 +439,8 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	/**
 	 * @param ElementInterface|Element $element
 	 *
-	 * @throws \Throwable
-	 * @throws \yii\base\Exception
+	 * @throws Throwable
+	 * @throws Exception
 	 */
 	public function afterElementRestore (ElementInterface $element)
 	{
@@ -437,11 +458,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 * @param bool $isSettings
 	 *
 	 * @return string
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
 	 */
 	private function _renderMap ($value, $isSettings = false)
 	{
-		$view = \Craft::$app->getView();
+		$view = Craft::$app->getView();
 
 		$containerId = $this->id . '-container';
 		$vueContainerId = $view->namespaceInputId($containerId);
@@ -490,7 +511,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 					$settings->geoService
 				),
 
-				'locale' => \Craft::$app->locale->getLanguageID(),
+				'locale' => Craft::$app->locale->getLanguageID(),
 			],
 
 			'value' => [

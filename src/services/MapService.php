@@ -117,11 +117,9 @@ class MapService extends Component
 	 */
 	public function saveRecord (MapElement $map, $ownerId, $ownerSiteId, $fieldId, $isNew)
 	{
-		if ($isNew)
-		{
-			$record = null;
-		}
-		else
+		$record = null;
+
+		if (!$isNew)
 		{
 			$record = MapRecord::findOne($map->id);
 

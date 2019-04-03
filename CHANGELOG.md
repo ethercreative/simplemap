@@ -1,3 +1,7 @@
+## [Unreleased] 3.4.10
+### Fixed
+- Map records are no longer double saved when upgrading to >3.4.x
+
 ## 3.4.9 - 2019-04-01
 ### Added
 - Added option to show lat / lng fields

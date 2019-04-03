@@ -11,7 +11,7 @@
 ### Additional info
 
 - Craft version:
-- SimpleMap version:
+- Maps version:
 - PHP version:
 - Database driver & version:
 - Other Plugins:

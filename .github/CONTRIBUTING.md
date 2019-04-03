@@ -27,6 +27,6 @@ In addition to [Crafts Guidelines](https://github.com/craftcms/docs/blob/v3/en/c
 In addition to the above:
 
 - Write valid ES6
-- Use double quotes `"`
+- Use single quotes `'`
 
 Don't follow my example, try to stick to the above guidelines!

@@ -1,4 +1,4 @@
-## [Unreleased] 3.4.10
+## 3.4.10 - 2019-04-04
 ### Fixed
 - Map records are no longer double saved when upgrading to >3.4.x
 

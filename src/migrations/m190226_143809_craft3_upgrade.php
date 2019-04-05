@@ -101,20 +101,6 @@ class m190226_143809_craft3_upgrade extends Migration
 		    ]);
 
 		    $elements->saveElement($map, false);
-
-		    $record              = new Map();
-		    $record->id          = $map->id;
-		    $record->ownerId     = $map->ownerId;
-		    $record->ownerSiteId = $map->ownerSiteId;
-		    $record->fieldId     = $map->fieldId;
-
-		    $record->lat     = $map->lat;
-		    $record->lng     = $map->lng;
-		    $record->zoom    = $map->zoom;
-		    $record->address = $map->address;
-		    $record->parts   = $map->parts;
-
-		    $record->save();
 	    }
 
 	    $this->dropTable('{{%simplemap_maps}}');

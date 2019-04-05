@@ -1,3 +1,7 @@
+## 3.4.11 - 2019-04-05
+### Fixed
+- Map records are no longer double saved when upgrading to from Craft 2 to 3
+
 ## 3.4.10 - 2019-04-04
 ### Fixed
 - Map records are no longer double saved when upgrading to >3.4.x

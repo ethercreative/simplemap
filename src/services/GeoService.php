@@ -6,16 +6,16 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\services;
+namespace ether\maps\services;
 
 use craft\base\Component;
 use craft\helpers\Json;
-use ether\simplemap\enums\GeoService as GeoEnum;
-use ether\simplemap\enums\MapTiles;
-use ether\simplemap\models\Parts;
-use ether\simplemap\models\PartsLegacy;
-use ether\simplemap\models\Settings;
-use ether\simplemap\SimpleMap;
+use ether\maps\enums\GeoService as GeoEnum;
+use ether\maps\enums\MapTiles;
+use ether\maps\models\Parts;
+use ether\maps\models\PartsLegacy;
+use ether\maps\models\Settings;
+use ether\maps\Maps;
 use GuzzleHttp\Client;
 use Mapkit\JWT;
 use yii\db\Exception;
@@ -24,7 +24,7 @@ use yii\db\Exception;
  * Class GeoService
  *
  * @author  Ether Creative
- * @package ether\simplemap\services
+ * @package ether\maps\services
  */
 class GeoService extends Component
 {
@@ -579,7 +579,7 @@ class GeoService extends Component
 	public static function latLngFromAddress ($address, $country = null)
 	{
 		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings();
+		$settings = Maps::getInstance()->getSettings();
 		$token = static::getToken($settings->geoToken, $settings->geoService);
 
 		switch ($settings->geoService)
@@ -622,7 +622,7 @@ class GeoService extends Component
 	public static function addressFromLatLng ($lat, $lng)
 	{
 		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings();
+		$settings = Maps::getInstance()->getSettings();
 		$token    =
 			static::getToken($settings->geoToken, $settings->geoService);
 

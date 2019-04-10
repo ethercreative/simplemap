@@ -1,25 +1,25 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\elements\db;
+namespace ether\maps\elements\db;
 
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 use craft\models\Site;
-use ether\simplemap\records\Map;
+use ether\maps\records\Map;
 
 /**
  * Class MapQuery
  *
  * @author  Ether Creative
- * @package ether\simplemap\elements\db
+ * @package ether\maps\elements\db
  */
 class MapQuery extends ElementQuery
 {

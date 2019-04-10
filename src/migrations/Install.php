@@ -1,22 +1,22 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\migrations;
+namespace ether\maps\migrations;
 
 use craft\db\Migration;
 use craft\db\Table;
-use ether\simplemap\records\Map;
+use ether\maps\records\Map;
 
 /**
  * Class Install
  *
  * @author  Ether Creative
- * @package ether\simplemap\migrations
+ * @package ether\maps\migrations
  */
 class Install extends Migration
 {

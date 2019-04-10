@@ -6,23 +6,23 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\services;
+namespace ether\maps\services;
 
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use ether\simplemap\elements\Map;
-use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\fields\MapField;
-use ether\simplemap\records\Map as MapRecord;
+use ether\maps\elements\Map;
+use ether\maps\elements\Map as MapElement;
+use ether\maps\fields\MapField;
+use ether\maps\records\Map as MapRecord;
 
 /**
  * Class MapService
  *
  * @author  Ether Creative
- * @package ether\simplemap\services
+ * @package ether\maps\services
  */
 class MapService extends Component
 {

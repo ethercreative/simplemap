@@ -1,27 +1,27 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\elements;
+namespace ether\maps\elements;
 
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use craft\records\Site;
-use ether\simplemap\elements\db\MapQuery;
-use ether\simplemap\models\Parts;
-use ether\simplemap\models\PartsLegacy;
-use ether\simplemap\SimpleMap;
+use ether\maps\elements\db\MapQuery;
+use ether\maps\models\Parts;
+use ether\maps\models\PartsLegacy;
+use ether\maps\Maps;
 
 /**
  * Class Map
  *
  * @author  Ether Creative
- * @package ether\simplemap\elements
+ * @package ether\maps\elements
  */
 class Map extends Element
 {
@@ -77,7 +77,7 @@ class Map extends Element
 		else
 			$this->parts = new Parts($this->parts);
 
-		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
+		$this->distance = Maps::getInstance()->map->getDistance($this);
 	}
 
 	// Methods: Static
@@ -85,7 +85,7 @@ class Map extends Element
 
 	public static function displayName (): string
 	{
-		return SimpleMap::t('Map');
+		return Maps::t('Map');
 	}
 
 	public static function refHandle ()
@@ -165,7 +165,7 @@ class Map extends Element
 	 */
 	public function afterSave (bool $isNew)
 	{
-		SimpleMap::getInstance()->map->saveRecord(
+		Maps::getInstance()->map->saveRecord(
 			$this,
 			$this->ownerId,
 			$this->ownerSiteId,

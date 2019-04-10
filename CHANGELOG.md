@@ -1,6 +1,9 @@
-## [Unreleased] 3.4.12
+## [Unreleased] 3.5.0
 ### Added
 - Added FeedMe support!
+
+### Changed
+- The plugin is now, completely, Maps
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

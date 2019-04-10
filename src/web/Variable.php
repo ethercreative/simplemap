@@ -6,18 +6,18 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\web;
+namespace ether\maps\web;
 
-use ether\simplemap\models\Settings;
-use ether\simplemap\services\GeoService;
-use ether\simplemap\SimpleMap;
+use ether\maps\models\Settings;
+use ether\maps\services\GeoService;
+use ether\maps\Maps;
 use yii\db\Exception;
 
 /**
  * Class Variable
  *
  * @author  Ether Creative
- * @package ether\simplemap\web
+ * @package ether\maps\web
  */
 class Variable
 {
@@ -30,7 +30,7 @@ class Variable
 	public function getMapToken ()
 	{
 		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings();
+		$settings = Maps::getInstance()->getSettings();
 
 		return GeoService::getToken(
 			$settings->mapToken,

@@ -1,35 +1,35 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap;
+namespace ether\maps;
 
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
-use ether\simplemap\fields\MapField as MapField;
-use ether\simplemap\integrations\craftql\GetCraftQLSchema;
-use ether\simplemap\integrations\feedme\FeedMeMaps;
-use ether\simplemap\models\Settings;
-use ether\simplemap\services\MapService;
-use ether\simplemap\web\Variable;
+use ether\maps\enums\GeoService;
+use ether\maps\enums\MapTiles;
+use ether\maps\fields\MapField as MapField;
+use ether\maps\integrations\craftql\GetCraftQLSchema;
+use ether\maps\integrations\feedme\FeedMeMaps;
+use ether\maps\models\Settings;
+use ether\maps\services\MapService;
+use ether\maps\web\Variable;
 use yii\base\Event;
 
 /**
- * Class SimpleMap
+ * Class Maps
  *
  * @author  Ether Creative
- * @package ether\simplemap
+ * @package ether\maps
  * @property MapService $map
  */
-class SimpleMap extends Plugin
+class Maps extends Plugin
 {
 
 	// Properties
@@ -45,7 +45,7 @@ class SimpleMap extends Plugin
 		parent::init();
 
 		\Craft::setAlias(
-			'simplemapimages',
+			'mapsimages',
 			__DIR__ . '/web/assets/imgs'
 		);
 

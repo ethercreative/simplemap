@@ -1,12 +1,12 @@
 <?php
 
-namespace ether\simplemap\migrations;
+namespace ether\maps\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
-use ether\simplemap\records\Map;
-use ether\simplemap\elements\Map as MapElement;
+use ether\maps\records\Map;
+use ether\maps\elements\Map as MapElement;
 
 /**
  * m190325_130533_repair_map_elements migration.

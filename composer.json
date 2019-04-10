@@ -1,12 +1,12 @@
 {
-  "name": "ether/simplemap",
+  "name": "ether/maps",
   "description": "A beautifully simple Map field type for Craft CMS 3",
-  "version": "3.4.12",
+  "version": "3.5.0",
   "type": "craft-plugin",
   "license": "MIT",
   "minimum-stability": "dev",
   "require": {
-    "craftcms/cms": "^3.1.0",
+    "craftcms/cms": "^3.1.21",
     "mapkit/jwt": "^1.1.2",
     "guzzlehttp/guzzle": "^6.3.3",
     "ext-openssl": "*",
@@ -14,22 +14,22 @@
   },
   "autoload": {
     "psr-4": {
-      "ether\\simplemap\\": "src/"
+      "ether\\maps\\": "src/"
     }
   },
   "support": {
     "email": "help@ethercreative.co.uk",
-    "docs": "https://github.com/ethercreative/simplemap",
+    "documentationUrl": "https://github.com/ethercreative/simplemap",
     "source": "https://github.com/ethercreative/simplemap",
     "issues": "https://github.com/ethercreative/simplemap/issues"
   },
   "extra": {
-    "handle": "simplemap",
+    "handle": "maps",
     "name": "Maps",
-    "developer": "Ether Creative",
+    "developer": "Ether",
     "developerUrl": "https://ethercreative.co.uk",
 
-    "class": "ether\\simplemap\\SimpleMap",
+    "class": "ether\\maps\\Maps",
     "schemaVersion": "3.4.1"
   }
 }

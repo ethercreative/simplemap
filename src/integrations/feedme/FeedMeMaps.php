@@ -6,21 +6,21 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\integrations\feedme;
+namespace ether\maps\integrations\feedme;
 
 use Cake\Utility\Hash;
 use craft\feedme\base\Field;
 use craft\feedme\base\FieldInterface;
 use craft\feedme\helpers\DataHelper;
-use ether\simplemap\elements\Map;
-use ether\simplemap\fields\MapField;
-use ether\simplemap\models\Parts;
+use ether\maps\elements\Map;
+use ether\maps\fields\MapField;
+use ether\maps\models\Parts;
 
 /**
  * Class FeedMeMaps
  *
  * @author  Ether Creative
- * @package ether\simplemap\integrations\feedme
+ * @package ether\maps\integrations\feedme
  */
 class FeedMeMaps extends Field implements FieldInterface
 {

@@ -6,15 +6,15 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\models;
+namespace ether\maps\models;
 
-use ether\simplemap\enums\GeoService;
+use ether\maps\enums\GeoService;
 
 /**
  * Class PartsLegacy
  *
  * @author  Ether Creative
- * @package ether\simplemap\models
+ * @package ether\maps\models
  */
 class PartsLegacy extends Parts
 {

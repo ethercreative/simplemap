@@ -1,12 +1,12 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\web\assets;
+namespace ether\maps\web\assets;
 
 use craft\web\AssetBundle;
 use craft\web\assets\vue\VueAsset;
@@ -15,7 +15,7 @@ use craft\web\assets\vue\VueAsset;
  * Class MapAsset
  *
  * @author  Ether Creative
- * @package ether\simplemap\web\assets
+ * @package ether\maps\web\assets
  */
 class MapAsset extends AssetBundle
 {

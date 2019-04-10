@@ -6,13 +6,13 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\fields;
+namespace ether\maps\fields;
 
 /**
  * Class Map
  *
  * @author  Ether Creative
- * @package ether\simplemap\fields
+ * @package ether\maps\fields
  */
 class Map extends MapField
 {}

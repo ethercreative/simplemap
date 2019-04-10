@@ -1,21 +1,21 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\models;
+namespace ether\maps\models;
 
 use craft\helpers\Json;
-use ether\simplemap\enums\GeoService;
+use ether\maps\enums\GeoService;
 
 /**
  * Class Parts
  *
  * @author  Ether Creative
- * @package ether\simplemap\models
+ * @package ether\maps\models
  */
 class Parts
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace ether\simplemap\migrations;
+namespace ether\maps\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
@@ -8,13 +8,13 @@ use craft\db\Table;
 use craft\helpers\Json;
 use craft\services\Plugins;
 use craft\validators\HandleValidator;
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
-use ether\simplemap\models\Settings;
-use ether\simplemap\records\Map;
-use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\fields\MapField;
-use ether\simplemap\SimpleMap;
+use ether\maps\enums\GeoService;
+use ether\maps\enums\MapTiles;
+use ether\maps\models\Settings;
+use ether\maps\records\Map;
+use ether\maps\elements\Map as MapElement;
+use ether\maps\fields\MapField;
+use ether\maps\Maps;
 
 /**
  * m190226_143809_craft3_upgrade migration.
@@ -291,8 +291,8 @@ class m190226_143809_craft3_upgrade extends Migration
 		echo '    > Upgrade Maps settings' . PHP_EOL;
 
 		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings()->toArray();
-		$newSettings = SimpleMap::getInstance()->getSettings()->toArray();
+		$settings = Maps::getInstance()->getSettings()->toArray();
+		$newSettings = Maps::getInstance()->getSettings()->toArray();
 
 		$craft2Settings = \Craft::$app->projectConfig->get(
 			Plugins::CONFIG_PLUGINS_KEY . '.simple-map.settings'
@@ -325,11 +325,11 @@ class m190226_143809_craft3_upgrade extends Migration
 		}
 
 		\Craft::$app->plugins->savePluginSettings(
-			SimpleMap::getInstance(),
+			Maps::getInstance(),
 			$newSettings
 		);
 
-		\Craft::$app->plugins->enablePlugin(SimpleMap::getInstance()->handle);
+		\Craft::$app->plugins->enablePlugin(Maps::getInstance()->handle);
 	}
 
 }

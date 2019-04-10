@@ -1,22 +1,22 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\models;
+namespace ether\maps\models;
 
 use craft\base\Model;
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
+use ether\maps\enums\GeoService;
+use ether\maps\enums\MapTiles;
 
 /**
  * Class Settings
  *
  * @author  Ether Creative
- * @package ether\simplemap\models
+ * @package ether\maps\models
  */
 class Settings extends Model
 {

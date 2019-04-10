@@ -85,7 +85,7 @@
 		<div>
 			{% for key, label in mapTileOptions if label is not iterable %}
 				<img
-					src="{{ craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.png', true) }}"
+					src="{{ craft.app.assetManager.getPublishedUrl('@mapsimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.png', true) }}"
 					alt="{{ label }}"
 					v-if="mapTiles === '{{ key }}'"
 				/>

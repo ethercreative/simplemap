@@ -1,12 +1,12 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\records;
+namespace ether\maps\records;
 
 use craft\db\ActiveRecord;
 use craft\records\Element;
@@ -28,7 +28,7 @@ use yii\db\ActiveQueryInterface;
  * @property array  $parts   - The specific parts of the address
  *
  * @author  Ether Creative
- * @package ether\simplemap\records
+ * @package ether\maps\records
  */
 class Map extends ActiveRecord
 {

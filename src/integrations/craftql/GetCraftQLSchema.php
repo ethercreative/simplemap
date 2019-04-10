@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\integrations\craftql;
+namespace ether\maps\integrations\craftql;
 
 use markhuot\CraftQL\Events\GetFieldSchema;
 
@@ -14,11 +14,14 @@ use markhuot\CraftQL\Events\GetFieldSchema;
  * Class GetCraftQLSchema
  *
  * @author  Ether Creative
- * @package ether\simplemap\integrations\craftql
+ * @package ether\maps\integrations\craftql
  */
 class GetCraftQLSchema
 {
 
+	/**
+	 * @param GetFieldSchema $event
+	 */
 	public function handle (GetFieldSchema $event)
 	{
 		$event->handled = true;
@@ -52,6 +55,7 @@ class GetCraftQLSchema
 		$query->addStringArgument('location');
 		$query->addStringArgument('country');
 		$query->addFloatArgument('radius');
+		/** @noinspection PhpUndefinedMethodInspection */
 		$query->addEnumArgument('unit')->values([
 			'mi' => 'Miles',
 			'km' => 'Kilometres',

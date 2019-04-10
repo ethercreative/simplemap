@@ -1,12 +1,12 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\fields;
+namespace ether\maps\fields;
 
 use Craft;
 use craft\base\EagerLoadingFieldInterface;
@@ -17,13 +17,13 @@ use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
-use ether\simplemap\enums\GeoService as GeoEnum;
-use ether\simplemap\models\Settings;
-use ether\simplemap\services\GeoService;
-use ether\simplemap\SimpleMap;
-use ether\simplemap\web\assets\MapAsset;
-use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\records\Map as MapRecord;
+use ether\maps\enums\GeoService as GeoEnum;
+use ether\maps\models\Settings;
+use ether\maps\services\GeoService;
+use ether\maps\Maps;
+use ether\maps\web\assets\MapAsset;
+use ether\maps\elements\Map as MapElement;
+use ether\maps\records\Map as MapRecord;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -36,7 +36,7 @@ use yii\base\InvalidConfigException;
  * Class Map
  *
  * @author  Ether Creative
- * @package ether\simplemap\fields
+ * @package ether\maps\fields
  */
 class MapField extends Field implements EagerLoadingFieldInterface, PreviewableFieldInterface
 {
@@ -129,7 +129,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 	public static function displayName (): string
 	{
-		return SimpleMap::t('Map');
+		return Maps::t('Map');
 	}
 
 	public static function hasContentColumn (): bool
@@ -288,7 +288,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$view = Craft::$app->getView();
 
 		$countries = array_merge([
-			'*' => SimpleMap::t('All Countries'),
+			'*' => Maps::t('All Countries'),
 		], GeoService::$countries);
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
@@ -375,10 +375,10 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
-		if (!SimpleMap::getInstance())
+		if (!Maps::getInstance())
 			return null;
 
-		SimpleMap::getInstance()->map->modifyElementsQuery($query, $value);
+		Maps::getInstance()->map->modifyElementsQuery($query, $value);
 
 		return null;
 	}
@@ -417,7 +417,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function beforeElementSave (ElementInterface $element, bool $isNew): bool
 	{
-		if (!SimpleMap::getInstance()->map->validateField($this, $element))
+		if (!Maps::getInstance()->map->validateField($this, $element))
 			return false;
 
 		return parent::beforeElementSave($element, $isNew);
@@ -431,7 +431,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementSave (ElementInterface $element, bool $isNew)
 	{
-		SimpleMap::getInstance()->map->saveField($this, $element);
+		Maps::getInstance()->map->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
 	}
 
@@ -442,7 +442,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementDelete (ElementInterface $element)
 	{
-		SimpleMap::getInstance()->map->softDeleteField($this, $element);
+		Maps::getInstance()->map->softDeleteField($this, $element);
 		parent::afterElementDelete($element);
 	}
 
@@ -454,7 +454,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementRestore (ElementInterface $element)
 	{
-		SimpleMap::getInstance()->map->restoreField($this, $element);
+		Maps::getInstance()->map->restoreField($this, $element);
 		parent::afterElementRestore($element);
 	}
 
@@ -494,7 +494,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		]);
 
 		/** @var Settings $settings */
-		$settings = SimpleMap::getInstance()->getSettings();
+		$settings = Maps::getInstance()->getSettings();
 
 		$country = $this->country;
 		// Convert ISO2 to ISO3 for Here autocomplete

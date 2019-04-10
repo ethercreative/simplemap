@@ -1,7 +1,7 @@
 <?php
 
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
+use ether\maps\enums\GeoService;
+use ether\maps\enums\MapTiles;
 
 return [
 	'mapTiles' => MapTiles::Wikimedia,

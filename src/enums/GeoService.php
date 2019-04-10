@@ -1,20 +1,20 @@
 <?php
 /**
- * SimpleMap for Craft CMS
+ * Maps for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\simplemap\enums;
+namespace ether\maps\enums;
 
-use ether\simplemap\SimpleMap;
+use ether\maps\Maps;
 
 /**
  * Class GeoService
  *
  * @author  Ether Creative
- * @package ether\simplemap\enums
+ * @package ether\maps\enums
  */
 abstract class GeoService
 {
@@ -45,21 +45,21 @@ abstract class GeoService
 	public static function getSelectOptions ()
 	{
 		return [
-			[ 'optgroup' => SimpleMap::t('Open Source') ],
+			[ 'optgroup' => Maps::t('Open Source') ],
 
-			self::Nominatim => SimpleMap::t('Nominatim'),
+			self::Nominatim => Maps::t('Nominatim'),
 
-			[ 'optgroup' => SimpleMap::t('Requires API Key (Token)') ],
+			[ 'optgroup' => Maps::t('Requires API Key (Token)') ],
 
-			self::Mapbox => SimpleMap::t('Mapbox'),
-			self::GoogleMaps => SimpleMap::t('Google Maps'),
+			self::Mapbox => Maps::t('Mapbox'),
+			self::GoogleMaps => Maps::t('Google Maps'),
 
 			// MapKit lacks both separate address parts and country restriction
 			// on the front-end, and any sort of server-side API, so it's
 			// disabled for now.
 //			self::AppleMapKit => SimpleMap::t('Apple MapKit'),
 
-			self::Here => SimpleMap::t('Here'),
+			self::Here => Maps::t('Here'),
 		];
 	}
 

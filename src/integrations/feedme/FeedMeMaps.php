@@ -39,7 +39,7 @@ class FeedMeMaps extends Field implements FieldInterface
 
 	public function getMappingTemplate ()
 	{
-		return 'simplemap/_feedme-mapping';
+		return 'maps/_feedme-mapping';
 	}
 
 	public function parseField ()

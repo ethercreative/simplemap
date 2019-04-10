@@ -101,7 +101,7 @@ class Maps extends Plugin
 	protected function settingsHtml ()
 	{
 		return \Craft::$app->getView()->renderTemplate(
-			'simplemap/settings',
+			'maps/settings',
 			[
 				'settings' => $this->getSettings(),
 				'mapTileOptions' => MapTiles::getSelectOptions(),
@@ -141,7 +141,7 @@ class Maps extends Plugin
 
 	public static function t ($message, $params = [])
 	{
-		return \Craft::t('simplemap', $message, $params);
+		return \Craft::t('maps', $message, $params);
 	}
 
 }

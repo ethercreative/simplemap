@@ -1,12 +1,12 @@
 import App from './App.vue';
 import { t } from './filters/craft';
 
-const VueSimpleMapPlugin = {
+const VueMapsPlugin = {
 	install (Vue) {
 		Vue.filter('t', t);
-		Vue.component('simple-map', App);
+		Vue.component('maps-map', App);
 	}
 };
 
 if (typeof window !== 'undefined' && window.Vue)
-	window.Vue.use(VueSimpleMapPlugin);
+	window.Vue.use(VueMapsPlugin);

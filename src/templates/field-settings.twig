@@ -1,45 +1,45 @@
 {% import '_includes/forms' as forms %}
 
 {{ forms.field({
-	label: 'Initial Location'|t('simplemap'),
-	instructions: 'The initial location and zoom that will show in the map field'|t('simplemap'),
+	label: 'Initial Location'|t('maps'),
+	instructions: 'The initial location and zoom that will show in the map field'|t('maps'),
 }, map) }}
 
 {{ forms.lightswitchField({
-	label: 'Hide Search'|t('simplemap'),
-	instructions: 'Hide the location search field'|t('simplemap'),
+	label: 'Hide Search'|t('maps'),
+	instructions: 'Hide the location search field'|t('maps'),
 	id: 'hideSearch',
 	name: 'hideSearch',
 	on: field.hideSearch
 }) }}
 
 {{ forms.lightswitchField({
-	label: 'Hide Map'|t('simplemap'),
-	instructions: 'Hide the map'|t('simplemap'),
+	label: 'Hide Map'|t('maps'),
+	instructions: 'Hide the map'|t('maps'),
 	id: 'hideMap',
 	name: 'hideMap',
 	on: field.hideMap
 }) }}
 
 {{ forms.lightswitchField({
-	label: 'Hide Address'|t('simplemap'),
-	instructions: 'Hide the address fields'|t('simplemap'),
+	label: 'Hide Address'|t('maps'),
+	instructions: 'Hide the address fields'|t('maps'),
 	id: 'hideAddress',
 	name: 'hideAddress',
 	on: field.hideAddress
 }) }}
 
 {{ forms.lightswitchField({
-	label: 'Show Latitude / Longitude'|t('simplemap'),
-	instructions: 'Show the latitude / longitude fields'|t('simplemap'),
+	label: 'Show Latitude / Longitude'|t('maps'),
+	instructions: 'Show the latitude / longitude fields'|t('maps'),
 	id: 'showLatLng',
 	name: 'showLatLng',
 	on: field.showLatLng
 }) }}
 
 {{ forms.selectField({
-	label: 'Preferred Country'|t('simplemap'),
-	instructions: 'When searching for a location, results in this country will take precedence'|t('simplemap'),
+	label: 'Preferred Country'|t('maps'),
+	instructions: 'When searching for a location, results in this country will take precedence'|t('maps'),
 	id: 'country',
 	name: 'country',
 	options: countries,

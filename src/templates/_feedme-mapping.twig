@@ -36,14 +36,14 @@
 	</td>
 </tr>
 
-{% set simpleMapSubfields = {
-	lat: 'Latitude'|t('simplemap'),
-	lng: 'Longitude'|t('simplemap'),
-	zoom: 'Zoom'|t('simplemap'),
-	address: 'Address'|t('simplemap'),
+{% set mapsSubfields = {
+	lat: 'Latitude'|t('maps'),
+	lng: 'Longitude'|t('maps'),
+	zoom: 'Zoom'|t('maps'),
+	address: 'Address'|t('maps'),
 } %}
 
-{% for key, col in simpleMapSubfields %}
+{% for key, col in mapsSubfields %}
 	{% set nameLabel = col %}
 	{% set instructionsHandle = handle ~ '[' ~ key ~ ']' %}
 

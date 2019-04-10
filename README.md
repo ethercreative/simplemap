@@ -121,7 +121,7 @@ have access to all the old parts from Google.
 ### Configuration
 
 You can configure the plugin either via the Craft CP or by duplicating the 
-`config.php` file to `config/simplemap.php`.
+`config.php` file to `config/maps.php`.
 
 ### Eager-loading
 

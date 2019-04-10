@@ -7,14 +7,14 @@
 {%- endmacro %}
 {% import _self as _ %}
 
-<div class="spinner" id="simpleMapSpinner"></div>
-<div id="simpleMap" style="display: none">
+<div class="spinner" id="mapsSpinner"></div>
+<div id="maps" style="display: none">
 
 	{# === Map === #}
 
-	<h2>{{ 'Map'|t('simplemap') }}</h2>
+	<h2>{{ 'Map'|t('maps') }}</h2>
 
-	<div class="simplemap-tiles">
+	<div class="maps-tiles">
 		<div>
 			{# --- Map: Tiles --- #}
 
@@ -22,8 +22,8 @@
 				first: true,
 				id: 'mapTiles',
 				name: 'mapTiles',
-				label: 'Map Tiles'|t('simplemap'),
-				instructions: 'Select the style of map tiles.'|t('simplemap'),
+				label: 'Map Tiles'|t('maps'),
+				instructions: 'Select the style of map tiles.'|t('maps'),
 				options: mapTileOptions,
 				value: settings.mapTiles,
 			})|replace('<select', '<select v-model="mapTiles"')|raw }}
@@ -35,8 +35,8 @@
 			<div v-if="mapTilesSimple && requiresMapToken">
 				{{ forms.textField({
 					name: 'mapToken',
-					label: 'Map Token'|t('simplemap'),
-					instructions: 'Add the API key for map tiles service you are using.'|t('simplemap'),
+					label: 'Map Token'|t('maps'),
+					instructions: 'Add the API key for map tiles service you are using.'|t('maps'),
 					value: not mapTokenIterable ? settings.mapToken,
 				}) }}
 			</div>
@@ -44,23 +44,23 @@
 			<div v-if="mapTiles.indexOf('mapkit') > -1">
 				{{ forms.textareaField({
 					name: 'mapToken[privateKey]',
-					label: 'Private Key'|t('simplemap'),
+					label: 'Private Key'|t('maps'),
 					rows: 6,
-					instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+					instructions: 'Paste the contents of your private key files below.'|t('maps'),
 					value: _.tokenValue(settings.mapToken, 'privateKey'),
 				}) }}
 
 				{{ forms.textField({
 					name: 'mapToken[keyId]',
-					label: 'Key ID'|t('simplemap'),
-					instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+					label: 'Key ID'|t('maps'),
+					instructions: 'The ID of the key associated with your private key.'|t('maps'),
 					value: _.tokenValue(settings.mapToken, 'keyId'),
 				}) }}
 
 				{{ forms.textField({
 					name: 'mapToken[teamId]',
-					label: 'Team ID'|t('simplemap'),
-					instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+					label: 'Team ID'|t('maps'),
+					instructions: 'The team ID that created the key ID and private key.'|t('maps'),
 					value: _.tokenValue(settings.mapToken, 'teamId'),
 				}) }}
 			</div>
@@ -68,15 +68,15 @@
 			<div v-if="mapTiles.indexOf('here') > -1">
 				{{ forms.textField({
 					name: 'mapToken[appId]',
-					label: 'App ID'|t('simplemap'),
-					instructions: 'Your Here app ID.'|t('simplemap'),
+					label: 'App ID'|t('maps'),
+					instructions: 'Your Here app ID.'|t('maps'),
 					value: _.tokenValue(settings.mapToken, 'appId'),
 				}) }}
 
 				{{ forms.textField({
 					name: 'mapToken[appCode]',
-					label: 'App Code'|t('simplemap'),
-					instructions: 'Your Here app code.'|t('simplemap'),
+					label: 'App Code'|t('maps'),
+					instructions: 'Your Here app code.'|t('maps'),
 					value: _.tokenValue(settings.mapToken, 'appCode'),
 				}) }}
 			</div>
@@ -96,15 +96,15 @@
 	{# === Geo === #}
 
 	<br v-if="requiresMapToken" />
-	<h2>{{ 'Geo-Coding'|t('simplemap') }}</h2>
+	<h2>{{ 'Geo-Coding'|t('maps') }}</h2>
 
 	{# --- Geo: Service --- #}
 
 	{{ forms.selectField({
 		id: 'geoService',
 		name: 'geoService',
-		label: 'Geo Service'|t('simplemap'),
-		instructions: 'Select the service to be used for Geo-coding.'|t('simplemap'),
+		label: 'Geo Service'|t('maps'),
+		instructions: 'Select the service to be used for Geo-coding.'|t('maps'),
 		options: geoServiceOptions,
 		value: settings.geoService,
 	}) |replace('<select', '<select v-model="geoService"')|raw}}
@@ -116,8 +116,8 @@
 	<div v-if="geoServiceSimple && requiresGeoToken">
 		{{ forms.textField({
 			name: 'geoToken',
-			label: 'Geo Token'|t('simplemap'),
-			instructions: 'Add the API key for the geo-coding service.'|t('simplemap'),
+			label: 'Geo Token'|t('maps'),
+			instructions: 'Add the API key for the geo-coding service.'|t('maps'),
 			value: not geoTokenIterable ? settings.geoToken,
 		}) }}
 	</div>
@@ -126,31 +126,31 @@
 		<div class="field">
 			<div class="warning">
 				<p style="display:inline-block;vertical-align:top">
-					<strong>{{ 'Notice'|t('simplemap') }}</strong><br>
-					{{ 'MapKit does not support individual address parts.'|t('simplemap') }}
+					<strong>{{ 'Notice'|t('maps') }}</strong><br>
+					{{ 'MapKit does not support individual address parts.'|t('maps') }}
 				</p>
 			</div>
 		</div>
 
 		{{ forms.textareaField({
 			name: 'geoToken[privateKey]',
-			label: 'Private Key'|t('simplemap'),
+			label: 'Private Key'|t('maps'),
 			rows: 6,
-			instructions: 'Paste the contents of your private key files below.'|t('simplemap'),
+			instructions: 'Paste the contents of your private key files below.'|t('maps'),
 			value: _.tokenValue(settings.geoToken, 'privateKey'),
 		}) }}
 
 		{{ forms.textField({
 			name: 'geoToken[keyId]',
-			label: 'Key ID'|t('simplemap'),
-			instructions: 'The ID of the key associated with your private key.'|t('simplemap'),
+			label: 'Key ID'|t('maps'),
+			instructions: 'The ID of the key associated with your private key.'|t('maps'),
 			value: _.tokenValue(settings.geoToken, 'keyId'),
 		}) }}
 
 		{{ forms.textField({
 			name: 'geoToken[teamId]',
-			label: 'Team ID'|t('simplemap'),
-			instructions: 'The team ID that created the key ID and private key.'|t('simplemap'),
+			label: 'Team ID'|t('maps'),
+			instructions: 'The team ID that created the key ID and private key.'|t('maps'),
 			value: _.tokenValue(settings.geoToken, 'teamId'),
 		}) }}
 	</div>
@@ -158,15 +158,15 @@
 	<div v-if="geoService.indexOf('here') > -1">
 		{{ forms.textField({
 			name: 'geoToken[appId]',
-			label: 'App ID'|t('simplemap'),
-			instructions: 'Your Here app ID.'|t('simplemap'),
+			label: 'App ID'|t('maps'),
+			instructions: 'Your Here app ID.'|t('maps'),
 			value: _.tokenValue(settings.geoToken, 'appId'),
 		}) }}
 
 		{{ forms.textField({
 			name: 'geoToken[appCode]',
-			label: 'App Code'|t('simplemap'),
-			instructions: 'Your Here app code.'|t('simplemap'),
+			label: 'App Code'|t('maps'),
+			instructions: 'Your Here app code.'|t('maps'),
 			value: _.tokenValue(settings.geoToken, 'appCode'),
 		}) }}
 	</div>
@@ -175,23 +175,23 @@
 
 	<hr>
 
-	<p><strong>{{ 'Getting API Keys'|t('simplemap') }}</strong></p>
+	<p><strong>{{ 'Getting API Keys'|t('maps') }}</strong></p>
 	<ul>
 		<li>
-			<a href="https://cloud.google.com/maps-platform/#get-started" target="_blank" rel="nofollow">{{ 'Google Maps'|t('simplemap') }}</a>
+			<a href="https://cloud.google.com/maps-platform/#get-started" target="_blank" rel="nofollow">{{ 'Google Maps'|t('maps') }}</a>
 			&mdash; {{ 'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.'|md|striptags('<strong>')|raw }}
 		</li>
 		<li>
-			<a href="https://docs.mapbox.com/help/how-mapbox-works/access-tokens/" target="_blank" rel="nofollow">{{ 'Mapbox'|t('simplemap') }}</a>
-			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('simplemap') }}
+			<a href="https://docs.mapbox.com/help/how-mapbox-works/access-tokens/" target="_blank" rel="nofollow">{{ 'Mapbox'|t('maps') }}</a>
+			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('maps') }}
 		</li>
 		<li>
-			<a href="https://developer.apple.com/documentation/mapkitjs/setting_up_mapkit_js" target="_blank" rel="nofollow">{{ 'Apple MapKit'|t('simplemap') }}</a>
-			&mdash; {{ 'We currently only support Apple MapKit for map tiles only.'|t('simplemap') }}
+			<a href="https://developer.apple.com/documentation/mapkitjs/setting_up_mapkit_js" target="_blank" rel="nofollow">{{ 'Apple MapKit'|t('maps') }}</a>
+			&mdash; {{ 'We currently only support Apple MapKit for map tiles only.'|t('maps') }}
 		</li>
 		<li>
-			<a href="https://developer.here.com/" target="_blank" rel="nofollow">{{ 'Here'|t('simplemap') }}</a>
-			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('simplemap') }}
+			<a href="https://developer.here.com/" target="_blank" rel="nofollow">{{ 'Here'|t('maps') }}</a>
+			&mdash; {{ 'You can use the same key for both map tiles and geo service, no configuration needed!'|t('maps') }}
 		</li>
 	</ul>
 
@@ -208,8 +208,8 @@ new Vue({
 		};
 	},
 	mounted () {
-		document.getElementById('settings-simpleMapSpinner').style.display = 'none';
-		document.getElementById('settings-simpleMap').style.display = 'block';
+		document.getElementById('settings-mapsSpinner').style.display = 'none';
+		document.getElementById('settings-maps').style.display = 'block';
 	},
 	computed: {
 		requiresMapToken () {
@@ -241,18 +241,18 @@ new Vue({
 {% endjs %}
 
 {% css %}
-.simplemap-tiles {
+.maps-tiles {
 	display: flex;
 	align-items: start;
 	justify-content: space-between;
 }
 
-.simplemap-tiles > div:first-child {
+.maps-tiles > div:first-child {
 	flex-grow: 999;
 	padding-right: 24px;
 }
 
-.simplemap-tiles img {
+.maps-tiles img {
 	width: 100%;
 	max-width: 250px;
 	vertical-align: middle;
@@ -260,11 +260,11 @@ new Vue({
 }
 
 @media only screen and (max-width: 1224px) {
-	.simplemap-tiles {
+	.maps-tiles {
 		display: block;
 	}
 
-	.simplemap-tiles > div:first-child {
+	.maps-tiles > div:first-child {
 		padding-right: 0;
 		padding-bottom: 24px;
 	}

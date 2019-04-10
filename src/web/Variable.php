@@ -49,7 +49,7 @@ class Variable
 	{
 		\Craft::$app->getDeprecator()->log(
 			'Variable::getApiKey()',
-			'ether\simplemap\web\Variable::getApiKey() has been deprecated. Use `getMapToken()` instead.'
+			'ether\maps\web\Variable::getApiKey() has been deprecated. Use `getMapToken()` instead.'
 		);
 
 		return $this->getMapToken();
@@ -72,7 +72,7 @@ class Variable
 		}
 		catch (Exception $e)
 		{
-			\Craft::error($e->getMessage(), 'simplemap');
+			\Craft::error($e->getMessage(), 'maps');
 
 			return [
 				'lat' => '',

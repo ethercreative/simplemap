@@ -292,7 +292,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		], GeoService::$countries);
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
-		return $view->renderTemplate('simplemap/field-settings', [
+		return $view->renderTemplate('maps/field-settings', [
 			'map' => $mapField,
 			'field' => $this,
 			'countries' => $countries,
@@ -479,7 +479,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
 		$view->registerAssetBundle(MapAsset::class);
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
-		$view->registerTranslations('simplemap', [
+		$view->registerTranslations('maps', [
 			'Search for a location',
 			'Clear',
 			'Name / Number',
@@ -584,7 +584,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 			json_encode($opts)
 		);
 
-		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'></simple-map></div>';
+		return '<div id="' . $containerId . '"><maps-map options=\'' . $options . '\'></maps-map></div>';
 	}
 
 }

@@ -57,7 +57,7 @@ abstract class GeoService
 			// MapKit lacks both separate address parts and country restriction
 			// on the front-end, and any sort of server-side API, so it's
 			// disabled for now.
-//			self::AppleMapKit => SimpleMap::t('Apple MapKit'),
+//			self::AppleMapKit => Maps::t('Apple MapKit'),
 
 			self::Here => Maps::t('Here'),
 		];

@@ -1,4 +1,4 @@
-# simplemap
+# Maps
 
 ## Project setup
 ```

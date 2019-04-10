@@ -1,3 +1,7 @@
+## [Unreleased] 3.4.12
+### Added
+- Added FeedMe support!
+
 ## 3.4.11 - 2019-04-05
 ### Fixed
 - Map records are no longer double saved when upgrading to from Craft 2 to 3

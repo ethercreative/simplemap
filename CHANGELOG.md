@@ -2,6 +2,10 @@
 ### Added
 - Added FeedMe support!
 
+### Fixed
+- Fixed results being duplicated when searching by location when an entry has 
+multiple map fields within the search catchment. 
+
 ### Changed
 - The plugin is now, completely, Maps
 

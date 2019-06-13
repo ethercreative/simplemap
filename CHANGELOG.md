@@ -4,10 +4,7 @@
 
 ### Fixed
 - Fixed results being duplicated when searching by location when an entry has 
-multiple map fields within the search catchment. 
-
-### Changed
-- The plugin is now, completely, Maps
+multiple map fields within the search catchment.
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

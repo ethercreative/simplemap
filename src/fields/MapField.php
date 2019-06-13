@@ -1,12 +1,12 @@
 <?php
 /**
- * Maps for Craft CMS
+ * SimpleMap for Craft CMS
  *
  * @link      https://ethercreative.co.uk
  * @copyright Copyright (c) 2019 Ether Creative
  */
 
-namespace ether\maps\fields;
+namespace ether\simplemap\fields;
 
 use Craft;
 use craft\base\EagerLoadingFieldInterface;
@@ -17,13 +17,13 @@ use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
-use ether\maps\enums\GeoService as GeoEnum;
-use ether\maps\models\Settings;
-use ether\maps\services\GeoService;
-use ether\maps\Maps;
-use ether\maps\web\assets\MapAsset;
-use ether\maps\elements\Map as MapElement;
-use ether\maps\records\Map as MapRecord;
+use ether\simplemap\enums\GeoService as GeoEnum;
+use ether\simplemap\models\Settings;
+use ether\simplemap\services\GeoService;
+use ether\simplemap\SimpleMap;
+use ether\simplemap\web\assets\MapAsset;
+use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\records\Map as MapRecord;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -36,7 +36,7 @@ use yii\base\InvalidConfigException;
  * Class Map
  *
  * @author  Ether Creative
- * @package ether\maps\fields
+ * @package ether\simplemap\fields
  */
 class MapField extends Field implements EagerLoadingFieldInterface, PreviewableFieldInterface
 {
@@ -129,7 +129,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 	public static function displayName (): string
 	{
-		return Maps::t('Map');
+		return SimpleMap::t('Map');
 	}
 
 	public static function hasContentColumn (): bool
@@ -288,11 +288,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$view = Craft::$app->getView();
 
 		$countries = array_merge([
-			'*' => Maps::t('All Countries'),
+			'*' => SimpleMap::t('All Countries'),
 		], GeoService::$countries);
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
-		return $view->renderTemplate('maps/field-settings', [
+		return $view->renderTemplate('simplemap/field-settings', [
 			'map' => $mapField,
 			'field' => $this,
 			'countries' => $countries,
@@ -375,10 +375,10 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{
-		if (!Maps::getInstance())
+		if (!SimpleMap::getInstance())
 			return null;
 
-		Maps::getInstance()->map->modifyElementsQuery($query, $value, $this);
+		SimpleMap::getInstance()->map->modifyElementsQuery($query, $value, $this);
 
 		return null;
 	}
@@ -417,7 +417,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function beforeElementSave (ElementInterface $element, bool $isNew): bool
 	{
-		if (!Maps::getInstance()->map->validateField($this, $element))
+		if (!SimpleMap::getInstance()->map->validateField($this, $element))
 			return false;
 
 		return parent::beforeElementSave($element, $isNew);
@@ -431,7 +431,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementSave (ElementInterface $element, bool $isNew)
 	{
-		Maps::getInstance()->map->saveField($this, $element);
+		SimpleMap::getInstance()->map->saveField($this, $element);
 		parent::afterElementSave($element, $isNew);
 	}
 
@@ -442,7 +442,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementDelete (ElementInterface $element)
 	{
-		Maps::getInstance()->map->softDeleteField($this, $element);
+		SimpleMap::getInstance()->map->softDeleteField($this, $element);
 		parent::afterElementDelete($element);
 	}
 
@@ -454,7 +454,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function afterElementRestore (ElementInterface $element)
 	{
-		Maps::getInstance()->map->restoreField($this, $element);
+		SimpleMap::getInstance()->map->restoreField($this, $element);
 		parent::afterElementRestore($element);
 	}
 
@@ -479,7 +479,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
 		$view->registerAssetBundle(MapAsset::class);
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
-		$view->registerTranslations('maps', [
+		$view->registerTranslations('simplemap', [
 			'Search for a location',
 			'Clear',
 			'Name / Number',
@@ -494,7 +494,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 		]);
 
 		/** @var Settings $settings */
-		$settings = Maps::getInstance()->getSettings();
+		$settings = SimpleMap::getInstance()->getSettings();
 
 		$country = $this->country;
 		// Convert ISO2 to ISO3 for Here autocomplete
@@ -584,7 +584,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 			json_encode($opts)
 		);
 
-		return '<div id="' . $containerId . '"><maps-map options=\'' . $options . '\'></maps-map></div>';
+		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'></simple-map></div>';
 	}
 
 }

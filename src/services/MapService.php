@@ -195,7 +195,7 @@ class MapService extends Component
 		/** @var ElementQuery $query */
 
 		$table = MapRecord::TableName;
-		$alias = MapRecord::TableNameClean . '_' . bin2hex(openssl_random_pseudo_bytes(5));
+		$alias = MapRecord::TableNameClean . '_' . $field->handle;
 		$on = [
 			'and',
 			'[[elements.id]] = [[' . $alias . '.ownerId]]',

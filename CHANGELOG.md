@@ -12,6 +12,7 @@ multiple map fields within the search catchment.
 - Add default zoom to map element
 - Update preferred country instructions to be clearer
 - Support rendering a map field without a value
+- Use field handle as table alias suffix, instead of random bytes
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

@@ -6,6 +6,7 @@
 - Fixed results being duplicated when searching by location when an entry has 
 multiple map fields within the search catchment.
 - Account for missing Craft 2 API keys
+- Fix HERE search not working when no country restriction was set
 
 ### Changed
 - Add default zoom to map element

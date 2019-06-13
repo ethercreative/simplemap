@@ -205,7 +205,7 @@ export default class Geo {
 			app_id: this.token.appId,
 			app_code: this.token.appCode,
 			query,
-			country: this.country.toUpperCase(),
+			country: this.country ? this.country.toUpperCase() : '',
 			maxresults: 5,
 			language: this.locale,
 		}).toString();

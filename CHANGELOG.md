@@ -5,6 +5,7 @@
 ### Fixed
 - Fixed results being duplicated when searching by location when an entry has 
 multiple map fields within the search catchment.
+- Account for missing Craft 2 API keys
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

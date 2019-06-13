@@ -50,8 +50,8 @@ return [
 
 	'All Countries' => 'All Countries',
 	'Preferred Country' => 'Preferred Country',
-	'When searching for a location, results in this country will take precedence' =>
-		'When searching for a location, results in this country will take precedence',
+	'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.' =>
+		'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.',
 
 	// Settings
 	// =========================================================================

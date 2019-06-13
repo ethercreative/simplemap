@@ -10,6 +10,7 @@ multiple map fields within the search catchment.
 
 ### Changed
 - Add default zoom to map element
+- Update preferred country instructions to be clearer
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

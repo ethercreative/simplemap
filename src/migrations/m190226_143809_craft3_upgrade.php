@@ -309,8 +309,8 @@ class m190226_143809_craft3_upgrade extends Migration
 		if (is_array($craft2Settings) && !empty($craft2Settings))
 		{
 			$settings = [
-				'apiKey' => $craft2Settings['browserApiKey'],
-				'unrestrictedApiKey' => $craft2Settings['serverApiKey'],
+				'apiKey' => @$craft2Settings['browserApiKey'] ?: '',
+				'unrestrictedApiKey' => @$craft2Settings['serverApiKey'] ?: '',
 			];
 		}
 

@@ -179,8 +179,16 @@ class m190226_143809_craft3_upgrade extends Migration
 	    (new Install())->safeUp();
 
 	    // 3. Store the old data as new
+	    $dupeKeys = [];
 	    foreach ($rows as $row)
 	    {
+		    $key = $row['ownerId'] . '_' . $row['ownerSiteId'] . '_' . $row['fieldId'];
+
+		    if (in_array($key, $dupeKeys))
+			    continue;
+
+		    $dupeKeys[] = $key;
+
 		    echo '    > Upgrade map value ' . $row['address'] . PHP_EOL;
 
 		    $map = new MapElement($row);
@@ -301,8 +309,8 @@ class m190226_143809_craft3_upgrade extends Migration
 		if (is_array($craft2Settings) && !empty($craft2Settings))
 		{
 			$settings = [
-				'apiKey' => $craft2Settings['browserApiKey'],
-				'unrestrictedApiKey' => $craft2Settings['serverApiKey'],
+				'apiKey' => @$craft2Settings['browserApiKey'] ?: '',
+				'unrestrictedApiKey' => @$craft2Settings['serverApiKey'] ?: '',
 			];
 		}
 

@@ -9,6 +9,7 @@
 namespace ether\simplemap\web\assets;
 
 use craft\web\AssetBundle;
+use craft\web\assets\cp\CpAsset;
 use craft\web\assets\vue\VueAsset;
 
 /**
@@ -25,6 +26,7 @@ class MapAsset extends AssetBundle
 		$this->sourcePath = __DIR__ . '/map';
 
 		$this->depends = [
+			CpAsset::class,
 			VueAsset::class,
 		];
 

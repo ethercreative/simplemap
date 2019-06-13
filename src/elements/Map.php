@@ -48,7 +48,7 @@ class Map extends Element
 	public $lng;
 
 	/** @var int */
-	public $zoom;
+	public $zoom = 15;
 
 	/** @var string */
 	public $address;

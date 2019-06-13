@@ -7,6 +7,9 @@
 multiple map fields within the search catchment.
 - Account for missing Craft 2 API keys
 
+### Changed
+- Add default zoom to map element
+
 ## 3.4.11 - 2019-04-05
 ### Fixed
 - Map records are no longer double saved when upgrading to from Craft 2 to 3

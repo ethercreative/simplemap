@@ -183,10 +183,11 @@ class MapService extends Component
 	/**
 	 * @param ElementQueryInterface $query
 	 * @param mixed                 $value
+	 * @param MapField              $field
 	 *
 	 * @throws \yii\db\Exception
 	 */
-	public function modifyElementsQuery (ElementQueryInterface $query, $value)
+	public function modifyElementsQuery (ElementQueryInterface $query, $value, MapField $field)
 	{
 		if (empty($value))
 			return;
@@ -200,6 +201,7 @@ class MapService extends Component
 			'[[elements.id]] = [[' . $alias . '.ownerId]]',
 			'[[elements.dateDeleted]] IS NULL',
 			'[[elements_sites.siteId]] = [[' . $alias . '.ownerSiteId]]',
+			'[[' . $alias . '.fieldId]] = ' . $field->id,
 		];
 
 		$query->query->join('JOIN', $table . ' ' . $alias, $on);

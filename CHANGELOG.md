@@ -1,6 +1,10 @@
-## [Unreleased] 3.4.12
+## [Unreleased] 3.5.0
 ### Added
 - Added FeedMe support!
+
+### Fixed
+- Fixed results being duplicated when searching by location when an entry has 
+multiple map fields within the search catchment.
 
 ## 3.4.11 - 2019-04-05
 ### Fixed

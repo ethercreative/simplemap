@@ -1,4 +1,4 @@
-## [Unreleased] 3.5.0
+## 3.5.0 - 2019-06-13
 ### Added
 - Added FeedMe support!
 

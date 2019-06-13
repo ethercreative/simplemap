@@ -306,14 +306,14 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	public function getInputHtml ($value, ElementInterface $element = null): string
+	public function getInputHtml ($value = null, ElementInterface $element = null): string
 	{
 		if ($element !== null && $element->hasEagerLoadedElements($this->handle))
 			$value = $element->getEagerLoadedElements($this->handle);
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
 		return new Markup(
-			$this->_renderMap($value),
+			$this->_renderMap($value ?: new MapElement()),
 			'utf-8'
 		);
 	}
@@ -464,7 +464,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	/**
 	 * Renders the map input
 	 *
-	 * @param      $value
+	 * @param MapElement $value
 	 * @param bool $isSettings
 	 *
 	 * @return string
@@ -474,7 +474,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	{
 		$view = Craft::$app->getView();
 
-		$containerId = $this->id . '-container';
+		$containerId = 'map-' . $this->id . '-container';
 		$vueContainerId = $view->namespaceInputId($containerId);
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
 		$view->registerAssetBundle(MapAsset::class);

@@ -40,14 +40,30 @@
 	lat: 'Latitude'|t('simplemap'),
 	lng: 'Longitude'|t('simplemap'),
 	zoom: 'Zoom'|t('simplemap'),
-	address: 'Address'|t('simplemap'),
+	address: 'Full Address'|t('simplemap'),
+	'parts.number': 'Number'|t('simplemap'),
+	'parts.address': 'Address'|t('simplemap'),
+	'parts.city': 'City'|t('simplemap'),
+	'parts.postcode': 'Postcode'|t('simplemap'),
+	'parts.county': 'County'|t('simplemap'),
+	'parts.state': 'State'|t('simplemap'),
+	'parts.country': 'Country'|t('simplemap'),
 } %}
 
 {% for key, col in simpleMapSubfields %}
-	{% set nameLabel = col %}
-	{% set instructionsHandle = handle ~ '[' ~ key ~ ']' %}
+	{% set splitKey = '.' in key %}
+	{% set subKey = null %}
 
-	{% set path = prefixPath | merge ([ 'fields', key ]) %}
+	{% if splitKey %}
+		{% set key = key|split('.') %}
+		{% set subKey = key[1] %}
+		{% set key = key[0] %}
+	{% endif %}
+
+	{% set nameLabel = col %}
+	{% set instructionsHandle = handle ~ '[' ~ key ~ ']' ~ (subKey ? '[' ~ subKey ~ ']') %}
+
+	{% set path = prefixPath | merge ([ 'fields', key, subKey ]|filter) %}
 
 	{% set default = default ?? {
 		type: 'text',

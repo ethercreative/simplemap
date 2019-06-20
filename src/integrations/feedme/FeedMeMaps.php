@@ -52,10 +52,22 @@ class FeedMeMaps extends Field implements FieldInterface
 			return null;
 
 		foreach ($fields as $subFieldHandle => $subFieldInfo)
+		{
+			if ($subFieldHandle === 'parts') {
+				foreach ($subFieldInfo as $handle => $info)
+					$preppedData[$subFieldHandle][$handle] = DataHelper::fetchValue(
+						$this->feedData,
+						$info
+					);
+
+				continue;
+			}
+
 			$preppedData[$subFieldHandle] = DataHelper::fetchValue(
 				$this->feedData,
 				$subFieldInfo
 			);
+		}
 
 		if (isset($preppedData['parts']))
 			$preppedData['parts'] = new Parts($preppedData['parts']);

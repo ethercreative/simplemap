@@ -1,3 +1,7 @@
+## 3.5.2 - 2019-06-20
+### Improved
+- FeedMe can now import the individual map parts
+
 ## 3.5.1 - 2019-06-20
 ### Added
 - Maps can now populate address and lat/lng data based off only a postcode

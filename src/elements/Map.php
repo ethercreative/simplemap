@@ -69,13 +69,16 @@ class Map extends Element
 		if ($this->address === null)
 			$this->address = '';
 
-		if ($this->parts && !is_array($this->parts))
-			$this->parts = Json::decodeIfJson($this->parts);
+		if (!($this->parts instanceof Parts))
+		{
+			if ($this->parts && !is_array($this->parts))
+				$this->parts = Json::decodeIfJson($this->parts);
 
-		if (Parts::isLegacy($this->parts))
-			$this->parts = new PartsLegacy($this->parts);
-		else
-			$this->parts = new Parts($this->parts);
+			if (Parts::isLegacy($this->parts))
+				$this->parts = new PartsLegacy($this->parts);
+			else
+				$this->parts = new Parts($this->parts);
+		}
 
 		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
 	}

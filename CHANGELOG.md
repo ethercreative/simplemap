@@ -1,3 +1,7 @@
+## 3.5.1 - 2019-06-20
+### Added
+- Maps can now populate address and lat/lng data based off only a postcode
+
 ## 3.5.0 - 2019-06-13
 ### Added
 - Added FeedMe support!

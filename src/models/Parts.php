@@ -162,9 +162,9 @@ class Parts
 	private function _mapbox (array $parts)
 	{
 		$parts = array_reduce(
-			$parts,
+			$parts['context'],
 			function ($a, $part) {
-				$key = explode('.', $part['id'])[0];
+				$key     = explode('.', $part['id'])[0];
 				$a[$key] = $part['text'];
 
 				return $a;
@@ -175,13 +175,13 @@ class Parts
 			]
 		);
 
-		$this->number   = $parts['number'];
-		$this->address  = $parts['address'];
-		$this->city     = $parts['city'];
-		$this->postcode = $parts['postcode'];
-		$this->county   = $parts['county'];
-		$this->state    = $parts['state'];
-		$this->country  = $parts['country'];
+		$this->number   = @$parts['number'];
+		$this->address  = @$parts['address'];
+		$this->city     = @$parts['city'];
+		$this->postcode = @$parts['postcode'];
+		$this->county   = @$parts['county'];
+		$this->state    = @$parts['state'];
+		$this->country  = @$parts['country'];
 	}
 
 	/**

@@ -349,16 +349,18 @@ class MapService extends Component
 	 */
 	private function _populateMissingData (MapRecord $record)
 	{
+		$postcode = is_array($record->parts) ? $record->parts['postcode'] : $record->parts->postcode;
+
 		// Missing Lat / Lng
-		if (!($record->lat && $record->lng) && $record->address)
+		if (!($record->lat && $record->lng) && ($record->address || $postcode))
 		{
-			$latLng = GeoService::latLngFromAddress($record->address);
+			$latLng = GeoService::latLngFromAddress($record->address ?: $postcode);
 			$record->lat = $latLng['lat'];
 			$record->lng = $latLng['lng'];
 		}
 
 		// Missing address / parts
-		if (!$record->address && ($record->lat && $record->lng))
+		if ((!$record->address || $record->address === $postcode) && ($record->lat && $record->lng))
 		{
 			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
 			$record->address = $loc['address'];

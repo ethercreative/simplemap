@@ -1,3 +1,7 @@
+## [Unreleased] 3.5.3
+### Fixed
+- Fix missing postcode warning (Fixes #169)
+
 ## 3.5.2 - 2019-06-20
 ### Improved
 - FeedMe can now import the individual map parts

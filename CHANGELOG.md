@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.0
+## 3.6.0 - 2019-07-12
 
 > {warning} This update changes how map data is stored, moving away from an 
 element type. This means if you are eager loading the a map field, you'll want 

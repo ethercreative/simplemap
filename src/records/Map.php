@@ -23,9 +23,6 @@ use yii\db\ActiveQueryInterface;
  * @property int    $fieldId
  * @property float  $lat
  * @property float  $lng
- * @property int    $zoom
- * @property string $address - The searched for address
- * @property array  $parts   - The specific parts of the address
  *
  * @author  Ether Creative
  * @package ether\simplemap\records
@@ -36,8 +33,11 @@ class Map extends ActiveRecord
 	// Properties
 	// =========================================================================
 
-	const TableName = '{{%simplemaps}}';
-	const TableNameClean = 'simplemaps';
+	/** @deprecated Remove in 4.x */
+	const OldTableName = '{{%simplemaps}}';
+
+	const TableName = '{{%maps}}';
+	const TableNameClean = 'maps';
 	
 	// Methods
 	// =========================================================================
@@ -45,11 +45,6 @@ class Map extends ActiveRecord
 	public static function tableName ()
 	{
 		return self::TableName;
-	}
-
-	public function getElement (): ActiveQueryInterface
-	{
-		return $this->hasOne(Element::class, ['id' => 'id']);
 	}
 
 	public function getOwner (): ActiveQueryInterface

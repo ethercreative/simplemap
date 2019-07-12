@@ -9,28 +9,25 @@
 namespace ether\simplemap\fields;
 
 use Craft;
-use craft\base\EagerLoadingFieldInterface;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
-use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
+use ether\simplemap\models\Map;
 use ether\simplemap\web\assets\MapAsset;
-use ether\simplemap\elements\Map as MapElement;
-use ether\simplemap\records\Map as MapRecord;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\db\Schema;
 
 /**
  * Class Map
@@ -38,7 +35,7 @@ use yii\base\InvalidConfigException;
  * @author  Ether Creative
  * @package ether\simplemap\fields
  */
-class MapField extends Field implements EagerLoadingFieldInterface, PreviewableFieldInterface
+class MapField extends Field implements PreviewableFieldInterface
 {
 
 	// Properties
@@ -134,7 +131,12 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 	public static function hasContentColumn (): bool
 	{
-		return false;
+		return true;
+	}
+
+	public function getContentColumnType (): string
+	{
+		return Schema::TYPE_TEXT;
 	}
 
 	public static function supportedTranslationMethods (): array
@@ -183,66 +185,36 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	}
 
 	/**
-	 * @param MapElement|null $value
+	 * @param Map|array|string|null         $value
 	 * @param ElementInterface|Element|null $element
 	 *
-	 * @return MapElement
+	 * @return Map
+	 * @throws \yii\db\Exception
 	 */
 	public function normalizeValue ($value, ElementInterface $element = null)
 	{
-		if (is_array($value) && !empty($value[0]))
-			$value = $value[0];
-
-		if ($value instanceof MapElement)
-			return $value;
-
-		if ($value instanceof ElementQueryInterface)
-			return $value->one();
-
 		if (is_string($value))
 			$value = Json::decodeIfJson($value);
 
-		$map = null;
+		if ($value instanceof Map)
+			$map = $value;
+		elseif (is_array($value))
+			$map = new Map($value);
+		else
+			$map = new Map([
+				'lat'  => null,
+				'lng'  => null,
+				'zoom' => $this->zoom,
+			]);
 
-		if ($element && $element->id)
-		{
-			/** @var MapElement $map */
-			$map = MapElement::find()
-				->anyStatus()
-				->fieldId($this->id)
-				->ownerSiteId($element->siteId)
-				->ownerId($element->id)
-				->trashed($element->trashed)
-				->one();
-
-			if ($map && $value)
-			{
-				$map->lat     = $value['lat'];
-				$map->lng     = $value['lng'];
-				$map->zoom    = $value['zoom'];
-				$map->address = $value['address'];
-				$map->parts   = $value['parts'];
-			}
-		}
-
-		if ($map === null)
-		{
-			if (is_array($value))
-				$map = new MapElement($value);
-			else
-				$map = new MapElement([
-					'lat' => null,
-					'lng' => null,
-					'zoom' => $this->zoom,
-				]);
-		}
+		SimpleMap::getInstance()->map->populateMissingData($map);
 
 		$map->ownerId = $element->id;
 		$map->ownerSiteId = $element->siteId;
 		$map->fieldId = $this->id;
 
 		$handle = $this->handle;
-		$element->$handle = $map;
+		$element->setFieldValue($handle, $map);
 
 		return $map;
 	}
@@ -256,7 +228,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 */
 	public function getSettingsHtml ()
 	{
-		$value = new MapElement();
+		$value = new Map();
 
 		$value->lat  = $this->lat;
 		$value->lng  = $this->lng;
@@ -300,7 +272,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	}
 
 	/**
-	 * @param MapElement $value
+	 * @param Map $value
 	 * @param ElementInterface|Element|null $element
 	 *
 	 * @return string
@@ -313,7 +285,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 
 		/** @noinspection PhpComposerExtensionStubsInspection */
 		return new Markup(
-			$this->_renderMap($value ?: new MapElement()),
+			$this->_renderMap($value ?: new Map()),
 			'utf-8'
 		);
 	}
@@ -325,45 +297,11 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	 * @param ElementInterface $element
 	 *
 	 * @return string
+	 * @throws \yii\db\Exception
 	 */
 	public function getTableAttributeHtml ($value, ElementInterface $element): string
 	{
 		return $this->normalizeValue($value, $element)->address;
-	}
-
-	/**
-	 * @inheritdoc
-	 *
-	 * @param array $sourceElements
-	 *
-	 * @return array
-	 */
-	public function getEagerLoadingMap (array $sourceElements)
-	{
-		$sourceElementIds = [];
-		$sourceSiteIds = [];
-
-		foreach ($sourceElements as $sourceElement)
-		{
-			$sourceElementIds[] = $sourceElement->id;
-			$sourceSiteIds[] = $sourceElement->siteId;
-		}
-
-		$map = (new Query())
-			->select(['ownerId as source', 'id as target'])
-			->from([MapRecord::TableName])
-			->where([
-				'fieldId' => $this->id,
-				'ownerId' => $sourceElementIds,
-				'ownerSiteId' => $sourceSiteIds,
-			])
-			->all();
-
-		return [
-			'elementType' => MapElement::class,
-			'map' => $map,
-			'criteria' => ['fieldId' => $this->id],
-		];
 	}
 
 	/**
@@ -432,30 +370,8 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	public function afterElementSave (ElementInterface $element, bool $isNew)
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);
+
 		parent::afterElementSave($element, $isNew);
-	}
-
-	/**
-	 * @param ElementInterface|Element $element
-	 *
-	 * @throws Throwable
-	 */
-	public function afterElementDelete (ElementInterface $element)
-	{
-		SimpleMap::getInstance()->map->softDeleteField($this, $element);
-		parent::afterElementDelete($element);
-	}
-
-	/**
-	 * @param ElementInterface|Element $element
-	 *
-	 * @throws Throwable
-	 * @throws Exception
-	 */
-	public function afterElementRestore (ElementInterface $element)
-	{
-		SimpleMap::getInstance()->map->restoreField($this, $element);
-		parent::afterElementRestore($element);
 	}
 
 	// Helpers
@@ -464,7 +380,7 @@ class MapField extends Field implements EagerLoadingFieldInterface, PreviewableF
 	/**
 	 * Renders the map input
 	 *
-	 * @param MapElement $value
+	 * @param Map $value
 	 * @param bool $isSettings
 	 *
 	 * @return string

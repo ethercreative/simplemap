@@ -13,8 +13,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use ether\simplemap\elements\Map;
-use ether\simplemap\elements\Map as MapElement;
+use ether\simplemap\models\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\records\Map as MapRecord;
 
@@ -44,7 +43,7 @@ class MapService extends Component
 	 */
 	public function validateField (MapField $field, ElementInterface $owner)
 	{
-		/** @var MapElement $map */
+		/** @var Map $map */
 		$map = $owner->getFieldValue($field->handle);
 
 		$valid = $map->validate();
@@ -63,59 +62,32 @@ class MapService extends Component
 	 */
 	public function saveField (MapField $field, ElementInterface $owner)
 	{
-		if ($owner instanceof MapElement)
-			return;
-
-		/** @var MapElement $map */
+		/** @var Map $map */
 		$map = $owner->getFieldValue($field->handle);
 
 		$map->fieldId     = $field->id;
 		$map->ownerId     = $owner->id;
 		$map->ownerSiteId = $owner->siteId;
 
-		\Craft::$app->elements->saveElement($map, true, true);
+		$record = MapRecord::findOne([
+			'ownerId'     => $map->ownerId,
+			'ownerSiteId' => $map->ownerSiteId,
+			'fieldId'     => $map->fieldId,
+		]);
+
+		if ($record)
+			$map->id = $record->id;
+
+		$this->saveRecord($map, !$map->id);
 	}
 
 	/**
-	 * @param MapField         $field
-	 * @param ElementInterface $owner
+	 * @param Map $map
+	 * @param     $isNew
 	 *
-	 * @throws \Throwable
-	 */
-	public function softDeleteField (MapField $field, ElementInterface $owner)
-	{
-		/** @var MapElement $map */
-		$map = $owner->getFieldValue($field->handle);
-
-		\Craft::$app->getElements()->deleteElement($map);
-	}
-
-	/**
-	 * @param MapField         $field
-	 * @param ElementInterface $owner
-	 *
-	 * @throws \Throwable
-	 * @throws \yii\base\Exception
-	 */
-	public function restoreField (MapField $field, ElementInterface $owner)
-	{
-		/** @var MapElement $map */
-		$map = $owner->getFieldValue($field->handle);
-
-		\Craft::$app->getElements()->restoreElement($map);
-	}
-
-	/**
-	 * @param MapElement $map
-	 * @param            $ownerId
-	 * @param            $ownerSiteId
-	 * @param            $fieldId
-	 * @param            $isNew
-	 *
-	 * @throws \yii\db\Exception
 	 * @throws \Exception
 	 */
-	public function saveRecord (MapElement $map, $ownerId, $ownerSiteId, $fieldId, $isNew)
+	public function saveRecord (Map $map, $isNew)
 	{
 		$record = null;
 
@@ -131,19 +103,16 @@ class MapService extends Component
 		{
 			$record = new MapRecord();
 
-			$record->id          = $map->id;
-			$record->ownerId     = $ownerId;
-			$record->ownerSiteId = $ownerSiteId;
-			$record->fieldId     = $fieldId;
+			if ($map->id)
+				$record->id = $map->id;
+
+			$record->ownerId     = $map->ownerId;
+			$record->ownerSiteId = $map->ownerSiteId;
+			$record->fieldId     = $map->fieldId;
 		}
 
-		$record->lat     = $map->lat;
-		$record->lng     = $map->lng;
-		$record->zoom    = $map->zoom;
-		$record->address = $map->address;
-		$record->parts   = $map->parts;
-
-		$this->_populateMissingData($record);
+		$record->lat = $map->lat;
+		$record->lng = $map->lng;
 
 		$record->save(false);
 	}
@@ -151,11 +120,11 @@ class MapService extends Component
 	/**
 	 * Returns the distance from the search origin (if one exists)
 	 *
-	 * @param MapElement $map
+	 * @param Map $map
 	 *
 	 * @return float|int|null
 	 */
-	public function getDistance (MapElement $map)
+	public function getDistance (Map $map)
 	{
 		if (!$this->_location || !$this->_distance)
 			return null;
@@ -224,6 +193,39 @@ class MapService extends Component
 
 		if ($oldOrderBy !== null)
 			$query->orderBy = $oldOrderBy;
+	}
+
+	/**
+	 * Populates any missing location data
+	 *
+	 * @param Map $map
+	 *
+	 * @throws \yii\db\Exception
+	 */
+	public function populateMissingData (Map $map)
+	{
+		$postcode = is_array($map->parts)
+			? @$map->parts['postcode']
+			: $map->parts->postcode;
+
+		// Missing Lat / Lng
+		if (!($map->lat && $map->lng) && ($map->address || $postcode))
+		{
+			$latLng   = GeoService::latLngFromAddress($map->address ?: $postcode);
+			$map->lat = $latLng['lat'];
+			$map->lng = $latLng['lng'];
+		}
+
+		// Missing address / parts
+		if ((!$map->address || $map->address === $postcode) && ($map->lat && $map->lng))
+		{
+			$loc          = GeoService::addressFromLatLng($map->lat, $map->lng);
+			$map->address = $loc['address'];
+			$map->parts   = array_merge(
+				array_filter((array) $loc['parts']),
+				array_filter((array) $map->parts)
+			);
+		}
 	}
 
 	// Private Methods
@@ -338,37 +340,6 @@ class MapService extends Component
 		}
 
 		$query->orderBy($nextOrder);
-	}
-
-	/**
-	 * Populates any missing location data
-	 *
-	 * @param MapRecord $record
-	 *
-	 * @throws \yii\db\Exception
-	 */
-	private function _populateMissingData (MapRecord $record)
-	{
-		$postcode = is_array($record->parts) ? @$record->parts['postcode'] : $record->parts->postcode;
-
-		// Missing Lat / Lng
-		if (!($record->lat && $record->lng) && ($record->address || $postcode))
-		{
-			$latLng = GeoService::latLngFromAddress($record->address ?: $postcode);
-			$record->lat = $latLng['lat'];
-			$record->lng = $latLng['lng'];
-		}
-
-		// Missing address / parts
-		if ((!$record->address || $record->address === $postcode) && ($record->lat && $record->lng))
-		{
-			$loc = GeoService::addressFromLatLng($record->lat, $record->lng);
-			$record->address = $loc['address'];
-			$record->parts   = array_merge(
-				array_filter((array) $loc['parts']),
-				array_filter((array) $record->parts)
-			);
-		}
 	}
 
 }

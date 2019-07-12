@@ -35,9 +35,6 @@ class Install extends Migration
 
 				'lat'     => $this->decimal(11, 9),
 				'lng'     => $this->decimal(12, 9),
-				'zoom'    => $this->integer(2),
-				'address' => $this->string(255),
-				'parts'   => $this->text(),
 
 				'dateCreated' => $this->dateTime()->notNull(),
 				'dateUpdated' => $this->dateTime()->notNull(),
@@ -67,15 +64,6 @@ class Install extends Migration
 		);
 
 		// Relations
-
-		$this->addForeignKey(
-			null,
-			Map::TableName,
-			['id'],
-			Table::ELEMENTS,
-			['id'],
-			'CASCADE'
-		);
 
 		$this->addForeignKey(
 			null,

@@ -12,7 +12,7 @@ use Cake\Utility\Hash;
 use craft\feedme\base\Field;
 use craft\feedme\base\FieldInterface;
 use craft\feedme\helpers\DataHelper;
-use ether\simplemap\elements\Map;
+use ether\simplemap\models\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\models\Parts;
 
@@ -31,8 +31,6 @@ class FeedMeMaps extends Field implements FieldInterface
 	public static $name = 'Maps';
 
 	public static $class = MapField::class;
-
-	public static $elementType = Map::class;
 
 	// Methods
 	// =========================================================================

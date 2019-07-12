@@ -1,3 +1,20 @@
+## [Unreleased] 3.6.0
+
+> {warning} This update changes how map data is stored, moving away from an 
+element type. This means if you are eager loading the a map field, you'll want 
+to remove the `with` from your query and `[0]` when outputting the map (if you 
+have it). We also **strongly** recommend taking a backup before updating.
+
+### Changed
+- Reformat data structure to remove map element type and need for eager loading
+
+### Fixed
+- Fix missing postcode warning (Fixes #169)
+- Fix map save DB issue in Craft 3.2 (Fixes #170)
+- Fix map not retrieving saved values in Craft 3.2 (Fixes #171)
+- Fix DB error on duplicate import via FeedMe (Fixes #168)
+- Fix maps not propagating across sites (Fixes #141)
+
 ## 3.5.2 - 2019-06-20
 ### Improved
 - FeedMe can now import the individual map parts

@@ -1,7 +1,7 @@
 {
   "name": "ether/simplemap",
   "description": "A beautifully simple Map field type for Craft CMS 3",
-  "version": "3.5.2",
+  "version": "3.6.0",
   "type": "craft-plugin",
   "license": "MIT",
   "minimum-stability": "dev",
@@ -30,6 +30,6 @@
     "developerUrl": "https://ethercreative.co.uk",
 
     "class": "ether\\simplemap\\SimpleMap",
-    "schemaVersion": "3.4.1"
+    "schemaVersion": "3.4.2"
   }
 }

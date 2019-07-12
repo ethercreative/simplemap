@@ -109,4 +109,9 @@ class Map extends Model
 		return $rules;
 	}
 
+	public function isValueEmpty ()
+	{
+		return empty($this->lat) && empty($this->lng);
+	}
+
 }

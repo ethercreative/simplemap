@@ -326,7 +326,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 */
 	public function isValueEmpty ($value, ElementInterface $element): bool
 	{
-		return empty($value->lat) && empty($value->lng);
+		return $this->normalizeValue($value)->isValueEmpty();
 	}
 
 	// Methods: Events

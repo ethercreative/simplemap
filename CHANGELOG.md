@@ -2,7 +2,8 @@
 
 > {warning} This update changes how map data is stored, moving away from an 
 element type. This means if you are eager loading the a map field, you'll want 
-to remove the `with` from your query and `[0]` when outputting the map (if you have it).
+to remove the `with` from your query and `[0]` when outputting the map (if you 
+have it). We also **strongly** recommend taking a backup before updating.
 
 ### Changed
 - Reformat data structure to remove map element type and need for eager loading

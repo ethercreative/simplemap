@@ -209,15 +209,13 @@ class Parts
 			if (!array_key_exists($key, $parts))
 				$parts[$key] = '';
 
-		$this->number = $this->_join([
-			$parts['number'],
+		$this->number = $parts['number'] ?? $this->_join([
 			$parts['subpremise'],
 			$parts['premise'],
 			$parts['street_number'],
 		]);
 
-		$this->address = $this->_join([
-			$parts['address'],
+		$this->address = $parts['address'] ?? $this->_join([
 			$parts['route'],
 			$parts['neighborhood'],
 			$parts['sublocality_level_5'],
@@ -228,8 +226,7 @@ class Parts
 			$parts['sublocality'],
 		]);
 
-		$this->city = $this->_join([
-			$parts['city'],
+		$this->city = $parts['city'] ?? $this->_join([
 			$parts['postal_town'],
 			$parts['locality'],
 		]);

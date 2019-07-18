@@ -2,6 +2,7 @@
 
 ### Fixed
 - Fix error when normalizing value without an element (Fixes #174)
+- Fix JS error when using two different API keys for Google maps services (Fixes #165)
 
 ## 3.6.0 - 2019-07-12
 

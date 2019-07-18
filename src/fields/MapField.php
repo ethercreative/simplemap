@@ -470,7 +470,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		if (strpos($settings->mapTiles, 'google') !== false)
 		{
 			$view->registerJsFile(
-				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
+				'https://maps.googleapis.com/maps/api/js?key=' .
 				$settings->mapToken
 			);
 		}

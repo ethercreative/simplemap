@@ -210,12 +210,14 @@ class Parts
 				$parts[$key] = '';
 
 		$this->number = $this->_join([
+			$parts['number'],
 			$parts['subpremise'],
 			$parts['premise'],
 			$parts['street_number'],
 		]);
 
 		$this->address = $this->_join([
+			$parts['address'],
 			$parts['route'],
 			$parts['neighborhood'],
 			$parts['sublocality_level_5'],
@@ -227,13 +229,14 @@ class Parts
 		]);
 
 		$this->city = $this->_join([
+			$parts['city'],
 			$parts['postal_town'],
 			$parts['locality'],
 		]);
 
-		$this->postcode = $parts['postal_code'] ?? $parts['postal_code_prefix'];
-		$this->county = $parts['administrative_area_level_2'];
-		$this->state = $parts['administrative_area_level_1'];
+		$this->postcode = $parts['postcode'] ?? $parts['postal_code'] ?? $parts['postal_code_prefix'];
+		$this->county = $parts['county'] ?? $parts['administrative_area_level_2'];
+		$this->state = $parts['state'] ?? $parts['administrative_area_level_1'];
 		$this->country = $parts['country'];
 	}
 

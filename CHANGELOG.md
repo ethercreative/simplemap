@@ -1,8 +1,13 @@
 ## [Unreleased] 3.6.1
 
+### Changed
+- `PartsLegacy` will be used when Google is the chosen Geo service, giving 
+access to additional Google specific parts (Fixes #167)
+
 ### Fixed
 - Fix error when normalizing value without an element (Fixes #174)
 - Fix JS error when using two different API keys for Google maps services (Fixes #165)
+- Fix parts being lost when moving from new to legacy (any other geo service to google)
 
 ## 3.6.0 - 2019-07-12
 

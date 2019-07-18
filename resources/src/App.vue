@@ -63,6 +63,7 @@
 	import GeoService from './enums/GeoService';
 	import Parts from './models/Parts';
 	import Fragment from './components/Fragment';
+	import PartsLegacy from './models/PartsLegacy';
 
 	@Component({
 		props: {
@@ -123,11 +124,19 @@
 		created () {
 			const { config, value, defaultValue } = JSON.parse(this.$props.options);
 
+			const isGoogle = config.geoService === GeoService.GoogleMaps;
+
 			this.config = config;
+
 			this.value = value;
-			this.value.parts = Parts.from(value.parts);
+			this.value.parts = isGoogle
+				? new PartsLegacy(value.parts)
+				: Parts.from(value.parts);
+
 			this.defaultValue = defaultValue;
-			this.defaultValue.parts = new Parts();
+			this.defaultValue.parts = isGoogle
+				? new PartsLegacy()
+				: new Parts();
 
 			this.geo = new Geo(config);
 		}

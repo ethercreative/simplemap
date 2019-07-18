@@ -139,12 +139,14 @@ export default class Parts {
 	 * @private
 	 */
 	_google (parts) {
-		parts = parts.reduce((a, part) => {
-			const key = part.types[0];
-			a[key] = part.long_name;
+		if (Array.isArray(parts)) {
+			parts = parts.reduce((a, part) => {
+				const key = part.types[0];
+				a[key]    = part.long_name;
 
-			return a;
-		}, {});
+				return a;
+			}, {});
+		}
 
 		this.number = this._join([
 			parts.subpremise,

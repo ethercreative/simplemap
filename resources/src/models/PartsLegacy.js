@@ -82,15 +82,17 @@ export default class PartsLegacy extends Parts {
 	train_station_short = '';
 	transit_station_short = '';
 
-	constructor (parts) {
+	constructor (parts = {}) {
 		super(parts, GeoService.GoogleMaps);
 
-		parts = parts.reduce((a, part) => {
-			const key = part.types[0];
-			a[key]    = part.long_name;
+		if (Array.isArray(parts)) {
+			parts = parts.reduce((a, part) => {
+				const key = part.types[0];
+				a[key]    = part.long_name;
 
-			return a;
-		}, {});
+				return a;
+			}, {});
+		}
 
 		Object.keys(parts).forEach(key => {
 			this[key] = parts[key];

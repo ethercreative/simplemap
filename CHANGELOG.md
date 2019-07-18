@@ -1,3 +1,8 @@
+## [Unreleased] 3.6.1
+
+### Fixed
+- Fix error when normalizing value without an element (Fixes #174)
+
 ## 3.6.0 - 2019-07-12
 
 > {warning} This update changes how map data is stored, moving away from an 

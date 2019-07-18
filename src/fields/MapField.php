@@ -209,12 +209,16 @@ class MapField extends Field implements PreviewableFieldInterface
 
 		SimpleMap::getInstance()->map->populateMissingData($map);
 
-		$map->ownerId = $element->id;
-		$map->ownerSiteId = $element->siteId;
 		$map->fieldId = $this->id;
 
-		$handle = $this->handle;
-		$element->setFieldValue($handle, $map);
+		if ($element)
+		{
+			$map->ownerId     = $element->id;
+			$map->ownerSiteId = $element->siteId;
+
+			$handle = $this->handle;
+			$element->setFieldValue($handle, $map);
+		}
 
 		return $map;
 	}

@@ -82,6 +82,32 @@ class Map extends Model
 		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
 	}
 
+	// Getters
+	// =========================================================================
+
+	public function __get ($name)
+	{
+		$isPart = property_exists($this->parts, $name) || $name === 'streetAddress';
+
+		if (in_array($name, PartsLegacy::$legacyKeys) && !$isPart)
+			return null;
+		else if ($isPart)
+			return $this->parts->$name;
+
+		return parent::__get($name);
+	}
+
+	public function canGetProperty ($name, $checkVars = true, $checkBehaviors = true)
+	{
+		if (
+			property_exists($this->parts, $name) ||
+			$name === 'streetAddress' ||
+			in_array($name, PartsLegacy::$legacyKeys)
+		) return true;
+
+		return parent::canGetProperty($name, $checkVars, $checkBehaviors);
+	}
+
 	// Methods
 	// =========================================================================
 

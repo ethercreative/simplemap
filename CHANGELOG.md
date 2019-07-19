@@ -1,5 +1,12 @@
 ## [Unreleased] 3.6.1
 
+### Added
+- Add support for getting parts without having to go via the `parts` property. 
+(i.e. `myMap.parts.number` can be simply `myMap.number`). This _doesn't_ work 
+for the `address` part, which is already in use and returns the full address 
+as a string (alternatively, use the `streetAddress` alias). (Closes #154)
+- Add `streetAddress` alias of `address` to Parts.
+
 ### Changed
 - `PartsLegacy` will be used when Google is the chosen Geo service, giving 
 access to additional Google specific parts (Fixes #167)

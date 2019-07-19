@@ -10,6 +10,7 @@ namespace ether\simplemap\models;
 
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService;
+use yii\base\BaseObject;
 
 /**
  * Class Parts
@@ -17,7 +18,7 @@ use ether\simplemap\enums\GeoService;
  * @author  Ether Creative
  * @package ether\simplemap\models
  */
-class Parts
+class Parts extends BaseObject
 {
 
 	// Properties
@@ -49,6 +50,8 @@ class Parts
 
 	public function __construct ($parts = null, string $service = null)
 	{
+		parent::__construct();
+
 		if ($parts === null)
 			return $this;
 
@@ -72,6 +75,11 @@ class Parts
 			default:
 				$this->_fromArray($parts);
 		}
+	}
+
+	public function getStreetAddress ()
+	{
+		return $this->address;
 	}
 
 	// Methods: Private

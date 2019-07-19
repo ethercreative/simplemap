@@ -15,6 +15,8 @@ access to additional Google specific parts (Fixes #167)
 - Fix error when normalizing value without an element (Fixes #174)
 - Fix JS error when using two different API keys for Google maps services (Fixes #165)
 - Fix parts being lost when moving from new to legacy (any other geo service to google)
+- Fix issue with Mapbox geo service when country was unrestricted
+- Fix JS issues when using Apple or Google Maps in an element edit HUD (Fixes #175)
 
 ## 3.6.0 - 2019-07-12
 

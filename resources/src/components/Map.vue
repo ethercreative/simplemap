@@ -10,6 +10,7 @@
 	import 'leaflet.mapkitmutant';
 	import MapTiles from '../enums/MapTiles';
 	import 'leaflet/dist/leaflet.css';
+	import waitForGlobal from '../helpers/waitForGlobal';
 
 	@Component({
 		props: {
@@ -186,9 +187,11 @@
 		 * @private
 		 */
 		_googleMutant () {
-			L.gridLayer.googleMutant({
-				type: this.tiles.split('.')[1],
-			}).addTo(this.map);
+			waitForGlobal('google', () => {
+				L.gridLayer.googleMutant({
+					type: this.tiles.split('.')[1],
+				}).addTo(this.map);
+			});
 		}
 
 		/**
@@ -197,11 +200,13 @@
 		 * @private
 		 */
 		_mapKitMutant () {
-			L.mapkitMutant({
-				type: this.tiles.split('.')[1],
-				authorizationCallback: done => done(this.token),
-				language: window.Craft.language,
-			}).addTo(this.map);
+			waitForGlobal('mapkit', () => {
+				L.mapkitMutant({
+					type: this.tiles.split('.')[1],
+					authorizationCallback: done => done(this.token),
+					language: window.Craft.language,
+				}).addTo(this.map);
+			});
 		}
 
 	}

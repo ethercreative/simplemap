@@ -449,16 +449,16 @@ class MapField extends Field implements PreviewableFieldInterface
 
 			'value' => [
 				'address' => $value->address,
-				'lat'     => $value->lat,
-				'lng'     => $value->lng,
+				'lat'     => self::_parseFloat($value->lat),
+				'lng'     => self::_parseFloat($value->lng),
 				'zoom'    => $value->zoom,
 				'parts'   => $value->parts,
 			],
 
 			'defaultValue' => [
 				'address' => null,
-				'lat'     => $this->lat,
-				'lng'     => $this->lng,
+				'lat'     => self::_parseFloat($this->lat),
+				'lng'     => self::_parseFloat($this->lng),
 				'zoom'    => $this->zoom,
 				'parts'   => null,
 			],
@@ -508,6 +508,23 @@ class MapField extends Field implements PreviewableFieldInterface
 		);
 
 		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'></simple-map></div>';
+	}
+
+	// Helpers
+	// =========================================================================
+
+	/**
+	 * Will cast the given value to a float if not null
+	 *
+	 * @param null $value
+	 *
+	 * @return float|null
+	 */
+	private static function _parseFloat ($value = null) {
+		if ($value === null)
+			return null;
+
+		return (float) $value;
 	}
 
 }

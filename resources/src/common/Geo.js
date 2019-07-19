@@ -1,6 +1,7 @@
 import GeoService from '../enums/GeoService';
 import Parts from '../models/Parts';
 import PartsLegacy from '../models/PartsLegacy';
+import waitForGlobal from '../helpers/waitForGlobal';
 
 export default class Geo {
 
@@ -25,9 +26,9 @@ export default class Geo {
 		this.locale = locale;
 
 		if (service === GeoService.GoogleMaps) {
-			Geo.waitForGlobal('google', () => this.initGoogle());
+			waitForGlobal('google', () => this.initGoogle());
 		} else if (service === GeoService.AppleMapKit) {
-			Geo.waitForGlobal('mapkit', () => this.initApple(token));
+			waitForGlobal('mapkit', () => this.initApple(token));
 		}
 	}
 
@@ -137,13 +138,17 @@ export default class Geo {
 	 * @returns {Promise<*>}
 	 */
 	async searchMapbox (query) {
-		const params = new URLSearchParams({
+		const rawParams = {
 			types: 'address,country,postcode,place,locality,district,neighborhood',
 			limit: 5,
 			access_token: this.token,
-			country: this.country,
 			language: this.locale,
-		}).toString();
+		};
+
+		if (this.country)
+			rawParams.country = this.country;
+
+		const params = new URLSearchParams(rawParams).toString();
 
 		const data = await fetch(
 			'https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json?' + params
@@ -443,23 +448,6 @@ export default class Geo {
 				GeoService.Here
 			),
 		};
-	}
-
-	// Helpers
-	// =========================================================================
-
-	static waitForGlobal (property, callback) {
-		if (window.hasOwnProperty(property)) {
-			callback();
-			return;
-		}
-
-		const i = setInterval(() => {
-			if (window.hasOwnProperty(property)) {
-				callback();
-				clearTimeout(i);
-			}
-		});
 	}
 
 }

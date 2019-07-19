@@ -16,6 +16,8 @@ element type. This means if you are eager loading the a map field, you'll want
 to remove the `with` from your query and `[0]` when outputting the map (if you 
 have it). We also **strongly** recommend taking a backup before updating.
 
+> {tip} If you get a `Column not found` error when upgrading, try running `./craft migrate/all`.
+
 ### Changed
 - Reformat data structure to remove map element type and need for eager loading
 

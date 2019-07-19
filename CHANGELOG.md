@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.1
+## 3.6.1 - 2019-07-19
 
 ### Added
 - Add support for getting parts without having to go via the `parts` property. 

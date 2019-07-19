@@ -116,7 +116,20 @@ These parts can be changed in the map field. They include:
 - `country` - The country of the location
 
 If you're upgrading from an older version of Maps (SimpleMap) you will still 
-have access to all the old parts from Google. 
+have access to all the old parts from Google.
+
+Parts can be accessed in two ways. First, via the parts object:
+
+```twig
+{{ myMapField.parts.address }}
+```
+
+Second, via the field directly (except `address` which is already in use, you 
+can use the `streetAddress` alias):
+
+```twig
+{{ myMapField.streetAddress }}
+```
 
 ### Configuration
 

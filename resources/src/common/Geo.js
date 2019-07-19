@@ -25,25 +25,36 @@ export default class Geo {
 		this.locale = locale;
 
 		if (service === GeoService.GoogleMaps) {
-			this.google = {
-				service: new window.google.maps.places.AutocompleteService(),
-				session: new window.google.maps.places.AutocompleteSessionToken(),
-				geocoder: new window.google.maps.Geocoder(),
-				places: new window.google.maps.places.PlacesService(
-					document.createElement('div')
-				),
-			};
+			Geo.waitForGlobal('google', () => this.initGoogle());
 		} else if (service === GeoService.AppleMapKit) {
-			window.mapkit.init({
-				authorizationCallback: done => done(token),
-			});
-
-			this.apple = {
-				Search: new window.mapkit.Search(),
-				Geocoder: new window.mapkit.Geocoder(),
-				Coordinate: window.mapkit.Coordinate,
-			};
+			Geo.waitForGlobal('mapkit', () => this.initApple(token));
 		}
+	}
+
+	// Initializers
+	// =========================================================================
+
+	initGoogle () {
+		this.google = {
+			service: new window.google.maps.places.AutocompleteService(),
+			session: new window.google.maps.places.AutocompleteSessionToken(),
+			geocoder: new window.google.maps.Geocoder(),
+			places: new window.google.maps.places.PlacesService(
+				document.createElement('div')
+			),
+		};
+	}
+
+	initApple (token) {
+		window.mapkit.init({
+			authorizationCallback: done => done(token),
+		});
+
+		this.apple = {
+			Search: new window.mapkit.Search(),
+			Geocoder: new window.mapkit.Geocoder(),
+			Coordinate: window.mapkit.Coordinate,
+		};
 	}
 
 	// Actions
@@ -432,6 +443,23 @@ export default class Geo {
 				GeoService.Here
 			),
 		};
+	}
+
+	// Helpers
+	// =========================================================================
+
+	static waitForGlobal (property, callback) {
+		if (window.hasOwnProperty(property)) {
+			callback();
+			return;
+		}
+
+		const i = setInterval(() => {
+			if (window.hasOwnProperty(property)) {
+				callback();
+				clearTimeout(i);
+			}
+		});
 	}
 
 }

@@ -1,6 +1,7 @@
 ## [Unreleased] 3.6.2
 ### Fixed
 - Fix migration error when upgrading from 3.4.x to 3.6.x (Fixes #178)
+- Fix project config content column type being string instead of text (Fixes #180)
 
 ## 3.6.1 - 2019-07-19
 ### Added

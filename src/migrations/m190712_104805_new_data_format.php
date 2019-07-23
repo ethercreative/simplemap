@@ -13,8 +13,6 @@ use ether\simplemap\models\Map;
 use ether\simplemap\records\Map as MapRecord;
 use ether\simplemap\SimpleMap;
 use verbb\supertable\fields\SuperTableField;
-use verbb\supertable\services\SuperTableService;
-use verbb\supertable\SuperTable;
 
 /**
  * m190712_104805_new_data_format migration.
@@ -25,6 +23,7 @@ class m190712_104805_new_data_format extends Migration
 	/**
 	 * @inheritdoc
 	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
     public function safeUp ()
     {
@@ -33,10 +32,6 @@ class m190712_104805_new_data_format extends Migration
     	$matrixService = Craft::$app->getMatrix();
     	$superTableService = null;
     	$hasSuperTable = class_exists(SuperTableField::class);
-
-    	if ($hasSuperTable)
-    		/** @var SuperTableService $superTableService */
-    		$superTableService = SuperTable::getInstance()->getService();
 
         // 1. Add content columns
         // ---------------------------------------------------------------------

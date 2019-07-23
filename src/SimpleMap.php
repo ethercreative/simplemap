@@ -17,6 +17,7 @@ use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\integrations\feedme\FeedMeMaps;
+use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
 use ether\simplemap\web\Variable;
@@ -43,6 +44,8 @@ class SimpleMap extends Plugin
 	public function init ()
 	{
 		parent::init();
+
+		(new m190723_105637_fix_map_field_column_type())->safeUp();
 
 		\Craft::setAlias(
 			'simplemapimages',

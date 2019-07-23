@@ -33,7 +33,6 @@ class m190226_143809_craft3_upgrade extends Migration
      * @inheritdoc
      *
      * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
      * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      */
@@ -169,7 +168,9 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	    // 2. Re-create the table
 	    $this->dropTable(MapRecord::OldTableName);
-	    (new Install())->safeUp();
+
+	    if (!$this->db->tableExists(MapRecord::TableName))
+	        (new Install())->safeUp();
 
 	    // 3. Store the old data as new
 	    $dupeKeys = [];

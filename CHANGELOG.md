@@ -1,4 +1,7 @@
 ## [Unreleased] 3.6.2
+### Added
+- Add `postal_code_suffix` to `PartsLegacy` (Fixes #179)
+
 ### Fixed
 - Fix migration error when upgrading from 3.4.x to 3.6.x (Fixes #178)
 - Fix project config content column type being string instead of text (Fixes #180)

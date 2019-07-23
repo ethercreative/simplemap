@@ -48,6 +48,7 @@ class PartsLegacy extends Parts
 		'post_box',
 		'postal_code',
 		'postal_code_prefix',
+		'postal_code_suffix',
 		'postal_town',
 		'premise',
 		'room',
@@ -89,6 +90,7 @@ class PartsLegacy extends Parts
 	public $post_box;
 	public $postal_code;
 	public $postal_code_prefix;
+	public $postal_code_suffix;
 	public $postal_town;
 	public $premise;
 	public $room;
@@ -126,6 +128,7 @@ class PartsLegacy extends Parts
 	public $post_box_short;
 	public $postal_code_short;
 	public $postal_code_prefix_short;
+	public $postal_code_suffix_short;
 	public $postal_town_short;
 	public $premise_short;
 	public $room_short;

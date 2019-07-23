@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\models;
 
+use Craft;
 use ether\simplemap\enums\GeoService;
 
 /**
@@ -153,6 +154,21 @@ class PartsLegacy extends Parts
 		\Yii::configure($this, $parts);
 
 		parent::__construct($parts, GeoService::GoogleMaps);
+	}
+
+	public function __set ($name, $value)
+	{
+		// Prevent setting any new parameters that we don't support
+		if (!$this->hasProperty($name))
+		{
+			Craft::info(
+				'Attempted to set unsupported legacy part: "' . $name . '" to value "' . $value . '"',
+				'simplemap'
+			);
+			return;
+		}
+
+		parent::__set($name, $value);
 	}
 
 }

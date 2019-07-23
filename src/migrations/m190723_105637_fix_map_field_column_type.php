@@ -27,9 +27,9 @@ class m190723_105637_fix_map_field_column_type extends Migration
     {
         $pc = Craft::$app->getProjectConfig();
 
-        $fields = $pc->get('fields', true);
-        $matrixBlockTypes = $pc->get('matrixBlockTypes', true);
-        $superTableBlockTypes = $pc->get('superTableBlockTypes', true);
+        $fields = $pc->get('fields', true) ?? [];
+        $matrixBlockTypes = $pc->get('matrixBlockTypes', true) ?? [];
+        $superTableBlockTypes = $pc->get('superTableBlockTypes', true) ?? [];
         $updates = [];
 
         foreach ($fields as $fieldUid => $field)

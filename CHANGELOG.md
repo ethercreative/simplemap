@@ -1,3 +1,7 @@
+## [Unreleased] 3.6.2.1
+### Fixed
+- Fix migration issue when no matrix or SuperTable blocks exist (Fixes #182)
+
 ## 3.6.2 - 2019-07-23
 ### Added
 - Add `postal_code_suffix` to `PartsLegacy` (Fixes #179)

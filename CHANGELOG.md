@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.2
+## 3.6.2 - 2019-07-23
 ### Added
 - Add `postal_code_suffix` to `PartsLegacy` (Fixes #179)
 

@@ -99,11 +99,16 @@ class Map extends Model
 
 	public function canGetProperty ($name, $checkVars = true, $checkBehaviors = true)
 	{
-		if (
-			property_exists($this->parts, $name) ||
-			$name === 'streetAddress' ||
-			in_array($name, PartsLegacy::$legacyKeys)
-		) return true;
+		try
+		{
+			if (
+				property_exists($this->parts, $name) ||
+				$name === 'streetAddress' ||
+				in_array($name, PartsLegacy::$legacyKeys)
+			) return true;
+		} catch (\Exception $e) {
+			return false;
+		}
 
 		return parent::canGetProperty($name, $checkVars, $checkBehaviors);
 	}

@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.2.1
+## 3.6.2.1 - 2019-07-23
 ### Fixed
 - Fix migration issue when no matrix or SuperTable blocks exist (Fixes #182)
 - Fix issue with Google trying to set legacy parts that aren’t supported (Fixes #183)

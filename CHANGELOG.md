@@ -1,3 +1,7 @@
+## 3.6.2.2 - 2019-07-24
+### Fixed
+- Fix migration issue when matrix / super table blocks don't have any fields (Fixes #184)
+
 ## 3.6.2.1 - 2019-07-23
 ### Fixed
 - Fix migration issue when no matrix or SuperTable blocks exist (Fixes #182)

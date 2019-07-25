@@ -86,13 +86,12 @@ class m190226_143809_craft3_upgrade extends Migration
 
 	    	$site = $this->getSiteByLocale($row['ownerLocale']);
 
-	    	$map = new Map([
-			    'ownerId'     => $row['ownerId'],
-			    'ownerSiteId' => $site->id,
-			    'fieldId'     => $row['fieldId'],
-			    'lat'         => $row['lat'],
-			    'lng'         => $row['lng'],
-		    ]);
+		    $map              = new Map();
+		    $map->ownerId     = $row['ownerId'];
+		    $map->ownerSiteId = $site->id;
+		    $map->fieldId     = $row['fieldId'];
+		    $map->lat         = $row['lat'];
+		    $map->lng         = $row['lng'];
 
 		    $mapService->saveRecord($map, true);
 	    }

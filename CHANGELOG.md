@@ -1,3 +1,7 @@
+## [Unreleased] 3.6.3
+### Fixed
+- Fix migration from Craft 2 (Fixes #153)
+
 ## 3.6.2.2 - 2019-07-24
 ### Fixed
 - Fix migration issue when matrix / super table blocks don't have any fields (Fixes #184)

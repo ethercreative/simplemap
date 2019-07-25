@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.3
+## 3.6.3 - 2019-07-25
 ### Added
 - Add min / max zoom settings to map field (Closes #186)
 

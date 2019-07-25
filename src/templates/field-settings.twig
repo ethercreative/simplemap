@@ -45,3 +45,27 @@
 	options: countries,
 	value: field.country,
 }) }}
+
+{{ forms.textField({
+	label: 'Min Zoom'|t('simplemap'),
+	instructions: 'The minimum level the user can zoom the map out to.'|t('simplemap'),
+	id: 'minZoom',
+	name: 'minZoom',
+	type: 'number',
+	value: field.minZoom,
+	min: 0,
+	max: 18,
+	step: 0.01,
+}) }}
+
+{{ forms.textField({
+	label: 'Max Zoom'|t('simplemap'),
+	instructions: 'The maximum level the user can zoom the map in to.'|t('simplemap'),
+	id: 'maxZoom',
+	name: 'maxZoom',
+	type: 'number',
+	value: field.maxZoom,
+	min: 0,
+	max: 18,
+	step: 0.01,
+}) }}

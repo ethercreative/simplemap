@@ -1,4 +1,7 @@
 ## [Unreleased] 3.6.3
+### Added
+- Add min / max zoom settings to map field (Closes #186)
+
 ### Fixed
 - Fix migration from Craft 2 (Fixes #153)
 - Fix issue when column already exists during migration (Fixes #187)

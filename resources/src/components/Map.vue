@@ -18,6 +18,8 @@
 			token: [String, Object],
 			latLng: Object,
 			zoom: Number,
+			minZoom: Number,
+			maxZoom: Number,
 		}
 	})
 	export default class Map extends Vue {
@@ -99,7 +101,8 @@
 
 		mounted () {
 			this.map = L.map(this.$el, {
-				minZoom: 3,
+				minZoom: this.minZoom,
+				maxZoom: this.maxZoom,
 				scrollWheelZoom: false,
 			}).setView(this.latLng, this.zoom);
 

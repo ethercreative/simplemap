@@ -57,6 +57,16 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $zoom = 15;
 
 	/**
+	 * @var float - The maps min zoom level (how far OUT it can be zoomed)
+	 */
+	public $minZoom = 3;
+
+	/**
+	 * @var float - The maps max zoom level (how far IN it can be zoomed)
+	 */
+	public $maxZoom = 18;
+
+	/**
 	 * @var string - The preferred country when searching
 	 */
 	public $country = null;
@@ -163,8 +173,15 @@ class MapField extends Field implements PreviewableFieldInterface
 		$rules = parent::rules();
 
 		$rules[] = [
-			['zoom'],
+			['zoom', 'minZoom', 'maxZoom'],
 			'required',
+		];
+
+		$rules[] = [
+			['minZoom', 'maxZoom'],
+			'double',
+			'min' => 0,
+			'max' => 18,
 		];
 
 		$rules[] = [
@@ -431,6 +448,8 @@ class MapField extends Field implements PreviewableFieldInterface
 				'hideMap'     => (bool) $this->hideMap,
 				'hideAddress' => (bool) $this->hideAddress,
 				'showLatLng'  => (bool) $this->showLatLng,
+				'minZoom'     => $isSettings ? 0  : (float) $this->minZoom,
+				'maxZoom'     => $isSettings ? 18 : (float) $this->maxZoom,
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(

@@ -14,6 +14,8 @@
 			:token="config.mapToken"
 			:latLng="{ lat: val.lat, lng: val.lng }"
 			:zoom="+val.zoom"
+			:min-zoom="config.minZoom"
+			:max-zoom="config.maxZoom"
 			@change="onMapChange"
 			@zoom="onZoom"
 		/>
@@ -90,6 +92,8 @@
 			hideMap: false,
 			hideAddress: false,
 			showLatLng: false,
+			minZoom: 3,
+			maxZoom: 20,
 			mapTiles: 'wikimedia',
 			mapToken: '',
 			geoService: 'nominatim',

@@ -103,7 +103,22 @@ class m190712_104805_new_data_format extends Migration
 	    {
 	    	echo '- Create content column for ' . $field->name . ' in content table' . PHP_EOL;
 
-	    	$this->addColumn(
+	    	$exists = $this->db->columnExists(
+			    $contentTable,
+			    $fieldColumnPrefix . $field->handle
+		    );
+
+	    	if ($exists)
+		    {
+			    $this->alterColumn(
+				    $contentTable,
+				    $fieldColumnPrefix . $field->handle,
+				    $columnType
+			    );
+			    continue;
+		    }
+
+		    $this->addColumn(
 			    $contentTable,
 			    $fieldColumnPrefix . $field->handle,
 			    $columnType
@@ -119,10 +134,27 @@ class m190712_104805_new_data_format extends Migration
 
 			    echo '- Create content column for ' . $field->name . ' in matrix ' . $blockTypeHandle . PHP_EOL;
 
+			    $handle =
+				    $fieldColumnPrefix . $blockTypeHandle . '_' . $field->handle;
+
+			    $exists = $this->db->columnExists(
+				    $table,
+				    $handle
+			    );
+
+			    if ($exists)
+			    {
+			    	$this->alterColumn(
+			    		$table,
+					    $handle,
+					    $contentTable
+				    );
+				    continue;
+			    }
+
 			    $this->addColumn(
 				    $table,
-				    $fieldColumnPrefix . $blockTypeHandle . '_' .
-				    $field->handle,
+				    $handle,
 				    $columnType
 			    );
 		    }
@@ -133,6 +165,21 @@ class m190712_104805_new_data_format extends Migration
 	    	foreach ($stFields as $field)
 		    {
 			    echo '- Create content column for ' . $field->name . ' in super table' . PHP_EOL;
+
+			    $exists = $this->db->columnExists(
+				    $table,
+				    $fieldColumnPrefix . $field->handle
+			    );
+
+			    if ($exists)
+			    {
+				    $this->alterColumn(
+					    $table,
+					    $fieldColumnPrefix . $field->handle,
+					    $contentTable
+				    );
+				    continue;
+			    }
 
 			    $this->addColumn(
 				    $table,

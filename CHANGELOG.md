@@ -1,6 +1,7 @@
 ## [Unreleased] 3.6.3
 ### Fixed
 - Fix migration from Craft 2 (Fixes #153)
+- Fix issue when column already exists during migration (Fixes #187)
 
 ## 3.6.2.2 - 2019-07-24
 ### Fixed

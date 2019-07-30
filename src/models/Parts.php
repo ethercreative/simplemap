@@ -333,7 +333,7 @@ class Parts extends BaseObject
 	 *
 	 * @return bool
 	 */
-	private function _isAssoc (array $arr)
+	protected function _isAssoc (array $arr)
 	{
 		if ([] === $arr) return false;
 		return array_keys($arr) !== range(0, count($arr) - 1);

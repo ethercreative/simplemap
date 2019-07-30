@@ -147,7 +147,7 @@ class m190712_104805_new_data_format extends Migration
 			    	$this->alterColumn(
 			    		$table,
 					    $handle,
-					    $contentTable
+					    $columnType
 				    );
 				    continue;
 			    }
@@ -176,7 +176,7 @@ class m190712_104805_new_data_format extends Migration
 				    $this->alterColumn(
 					    $table,
 					    $fieldColumnPrefix . $field->handle,
-					    $contentTable
+					    $columnType
 				    );
 				    continue;
 			    }

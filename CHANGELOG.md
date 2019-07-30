@@ -1,6 +1,7 @@
 ## [Unreleased] 3.6.4
 ### Fixed
 - Remove errant debug code causing migration to run every request (Fixes #190)
+- Fix migration trying to change a column type to a table (Fixes #189, #188)
 
 ## 3.6.3 - 2019-07-25
 ### Added

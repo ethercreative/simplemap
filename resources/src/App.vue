@@ -157,7 +157,7 @@
 
 		async onMapChange (latLng) {
 			const zoom = this.value.zoom;
-		
+
 			switch (this.config.geoService) {
 				case GeoService.Nominatim:
 					this.value = await this.geo.reverseNominatim(latLng);
@@ -177,7 +177,7 @@
 				default:
 					throw new Error('Unknown geo service: ' + this.config.geoService);
 			}
-			
+
 			this.value.zoom = zoom;
 			this.fullAddressDirty = false;
 		}

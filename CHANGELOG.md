@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.5
+## 3.6.4.1 - 2019-07-30
 ### Fixed
 - Fix error when populating legacy parts server-side from lat/lng
 - Fix error when logging invalid legacy part

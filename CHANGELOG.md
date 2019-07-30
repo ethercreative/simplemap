@@ -1,3 +1,7 @@
+## [Unreleased] 3.6.4
+### Fixed
+- Remove errant debug code causing migration to run every request (Fixes #190)
+
 ## 3.6.3 - 2019-07-25
 ### Added
 - Add min / max zoom settings to map field (Closes #186)

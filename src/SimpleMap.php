@@ -45,8 +45,6 @@ class SimpleMap extends Plugin
 	{
 		parent::init();
 
-		(new m190723_105637_fix_map_field_column_type())->safeUp();
-
 		\Craft::setAlias(
 			'simplemapimages',
 			__DIR__ . '/web/assets/imgs'

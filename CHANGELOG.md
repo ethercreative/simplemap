@@ -1,4 +1,7 @@
 ## [Unreleased] 3.6.4.2
+### Changed
+- Don't update project config unnecessarily during migration (Closes #194)
+
 ### Fixed
 - Fix migration error when upgrading from 3.3.4 or lower (Fixes #192)
 

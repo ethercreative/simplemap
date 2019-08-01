@@ -1,4 +1,4 @@
-## [Unreleased] 3.6.4.2
+## 3.6.4.2 - 2019-08-01
 ### Changed
 - Don't update project config unnecessarily during migration (Closes #194)
 

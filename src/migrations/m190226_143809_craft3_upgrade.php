@@ -39,7 +39,7 @@ class m190226_143809_craft3_upgrade extends Migration
     public function safeUp()
     {
         // 1. Run the install migration
-	    if (!$this->db->tableExists(MapRecord::TableName))
+	    if (!$this->db->tableExists(MapRecord::OldTableName))
 	        (new Install())->safeUp();
 
 	    // 2. Upgrade the data
@@ -169,7 +169,7 @@ class m190226_143809_craft3_upgrade extends Migration
 	    $this->dropTable(MapRecord::OldTableName);
 
 	    if (!$this->db->tableExists(MapRecord::TableName))
-	        (new Install())->safeUp();
+	        (new Install())->safeUpPre34();
 
 	    // 3. Store the old data as new
 	    $dupeKeys = [];
@@ -184,7 +184,10 @@ class m190226_143809_craft3_upgrade extends Migration
 
 		    echo '    > Upgrade map value ' . $row['address'] . PHP_EOL;
 
-		    $map = new Map($row);
+		    $map              = new Map($row);
+		    $map->ownerId     = $row['ownerId'];
+		    $map->ownerSiteId = $row['ownerSiteId'];
+		    $map->fieldId     = $row['fieldId'];
 
 		    if (!$map->zoom)
 		    	$map->zoom = 15;

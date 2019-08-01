@@ -194,7 +194,53 @@ class m190712_104805_new_data_format extends Migration
 
 	    echo '2. Creating new Maps table' . PHP_EOL;
 
-	    (new Install())->safeUp();
+	    if ($this->db->tableExists(MapRecord::TableName))
+	    {
+	    	$rawTableName = $this->getDb()->getSchema()->getRawTableName(
+			    MapRecord::TableName
+		    );
+
+	    	if ($this->getDb()->getDriverName() === 'pgsql')
+		    {
+		    	$indexNames = $this->getDb()->createCommand(
+				    'SELECT indexname FROM pg_indexes WHERE [[tablename]]=:tablename',
+				    ['tablename' => $rawTableName]
+			    )->queryColumn();
+
+		    	foreach ($indexNames as $name)
+		    		$this->getDb()->createCommand(
+		    			'ALTER INDEX "' . $name . '" RENAME TO "' . $name . '_old"'
+				    )->execute();
+		    }
+	    	else
+		    {
+			    $indexNames = $this->getDb()->createCommand(
+				    'SHOW INDEX FROM ' . $rawTableName
+			    )->queryAll();
+
+			    $indexNames = array_unique(array_reduce(
+			    	$indexNames,
+				    function ($carry, $row) {
+			    		if ($row['Key_name'] === 'PRIMARY')
+			    			return $carry;
+
+			    		$carry[] = $row['Key_name'];
+			    		return $carry;
+				    },
+				    []
+			    ));
+
+			    foreach ($indexNames as $name)
+			    	$this->dropIndex($name, MapRecord::TableName);
+//			    	$this->getDb()->createCommand(
+//			    		'ALTER TABLE "' . $rawTableName . '" RENAME INDEX "' . $name . '" TO "' . $name . '_old"'
+//				    )->execute();
+		    }
+
+		    $this->renameTable(MapRecord::TableName, MapRecord::OldTableName);
+	    }
+
+        (new Install())->safeUp();
 
 	    // 3. Move content to table
 	    // ---------------------------------------------------------------------
@@ -330,7 +376,7 @@ class m190712_104805_new_data_format extends Migration
 	    // 4. Drop old data table
 	    // ---------------------------------------------------------------------
 
-	    $this->dropTable(MapRecord::OldTableName);
+	    $this->dropTableIfExists(MapRecord::OldTableName);
 
     }
 

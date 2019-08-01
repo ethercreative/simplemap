@@ -98,6 +98,53 @@ class Install extends Migration
 			(new m190226_143809_craft3_upgrade())->safeUp();
 	}
 
+	public function safeUpPre34 ()
+	{
+		// Create
+
+		$this->createTable(
+			Map::TableName,
+			[
+				'id'          => $this->primaryKey(),
+				'ownerId'     => $this->integer()->notNull(),
+				'ownerSiteId' => $this->integer(),
+				'fieldId'     => $this->integer()->notNull(),
+
+				'lat'     => $this->decimal(11, 9),
+				'lng'     => $this->decimal(12, 9),
+				'zoom'    => $this->integer(2),
+				'address' => $this->string(255),
+				'parts'   => $this->text(),
+
+				'dateCreated' => $this->dateTime()->notNull(),
+				'dateUpdated' => $this->dateTime()->notNull(),
+				'uid'         => $this->uid()->notNull(),
+			]
+		);
+
+		// Indexes
+
+		$this->createIndex(
+			null,
+			Map::TableName,
+			['ownerId', 'ownerSiteId', 'fieldId'],
+			true
+		);
+
+		$this->createIndex(
+			null,
+			Map::TableName,
+			['lat']
+		);
+
+		$this->createIndex(
+			null,
+			Map::TableName,
+			['lng']
+		);
+
+	}
+
 	public function safeDown ()
 	{
 		$this->dropTableIfExists(Map::TableName);

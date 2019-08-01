@@ -1,3 +1,7 @@
+## [Unreleased] 3.6.4.2
+### Fixed
+- Fix migration error when upgrading from 3.3.4 or lower (Fixes #192)
+
 ## 3.6.4.1 - 2019-07-30
 ### Fixed
 - Fix error when populating legacy parts server-side from lat/lng

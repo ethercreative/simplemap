@@ -10,13 +10,17 @@ namespace ether\simplemap;
 
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterGqlTypesEvent;
 use craft\services\Fields;
+use craft\services\Gql;
 use craft\web\twig\variables\CraftVariable;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\integrations\feedme\FeedMeMaps;
+use ether\simplemap\integrations\graphql\MapPartsType;
+use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
@@ -65,6 +69,15 @@ class SimpleMap extends Plugin
 			CraftVariable::EVENT_INIT,
 			[$this, 'onRegisterVariable']
 		);
+
+		if (class_exists(Gql::class))
+		{
+			Event::on(
+				Gql::class,
+				Gql::EVENT_REGISTER_GQL_TYPES,
+				[$this, 'onRegisterGqlTypes']
+			);
+		}
 
 		if (class_exists(\markhuot\CraftQL\CraftQL::class))
 		{
@@ -135,6 +148,12 @@ class SimpleMap extends Plugin
 	public function onRegisterFeedMeFields (\craft\feedme\events\RegisterFeedMeFieldsEvent $event)
 	{
 		$event->fields[] = FeedMeMaps::class;
+	}
+
+	public function onRegisterGqlTypes (RegisterGqlTypesEvent $event)
+	{
+		$event->types[] = MapType::class;
+		$event->types[] = MapPartsType::class;
 	}
 
 	// Helpers

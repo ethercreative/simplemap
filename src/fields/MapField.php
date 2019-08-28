@@ -16,6 +16,7 @@ use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
+use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
@@ -92,11 +93,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $showLatLng = false;
 
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 */
 	public $hideLatLng;
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 */
 	public $height;
 	/**
@@ -348,6 +349,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	public function isValueEmpty ($value, ElementInterface $element): bool
 	{
 		return $this->normalizeValue($value)->isValueEmpty();
+	}
+
+	public function getContentGqlType ()
+	{
+		return MapType::getType();
 	}
 
 	// Methods: Events

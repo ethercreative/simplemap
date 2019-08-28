@@ -15,9 +15,7 @@
 </template>
 
 <script lang="js">
-	import { Component, Vue } from 'vue-property-decorator';
-
-	@Component({
+	export default {
 		props: {
 			label: String,
 			name: String,
@@ -27,11 +25,8 @@
 			},
 			value: [String, Number],
 			disabled: Boolean,
-		}
-	})
-	export default class Input extends Vue {
-		//
-	}
+		},
+	};
 </script>
 
 <style lang="less" module>

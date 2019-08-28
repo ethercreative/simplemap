@@ -77,65 +77,62 @@
 </template>
 
 <script lang="js">
-	import { Component, Vue } from 'vue-property-decorator';
 	import Input from './Input';
 	import Fragment from './Fragment';
 	import { t } from '../filters/craft';
 
-	@Component({
-		components: {
-			Input,
-			Fragment,
-		},
+	export default {
 		props: {
 			value: {
 				type: Object,
-				default: {
+				default: () => ({
 					address: '',
 					lat: 0,
 					lng: 0,
 					parts: {},
-				},
+				}),
 			},
 			showLatLng: Boolean,
 			fullAddressDirty: Boolean,
 			hide: Boolean,
-		}
-	})
-	export default class Address extends Vue {
+		},
 
-		// Properties
-		// =====================================================================
+		components: {
+			Input,
+			Fragment,
+		},
 
-		labels = {
-			clear: t('Clear'),
-			fullAddress: t('Full Address'),
-			number: t('Name / Number'),
-			address: t('Street Address'),
-			city: t('Town / City'),
-			postcode: t('Postcode'),
-			county: t('County'),
-			state: t('State'),
-			country: t('Country'),
-			lat: t('Latitude'),
-			lng: t('Longitude'),
-		};
+		data () {
+			return {
+				labels: {
+					clear: t('Clear'),
+					fullAddress: t('Full Address'),
+					number: t('Name / Number'),
+					address: t('Street Address'),
+					city: t('Town / City'),
+					postcode: t('Postcode'),
+					county: t('County'),
+					state: t('State'),
+					country: t('Country'),
+					lat: t('Latitude'),
+					lng: t('Longitude'),
+				}
+			};
+		},
 
-		// Events
-		// =====================================================================
+		methods: {
+			onInput (name, e) {
+				this.$emit('changed', {
+					name,
+					value: e.target.value,
+				});
+			},
 
-		onInput (name, e) {
-			this.$emit('changed', {
-				name,
-				value: e.target.value,
-			});
-		}
-
-		onClear () {
-			this.$emit('clear');
-		}
-
-	}
+			onClear () {
+				this.$emit('clear');
+			},
+		},
+	};
 </script>
 
 <style lang="less" module>

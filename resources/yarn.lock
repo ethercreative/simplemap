@@ -4898,7 +4898,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
+lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -7888,11 +7888,6 @@ vue-autosuggest@^1.8.1:
   resolved "https://registry.yarnpkg.com/vue-autosuggest/-/vue-autosuggest-1.8.2.tgz#9162d5685be4ec47b3a74fc84a9a580cf8dfcd27"
   integrity sha512-zqHxI4YkUxYg2BJwi3WPcaK3+CHqNNOcKrl5LIo5IpKAV08S9w3AHiOs8Hs+yb/NdhDA9d4FryuNDN/5O9C12w==
 
-vue-class-component@^6.0.0, vue-class-component@^6.2.0:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
-  integrity sha512-cH208IoM+jgZyEf/g7mnFyofwPDJTM/QvBNhYMjqGB8fCsRyTf68rH2ISw/G20tJv+5mIThQ3upKwoL4jLTr1A==
-
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -7933,13 +7928,6 @@ vue-loader@^15.6.4:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-property-decorator@^7.0.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-7.3.0.tgz#d50d67f0b0f1c814f9f2fba36d6eeccbcc62dbb6"
-  integrity sha512-HarXfTQ/Nxm4s/APpAaGIGHq5ZzslApImQy8ZrtkfGamw8rUFAVgMS5C50/AQ80+wfw3Wpnf4bNzbmj75m/k2Q==
-  dependencies:
-    vue-class-component "^6.2.0"
-
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -7960,11 +7948,6 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
-
-vue@^2.5.21:
-  version "2.6.9"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.9.tgz#415c1cc1a5ed00c8f0acdd0a948139d12b7ea6b3"
-  integrity sha512-t1+tvH8hybPM86oNne3ZozCD02zj/VoZIiojOBPJLjwBn7hxYU5e1gBObFpq8ts1NEn1VhPf/hVXBDAJ3X5ljg==
 
 watchpack@^1.5.0:
   version "1.6.0"
@@ -8004,6 +7987,25 @@ webpack-bundle-analyzer@^3.0.4:
     filesize "^3.6.1"
     gzip-size "^5.0.0"
     lodash "^4.17.10"
+    mkdirp "^0.5.1"
+    opener "^1.5.1"
+    ws "^6.0.0"
+
+webpack-bundle-analyzer@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.4.1.tgz#430544c7ba1631baccf673475ca8300cb74a3c47"
+  integrity sha512-Bs8D/1zF+17lhqj2OYmzi7HEVYqEVxu7lCO9Ff8BwajenOU0vAwEoV8e4ICCPNZAcqR1PCR/7o2SkW+cnCmF0A==
+  dependencies:
+    acorn "^6.0.7"
+    acorn-walk "^6.1.1"
+    bfj "^6.1.1"
+    chalk "^2.4.1"
+    commander "^2.18.0"
+    ejs "^2.6.1"
+    express "^4.16.3"
+    filesize "^3.6.1"
+    gzip-size "^5.0.0"
+    lodash "^4.17.15"
     mkdirp "^0.5.1"
     opener "^1.5.1"
     ws "^6.0.0"

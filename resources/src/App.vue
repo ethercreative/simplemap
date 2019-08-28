@@ -57,7 +57,6 @@
 </template>
 
 <script lang="js">
-	import { Component, Vue } from 'vue-property-decorator';
 	import Search from './components/Search';
 	import Address from './components/Address';
 	import Map from './components/Map';
@@ -67,66 +66,54 @@
 	import Fragment from './components/Fragment';
 	import PartsLegacy from './models/PartsLegacy';
 
-	@Component({
+	export default {
 		props: {
-			options: {
-				type: String,
-			},
+			options: String,
 		},
+
 		components: {
 			Search,
 			Address,
 			Map,
 			Fragment,
 		},
-	})
-	export default class App extends Vue {
 
-		// Props
-		// =====================================================================
+		data () {
+			return {
+				config: {
+					isSettings: false,
+					name: '',
+					hideSearch: false,
+					hideMap: false,
+					hideAddress: false,
+					showLatLng: false,
+					minZoom: 3,
+					maxZoom: 20,
+					mapTiles: 'wikimedia',
+					mapToken: '',
+					geoService: 'nominatim',
+					geoToken: '',
+					locale: 'en',
+				},
 
-		config = {
-			isSettings: false,
-			name: '',
-			hideSearch: false,
-			hideMap: false,
-			hideAddress: false,
-			showLatLng: false,
-			minZoom: 3,
-			maxZoom: 20,
-			mapTiles: 'wikimedia',
-			mapToken: '',
-			geoService: 'nominatim',
-			geoToken: '',
-			locale: 'en',
-		};
+				value: {
+					address: '',
+					zoom: 15,
+					lat: null,
+					lng: null,
+					parts: new Parts(),
+				},
 
-		value = {
-			address: '',
-			zoom: 15,
-			lat: null,
-			lng: null,
-			parts: new Parts(),
-		};
+				geo: null,
 
-		geo = null;
+				fullAddressDirty: false,
 
-		fullAddressDirty = false;
-
-		defaultValue = null;
-
-		// Getters
-		// =====================================================================
-
-		get val () {
-			return this.value.lat === null ? this.defaultValue : this.value;
-		}
-
-		// Vue
-		// =====================================================================
+				defaultValue: null,
+			};
+		},
 
 		created () {
-			const { config, value, defaultValue } = JSON.parse(this.$props.options);
+			const { config, value, defaultValue } = JSON.parse(this.options);
 
 			const isGoogle = config.geoService === GeoService.GoogleMaps;
 
@@ -143,75 +130,79 @@
 				: new Parts();
 
 			this.geo = new Geo(config);
-		}
+		},
 
-		// Events
-		// =====================================================================
+		computed: {
+			val () {
+				return this.value.lat === null ? this.defaultValue : this.value;
+			},
+		},
 
-		onSearchSelected (item) {
-			this.value = {
-				...this.value,
-				...item,
-			};
-		}
+		methods: {
+			onSearchSelected (item) {
+				this.value = {
+					...this.value,
+					...item,
+				};
+			},
 
-		async onMapChange (latLng) {
-			const zoom = this.value.zoom;
+			async onMapChange (latLng) {
+				const zoom = this.value.zoom;
 
-			switch (this.config.geoService) {
-				case GeoService.Nominatim:
-					this.value = await this.geo.reverseNominatim(latLng);
-					break;
-				case GeoService.Mapbox:
-					this.value = await this.geo.reverseMapbox(latLng);
-					break;
-				case GeoService.GoogleMaps:
-					this.value = await this.geo.reverseGoogle(latLng);
-					break;
-				case GeoService.AppleMapKit:
-					this.value = await this.geo.reverseApple(latLng);
-					break;
-				case GeoService.Here:
-					this.value = await this.geo.reverseHere(latLng);
-					break;
-				default:
-					throw new Error('Unknown geo service: ' + this.config.geoService);
-			}
-
-			this.value.zoom = zoom;
-			this.fullAddressDirty = false;
-		}
-
-		onZoom (zoom) {
-			this.value.zoom = zoom;
-		}
-
-		onPartChange ({ name, value }) {
-			if (name === 'fullAddress') {
-				this.value.address    = value;
-				this.fullAddressDirty = value !== '';
-			} else if (name === 'lat' || name === 'lng') {
-				this.value[name] = value;
-			} else {
-				this.value.parts[name] = value;
-
-				if (this.value.address === '' || !this.fullAddressDirty) {
-					this.value.address = Object.values(this.value.parts).filter(Boolean).join(', ');
+				switch (this.config.geoService) {
+					case GeoService.Nominatim:
+						this.value = await this.geo.reverseNominatim(latLng);
+						break;
+					case GeoService.Mapbox:
+						this.value = await this.geo.reverseMapbox(latLng);
+						break;
+					case GeoService.GoogleMaps:
+						this.value = await this.geo.reverseGoogle(latLng);
+						break;
+					case GeoService.AppleMapKit:
+						this.value = await this.geo.reverseApple(latLng);
+						break;
+					case GeoService.Here:
+						this.value = await this.geo.reverseHere(latLng);
+						break;
+					default:
+						throw new Error('Unknown geo service: ' + this.config.geoService);
 				}
-			}
-		}
 
-		onClear () {
-			this.value = {
-				address: '',
-				zoom: 15,
-				lat: null,
-				lng: null,
-				parts: new Parts(),
-			};
-		}
+				this.value.zoom       = zoom;
+				this.fullAddressDirty = false;
+			},
 
-	}
+			onZoom (zoom) {
+				this.value.zoom = zoom;
+			},
+
+			onPartChange ({ name, value }) {
+				if (name === 'fullAddress') {
+					this.value.address    = value;
+					this.fullAddressDirty = value !== '';
+				} else if (name === 'lat' || name === 'lng') {
+					this.value[name] = value;
+				} else {
+					this.value.parts[name] = value;
+
+					if (this.value.address === '' || !this.fullAddressDirty) {
+						this.value.address = Object.values(this.value.parts).filter(Boolean).join(', ');
+					}
+				}
+			},
+
+			onClear () {
+				this.value = {
+					address: '',
+					zoom: 15,
+					lat: null,
+					lng: null,
+					parts: new Parts(),
+				};
+			},
+		},
+	};
 </script>
 
 <style lang="less" module>

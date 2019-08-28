@@ -1,10 +1,8 @@
 <script>
-	const Fragment = {
+	export default {
 		functional: true,
 		render (h, ctx) {
 			return ctx.children;
 		}
 	};
-
-	export default Fragment;
 </script>

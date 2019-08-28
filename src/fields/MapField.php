@@ -29,6 +29,7 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
+use yii\web\View;
 
 /**
  * Class Map
@@ -420,7 +421,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$containerId = 'map-' . $this->id . '-container';
 		$vueContainerId = $view->namespaceInputId($containerId);
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
-		$view->registerAssetBundle(MapAsset::class);
+		$view->registerAssetBundle(MapAsset::class, View::POS_BEGIN);
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
 		$view->registerTranslations('simplemap', [
 			'Search for a location',

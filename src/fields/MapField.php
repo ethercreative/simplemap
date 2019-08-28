@@ -29,7 +29,6 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
-use yii\web\View;
 
 /**
  * Class Map

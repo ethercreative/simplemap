@@ -18,7 +18,7 @@ use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
 use Mapkit\JWT;
-use yii\db\Exception;
+use Exception;
 
 /**
  * Class GeoService

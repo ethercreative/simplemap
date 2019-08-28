@@ -41,6 +41,7 @@ class Settings extends Model
 
 	public $mapTiles = MapTiles::Wikimedia;
 
+	/** @var string|array */
 	public $mapToken = '';
 
 	// Properties: Geo-coding
@@ -48,6 +49,7 @@ class Settings extends Model
 
 	public $geoService = GeoService::Nominatim;
 
+	/** @var string|array */
 	public $geoToken = '';
 
 }

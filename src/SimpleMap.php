@@ -24,6 +24,7 @@ use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\MapService;
+use ether\simplemap\services\StaticService;
 use ether\simplemap\web\Variable;
 use yii\base\Event;
 
@@ -33,6 +34,7 @@ use yii\base\Event;
  * @author  Ether Creative
  * @package ether\simplemap
  * @property MapService $map
+ * @property StaticService $static
  */
 class SimpleMap extends Plugin
 {
@@ -70,6 +72,7 @@ class SimpleMap extends Plugin
 
 		$this->setComponents([
 			'map' => MapService::class,
+			'static' => StaticService::class,
 		]);
 
 		Event::on(

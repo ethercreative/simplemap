@@ -11,7 +11,6 @@ namespace ether\simplemap\web;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
-use yii\db\Exception;
 
 /**
  * Class Variable
@@ -70,7 +69,7 @@ class Variable
 		{
 			return GeoService::latLngFromAddress($address, $country);
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			\Craft::error($e->getMessage(), 'simplemap');
 
@@ -79,6 +78,19 @@ class Variable
 				'lng' => '',
 			];
 		}
+	}
+
+	/**
+	 * Will return a static map image using the given options.
+	 *
+	 * @param $options - See StaticOptions for the available options
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function getStatic ($options)
+	{
+		return SimpleMap::getInstance()->static->generate($options);
 	}
 
 }

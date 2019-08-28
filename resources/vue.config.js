@@ -6,4 +6,7 @@ module.exports = {
 		headers: { "Access-Control-Allow-Origin": "*" },
 		disableHostCheck: true,
 	},
+	configureWebpack: config => {
+		config.output.library = 'EtherMaps';
+	},
 };

@@ -421,7 +421,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$containerId = 'map-' . $this->id . '-container';
 		$vueContainerId = $view->namespaceInputId($containerId);
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
-		$view->registerAssetBundle(MapAsset::class, View::POS_BEGIN);
+		$view->registerAssetBundle(MapAsset::class);
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
 		$view->registerTranslations('simplemap', [
 			'Search for a location',

@@ -74,6 +74,25 @@ abstract class MapTiles
 
 	public static function getSelectOptions ()
 	{
+		if (SimpleMap::v(SimpleMap::EDITION_LITE))
+			return [
+				['optgroup' => SimpleMap::t('Open Source')],
+
+				self::Wikimedia => SimpleMap::t('Wikimedia'),
+
+				self::OpenStreetMap => SimpleMap::t('OpenStreetMap'),
+
+				self::CartoVoyager    => SimpleMap::t('Carto: Voyager'),
+				self::CartoPositron   => SimpleMap::t('Carto: Positron'),
+				self::CartoDarkMatter => SimpleMap::t('Carto: Dark Matter'),
+
+				['optgroup' => SimpleMap::t('Requires API Key (Token)')],
+
+				self::GoogleRoadmap => SimpleMap::t('Google Maps: Roadmap'),
+				self::GoogleTerrain => SimpleMap::t('Google Maps: Terrain'),
+				self::GoogleHybrid  => SimpleMap::t('Google Maps: Hybrid'),
+			];
+
 		return [
 			['optgroup' => SimpleMap::t('Open Source')],
 
@@ -81,20 +100,20 @@ abstract class MapTiles
 
 			self::OpenStreetMap => SimpleMap::t('OpenStreetMap'),
 
-			self::CartoVoyager => SimpleMap::t('Carto: Voyager'),
-			self::CartoPositron => SimpleMap::t('Carto: Positron'),
+			self::CartoVoyager    => SimpleMap::t('Carto: Voyager'),
+			self::CartoPositron   => SimpleMap::t('Carto: Positron'),
 			self::CartoDarkMatter => SimpleMap::t('Carto: Dark Matter'),
 
 			['optgroup' => SimpleMap::t('Requires API Key (Token)')],
 
 			self::MapboxOutdoors => SimpleMap::t('Mapbox: Outdoors'),
-			self::MapboxStreets => SimpleMap::t('Mapbox: Streets'),
-			self::MapboxLight => SimpleMap::t('Mapbox: Light'),
-			self::MapboxDark => SimpleMap::t('Mapbox: Dark'),
+			self::MapboxStreets  => SimpleMap::t('Mapbox: Streets'),
+			self::MapboxLight    => SimpleMap::t('Mapbox: Light'),
+			self::MapboxDark     => SimpleMap::t('Mapbox: Dark'),
 
 			self::GoogleRoadmap => SimpleMap::t('Google Maps: Roadmap'),
 			self::GoogleTerrain => SimpleMap::t('Google Maps: Terrain'),
-			self::GoogleHybrid => SimpleMap::t('Google Maps: Hybrid'),
+			self::GoogleHybrid  => SimpleMap::t('Google Maps: Hybrid'),
 
 			self::MapKitStandard       => SimpleMap::t('Apple MapKit: Standard'),
 			self::MapKitMutedStandard  => SimpleMap::t('Apple MapKit: Muted Standard'),

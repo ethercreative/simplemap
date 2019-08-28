@@ -1,6 +1,13 @@
-## [Unreleased] 3.6.5
+## [Unreleased] 3.7.0
 ### Added
 - Add Craft GraphQL support
+- Add Pro edition
+
+### Changed
+- Mapbox, Apple Maps, and Here are now only available in Maps Pro
+
+### Improved
+- Remove Vue from JS bundle to reduce file size
 
 ### Fixed
 - Fix map not showing when other Vue based plugins interfere (Fixes #196)

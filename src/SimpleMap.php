@@ -37,10 +37,24 @@ use yii\base\Event;
 class SimpleMap extends Plugin
 {
 
+	const EDITION_LITE = 'lite';
+	const EDITION_PRO = 'pro';
+
 	// Properties
 	// =========================================================================
 
 	public $hasCpSettings = true;
+
+	// Static
+	// =========================================================================
+
+	public static function editions (): array
+	{
+		return [
+			self::EDITION_LITE,
+			self::EDITION_PRO,
+		];
+	}
 
 	// Craft
 	// =========================================================================
@@ -162,6 +176,11 @@ class SimpleMap extends Plugin
 	public static function t ($message, $params = [])
 	{
 		return \Craft::t('simplemap', $message, $params);
+	}
+
+	public static function v ($version, $operator = '=')
+	{
+		return SimpleMap::getInstance()->is($version, $operator);
 	}
 
 }

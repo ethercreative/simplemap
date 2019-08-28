@@ -236,7 +236,3 @@ Lat/Lng, to display it on a map.
 - Static Maps template output
 - Dynamic Maps template output
 - Support env in settings
-
-### Support Maps
-
-[![Beerpay](https://beerpay.io/ethercreative/simplemap/badge.svg?style=flat)](https://beerpay.io/ethercreative/simplemap)

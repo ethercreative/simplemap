@@ -44,6 +44,17 @@ abstract class GeoService
 
 	public static function getSelectOptions ()
 	{
+		if (SimpleMap::v(SimpleMap::EDITION_LITE))
+			return [
+				['optgroup' => SimpleMap::t('Open Source')],
+
+				self::Nominatim => SimpleMap::t('Nominatim'),
+
+				['optgroup' => SimpleMap::t('Requires API Key (Token)')],
+
+				self::GoogleMaps => SimpleMap::t('Google Maps'),
+			];
+
 		return [
 			[ 'optgroup' => SimpleMap::t('Open Source') ],
 

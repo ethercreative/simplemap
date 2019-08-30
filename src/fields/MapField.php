@@ -225,7 +225,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				'zoom' => $this->zoom,
 			]);
 
-		SimpleMap::getInstance()->map->populateMissingData($map);
+		SimpleMap::getInstance()->map->populateMissingData($map, $this);
 
 		$map->fieldId = $this->id;
 

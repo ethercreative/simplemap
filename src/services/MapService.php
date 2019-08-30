@@ -198,11 +198,12 @@ class MapService extends Component
 	/**
 	 * Populates any missing location data
 	 *
-	 * @param Map $map
+	 * @param Map      $map
+	 * @param MapField $field
 	 *
 	 * @throws \yii\db\Exception
 	 */
-	public function populateMissingData (Map $map)
+	public function populateMissingData (Map $map, MapField $field)
 	{
 		$postcode = is_array($map->parts)
 			? @$map->parts['postcode']
@@ -226,6 +227,10 @@ class MapService extends Component
 				array_filter((array) $map->parts)
 			);
 		}
+
+		// Missing zoom
+		if (!$map->zoom)
+			$map->zoom = $field->zoom;
 	}
 
 	// Private Methods

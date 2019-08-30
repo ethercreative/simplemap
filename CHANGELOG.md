@@ -13,6 +13,10 @@
 ### Fixed
 - Fix map not showing when other Vue based plugins interfere (Fixes #196)
 
+## 3.6.4.3 - 2019-08-30
+### Fixed
+- Fix issue when trying to save map field on initial draft entry
+
 ## 3.6.4.2 - 2019-08-01
 ### Changed
 - Don't update project config unnecessarily during migration (Closes #194)

@@ -92,11 +92,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $showLatLng = false;
 
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 */
 	public $hideLatLng;
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 */
 	public $height;
 	/**
@@ -224,7 +224,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				'zoom' => $this->zoom,
 			]);
 
-		SimpleMap::getInstance()->map->populateMissingData($map);
+		SimpleMap::getInstance()->map->populateMissingData($map, $this);
 
 		$map->fieldId = $this->id;
 

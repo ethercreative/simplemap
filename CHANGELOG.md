@@ -1,5 +1,6 @@
 ## [Unreleased] 3.7.0
 ### Added
+- Add docs
 - Add Craft GraphQL support
 - Add Pro edition
 - Add static map image support

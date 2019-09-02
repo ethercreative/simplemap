@@ -8,7 +8,9 @@
 
 namespace ether\simplemap\enums;
 
+use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
+use ether\simplemap\services\GeoService;
 
 /**
  * Class MapTiles
@@ -129,6 +131,44 @@ abstract class MapTiles
 			self::HereSatellite        => SimpleMap::t('Here: Satellite'),
 			self::HereHybrid           => SimpleMap::t('Here: Hybrid'),
 		];
+	}
+
+	/**
+	 * Get the tiles url for the given type and scale
+	 *
+	 * @param string $type
+	 * @param int $scale
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getTiles ($type, $scale = 1)
+	{
+		$scale = $scale === 1 ? '.png' : '@2x.png';
+		$style = strpos($type, '.') !== false ? explode('.', $type, 2)[1] : '';
+
+		switch ($type)
+		{
+			case self::Wikimedia:
+				return [
+					'url' => 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}' . $scale,
+					'size' => 512,
+				];
+			case self::OpenStreetMap:
+				return [
+					'url' => 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+					'size' => 256,
+				];
+			case self::CartoVoyager:
+			case self::CartoPositron:
+			case self::CartoDarkMatter:
+				return [
+					'url' => 'https://a.basemaps.cartocdn.com/' . $style . '/{z}/{x}/{y}' . $scale,
+					'size' => 512,
+				];
+		}
+
+		throw new \Exception('Unknown tile type "' . $type . '"');
 	}
 
 }

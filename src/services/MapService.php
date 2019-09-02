@@ -154,7 +154,7 @@ class MapService extends Component
 	 * @param mixed                 $value
 	 * @param MapField              $field
 	 *
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value, MapField $field)
 	{
@@ -201,7 +201,7 @@ class MapService extends Component
 	 * @param Map      $map
 	 * @param MapField $field
 	 *
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	public function populateMissingData (Map $map, MapField $field)
 	{
@@ -247,7 +247,7 @@ class MapService extends Component
 	 * @param string       $table
 	 *
 	 * @return bool|string
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	private function _searchLocation (ElementQuery $query, $value, $table)
 	{

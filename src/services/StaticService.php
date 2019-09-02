@@ -188,6 +188,9 @@ class StaticService extends Component
 		$url .= $options->zoom . ',0,0';
 		$url .= '/' . $options->getSize();
 
+		if ($options->scale > 1)
+			$url .= '@2x';
+
 		return $url . '?access_token=' . $settings->mapToken;
 	}
 

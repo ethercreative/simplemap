@@ -22,8 +22,11 @@ use yii\web\BadRequestHttpException;
 class StaticController extends Controller
 {
 
+	protected $allowAnonymous = true;
+
 	/**
 	 * @throws BadRequestHttpException
+	 * @throws \Exception
 	 */
 	public function actionIndex ()
 	{
@@ -32,7 +35,7 @@ class StaticController extends Controller
 		if (!$request->validateCsrfToken($request->getRequiredQueryParam('csrf')))
 			throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
 
-		(new StaticMap(
+		return (new StaticMap(
 			$request->getRequiredQueryParam('lat'),
 			$request->getRequiredQueryParam('lng'),
 			$request->getRequiredQueryParam('width'),

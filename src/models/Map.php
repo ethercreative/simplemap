@@ -145,6 +145,12 @@ class Map extends Model
 		return empty($this->lat) && empty($this->lng);
 	}
 
+	// Render Map
+	// =========================================================================
+
+	// Render Map: Image
+	// -------------------------------------------------------------------------
+
 	/**
 	 * Output the map field as a static image
 	 *
@@ -164,6 +170,22 @@ class Map extends Model
 				'zoom' => $this->zoom,
 			])
 		);
+	}
+
+	/**
+	 * Output the map ready for srcset
+	 *
+	 * @param array $options
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function imgSrcSet ($options = [])
+	{
+		$x1 = $this->img(array_merge($options, ['scale' => 1]));
+		$x2 = $this->img(array_merge($options, ['scale' => 2]));
+
+		return $x1 . ' 1x, ' . $x2 . ' 2x';
 	}
 
 }

@@ -93,4 +93,20 @@ class Variable
 		return SimpleMap::getInstance()->static->generate($options);
 	}
 
+	/**
+	 * Will return a static map image ready for srcset
+	 *
+	 * @param $options - See StaticOptions for the available options
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function getImgSrcSet ($options)
+	{
+		$x1 = $this->getImg(array_merge($options, ['scale' => 1]));
+		$x2 = $this->getImg(array_merge($options, ['scale' => 2]));
+
+		return $x1 . ' 1x, ' . $x2 . ' 2x';
+	}
+
 }

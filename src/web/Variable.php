@@ -88,7 +88,7 @@ class Variable
 	 * @return string
 	 * @throws \Exception
 	 */
-	public function getStatic ($options)
+	public function getImg ($options)
 	{
 		return SimpleMap::getInstance()->static->generate($options);
 	}

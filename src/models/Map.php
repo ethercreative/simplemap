@@ -153,7 +153,7 @@ class Map extends Model
 	 * @return string|void
 	 * @throws \Exception
 	 */
-	public function static ($options = [])
+	public function img ($options = [])
 	{
 		return SimpleMap::getInstance()->static->generate(
 			array_merge($options, [

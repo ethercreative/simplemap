@@ -11,16 +11,19 @@ namespace ether\simplemap\utilities;
 use Craft;
 use craft\web\Response;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Point;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
+use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\Palette\RGB;
 
 /**
  * Class StaticMap
  *
  * Based off https://github.com/dfacts/staticmaplite/blob/master/staticmap.php
  *
- * TODO: Re-write using https://imagine.readthedocs.io/en/stable/index.html
  * TODO: Support external volumes (i.e. S3, Spaces)
  *
  * @author  Ether Creative
@@ -38,6 +41,10 @@ class StaticMap
 	private $lat, $lng, $width, $height, $zoom, $scale;
 	private $tiles, $tileSize, $mapTiles;
 	private $centerX, $centerY, $offsetX, $offsetY;
+
+	/**
+	 * @var ImageInterface
+	 */
 	private $image;
 
 	// Constructor
@@ -92,12 +99,12 @@ class StaticMap
 		$this->_createBaseMap();
 
 		self::_mkdirRecursive(dirname($filename), 0777);
-		imagepng($this->image, $filename, 9);
+		$this->image->save($filename);
 
 		if (file_exists($filename))
 			return $this->_send(file_get_contents($filename));
 
-		return $this->_send(imagepng($this->image));
+		return $this->_send($this->image->show('png'));
 	}
 
 	// Private Methods
@@ -111,10 +118,13 @@ class StaticMap
 
 	private function _createBaseMap ()
 	{
+		$imagine = $this->_getImagine();
+		$palette = new RGB();
+
 		$w = $this->width * $this->scale;
 		$h = $this->height * $this->scale;
 
-		$this->image = imagecreatetruecolor($w, $h);
+		$this->image = $imagine->create(new Box($w, $h));
 
 		$_ts = $this->tileSize * $this->scale;
 
@@ -145,25 +155,24 @@ class StaticMap
 
 				$tileData = $this->_fetchTile($url);
 
-				if ($tileData) $tileImg = imagecreatefromstring($tileData);
-				else {
-					$tileImg = imagecreate($_ts, $_ts);
-					$color = imagecolorallocate($tileImg, 255, 255, 255);
-					@imagestring($tileImg, 1, 127, 127, 'err', $color);
+				if ($tileData) {
+					$tileImg = $imagine->load($tileData);
+				} else {
+					$tileImg = $imagine->create(new Box($_ts, $_ts));
+					$tileImg->draw()->text(
+						'err',
+						null,
+						new Point($_ts / 2, $_ts / 2),
+						$palette->color('#fff', 100)
+					);
 				}
 
 				$destX = ($x - $startX) * $_ts + $this->offsetX;
 				$destY = ($y - $startY) * $_ts + $this->offsetY;
 
-				imagecopy(
-					$this->image,
+				$this->image->paste(
 					$tileImg,
-					$destX,
-					$destY,
-					0,
-					0,
-					$_ts,
-					$_ts
+					new Point($destX, $destY)
 				);
 			}
 		}
@@ -201,6 +210,28 @@ class StaticMap
 	{
 		is_dir(dirname($pathname)) || self::_mkdirRecursive(dirname($pathname), $mode);
 		return is_dir($pathname) || mkdir($pathname, $mode);
+	}
+
+	// Imagine
+	// -------------------------------------------------------------------------
+
+	private function _getImagine ()
+	{
+		static $imagine;
+
+		if ($imagine)
+			return $imagine;
+
+		$generalConfig = Craft::$app->getConfig()->getGeneral();
+		$extension     = strtolower($generalConfig->imageDriver);
+
+		if ($extension === 'gd' || Craft::$app->getImages()->getIsGd()) {
+			$imagine = new \Imagine\Gd\Imagine();
+		} else {
+			$imagine = new \Imagine\Imagick\Imagine();
+		}
+
+		return $imagine;
 	}
 
 	// Tiles

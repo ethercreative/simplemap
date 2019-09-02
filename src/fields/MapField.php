@@ -207,7 +207,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @param ElementInterface|Element|null $element
 	 *
 	 * @return Map
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	public function normalizeValue ($value, ElementInterface $element = null)
 	{
@@ -319,7 +319,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @param ElementInterface $element
 	 *
 	 * @return string
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	public function getTableAttributeHtml ($value, ElementInterface $element): string
 	{
@@ -331,7 +331,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @param                       $value
 	 *
 	 * @return bool|false|null
-	 * @throws \yii\db\Exception
+	 * @throws \Exception
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, $value)
 	{

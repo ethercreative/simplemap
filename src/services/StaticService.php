@@ -26,6 +26,8 @@ class StaticService extends Component
 {
 
 	/**
+	 * TODO: Add marker support
+	 *
 	 * @param array $options
 	 *
 	 * @return string|void

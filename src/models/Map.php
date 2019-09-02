@@ -145,4 +145,25 @@ class Map extends Model
 		return empty($this->lat) && empty($this->lng);
 	}
 
+	/**
+	 * Output the map field as a static image
+	 *
+	 * @param array $options
+	 *
+	 * @return string|void
+	 * @throws \Exception
+	 */
+	public function static ($options = [])
+	{
+		return SimpleMap::getInstance()->static->generate(
+			array_merge($options, [
+				'center' => [
+					$this->lat,
+					$this->lng,
+				],
+				'zoom' => $this->zoom,
+			])
+		);
+	}
+
 }

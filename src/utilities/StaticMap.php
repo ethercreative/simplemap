@@ -107,29 +107,28 @@ class StaticMap
 	{
 		$this->centerX = $this->_lngToTile($this->lng);
 		$this->centerY = $this->_latToTile($this->lat);
-
-		$_ts = $this->tileSize;
-		$this->offsetX = floor((floor($this->centerX) - $this->centerX) * $_ts);
-		$this->offsetY = floor((floor($this->centerY) - $this->centerY) * $_ts);
 	}
 
 	private function _createBaseMap ()
 	{
-		$this->image = imagecreatetruecolor($this->width, $this->height);
+		$w = $this->width * $this->scale;
+		$h = $this->height * $this->scale;
 
-		$_ts = $this->tileSize;
+		$this->image = imagecreatetruecolor($w, $h);
 
-		$startX = floor($this->centerX - ($this->width / $_ts) / 2);
-		$startY = floor($this->centerY - ($this->height / $_ts) / 2);
+		$_ts = $this->tileSize * $this->scale;
 
-		$endX = ceil($this->centerX + ($this->width / $_ts) / 2);
-		$endY = ceil($this->centerY + ($this->height / $_ts) / 2);
+		$startX = floor($this->centerX - ($w / $_ts) / 2);
+		$startY = floor($this->centerY - ($h / $_ts) / 2);
+
+		$endX = ceil($this->centerX + ($w / $_ts) / 2);
+		$endY = ceil($this->centerY + ($h / $_ts) / 2);
 
 		$this->offsetX = -floor(($this->centerX - floor($this->centerX)) * $_ts);
 		$this->offsetY = -floor(($this->centerY - floor($this->centerY)) * $_ts);
 
-		$this->offsetX += floor($this->width / 2);
-		$this->offsetY += floor($this->height / 2);
+		$this->offsetX += floor($w / 2);
+		$this->offsetY += floor($h / 2);
 
 		$this->offsetX += floor($startX - floor($this->centerX)) * $_ts;
 		$this->offsetY += floor($startY - floor($this->centerY)) * $_ts;
@@ -138,8 +137,6 @@ class StaticMap
 		{
 			for ($y = $startY; $y <= $endY; $y++)
 			{
-
-
 				$url = str_replace(
 					['{z}', '{x}', '{y}'],
 					[$this->zoom, $x, $y],
@@ -154,9 +151,6 @@ class StaticMap
 					$color = imagecolorallocate($tileImg, 255, 255, 255);
 					@imagestring($tileImg, 1, 127, 127, 'err', $color);
 				}
-
-				$color = imagecolorallocate($tileImg, 0, 0, 0);
-				@imagestring($tileImg, 1, 10, 10, 'x: ' . $x . ', y: ' . $y, $color);
 
 				$destX = ($x - $startX) * $_ts + $this->offsetX;
 				$destY = ($y - $startY) * $_ts + $this->offsetY;

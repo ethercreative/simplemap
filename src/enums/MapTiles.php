@@ -144,7 +144,7 @@ abstract class MapTiles
 	 */
 	public static function getTiles ($type, $scale = 1)
 	{
-		$scale = $scale === 1 ? '.png' : '@2x.png';
+		$scale = $scale == 1 ? '.png' : '@2x.png';
 		$style = strpos($type, '.') !== false ? explode('.', $type, 2)[1] : '';
 
 		switch ($type)
@@ -164,7 +164,7 @@ abstract class MapTiles
 			case self::CartoDarkMatter:
 				return [
 					'url' => 'https://a.basemaps.cartocdn.com/' . $style . '/{z}/{x}/{y}' . $scale,
-					'size' => 512,
+					'size' => 256,
 				];
 		}
 

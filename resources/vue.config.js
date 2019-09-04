@@ -1,5 +1,3 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 module.exports = {
 	filenameHashing: false,
 	outputDir: '../src/web/assets/map',
@@ -10,8 +8,8 @@ module.exports = {
 	},
 	configureWebpack: config => {
 		config.output.library = 'EtherMaps';
-		config.plugins.push(
-			new BundleAnalyzerPlugin()
-		);
+		// config.plugins.push(
+		// 	new require('webpack-bundle-analyzer').BundleAnalyzerPlugin()
+		// );
 	},
 };

@@ -143,7 +143,7 @@
 					if (next.lat === old.lat && next.lng === old.lng)
 						return;
 
-					this.map.flyTo(this.latLng);
+					this.map.panTo(this.latLng);
 					this.setMarker();
 				},
 			},

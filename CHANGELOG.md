@@ -6,6 +6,9 @@
 - Add static map image support
 
 ### Changed
+- Removed fly animation when updating map location for snappier UI (Closes #202)
+
+### Changed
 - Mapbox, Apple Maps, and Here are now only available in Maps Pro
 
 ### Improved

@@ -34,7 +34,7 @@ fields value:
 />
 ```
 
-### `img([options])`
+### `mapField.img([options])`
 
 The `img` method returns the URL for the static map image. It accepts an 
 [options](#options) object as its only parameter. Since we already
@@ -48,7 +48,7 @@ options will be ignored.
 }) }}
 ```
 
-### `imgSrcSet([options])`
+### `mapField.imgSrcSet([options])`
 
 `imgSrcSet` is similar to `img` accept it returns a `srcset` ready string, 
 supporting @1x and @2x resolutions. As with `img` it accepts an 
@@ -56,6 +56,34 @@ supporting @1x and @2x resolutions. As with `img` it accepts an
 `zoom` options being ignored (as with `img`), the `scale` option is also 
 ignored.
 
-## Using the global `map` variable
+## Using the global `maps` variable
 
-...todo...
+You can turn any address into a static map using the globally available `maps` 
+variable.
+
+```twig
+<img
+    src="{{ craft.maps.img() }}"
+    srcset="{{ craft.maps.imgSrcSet() }}"
+    alt=""
+/>
+```
+
+### `craft.maps.img([options])`
+
+The `img` method returns the URL for the static map image. It accepts an 
+[options](#options) object as its only parameter.
+
+```twig
+{{ craft.maps.img({
+    center: 'Maidstone, UK',
+    width: 800,
+    height: 600,
+}) }}
+```
+
+### `craft.maps.imgSrcSet([options])`
+
+`imgSrcSet` is similar to `img` accept it returns a `srcset` ready string, 
+supporting @1x and @2x resolutions. As with `img` it accepts an 
+[options](#options) object as its only parameter. The `scale` is ignored.

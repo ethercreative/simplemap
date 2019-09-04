@@ -114,8 +114,8 @@ class StaticMap
 	{
 		$filename = $this->_mapCacheIdToFilename();
 
-//		if ($this->_checkMapCache())
-//			return $this->_send(file_get_contents($filename));
+		if ($this->_checkMapCache())
+			return $this->_send(file_get_contents($filename));
 
 		$this->_initCoords();
 		$this->_createBaseMap();
@@ -406,6 +406,7 @@ class StaticMap
 				'zoom'   => $this->zoom,
 				'scale'  => $this->scale,
 				'tiles'  => $this->mapTiles,
+				'markers' => $this->markers,
 			])
 		);
 	}

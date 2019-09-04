@@ -9,15 +9,21 @@
 namespace ether\simplemap\utilities;
 
 use Craft;
+use craft\helpers\Json;
 use craft\web\Response;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Marker;
 use ether\simplemap\models\Point;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
 use Imagine\Image\Box;
+use Imagine\Image\FontInterface;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Palette\RGB;
+use Imagine\Image\Point\Center;
+use Imagine\Imagick\Imagick;
 
 /**
  * Class StaticMap
@@ -41,6 +47,7 @@ class StaticMap
 	private $lat, $lng, $width, $height, $zoom, $scale;
 	private $tiles, $tileSize, $mapTiles;
 	private $centerX, $centerY, $offsetX, $offsetY;
+	private $markers;
 
 	/**
 	 * @var ImageInterface
@@ -59,6 +66,7 @@ class StaticMap
 	 * @param int $height
 	 * @param int $zoom
 	 * @param int $scale
+	 * @param string|null $markers
 	 *
 	 * @throws \Exception
 	 */
@@ -68,7 +76,8 @@ class StaticMap
 		$width = 640,
 		$height = 480,
 		$zoom = 15,
-		$scale = 1
+		$scale = 1,
+		$markers = null
 	) {
 		$this->lat    = $lat;
 		$this->lng    = $lng;
@@ -76,6 +85,19 @@ class StaticMap
 		$this->height = $height;
 		$this->zoom   = $zoom;
 		$this->scale  = $scale;
+
+		if ($markers !== null)
+		{
+			$this->markers = array_map(function ($m) {
+				$m = explode('|', $m);
+
+				return new Marker([
+					'location' => Json::decode($m[0]),
+					'color' => $m[1],
+					'label' => $m[2],
+				]);
+			}, explode(';', $markers));
+		}
 
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
@@ -92,11 +114,12 @@ class StaticMap
 	{
 		$filename = $this->_mapCacheIdToFilename();
 
-		if ($this->_checkMapCache())
-			return $this->_send(file_get_contents($filename));
+//		if ($this->_checkMapCache())
+//			return $this->_send(file_get_contents($filename));
 
 		$this->_initCoords();
 		$this->_createBaseMap();
+		$this->_placeMarkers();
 
 		self::_mkdirRecursive(dirname($filename), 0777);
 		$this->image->save($filename);
@@ -123,10 +146,9 @@ class StaticMap
 
 		$w = $this->width * $this->scale;
 		$h = $this->height * $this->scale;
+		$_ts = $this->tileSize * $this->scale;
 
 		$this->image = $imagine->create(new Box($w, $h));
-
-		$_ts = $this->tileSize * $this->scale;
 
 		$startX = floor($this->centerX - ($w / $_ts) / 2);
 		$startY = floor($this->centerY - ($h / $_ts) / 2);
@@ -178,6 +200,35 @@ class StaticMap
 		}
 	}
 
+	private function _placeMarkers ()
+	{
+		$w   = $this->width * $this->scale;
+		$h   = $this->height * $this->scale;
+		$_ts = $this->tileSize * $this->scale;
+
+		/** @var Marker $marker */
+		foreach ($this->markers as $marker)
+		{
+			$img = $this->_renderMarker(
+				$marker->color,
+				$marker->label
+			);
+
+			$pos = explode(',', $marker->getLocation(true));
+
+			$x = floor(($w / 2) - $_ts * ($this->centerX - $this->_lngToTile($pos[1])));
+			$y = floor(($h / 2) - $_ts * ($this->centerY - $this->_latToTile($pos[0])));
+
+			$x -= $img->getSize()->getWidth() / 2;
+			$y -= $img->getSize()->getHeight();
+
+			$this->image->paste(
+				$img,
+				new Point($x, $y)
+			);
+		}
+	}
+
 	private function _send ($file)
 	{
 		$response = Craft::$app->getResponse();
@@ -194,6 +245,15 @@ class StaticMap
 
 	// Helpers
 	// =========================================================================
+
+	public static function getLabelColour ($color)
+	{
+		$r = hexdec($color[1] . $color[2]);
+		$g = hexdec($color[3] . $color[4]);
+		$b = hexdec($color[5] . $color[6]);
+
+		return (($r * 299 + $g * 587 + $b * 114) / 1000 > 130) ? '000' : 'fff';
+	}
 
 	private static function _join ()
 	{
@@ -215,6 +275,24 @@ class StaticMap
 	// Imagine
 	// -------------------------------------------------------------------------
 
+	private function _getImageDriver ()
+	{
+		static $driver;
+
+		if ($driver)
+			return $driver;
+
+		$generalConfig = Craft::$app->getConfig()->getGeneral();
+		$extension     = strtolower($generalConfig->imageDriver);
+
+		if ($extension === 'gd' || Craft::$app->getImages()->getIsGd())
+			$driver = 'gd';
+		else
+			$driver = 'imagick';
+
+		return $driver;
+	}
+
 	private function _getImagine ()
 	{
 		static $imagine;
@@ -222,16 +300,70 @@ class StaticMap
 		if ($imagine)
 			return $imagine;
 
-		$generalConfig = Craft::$app->getConfig()->getGeneral();
-		$extension     = strtolower($generalConfig->imageDriver);
-
-		if ($extension === 'gd' || Craft::$app->getImages()->getIsGd()) {
+		if ($this->_getImageDriver() === 'gd') {
 			$imagine = new \Imagine\Gd\Imagine();
 		} else {
 			$imagine = new \Imagine\Imagick\Imagine();
 		}
 
 		return $imagine;
+	}
+
+	private function _getFont (ColorInterface $colour, $size = 10)
+	{
+		$key = ((string) $colour) . '-' . $size;
+
+		/** @var FontInterface[] $fonts */
+		static $fonts = [];
+
+		if (array_key_exists($key, $fonts))
+			return $fonts[$key];
+
+		$file = Craft::getAlias('@simplemap/resources/OpenSans-Bold.ttf');
+
+		if ($this->_getImageDriver() === 'gd')
+			$fonts[$key] = new \Imagine\Gd\Font($file, $size, $colour);
+		else
+			$fonts[$key] = new \Imagine\Imagick\Font(new Imagick(), $file, $size, $colour);
+
+		return $fonts[$key];
+	}
+
+	private function _renderMarker ($colour, $label = null)
+	{
+		$resizeMultiplier = 0.1 * $this->scale;
+		$fontSize = 12 * $this->scale;
+		$fontOffset = 4 * $this->scale;
+
+		$svg = $label === null ? 'markerNoLabel.png' : 'marker.png';
+
+		$img = $this->_getImagine()->open(
+			Craft::getAlias('@simplemap/resources/' . $svg)
+		);
+		$img->resize(new Box(
+			$img->getSize()->getWidth() * $resizeMultiplier,
+			$img->getSize()->getHeight() * $resizeMultiplier
+		), ImageInterface::FILTER_MITCHELL);
+		$img->effects()->colorize($img->palette()->color($colour));
+
+		if ($label !== null)
+		{
+			$textColour = $img->palette()->color(self::getLabelColour($colour));
+			$imgCenter = new Center($img->getSize());
+			$font = $this->_getFont($textColour, $fontSize);
+			$textCenter = new Center($font->box($label));
+
+			$img->draw()->text(
+				$label,
+				$font,
+				new Point(
+					$imgCenter->getX() - $textCenter->getX(),
+					$fontOffset
+				)
+			);
+		}
+
+		return $img;
 	}
 
 	// Tiles

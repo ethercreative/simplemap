@@ -41,7 +41,8 @@ class StaticController extends Controller
 			$request->getRequiredQueryParam('width'),
 			$request->getRequiredQueryParam('height'),
 			$request->getRequiredQueryParam('zoom'),
-			$request->getRequiredQueryParam('scale')
+			$request->getRequiredQueryParam('scale'),
+			$request->getQueryParam('markers')
 		))->render();
 	}
 

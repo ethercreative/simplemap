@@ -10,6 +10,7 @@ namespace ether\simplemap\models;
 
 use ether\simplemap\services\GeoService;
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * Class StaticOptions
@@ -38,13 +39,43 @@ class StaticOptions
 	/** @var int The scale of the map image (i.e. 2 for @2x retina screens) */
 	public $scale = 1;
 
+	/**
+	 * @var Marker[] An array of map markers
+	 */
+	public $markers = [];
+
 	// Constructor
 	// =========================================================================
 
+	/**
+	 * StaticOptions constructor.
+	 *
+	 * @param array $config
+	 *
+	 * @throws InvalidConfigException
+	 */
 	public function __construct ($config = [])
 	{
+		$markers = $config['markers'] ?? [];
+		unset($config['markers']);
+
 		if (!empty($config))
 			Yii::configure($this, $config);
+
+		foreach (['center', 'width', 'height', 'zoom', 'scale'] as $key)
+			if (empty($this->$key))
+				throw new InvalidConfigException('Map ' . $key . ' is missing!');
+
+		if (!empty($markers))
+		{
+			foreach ($markers as $marker)
+			{
+				if (!array_key_exists('location', $marker) || empty($marker['location']))
+					$marker['location'] = $this->center;
+
+				$this->markers[] = new Marker($marker);
+			}
+		}
 	}
 
 	// Getters

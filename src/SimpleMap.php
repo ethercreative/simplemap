@@ -66,6 +66,11 @@ class SimpleMap extends Plugin
 		parent::init();
 
 		\Craft::setAlias(
+			'simplemap',
+			__DIR__
+		);
+
+		\Craft::setAlias(
 			'simplemapimages',
 			__DIR__ . '/web/assets/imgs'
 		);

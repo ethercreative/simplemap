@@ -14,11 +14,25 @@ Both methods support the following options, passed as a Twig object to the
 method (we'll cover that later):
 
 - **`center`** - This can be an address string (i.e. "Maidstone, UK"), a lat / 
-lng variable (i.e. `[51.272154, 0.514951]` or `{ lat: 51.272154, lng: 0.514951 }`).
+                 lng variable (i.e. `[51.272154, 0.514951]` or 
+                 `{ lat: 51.272154, lng: 0.514951 }`).
 - **`width`** - The width of the map image (see max image sizes below).
 - **`height`** - The height of the map image (see max image sizes below).
 - **`zoom`** - The zoom level of the map (must be between 0 and 18).
 - **`scale`** - The scale of the image (can be either 1 or 2 (retina), defaults to 1).
+- **`markers`** - An array of map markers (see below)
+
+### Markers
+
+The `markers` option accepts an array of objects with the following parameters 
+(all are optional):
+
+- **`location`** - This can be an address string (i.e. "Maidstone, UK"), a lat / 
+                   lng variable (i.e. `[51.272154, 0.514951]` or 
+                   `{ lat: 51.272154, lng: 0.514951 }`). If left blank the 
+                   marker will appear at the center of the map.
+- **`color`** - A valid hex colour string. Will default to `#ff0000` if blank.
+- **`label`** - An option label, must be a single character A-Z0-9.
 
 ## From a Map field
 

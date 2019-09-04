@@ -10,11 +10,14 @@ namespace ether\simplemap\services;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Marker;
 use ether\simplemap\models\Settings;
 use ether\simplemap\models\StaticOptions;
 use ether\simplemap\SimpleMap;
+use ether\simplemap\utilities\StaticMap;
 
 /**
  * Class StaticService
@@ -97,6 +100,29 @@ class StaticService extends Component
 			),
 		];
 
+		$markersString = '';
+		if (!empty($options->markers))
+		{
+			$markers = [];
+
+			/** @var Marker $marker */
+			foreach ($options->markers as $marker)
+			{
+				$m = [
+					'color:' . str_replace('#', '0x', $marker->color),
+				];
+
+				if ($marker->label !== null)
+					$m[] = 'label:' . strtoupper($marker->label);
+
+				$m[] = $marker->getLocation();
+
+				$markers[] = implode('|', $m);
+			}
+
+			$markersString = '&markers=' . implode('&markers=', $markers);
+		}
+
 		switch ($settings->mapTiles)
 		{
 			case MapTiles::GoogleTerrain:
@@ -110,7 +136,7 @@ class StaticService extends Component
 				break;
 		}
 
-		return 'https://maps.googleapis.com/maps/api/staticmap?' . http_build_query($params);
+		return 'https://maps.googleapis.com/maps/api/staticmap?' . http_build_query($params) . $markersString;
 	}
 
 	/**
@@ -131,6 +157,22 @@ class StaticService extends Component
 			'teamId' => $settings->mapToken['teamId'],
 			'keyId' => $settings->mapToken['keyId'],
 		];
+
+		if (!empty($options->markers))
+		{
+			$params['annotations'] = [];
+
+			foreach ($options->markers as $marker)
+			{
+				$params['annotations'][] = [
+					'color' => str_replace('#', '', $marker->color),
+					'glyphText' => $marker->label,
+					'point' => $marker->getLocation(true),
+				];
+			}
+
+			$params['annotations'] = Json::encode($params['annotations']);
+		}
 
 		switch ($settings->mapTiles)
 		{
@@ -183,6 +225,24 @@ class StaticService extends Component
 		}
 
 		$url .= '/static/';
+
+		if (!empty($options->markers))
+		{
+			$markers = [];
+			$i = 0;
+
+			foreach ($options->markers as $marker)
+			{
+				$m = 'pin-l-';
+				$m .= strtolower($marker->label ?: ++$i);
+				$m .= '+' . str_replace('#', '', $marker->color);
+				$m .= '(' . implode(',', array_reverse(explode(',', $marker->getLocation(true)))) . ')';
+
+				$markers[] = $m;
+			}
+
+			$url .= implode(',', $markers) . '/';
+		}
 
 		$center = $options->getCenter();
 		$url .= $center['lng'] . ',';
@@ -243,6 +303,22 @@ class StaticService extends Component
 				break;
 		}
 
+		if (!empty($options->markers))
+		{
+			$i = 0;
+
+			foreach ($options->markers as $marker)
+			{
+				$m = [$marker->getLocation(true)];
+				$m[] = str_replace('#', '', $marker->color);
+				$m[] = StaticMap::getLabelColour($marker->color);
+				$m[] = 18;
+				$m[] = $marker->label ?: ++$i;
+
+				$params['poix' . ($i - 1)] = implode(';', $m);
+			}
+		}
+
 		return 'https://image.maps.api.here.com/mia/1.6/mapview?' . http_build_query($params);
 	}
 
@@ -265,6 +341,7 @@ class StaticService extends Component
 				'width' => $options->width,
 				'height' => $options->height,
 				'scale' => $options->scale,
+				'markers' => urlencode(implode(';', $options->markers)),
 				'csrf' => Craft::$app->getRequest()->getCsrfToken(),
 			]
 		);

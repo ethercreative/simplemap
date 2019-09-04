@@ -1,9 +1,7 @@
 <template>
-	<label>
-		<span :class="$style.name">
-			{{ label }}
-		</span>
+	<Label :label="label" :class="className">
 		<input
+			:class="$style.input"
 			:type="type"
 			:name="name"
 			:value="value"
@@ -11,10 +9,12 @@
 			class="text nicetext fullwidth"
 			@input="$emit('input', $event)"
 		/>
-	</label>
+	</Label>
 </template>
 
 <script lang="js">
+	import Label from './Label';
+
 	export default {
 		props: {
 			label: String,
@@ -25,17 +25,19 @@
 			},
 			value: [String, Number],
 			disabled: Boolean,
+			className: Boolean,
+		},
+
+		components: {
+			Label,
 		},
 	};
 </script>
 
 <style lang="less" module>
-	.name {
-		display: block;
-		margin-bottom: 3px;
-
-		color: #a1a1a1;
-		font-size: 11px;
-		text-transform: uppercase;
+	.input {
+		&:disabled {
+			background-color: transparent;
+		}
 	}
 </style>

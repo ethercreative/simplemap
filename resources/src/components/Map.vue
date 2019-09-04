@@ -1,5 +1,5 @@
 <template>
-	<div :class="$style.map"></div>
+	<div :class="cls"></div>
 </template>
 
 <script lang="js">
@@ -19,6 +19,8 @@
 			zoom: Number,
 			minZoom: Number,
 			maxZoom: Number,
+			hasSearch: Boolean,
+			hasAddress: Boolean,
 		},
 
 		data () {
@@ -68,6 +70,16 @@
 		},
 
 		computed: {
+			cls () {
+				const cls = [this.$style.map];
+
+				if (!this.hasSearch && !this.hasAddress) cls.push(this.$style.alone);
+				else if (!this.hasSearch) cls.push(this.$style.searchless);
+				else if (!this.hasAddress) cls.push(this.$style.addressless);
+
+				return cls;
+			},
+
 			tileLayer () {
 				const scale     = L.Browser.retina ? '@2x.png' : '.png'
 					, hereScale = L.Browser.retina ? '512' : '256'
@@ -212,10 +224,20 @@
 
 		width: 100%;
 		height: 450px;
-		margin-top: 10px;
 		box-sizing: border-box;
 
 		border: 1px solid #e0e2e4;
-		border-radius: 2px 2px 0 0;
+
+		&.searchless {
+			border-radius: 2px 2px 0 0;
+		}
+
+		&.addressless {
+			border-radius: 0 0 2px 2px;
+		}
+
+		&.alone {
+			border-radius: 2px;
+		}
 	}
 </style>

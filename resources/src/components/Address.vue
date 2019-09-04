@@ -1,22 +1,5 @@
 <template>
-	<div :class="$style.grid">
-		<div :class="$style.full">
-			<Input
-				:label="labels.fullAddress"
-				:value="value.address"
-				@input="onInput('fullAddress', $event)"
-				:disabled="hide"
-			/>
-
-			<button
-				class="btn"
-				@click="onClear()"
-				type="button"
-			>
-				{{labels.clear}}
-			</button>
-		</div>
-
+	<div :class="cls">
 		<Fragment v-if="showLatLng">
 			<Input
 				:label="labels.lat"
@@ -28,7 +11,17 @@
 				:value="value.lng"
 				@input="onInput('lng', $event)"
 			/>
+
+			<hr />
 		</Fragment>
+
+		<Input
+			:class-name="$style.full"
+			:label="labels.fullAddress"
+			:value="value.address"
+			@input="onInput('fullAddress', $event)"
+			:disabled="hide"
+		/>
 
 		<Fragment v-if="!hide">
 			<Input
@@ -95,6 +88,8 @@
 			showLatLng: Boolean,
 			fullAddressDirty: Boolean,
 			hide: Boolean,
+			hasSearch: Boolean,
+			hasMap: Boolean,
 		},
 
 		components: {
@@ -105,7 +100,6 @@
 		data () {
 			return {
 				labels: {
-					clear: t('Clear'),
 					fullAddress: t('Full Address'),
 					number: t('Name / Number'),
 					address: t('Street Address'),
@@ -120,16 +114,23 @@
 			};
 		},
 
+		computed: {
+			cls () {
+				const cls = [this.$style.grid];
+
+				if (!this.hasSearch && !this.hasMap)
+					cls.push(this.$style.alone);
+
+				return cls;
+			},
+		},
+
 		methods: {
 			onInput (name, e) {
 				this.$emit('changed', {
 					name,
 					value: e.target.value,
 				});
-			},
-
-			onClear () {
-				this.$emit('clear');
 			},
 		},
 	};
@@ -147,31 +148,28 @@
 		border-top: none;
 		border-radius: 0 0 2px 2px;
 
+		&.alone {
+			border-radius: 2px;
+			border-top: 1px solid rgba(0, 0, 20, 0.1);
+		}
+
 		@media only screen and (max-width: 998px) {
 			grid-template-columns: 1fr;
 		}
 
-		div:first-child,
-		label:last-child:nth-child(even) {
+		.full,
+		label:last-child,
+		hr {
 			grid-column: span 2;
 
 			@media only screen and (max-width: 998px) {
 				grid-column: span 1;
 			}
 		}
-	}
 
-	.full {
-		display: flex;
-		align-items: flex-end;
-
-		label {
-			width: 100%;
-			margin-right: 14px;
-		}
-
-		button {
-			font-size: 14px;
+		hr {
+			margin: 11px -14px 6px;
+			opacity: 0.5;
 		}
 	}
 </style>

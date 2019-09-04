@@ -424,7 +424,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$view->registerJs('new Vue({ el: \'#' . $vueContainerId . '\' });');
 		$view->registerTranslations('simplemap', [
 			'Search for a location',
-			'Clear',
+			'Clear address',
 			'Name / Number',
 			'Street Address',
 			'Town / City',

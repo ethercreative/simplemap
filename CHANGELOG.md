@@ -6,13 +6,11 @@
 - Add static map image support
 
 ### Changed
-- Removed fly animation when updating map location for snappier UI (Closes #202)
-
-### Changed
 - Mapbox, Apple Maps, and Here are now only available in Maps Pro
 
 ### Improved
 - Remove Vue from JS bundle to reduce file size
+- Removed fly animation when updating map location for snappier UI (Closes #202)
 
 ### Fixed
 - Fix map not showing when other Vue based plugins interfere (Fixes #196)

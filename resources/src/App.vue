@@ -6,6 +6,8 @@
 			:default-value="val.address"
 			:geo="geo"
 			@selected="onSearchSelected"
+			@clear="onClear"
+			:has-map="!config.hideMap"
 		/>
 
 		<Map
@@ -18,15 +20,18 @@
 			:max-zoom="config.maxZoom"
 			@change="onMapChange"
 			@zoom="onZoom"
+			:has-search="!config.hideSearch"
+			:has-address="!config.isSettings"
 		/>
 
 		<Address
 			v-if="!config.isSettings"
 			:hide="config.hideAddress"
+			:has-search="!config.hideSearch"
+			:has-map="!config.hideMap"
 			:showLatLng="config.showLatLng"
 			:value="val"
 			@changed="onPartChange"
-			@clear="onClear"
 		/>
 
 		<input
@@ -187,7 +192,20 @@
 					this.value.parts[name] = value;
 
 					if (this.value.address === '' || !this.fullAddressDirty) {
-						this.value.address = Object.values(this.value.parts).filter(Boolean).join(', ');
+						const parts = [];
+						const keys = Object.keys(this.value.parts);
+
+						for (let i = 0, l = keys.length; i < l; i++) {
+							const k = keys[i];
+
+							// Filter out guff google properties
+							if (['number', 'address', 'city', 'postcode', 'county', 'state', 'country'].indexOf(k) === -1)
+								continue;
+
+							parts.push(this.value.parts[k]);
+						}
+
+						this.value.address = parts.filter(Boolean).join(', ');
 					}
 				}
 			},

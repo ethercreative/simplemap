@@ -11,6 +11,7 @@
     "leaflet": "^1.4.0",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.mapkitmutant": "^0.3.0",
+    "vue": "^2.6.10",
     "vue-autosuggest": "^1.8.1"
   },
   "devDependencies": {
@@ -60,7 +61,9 @@
       "operator-linebreak": "off",
       "no-multi-spaces": "off",
       "no-prototype-builtins": "off",
-      "object-curly-newline": "off"
+      "object-curly-newline": "off",
+      "no-plusplus": "off",
+      "no-continue": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint",

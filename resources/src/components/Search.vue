@@ -1,12 +1,23 @@
 <template>
-	<vue-autosuggest
-		:suggestions="suggestions"
-		:render-suggestion="renderSuggestion"
-		:get-suggestion-value="getSuggestionValue"
-		:input-props="inputProps"
-		@selected="onSelected"
-		ref="self"
-	/>
+	<div :class="cls">
+		<Label :label="labels.search">
+			<vue-autosuggest
+				:suggestions="suggestions"
+				:render-suggestion="renderSuggestion"
+				:get-suggestion-value="getSuggestionValue"
+				:input-props="inputProps"
+				@selected="onSelected"
+				ref="self"
+			/>
+		</Label>
+		<button
+			:class="['btn', $style.btn]"
+			@click="onClear()"
+			type="button"
+		>
+			{{labels.clear}}
+		</button>
+	</div>
 </template>
 
 <script lang="jsx">
@@ -14,36 +25,55 @@
 	import { t } from '../filters/craft';
 	import GeoService from '../enums/GeoService';
 	import Geo from '../common/Geo';
+	import Label from './Label';
 
 	export default {
 		props: {
 			geo: Geo,
 			service: String,
 			defaultValue: String,
+			hasMap: Boolean,
 		},
 
 		components: {
 			VueAutosuggest,
+			Label,
 		},
 
 		data () {
 			return {
 				suggestions: [{ data: [] }],
+				labels: {
+					search: t('Search for a location'),
+					clear: t('Clear address'),
+				},
 			};
 		},
 
 		computed: {
+			cls () {
+				const cls = [this.$style.wrap];
+
+				if (!this.hasMap)
+					cls.push(this.$style.addr);
+
+				return cls;
+			},
+
 			inputProps () {
 				return {
 					onInputChange: this.onInputChange(),
 					class: 'text nicetext fullwidth',
-					placeholder: t('Search for a location'),
 					initialValue: this.initialValue,
 				};
 			},
 		},
 
 		methods: {
+			onClear () {
+				this.$emit('clear');
+			},
+
 			/**
 			 * Fired on autocomplete input change
 			 */
@@ -107,4 +137,27 @@
 </script>
 
 <style lang="less" module>
+	.wrap {
+		display: flex;
+		align-items: flex-end;
+		padding: 12px 14px 18px;
+
+		background-color: #f9fbfc;
+		border: 1px solid rgba(0, 0, 20, 0.1);
+		border-bottom: none;
+		border-radius: 2px 2px 0 0;
+
+		label {
+			width: 100%;
+		}
+
+		&.addr {
+			border-bottom: 1px solid rgba(0, 0, 20, 0.025);
+		}
+	}
+
+	.btn {
+		margin-left: 14px;
+		font-size: 14px;
+	}
 </style>

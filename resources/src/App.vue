@@ -1,28 +1,32 @@
 <template>
-	<div>
-		<Search
-			v-if="!config.hideSearch"
-			:service="config.geoService"
-			:default-value="val.address"
-			:geo="geo"
-			@selected="onSearchSelected"
-			@clear="onClear"
-			:has-map="!config.hideMap"
-		/>
+	<div :class="cls">
+		<div>
+			<Search
+				v-if="!config.hideSearch"
+				:service="config.geoService"
+				:default-value="val.address"
+				:geo="geo"
+				@selected="onSearchSelected"
+				@clear="onClear"
+				:has-map="!config.hideMap"
+				:size="config.size"
+			/>
 
-		<Map
-			v-if="!config.hideMap"
-			:tiles="config.mapTiles"
-			:token="config.mapToken"
-			:latLng="{ lat: val.lat, lng: val.lng }"
-			:zoom="+val.zoom"
-			:min-zoom="config.minZoom"
-			:max-zoom="config.maxZoom"
-			@change="onMapChange"
-			@zoom="onZoom"
-			:has-search="!config.hideSearch"
-			:has-address="!config.isSettings"
-		/>
+			<Map
+				v-if="!config.hideMap"
+				:tiles="config.mapTiles"
+				:token="config.mapToken"
+				:latLng="{ lat: val.lat, lng: val.lng }"
+				:zoom="+val.zoom"
+				:min-zoom="config.minZoom"
+				:max-zoom="config.maxZoom"
+				@change="onMapChange"
+				@zoom="onZoom"
+				:has-search="!config.hideSearch"
+				:has-address="!config.isSettings"
+				:size="config.size"
+			/>
+		</div>
 
 		<Address
 			v-if="!config.isSettings"
@@ -30,6 +34,7 @@
 			:has-search="!config.hideSearch"
 			:has-map="!config.hideMap"
 			:showLatLng="config.showLatLng"
+			:size="config.size"
 			:value="val"
 			@changed="onPartChange"
 		/>
@@ -99,6 +104,7 @@
 					geoService: 'nominatim',
 					geoToken: '',
 					locale: 'en',
+					size: 'large',
 				},
 
 				value: {
@@ -138,6 +144,15 @@
 		},
 
 		computed: {
+			cls () {
+				if (this.config.hideMap)
+					return null;
+
+				if (this.config.size === 'medium')
+					return this.$style.medium;
+
+				return null;
+			},
 			val () {
 				return this.value.lat === null ? this.defaultValue : this.value;
 			},
@@ -224,4 +239,12 @@
 </script>
 
 <style lang="less" module>
+	.medium {
+		display: flex;
+		align-items: stretch;
+
+		> * {
+			width: 50%;
+		}
+	}
 </style>

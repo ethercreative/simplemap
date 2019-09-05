@@ -33,6 +33,7 @@
 			service: String,
 			defaultValue: String,
 			hasMap: Boolean,
+			size: String,
 		},
 
 		components: {
@@ -56,6 +57,8 @@
 
 				if (!this.hasMap)
 					cls.push(this.$style.addr);
+				else if (this.size === 'medium')
+					cls.push(this.$style.medium);
 
 				return cls;
 			},
@@ -153,6 +156,10 @@
 
 		&.addr {
 			border-bottom: 1px solid rgba(0, 0, 20, 0.025);
+		}
+
+		&.medium {
+			border-radius: 2px 0 0 0;
 		}
 	}
 

@@ -1,0 +1,9 @@
+<svg width="77" height="77" viewBox="0 0 77 77">
+  <g fill="none" fill-rule="evenodd">
+    <rect width="77" height="77" fill="#0A4961" rx="8"/>
+    <path stroke="#FFF" stroke-linecap="square" stroke-width="7" d="M38.5 12.5l-27 53m54-19l-54 19m54-19l-27-34"/>
+    <circle cx="11.5" cy="65.5" r="9.5" fill="#00B0F2"/>
+    <circle cx="65.5" cy="46.5" r="9.5" fill="#00B0F2"/>
+    <circle cx="38.5" cy="12.5" r="9.5" fill="#00B0F2"/>
+  </g>
+</svg>

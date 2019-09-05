@@ -76,24 +76,7 @@ abstract class MapTiles
 
 	public static function getSelectOptions ()
 	{
-		if (SimpleMap::v(SimpleMap::EDITION_LITE))
-			return [
-				['optgroup' => SimpleMap::t('Open Source')],
-
-				self::Wikimedia => SimpleMap::t('Wikimedia'),
-
-				self::OpenStreetMap => SimpleMap::t('OpenStreetMap'),
-
-				self::CartoVoyager    => SimpleMap::t('Carto: Voyager'),
-				self::CartoPositron   => SimpleMap::t('Carto: Positron'),
-				self::CartoDarkMatter => SimpleMap::t('Carto: Dark Matter'),
-
-				['optgroup' => SimpleMap::t('Requires API Key (Token)')],
-
-				self::GoogleRoadmap => SimpleMap::t('Google Maps: Roadmap'),
-				self::GoogleTerrain => SimpleMap::t('Google Maps: Terrain'),
-				self::GoogleHybrid  => SimpleMap::t('Google Maps: Hybrid'),
-			];
+		$isLite = SimpleMap::v(SimpleMap::EDITION_LITE);
 
 		return [
 			['optgroup' => SimpleMap::t('Open Source')],
@@ -108,28 +91,28 @@ abstract class MapTiles
 
 			['optgroup' => SimpleMap::t('Requires API Key (Token)')],
 
-			self::MapboxOutdoors => SimpleMap::t('Mapbox: Outdoors'),
-			self::MapboxStreets  => SimpleMap::t('Mapbox: Streets'),
-			self::MapboxLight    => SimpleMap::t('Mapbox: Light'),
-			self::MapboxDark     => SimpleMap::t('Mapbox: Dark'),
-
 			self::GoogleRoadmap => SimpleMap::t('Google Maps: Roadmap'),
 			self::GoogleTerrain => SimpleMap::t('Google Maps: Terrain'),
 			self::GoogleHybrid  => SimpleMap::t('Google Maps: Hybrid'),
 
-			self::MapKitStandard       => SimpleMap::t('Apple MapKit: Standard'),
-			self::MapKitMutedStandard  => SimpleMap::t('Apple MapKit: Muted Standard'),
-			self::MapKitSatellite      => SimpleMap::t('Apple MapKit: Satellite'),
-			self::MapKitHybrid         => SimpleMap::t('Apple MapKit: Hybrid'),
+			self::MapboxOutdoors => self::pro('Mapbox: Outdoors', $isLite),
+			self::MapboxStreets  => self::pro('Mapbox: Streets', $isLite),
+			self::MapboxLight    => self::pro('Mapbox: Light', $isLite),
+			self::MapboxDark     => self::pro('Mapbox: Dark', $isLite),
 
-			self::HereNormalDay        => SimpleMap::t('Here: Normal Day'),
-			self::HereNormalDayGrey    => SimpleMap::t('Here: Normal Day Grey'),
-			self::HereNormalDayTransit => SimpleMap::t('Here: Normal Day Transit'),
-			self::HereReduced          => SimpleMap::t('Here: Reduced'),
-			self::HerePedestrian       => SimpleMap::t('Here: Pedestrian'),
-			self::HereTerrain          => SimpleMap::t('Here: Terrain'),
-			self::HereSatellite        => SimpleMap::t('Here: Satellite'),
-			self::HereHybrid           => SimpleMap::t('Here: Hybrid'),
+			self::MapKitStandard       => self::pro('Apple MapKit: Standard', $isLite),
+			self::MapKitMutedStandard  => self::pro('Apple MapKit: Muted Standard', $isLite),
+			self::MapKitSatellite      => self::pro('Apple MapKit: Satellite', $isLite),
+			self::MapKitHybrid         => self::pro('Apple MapKit: Hybrid', $isLite),
+
+			self::HereNormalDay        => self::pro('Here: Normal Day', $isLite),
+			self::HereNormalDayGrey    => self::pro('Here: Normal Day Grey', $isLite),
+			self::HereNormalDayTransit => self::pro('Here: Normal Day Transit', $isLite),
+			self::HereReduced          => self::pro('Here: Reduced', $isLite),
+			self::HerePedestrian       => self::pro('Here: Pedestrian', $isLite),
+			self::HereTerrain          => self::pro('Here: Terrain', $isLite),
+			self::HereSatellite        => self::pro('Here: Satellite', $isLite),
+			self::HereHybrid           => self::pro('Here: Hybrid', $isLite),
 		];
 	}
 
@@ -169,6 +152,17 @@ abstract class MapTiles
 		}
 
 		throw new \Exception('Unknown tile type "' . $type . '"');
+	}
+
+	// Helpers
+	// =========================================================================
+
+	public static function pro ($label, $isLite)
+	{
+		return [
+			'label'    => SimpleMap::t($label) . ($isLite ? ' (Pro)' : ''),
+			'disabled' => $isLite,
+		];
 	}
 
 }

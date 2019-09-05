@@ -48,6 +48,12 @@ return [
 	'Show Latitude / Longitude' => 'Show Latitude / Longitude',
 	'Show the latitude / longitude fields' => 'Show the latitude / longitude fields',
 
+	'Field Size' => 'Field Size',
+	'Choose the size of the field to display' => 'Choose the size of the field to display',
+	'Large' => 'Large',
+	'Medium' => 'Medium',
+	'Small' => 'Small',
+
 	'All Countries' => 'All Countries',
 	'Preferred Country' => 'Preferred Country',
 	'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.' =>
@@ -56,6 +62,7 @@ return [
 	// Settings
 	// =========================================================================
 
+	'Select your map style' => 'Select your map style',
 	'Map Tiles' => 'Map Tiles',
 	'Select the style of map tiles.' => 'Select the style of map tiles.',
 
@@ -64,12 +71,12 @@ return [
 		'Add the API key for map tiles service you are using.',
 
 	'Geo Service' => 'Geo Service',
-	'Select the service to be used for Geo-coding.' =>
-		'Select the service to be used for Geo-coding.',
+	'Select the service to be used for Geocoding.' =>
+		'Select the service to be used for Geocoding.',
 
 	'Geo Token' => 'Geo Token',
-	'Add the API key for the geo-coding service.' =>
-		'Add the API key for the geo-coding service.',
+	'Add the API key for the geocoding service.' =>
+		'Add the API key for the geocoding service.',
 
 	'Private Key' => 'Private Key',
 	'Paste the contents of your private key files below.' => 'Paste the contents of your private key files below.',
@@ -88,6 +95,12 @@ return [
 
 	'App Code' => 'App Code',
 	'Your Here app code.' => 'Your Here app code.',
+
+	'Geolocation Service' => 'Geolocation Service',
+	'Select the service to be used for Geolocating users.' => 'Select the service to be used for Geolocating users.',
+
+	'Geolocation Token' => 'Geolocation Token',
+	'Add the API key for the geolocation service.' => 'Add the API key for the geolocation service.',
 
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------
@@ -136,6 +149,14 @@ return [
 	'Apple MapKit' => 'Apple MapKit',
 	'Here' => 'Here',
 
+	// Settings: Geo Location Services
+	// -------------------------------------------------------------------------
+
+	'None' => 'None',
+	'ipstack' => 'ipstack',
+	'MaxMind (Lite, ~60MB download)' => 'MaxMind (Lite, ~60MB download)',
+	'MaxMind' => 'MaxMind',
+
 	// Settings: Info
 	// -------------------------------------------------------------------------
 
@@ -146,5 +167,10 @@ return [
 		'You can use the same key for both map tiles and geo service, no configuration needed!',
 	'We currently only support Apple MapKit for map tiles only.' =>
 		'We currently only support Apple MapKit for map tiles only.',
+
+	'Getting Geolocation API Keys' => 'Getting Geolocation API Keys',
+	'ipstack offer free and paid-for versions of their API.' => 'ipstack offer free and paid-for versions of their API.',
+	'MaxMind offer free lookup database that must be stored locally, and a paid-for version of their API.' =>
+		'MaxMind offer free lookup database that must be stored locally, and a paid-for version of their API.',
 
 ];

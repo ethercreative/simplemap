@@ -4,6 +4,7 @@
 - Add Craft GraphQL support
 - Add Pro edition
 - Add static map image support
+- Add new map field size options
 
 ### Changed
 - Mapbox, Apple Maps, and Here are now only available in Maps Pro

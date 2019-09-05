@@ -93,6 +93,12 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $showLatLng = false;
 
 	/**
+	 * @var string - The size of the field
+	 *   (can be either "large", "medium", or "small")
+	 */
+	public $size = 'large';
+
+	/**
 	 * @deprecated
 	 */
 	public $hideLatLng;
@@ -456,6 +462,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				'showLatLng'  => (bool) $this->showLatLng,
 				'minZoom'     => $isSettings ? 0  : (float) $this->minZoom,
 				'maxZoom'     => $isSettings ? 18 : (float) $this->maxZoom,
+				'size'        => $this->size,
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(

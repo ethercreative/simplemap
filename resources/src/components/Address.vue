@@ -90,6 +90,7 @@
 			hide: Boolean,
 			hasSearch: Boolean,
 			hasMap: Boolean,
+			size: String,
 		},
 
 		components: {
@@ -117,6 +118,9 @@
 		computed: {
 			cls () {
 				const cls = [this.$style.grid];
+
+				if (this.hasMap && this.size === 'medium')
+					cls.push(this.$style.medium);
 
 				if (!this.hasSearch && !this.hasMap)
 					cls.push(this.$style.alone);
@@ -148,6 +152,12 @@
 		border-top: none;
 		border-radius: 0 0 2px 2px;
 
+		&.medium {
+			border-radius: 0 2px 2px 0;
+			border-left: none;
+			border-top: 1px solid rgba(0, 0, 20, 0.1);
+		}
+
 		&.alone {
 			border-radius: 2px;
 			border-top: 1px solid rgba(0, 0, 20, 0.1);
@@ -169,7 +179,7 @@
 
 		hr {
 			margin: 11px -14px 6px;
-			opacity: 0.5;
+			opacity: 0.25;
 		}
 	}
 </style>

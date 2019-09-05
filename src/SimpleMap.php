@@ -11,9 +11,12 @@ namespace ether\simplemap;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterGqlTypesEvent;
+use craft\events\RegisterUrlRulesEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Gql;
 use craft\web\twig\variables\CraftVariable;
+use craft\web\UrlManager;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\MapField as MapField;
@@ -81,6 +84,12 @@ class SimpleMap extends Plugin
 		]);
 
 		Event::on(
+			UrlManager::class,
+			UrlManager::EVENT_REGISTER_CP_URL_RULES,
+			[$this, 'onRegisterCPUrlRules']
+		);
+
+		Event::on(
 			Fields::class,
 			Fields::EVENT_REGISTER_FIELD_TYPES,
 			[$this, 'onRegisterFieldTypes']
@@ -128,26 +137,21 @@ class SimpleMap extends Plugin
 		return new Settings();
 	}
 
-	/**
-	 * @return string|null
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
-	 */
 	protected function settingsHtml ()
 	{
-		return \Craft::$app->getView()->renderTemplate(
-			'simplemap/settings',
-			[
-				'settings' => $this->getSettings(),
-				'mapTileOptions' => MapTiles::getSelectOptions(),
-				'geoServiceOptions' => GeoService::getSelectOptions(),
-			]
+		// Redirect to our settings page
+		\Craft::$app->controller->redirect(
+			UrlHelper::cpUrl('maps/settings')
 		);
 	}
 
 	// Events
 	// =========================================================================
+
+	public function onRegisterCPUrlRules (RegisterUrlRulesEvent $event)
+	{
+		$event->rules['maps/settings'] = 'simplemap/settings';
+	}
 
 	public function onRegisterFieldTypes (RegisterComponentTypesEvent $event)
 	{

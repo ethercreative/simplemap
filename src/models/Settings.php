@@ -11,6 +11,7 @@ namespace ether\simplemap\models;
 use craft\base\Model;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\services\GeoLocationService;
 
 /**
  * Class Settings
@@ -51,5 +52,13 @@ class Settings extends Model
 
 	/** @var string|array */
 	public $geoToken = '';
+
+	// Properties: Geo-location
+	// -------------------------------------------------------------------------
+
+	public $geoLocationService = GeoLocationService::None;
+
+	/** @var string */
+	public $geoLocationToken = '';
 
 }

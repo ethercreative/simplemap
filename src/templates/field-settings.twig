@@ -38,6 +38,19 @@
 }) }}
 
 {{ forms.selectField({
+	label: 'Field Size'|t('simplemap'),
+	instructions: 'Choose the size of the field to display'|t('simplemap'),
+	id: 'size',
+	name: 'size',
+	options: {
+		'large': 'Large'|t('simplemap'),
+		'medium': 'Medium'|t('simplemap'),
+		'small': 'Small'|t('simplemap'),
+	},
+	value: field.size,
+}) }}
+
+{{ forms.selectField({
 	label: 'Preferred Country'|t('simplemap'),
 	instructions: 'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.'|t('simplemap'),
 	id: 'country',

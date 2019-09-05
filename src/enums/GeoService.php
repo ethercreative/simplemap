@@ -44,16 +44,7 @@ abstract class GeoService
 
 	public static function getSelectOptions ()
 	{
-		if (SimpleMap::v(SimpleMap::EDITION_LITE))
-			return [
-				['optgroup' => SimpleMap::t('Open Source')],
-
-				self::Nominatim => SimpleMap::t('Nominatim'),
-
-				['optgroup' => SimpleMap::t('Requires API Key (Token)')],
-
-				self::GoogleMaps => SimpleMap::t('Google Maps'),
-			];
+		$isLite = SimpleMap::v(SimpleMap::EDITION_LITE);
 
 		return [
 			[ 'optgroup' => SimpleMap::t('Open Source') ],
@@ -62,15 +53,15 @@ abstract class GeoService
 
 			[ 'optgroup' => SimpleMap::t('Requires API Key (Token)') ],
 
-			self::Mapbox => SimpleMap::t('Mapbox'),
 			self::GoogleMaps => SimpleMap::t('Google Maps'),
+			self::Mapbox => MapTiles::pro('Mapbox', $isLite),
 
 			// MapKit lacks both separate address parts and country restriction
 			// on the front-end, and any sort of server-side API, so it's
 			// disabled for now.
-//			self::AppleMapKit => SimpleMap::t('Apple MapKit'),
+//			self::AppleMapKit => MapTiles::pro('Apple MapKit', $isLite),
 
-			self::Here => SimpleMap::t('Here'),
+			self::Here => MapTiles::pro('Here', $isLite),
 		];
 	}
 

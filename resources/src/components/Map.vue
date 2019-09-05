@@ -21,6 +21,7 @@
 			maxZoom: Number,
 			hasSearch: Boolean,
 			hasAddress: Boolean,
+			size: String,
 		},
 
 		data () {
@@ -76,6 +77,9 @@
 				if (!this.hasSearch && !this.hasAddress) cls.push(this.$style.alone);
 				else if (!this.hasSearch) cls.push(this.$style.searchless);
 				else if (!this.hasAddress) cls.push(this.$style.addressless);
+
+				if (this.hasAddress && this.size === 'medium')
+					cls.push(this.$style.medium);
 
 				return cls;
 			},
@@ -227,6 +231,10 @@
 		box-sizing: border-box;
 
 		border: 1px solid #e0e2e4;
+
+		&.medium {
+			border-radius: 0 0 0 2px;
+		}
 
 		&.searchless {
 			border-radius: 2px 2px 0 0;

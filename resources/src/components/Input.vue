@@ -36,11 +36,12 @@
 <style lang="less" module>
 	.input {
 		width: 100%;
-		padding: 0;
+		padding: 29px 0 10px;
 
 		color: #29323D;
 		font-size: 15px;
 		letter-spacing: 0;
+		text-indent: 12px;
 
 		appearance: none;
 		-moz-appearance: none;

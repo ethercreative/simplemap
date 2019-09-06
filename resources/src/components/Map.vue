@@ -59,6 +59,8 @@
 				this.map.addLayer(tileLayer);
 			}
 
+			// TODO: Override zoom controls that use `setZoomAround` to account
+			//  for the map offset by zooming around the latLng
 			this.map.on('zoom', this.onZoom);
 
 			this.setMarker();
@@ -206,6 +208,7 @@
 			 * Listens to map zoom event and triggers component zoom event.
 			 */
 			onZoom () {
+				this.panTo(this.latLng);
 				this.$emit('zoom', this.map.getZoom());
 			},
 

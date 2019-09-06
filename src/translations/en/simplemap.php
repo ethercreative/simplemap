@@ -50,9 +50,8 @@ return [
 
 	'Field Size' => 'Field Size',
 	'Choose the size of the field to display' => 'Choose the size of the field to display',
-	'Large' => 'Large',
-	'Medium' => 'Medium',
-	'Small' => 'Small',
+	'Normal' => 'Normal',
+	'Mini' => 'Mini',
 
 	'All Countries' => 'All Countries',
 	'Preferred Country' => 'Preferred Country',

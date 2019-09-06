@@ -1,5 +1,5 @@
 <template>
-	<div :class="cls">
+	<div :class="cls" :style="styl">
 		<Fragment v-if="showLatLng">
 			<Input
 				:label="labels.lat"
@@ -11,8 +11,6 @@
 				:value="value.lng"
 				@input="onInput('lng', $event)"
 			/>
-
-			<hr />
 		</Fragment>
 
 		<Input
@@ -91,6 +89,7 @@
 			hasSearch: Boolean,
 			hasMap: Boolean,
 			size: String,
+			resultsOpen: Number,
 		},
 
 		components: {
@@ -119,13 +118,16 @@
 			cls () {
 				const cls = [this.$style.grid];
 
-				if (this.hasMap && this.size === 'medium')
-					cls.push(this.$style.medium);
-
-				if (!this.hasSearch && !this.hasMap)
-					cls.push(this.$style.alone);
+				if (this.resultsOpen)
+					cls.push(this.$style.fade);
 
 				return cls;
+			},
+
+			styl () {
+				return {
+					transform: `translateY(${this.offset}px)`,
+				};
 			},
 		},
 
@@ -144,42 +146,48 @@
 	.grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-gap: 7px 14px;
-		padding: 12px 14px 18px;
 
-		background-color: #f9fbfc;
-		border: 1px solid rgba(0, 0, 20, 0.1);
-		border-top: none;
-		border-radius: 0 0 2px 2px;
+		background-color: #fff;
+		border-radius: 5px;
+		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
 
-		&.medium {
-			border-radius: 0 2px 2px 0;
-			border-left: none;
-			border-top: 1px solid rgba(0, 0, 20, 0.1);
+		&:not(:first-child) {
+			margin-top: 24px;
 		}
 
-		&.alone {
-			border-radius: 2px;
-			border-top: 1px solid rgba(0, 0, 20, 0.1);
+		&.fade {
+			opacity: 0;
 		}
 
-		@media only screen and (max-width: 998px) {
+		@media only screen and (max-width: 1199px) {
 			grid-template-columns: 1fr;
-		}
 
-		.full,
-		label:last-child,
-		hr {
-			grid-column: span 2;
-
-			@media only screen and (max-width: 998px) {
-				grid-column: span 1;
+			label {
+				border-right: none;
 			}
 		}
 
-		hr {
-			margin: 11px -14px 6px;
-			opacity: 0.25;
+		@media only screen and (max-width: 767px) {
+			margin-top: 200px !important;
+		}
+
+		&, * {
+			box-sizing: border-box;
+		}
+
+		label:nth-child(odd):not(:first-child),
+		label:not(.full) + label:nth-child(2) {
+			border-right: none;
+		}
+
+		.full,
+		label:last-child {
+			grid-column: span 2;
+			border-right: none;
+
+			@media only screen and (max-width: 1199px) {
+				grid-column: span 1;
+			}
 		}
 	}
 </style>

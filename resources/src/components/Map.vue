@@ -19,9 +19,7 @@
 			zoom: Number,
 			minZoom: Number,
 			maxZoom: Number,
-			hasSearch: Boolean,
-			hasAddress: Boolean,
-			size: String,
+			hideSearch: Boolean,
 		},
 
 		data () {
@@ -37,6 +35,12 @@
 				maxZoom: this.maxZoom,
 				scrollWheelZoom: false,
 			}).setView(this.latLng, this.zoom);
+
+			this.map.panBy(
+				L.point(this.offsetAmount()),
+				{ animate: false }
+			);
+			this.map.zoomControl.setPosition('topright');
 
 			if (this.tiles.indexOf('google') > -1) {
 				this._googleMutant();
@@ -74,12 +78,8 @@
 			cls () {
 				const cls = [this.$style.map];
 
-				if (!this.hasSearch && !this.hasAddress) cls.push(this.$style.alone);
-				else if (!this.hasSearch) cls.push(this.$style.searchless);
-				else if (!this.hasAddress) cls.push(this.$style.addressless);
-
-				if (this.hasAddress && this.size === 'medium')
-					cls.push(this.$style.medium);
+				if (this.hideSearch)
+					cls.push(this.$style.short);
 
 				return cls;
 			},
@@ -139,10 +139,13 @@
 			},
 
 			icon () {
+				const w = 14 * 2
+					, h = 20 * 2;
+
 				return L.divIcon({
-					html: '<svg xmlns="http://www.w3.org/2000/svg" width="23.5" height="41" viewBox="0 0 47 82"><path fill="#E7433B" d="M23.5036141,0 C10.5440829,0 0,10.5437082 0,23.5027789 C0,24.4175793 0.0650869313,25.3179165 0.159101388,26.1423217 C0.867825751,35.0299879 5.03338935,41.3938173 9.43760504,48.1336911 C15.1833347,56.9164988 21.6920278,62.0913384 21.6920278,80.1920939 C21.6920278,81.1900581 22.5019985,82 23.4999981,82 C24.4979978,82 25.3079685,81.1900581 25.3079685,80.1920939 C25.3079685,62.0949542 31.8166616,56.9201146 37.5623912,48.1336911 C41.9702229,41.3938173 46.1321705,35.0299879 46.833663,26.2074063 C46.9385253,25.3179165 46.9999963,24.4175793 46.9999963,23.499163 C47.0072282,10.5437082 36.4631453,0 23.5036141,0 Z M23,33 C18.0392,33 14,28.9608 14,24 C14,19.0392 18.0392,15 23,15 C27.9608,15 32,19.0392 32,24 C32,28.9608 27.9608,33 23,33 Z"/></svg>',
-					iconSize: [23.5, 41],
-					iconAnchor: [11.75, 41],
+					html: `<svg width="${w}" height="${h}" viewBox="0 0 14 20"><path fill="#E7433B" d="M6.976.478C3.482.478.634 3.313.634 6.79c0 2.381 1.716 4.247 2.945 6.09 1.23 1.844 2 3.706 2.664 6.17a.78.78 0 0 0 .733.56c.308 0 .64-.217.733-.56.724-2.69 1.49-4.537 2.704-6.324 1.213-1.786 2.906-3.56 2.906-5.936 0-3.476-2.849-6.31-6.343-6.31zm.04 3.874c1.21 0 2.18.968 2.18 2.174A2.17 2.17 0 0 1 7.016 8.7a2.17 2.17 0 0 1-2.18-2.174 2.17 2.17 0 0 1 2.18-2.174z"/></svg>`,
+					iconSize: [w, h],
+					iconAnchor: [w / 2, h],
 					className: '',
 				});
 			},
@@ -159,13 +162,29 @@
 					if (next.lat === old.lat && next.lng === old.lng)
 						return;
 
-					this.map.panTo(this.latLng);
+					this.panTo(this.latLng);
 					this.setMarker();
 				},
 			},
 		},
 
 		methods: {
+			offsetAmount () {
+				let x = 0;
+
+				if (!window.matchMedia('(max-width: 767px)').matches)
+					x = -(this.$el.getBoundingClientRect().width / 4);
+
+				return { x, y: this.hideSearch ? 5 : -15 };
+			},
+
+			panTo (latLng) {
+				const point = this.map.latLngToContainerPoint(latLng);
+				point.x += this.offsetAmount().x;
+				point.y += this.offsetAmount().y;
+				this.map.panTo(this.map.containerPointToLatLng(point));
+			},
+
 			setMarker () {
 				if (this.marker)
 					this.map.removeLayer(this.marker);
@@ -223,29 +242,22 @@
 
 <style lang="less" module>
 	.map {
-		position: relative;
+		position: absolute;
 		z-index: 0;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 
-		width: 100%;
-		height: 450px;
 		box-sizing: border-box;
 
-		border: 1px solid #e0e2e4;
-
-		&.medium {
-			border-radius: 0 0 0 2px;
+		@media only screen and (max-width: 767px) {
+			height: 300px;
+			bottom: auto;
 		}
 
-		&.searchless {
-			border-radius: 2px 2px 0 0;
-		}
-
-		&.addressless {
-			border-radius: 0 0 2px 2px;
-		}
-
-		&.alone {
-			border-radius: 2px;
+		&.short {
+			height: 250px;
 		}
 	}
 </style>

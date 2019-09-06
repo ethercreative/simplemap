@@ -1,5 +1,5 @@
 <template>
-	<label>
+	<label :class="$style.label">
 		<span :class="$style.name">
 			{{ label }}
 		</span>
@@ -16,12 +16,24 @@
 </script>
 
 <style lang="less" module>
+	.label {
+		display: block;
+		padding: 9px 0 9px 12px;
+
+		border-right: 1px solid #DCE4EA;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid #DCE4EA;
+		}
+	}
+
 	.name {
 		display: block;
-		margin-bottom: 3px;
+		margin-bottom: 1px;
 
-		color: #a1a1a1;
-		font-size: 11px;
-		text-transform: uppercase;
+		color: rgba(41, 50, 61, 0.41);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0;
 	}
 </style>

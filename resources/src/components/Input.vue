@@ -6,7 +6,6 @@
 			:name="name"
 			:value="value"
 			:disabled="disabled"
-			class="text nicetext fullwidth"
 			@input="$emit('input', $event)"
 		/>
 	</Label>
@@ -36,8 +35,22 @@
 
 <style lang="less" module>
 	.input {
+		width: 100%;
+		padding: 0;
+
+		color: #29323D;
+		font-size: 15px;
+		letter-spacing: 0;
+
+		appearance: none;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		background: none;
+		border: none;
+		border-radius: 0;
+
 		&:disabled {
-			background-color: transparent;
+			opacity: 0.5;
 		}
 	}
 </style>

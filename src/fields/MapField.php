@@ -94,9 +94,9 @@ class MapField extends Field implements PreviewableFieldInterface
 
 	/**
 	 * @var string - The size of the field
-	 *   (can be either "large", "medium", or "small")
+	 *   (can be either "normal", "mini")
 	 */
-	public $size = 'large';
+	public $size = 'normal';
 
 	/**
 	 * @deprecated

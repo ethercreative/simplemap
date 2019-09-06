@@ -1,43 +1,48 @@
 <template>
-	<div :class="cls">
-		<div>
+	<div :class="wrapCls">
+		<Map
+			v-if="!config.hideMap"
+			:tiles="config.mapTiles"
+			:token="config.mapToken"
+			:latLng="{ lat: val.lat, lng: val.lng }"
+			:zoom="+val.zoom"
+			:min-zoom="config.minZoom"
+			:max-zoom="config.maxZoom"
+			@change="onMapChange"
+			@zoom="onZoom"
+			:hide-search="config.hideSearch"
+		/>
+
+		<div :class="$style.content">
 			<Search
 				v-if="!config.hideSearch"
 				:service="config.geoService"
 				:default-value="val.address"
 				:geo="geo"
 				@selected="onSearchSelected"
-				@clear="onClear"
+				@is-open="onResultsOpen"
 				:has-map="!config.hideMap"
-				:size="config.size"
 			/>
 
-			<Map
-				v-if="!config.hideMap"
-				:tiles="config.mapTiles"
-				:token="config.mapToken"
-				:latLng="{ lat: val.lat, lng: val.lng }"
-				:zoom="+val.zoom"
-				:min-zoom="config.minZoom"
-				:max-zoom="config.maxZoom"
-				@change="onMapChange"
-				@zoom="onZoom"
+			<Address
+				v-if="!config.isSettings"
+				:hide="config.hideAddress"
 				:has-search="!config.hideSearch"
-				:has-address="!config.isSettings"
-				:size="config.size"
+				:has-map="!config.hideMap"
+				:showLatLng="config.showLatLng"
+				:value="val"
+				@changed="onPartChange"
+				:results-open="resultsOpen"
 			/>
 		</div>
 
-		<Address
-			v-if="!config.isSettings"
-			:hide="config.hideAddress"
-			:has-search="!config.hideSearch"
-			:has-map="!config.hideMap"
-			:showLatLng="config.showLatLng"
-			:size="config.size"
-			:value="val"
-			@changed="onPartChange"
-		/>
+		<!--<button
+			class="btn"
+			@click="onClear()"
+			type="button"
+		>
+			{{labels.clear}}
+		</button>-->
 
 		<input
 			type="hidden"
@@ -75,6 +80,7 @@
 	import Parts from './models/Parts';
 	import Fragment from './components/Fragment';
 	import PartsLegacy from './models/PartsLegacy';
+	import { t } from './filters/craft';
 
 	export default {
 		props: {
@@ -118,8 +124,13 @@
 				geo: null,
 
 				fullAddressDirty: false,
-
 				defaultValue: null,
+
+				labels: {
+					clear: t('Clear address'),
+				},
+
+				resultsOpen: false,
 			};
 		},
 
@@ -144,21 +155,25 @@
 		},
 
 		computed: {
-			cls () {
+			wrapCls () {
+				const cls = [this.$style.wrap];
+
 				if (this.config.hideMap)
-					return null;
+					cls.push(this.$style['no-map']);
 
-				if (this.config.size === 'medium')
-					return this.$style.medium;
-
-				return null;
+				return cls;
 			},
+
 			val () {
 				return this.value.lat === null ? this.defaultValue : this.value;
 			},
 		},
 
 		methods: {
+			onResultsOpen (value) {
+				this.resultsOpen = value;
+			},
+
 			onSearchSelected (item) {
 				this.value = {
 					...this.value,
@@ -239,12 +254,40 @@
 </script>
 
 <style lang="less" module>
-	.medium {
-		display: flex;
-		align-items: stretch;
+	.wrap {
+		position: relative;
+		margin: 0 -24px;
+		min-height: 360px;
 
-		> * {
-			width: 50%;
+		@media only screen and (max-width: 767px) {
+			margin: 0 -12px;
+		}
+
+		&.no-map {
+			min-height: 0;
+			margin: 0;
+
+			.content {
+				padding: 0;
+			}
+		}
+	}
+	.content {
+		position: relative;
+		z-index: 2;
+		box-sizing: border-box;
+		padding: 24px;
+		width: 50%;
+
+		pointer-events: none;
+
+		@media only screen and (max-width: 767px) {
+			padding: 12px;
+			width: 100%;
+		}
+
+		& > * {
+			pointer-events: all;
 		}
 	}
 </style>

@@ -7,6 +7,7 @@
 - Add new map field size options
 
 ### Changed
+- Brand new UI!
 - Mapbox, Apple Maps, and Here are now only available in Maps Pro
 
 ### Improved

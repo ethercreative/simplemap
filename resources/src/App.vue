@@ -263,6 +263,15 @@
 			margin: 0 -12px;
 		}
 
+		:global(.matrixblock) & {
+			margin: 0 -14px !important;
+		}
+
+		:global(.superTable-layout-table) &,
+		:global(.superTable-layout-row) & {
+			margin: -4px -10px !important;
+		}
+
 		&.no-map {
 			min-height: 0;
 			margin: 0;
@@ -280,6 +289,12 @@
 		width: 50%;
 
 		pointer-events: none;
+
+		:global(.matrixblock) &,
+		:global(.superTable-layout-table) &,
+		:global(.superTable-layout-row) & {
+			padding: 14px;
+		}
 
 		@media only screen and (max-width: 767px) {
 			padding: 12px;

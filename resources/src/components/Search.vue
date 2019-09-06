@@ -7,8 +7,10 @@
 			:suggestions="suggestions"
 			:render-suggestion="renderSuggestion"
 			:get-suggestion-value="getSuggestionValue"
+			:should-render-suggestions="shouldRenderSuggestions"
 			:input-props="inputProps"
 			@selected="onSelected"
+			@input="onInputChange"
 			ref="self"
 			:component-attr-class-autosuggest-results-container="$style.resultsWrap"
 			:component-attr-class-autosuggest-results="$style.results"
@@ -21,6 +23,8 @@
 	import { t } from '../filters/craft';
 	import GeoService from '../enums/GeoService';
 	import Geo from '../common/Geo';
+
+	let to;
 
 	export default {
 		props: {
@@ -37,29 +41,17 @@
 
 		data () {
 			return {
-				isOpen: false,
+				shouldShow: false,
 				suggestions: [{ data: [] }],
 			};
-		},
-
-		mounted () {
-			this.$watch(
-				() => this.$refs.self.isOpen,
-				isOpen => {
-					this.isOpen = isOpen;
-					this.$emit('is-open', isOpen);
-				}
-			);
 		},
 
 		computed: {
 			cls () {
 				const cls = [this.$style.wrap];
 
-				if (!this.hasMap)
-					cls.push(this.$style.addr);
-				else if (this.size === 'medium')
-					cls.push(this.$style.medium);
+				if (this.isOpen)
+					cls.push(this.$style.open);
 
 				return cls;
 			},
@@ -67,33 +59,52 @@
 			inputProps () {
 				const cls = [this.$style.input];
 
-				if (this.isOpen)
-					cls.push(this.$style.open);
-
 				return {
-					onInputChange: this.onInputChange(),
 					class: cls,
 					initialValue: this.initialValue,
 					placeholder: t('Search for a location'),
 				};
 			},
+
+			isOpen () {
+				return this.suggestions[0].data.length > 0 && this.shouldShow;
+			},
+
+			suggestLengthShow () {
+				return `${this.shouldShow}${this.suggestions[0].data.length}`;
+			},
+		},
+
+		watch: {
+			suggestLengthShow () {
+				const list = this.$refs.self.$el.lastElementChild;
+
+				if (!this.isOpen || !list.firstElementChild || window.matchMedia('(max-width: 767px)').matches) {
+					this.$emit('open-offset', 0);
+					return;
+				}
+
+				setTimeout(() => {
+					this.$emit('open-offset', list.firstElementChild.getBoundingClientRect().height);
+				});
+			},
 		},
 
 		methods: {
+			shouldRenderSuggestions (_, loading) {
+				this.shouldShow = !loading;
+				return () => true;
+			},
+
 			/**
 			 * Fired on autocomplete input change
 			 */
-			onInputChange () {
-				const that = this;
-				let to     = null;
-
-				return function (text) {
-					clearTimeout(to);
-					to = setTimeout(async () => {
-						const data       = await that.geo.search(text);
-						that.suggestions = [{ data }];
-					}, 500);
-				};
+			onInputChange (text) {
+				clearTimeout(to);
+				to = setTimeout(async () => {
+					const data       = await this.geo.search(text);
+					this.suggestions = [{ data }];
+				}, 500);
 			},
 
 			/**
@@ -171,19 +182,25 @@
 		appearance: none;
 		background-color: #fff;
 		border: none;
+		border-bottom: 1px solid transparent;
 		border-radius: 5px;
 		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
 
-		&.open {
+		.open & {
 			border-radius: 5px 5px 0 0;
+			border-bottom-color: #D2DBE1;
 		}
 	}
 	.resultsWrap {
 		position: absolute;
 		top: 100%;
-		left: 0;
+		left: -20px;
 
-		width: 100%;
+		width: calc(100% + 40px);
+		height: 210px;
+		padding: 0 20px 20px;
+
+		overflow: hidden;
 	}
 	.results {
 		position: relative;
@@ -192,9 +209,15 @@
 		padding: 7px 0;
 
 		background-color: #fff;
-		border-top: 1px solid #D2DBE1;
 		box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.10);
 		border-radius: 0 0 5px 5px;
+
+		transform: translateY(calc(-100% - 15px));
+		transition: transform 0.3s ease;
+
+		.open & {
+			transform: translateY(0);
+		}
 
 		li {
 			padding: 7px 14px;

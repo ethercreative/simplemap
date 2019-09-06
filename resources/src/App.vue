@@ -20,7 +20,7 @@
 				:default-value="val.address"
 				:geo="geo"
 				@selected="onSearchSelected"
-				@is-open="onResultsOpen"
+				@open-offset="onResultsOpenOffset"
 				:has-map="!config.hideMap"
 			/>
 
@@ -33,7 +33,7 @@
 				:value="val"
 				@changed="onPartChange"
 				@clear="onClear"
-				:results-open="resultsOpen"
+				:open-offset="resultsOpenOffset"
 			/>
 		</div>
 
@@ -118,7 +118,7 @@
 				fullAddressDirty: false,
 				defaultValue: null,
 
-				resultsOpen: false,
+				resultsOpenOffset: 0,
 			};
 		},
 
@@ -158,8 +158,8 @@
 		},
 
 		methods: {
-			onResultsOpen (value) {
-				this.resultsOpen = value;
+			onResultsOpenOffset (value) {
+				this.resultsOpenOffset = value;
 			},
 
 			onSearchSelected (item) {

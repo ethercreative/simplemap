@@ -12,7 +12,7 @@
     "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.mapkitmutant": "^0.3.0",
     "vue": "^2.6.10",
-    "vue-autosuggest": "^1.8.1"
+    "vue-autosuggest": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",

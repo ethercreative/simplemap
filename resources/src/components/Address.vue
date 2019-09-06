@@ -102,7 +102,7 @@
 			hasSearch: Boolean,
 			hasMap: Boolean,
 			size: String,
-			resultsOpen: Number,
+			openOffset: Number,
 		},
 
 		components: {
@@ -133,7 +133,7 @@
 			cls () {
 				const cls = [this.$style.grid];
 
-				if (this.resultsOpen)
+				if (this.openOffset > 0)
 					cls.push(this.$style.fade);
 
 				if (this.hoverDelete)
@@ -147,7 +147,7 @@
 
 			styl () {
 				return {
-					transform: `translateY(${this.offset}px)`,
+					transform: `translateY(${this.openOffset}px)`,
 				};
 			},
 
@@ -189,13 +189,16 @@
 		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
 
 		overflow: hidden;
+		transition: transform 0.35s ease, opacity 0.3s ease;
 
 		&:not(:first-child) {
 			margin-top: 24px;
 		}
 
 		&.fade {
-			opacity: 0;
+			opacity: 0.8;
+			transition-delay: 0.075s, 0s;
+			transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.275), ease;
 		}
 
 		@media only screen and (max-width: 1199px) {

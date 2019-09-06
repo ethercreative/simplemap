@@ -13,13 +13,26 @@
 			/>
 		</Fragment>
 
-		<Input
-			:class-name="$style.full"
-			:label="labels.fullAddress"
-			:value="value.address"
-			@input="onInput('fullAddress', $event)"
-			:disabled="hide"
-		/>
+		<div :class="[$style.full, $style.row]">
+			<Input
+				:label="labels.fullAddress"
+				:value="value.address"
+				@input="onInput('fullAddress', $event)"
+				:disabled="hide"
+			/>
+			<button
+				:class="$style.btn"
+				@click="onClear()"
+				type="button"
+				@mouseenter="onDeleteEnter"
+				@mouseleave="onDeleteLeave"
+				:title="labels.clear"
+			>
+				<svg width="14" height="14" viewBox="0 0 14 14">
+					<path fill="#29323D" d="M7 14c-3.832 0-7-3.167-7-6.997C0 3.167 3.162 0 6.993 0 10.825 0 14 3.167 14 7.003 14 10.833 10.832 14 7 14zM4.65 9.994a.65.65 0 0 0 .468-.19l1.875-1.88 1.889 1.88c.115.116.27.19.46.19.366 0 .65-.29.65-.65a.674.674 0 0 0-.19-.46l-1.888-1.88 1.889-1.895a.581.581 0 0 0 .196-.447.64.64 0 0 0-.65-.643.59.59 0 0 0-.453.19L6.993 6.097 5.104 4.216a.607.607 0 0 0-.453-.19.64.64 0 0 0-.65.643c0 .17.074.331.196.447L6.08 7.003 4.197 8.898a.608.608 0 0 0-.196.447c0 .358.291.65.65.65z"/>
+				</svg>
+			</button>
+		</div>
 
 		<Fragment v-if="!hide">
 			<Input
@@ -99,6 +112,7 @@
 
 		data () {
 			return {
+				hoverDelete: false,
 				labels: {
 					fullAddress: t('Full Address'),
 					number: t('Name / Number'),
@@ -110,6 +124,7 @@
 					country: t('Country'),
 					lat: t('Latitude'),
 					lng: t('Longitude'),
+					clear: t('Clear address'),
 				}
 			};
 		},
@@ -121,6 +136,12 @@
 				if (this.resultsOpen)
 					cls.push(this.$style.fade);
 
+				if (this.hoverDelete)
+					cls.push(this.$style.delete);
+
+				if (this.hasValue)
+					cls.push(this.$style['show-clear']);
+
 				return cls;
 			},
 
@@ -128,6 +149,10 @@
 				return {
 					transform: `translateY(${this.offset}px)`,
 				};
+			},
+
+			hasValue () {
+				return this.value.address !== null;
 			},
 		},
 
@@ -137,6 +162,18 @@
 					name,
 					value: e.target.value,
 				});
+			},
+
+			onClear () {
+				this.$emit('clear');
+			},
+
+			onDeleteEnter () {
+				this.hoverDelete = true;
+			},
+
+			onDeleteLeave () {
+				this.hoverDelete = false;
 			},
 		},
 	};
@@ -150,6 +187,8 @@
 		background-color: #fff;
 		border-radius: 5px;
 		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
+
+		overflow: hidden;
 
 		&:not(:first-child) {
 			margin-top: 24px;
@@ -189,5 +228,58 @@
 				grid-column: span 1;
 			}
 		}
+	}
+	.row {
+		display: flex;
+
+		&:last-child > * {
+			border-bottom: none;
+		}
+
+		label {
+			flex-grow: 1;
+			border-right: none;
+		}
+	}
+	.btn {
+		appearance: none;
+		background: none;
+		border: none;
+		border-bottom: 1px solid #DCE4EA;
+		border-radius: 0 5px 0 0;
+		cursor: pointer;
+
+		pointer-events: none;
+
+		svg {
+			opacity: 0.5;
+
+			transform: translateX(200%);
+			transition: transform 0.3s ease, opacity 0.15s ease;
+		}
+
+		path {
+			transition: fill 0.15s ease;
+		}
+
+		.show-clear & {
+			pointer-events: auto;
+
+			svg {
+				transform: translateX(0);
+			}
+		}
+
+		&:hover {
+			svg {
+				opacity: 1;
+			}
+			path {
+				fill: #F22C26;
+			}
+		}
+	}
+	.delete input {
+		color: #F22C26;
 	}
 </style>

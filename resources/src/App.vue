@@ -32,17 +32,10 @@
 				:showLatLng="config.showLatLng"
 				:value="val"
 				@changed="onPartChange"
+				@clear="onClear"
 				:results-open="resultsOpen"
 			/>
 		</div>
-
-		<!--<button
-			class="btn"
-			@click="onClear()"
-			type="button"
-		>
-			{{labels.clear}}
-		</button>-->
 
 		<input
 			type="hidden"
@@ -80,7 +73,6 @@
 	import Parts from './models/Parts';
 	import Fragment from './components/Fragment';
 	import PartsLegacy from './models/PartsLegacy';
-	import { t } from './filters/craft';
 
 	export default {
 		props: {
@@ -125,10 +117,6 @@
 
 				fullAddressDirty: false,
 				defaultValue: null,
-
-				labels: {
-					clear: t('Clear address'),
-				},
 
 				resultsOpen: false,
 			};
@@ -258,6 +246,8 @@
 		position: relative;
 		margin: 0 -24px;
 		min-height: 360px;
+
+		overflow: hidden;
 
 		@media only screen and (max-width: 767px) {
 			margin: 0 -12px;

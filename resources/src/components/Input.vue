@@ -44,11 +44,11 @@
 		text-indent: 12px;
 
 		appearance: none;
-		-moz-appearance: none;
-		-webkit-appearance: none;
 		background: none;
 		border: none;
 		border-radius: 0;
+
+		transition: color 0.15s ease;
 
 		&:disabled {
 			opacity: 0.5;

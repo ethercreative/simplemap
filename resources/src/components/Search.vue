@@ -169,8 +169,6 @@
 		font-size: 16px;
 
 		appearance: none;
-		-moz-appearance: none;
-		-webkit-appearance: none;
 		background-color: #fff;
 		border: none;
 		border-radius: 5px;

@@ -225,6 +225,7 @@
 
 			&[class*="highlighted"] {
 				background-color: #e4edf3;
+				cursor: pointer;
 			}
 		}
 	}

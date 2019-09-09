@@ -56,6 +56,15 @@ class StaticOptions
 	 */
 	public function __construct ($config = [])
 	{
+		$center = $config['center'] ?? null;
+
+		if ($center instanceof Map)
+			$center = ['lat' => $center->lat, 'lng' => $center->lng, 'zoom' => $center->zoom];
+		elseif ($center instanceof UserLocation)
+			$center = ['lat' => $center->lat, 'lng' => $center->lng];
+
+		$config['center'] = $center;
+
 		$markers = $config['markers'] ?? [];
 		unset($config['markers']);
 

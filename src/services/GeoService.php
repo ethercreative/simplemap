@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\services;
 
+use Craft;
 use craft\base\Component;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
@@ -868,7 +869,7 @@ class GeoService extends Component
 		static $client;
 
 		if (!$client)
-			$client = new Client();
+			$client = Craft::createGuzzleClient();
 
 		return $client;
 	}

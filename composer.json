@@ -8,9 +8,11 @@
   "require": {
     "craftcms/cms": "^3.1.0",
     "mapkit/jwt": "^1.1.2",
+    "geoip2/geoip2": "~2.0",
     "guzzlehttp/guzzle": "^6.3.3",
     "ext-openssl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-zlib": "*"
   },
   "autoload": {
     "psr-4": {

@@ -26,6 +26,7 @@ use ether\simplemap\integrations\graphql\MapPartsType;
 use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
+use ether\simplemap\services\GeoLocationService;
 use ether\simplemap\services\MapService;
 use ether\simplemap\services\StaticService;
 use ether\simplemap\web\Variable;
@@ -38,6 +39,7 @@ use yii\base\Event;
  * @package ether\simplemap
  * @property MapService $map
  * @property StaticService $static
+ * @property GeoLocationService $geolocation
  */
 class SimpleMap extends Plugin
 {
@@ -81,6 +83,7 @@ class SimpleMap extends Plugin
 		$this->setComponents([
 			'map' => MapService::class,
 			'static' => StaticService::class,
+			'geolocation' => GeoLocationService::class,
 		]);
 
 		Event::on(
@@ -137,12 +140,30 @@ class SimpleMap extends Plugin
 		return new Settings();
 	}
 
+	/**
+	 * @return Settings
+	 */
+	public function getSettings ()
+	{
+		return parent::getSettings();
+	}
+
 	protected function settingsHtml ()
 	{
 		// Redirect to our settings page
 		\Craft::$app->controller->redirect(
 			UrlHelper::cpUrl('maps/settings')
 		);
+	}
+
+	public function afterSaveSettings ()
+	{
+		parent::afterSaveSettings();
+
+		if (
+			$this->getSettings()->geoLocationService === GeoLocationService::MaxMindLite &&
+			!GeoLocationService::dbExists()
+		) GeoLocationService::dbQueueDownload();
 	}
 
 	// Events

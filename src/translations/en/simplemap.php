@@ -105,6 +105,12 @@ return [
 	'Geolocation Token' => 'Geolocation Token',
 	'Add the API key for the geolocation service.' => 'Add the API key for the geolocation service.',
 
+	'Account ID' => 'Account ID',
+	'Your MaxMind account ID.' => 'Your MaxMind account ID.',
+
+	'License Key' => 'License Key',
+	'Your MaxMind license key.' => 'Your MaxMind license key.',
+
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------
 

@@ -9,8 +9,10 @@
 namespace ether\simplemap\web;
 
 use ether\simplemap\models\Settings;
+use ether\simplemap\models\UserLocation;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
+use Exception;
 
 /**
  * Class Variable
@@ -52,6 +54,19 @@ class Variable
 		);
 
 		return $this->getMapToken();
+	}
+
+	/**
+	 * Returns the current users approximate location
+	 *
+	 * @param string|null $ip - Override the lookup IP
+	 *
+	 * @return UserLocation|null
+	 * @throws Exception
+	 */
+	public function getUserLocation ($ip = null)
+	{
+		return SimpleMap::getInstance()->geolocation->lookup($ip);
 	}
 
 	/**

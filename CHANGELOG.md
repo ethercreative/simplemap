@@ -5,6 +5,7 @@
 - Add Pro edition
 - Add static map image support
 - Add new map field size options
+- Add IP based user location lookup
 
 ### Changed
 - 🍆 New, sexier UI! 💦

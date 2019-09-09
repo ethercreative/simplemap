@@ -272,15 +272,35 @@
 			{% endset %}
 			{{ label('Geolocation Service', 'Select the service to be used for Geolocating users.', children) }}
 
-			<div v-if="requiresGeoLocationToken">
+			{% set geoLocationTokenIterable = settings.geoLocationToken is iterable %}
+			<div v-if="geoLocationSimple && requiresGeoLocationToken">
 				{% set children %}
 					<input
 						type="text"
 						name="geoLocationToken"
-						value="{{ settings.geoLocationToken }}"
+						value="{{ not geoLocationTokenIterable ? settings.geoLocationToken }}"
 					/>
 				{% endset %}
 				{{ label('Geolocation Token', 'Add the API key for the geolocation service.', children) }}
+			</div>
+			<div v-if="requiresGeoLocationToken && geoLocationService.indexOf('maxmind') > -1">
+				{% set children %}
+					<input
+						type="text"
+						name="geoLocationToken[accountId]"
+						value="{{ tokenValue(settings.geoLocationToken, 'accountId') }}"
+					/>
+				{% endset %}
+				{{ label('Account ID', 'Your MaxMind account ID.', children) }}
+
+				{% set children %}
+					<input
+						type="text"
+						name="geoLocationToken[licenseKey]"
+						value="{{ tokenValue(settings.geoLocationToken, 'licenseKey') }}"
+					/>
+				{% endset %}
+				{{ label('License Key', 'Your MaxMind license key.', children) }}
 			</div>
 		</div>
 		<div class="maps-card maps-help">
@@ -345,6 +365,11 @@ new Vue({
 			return (
 				this.geoLocationService !== 'none' &&
 				this.geoLocationService.indexOf('lite') === -1
+			);
+		},
+		geoLocationSimple () {
+			return (
+				this.geoLocationService.indexOf('maxmind') === -1
 			);
 		},
 	}

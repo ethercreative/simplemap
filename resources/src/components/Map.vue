@@ -10,6 +10,9 @@
 	import MapTiles from '../enums/MapTiles';
 	import 'leaflet/dist/leaflet.css';
 	import waitForGlobal from '../helpers/waitForGlobal';
+	import { t } from '../filters/craft';
+
+	const icon = (w, h, f = '#E7433B') => `<svg width="${w}" height="${h}" viewBox="0 0 14 20"><path fill="${f}" d="M6.976.478C3.482.478.634 3.313.634 6.79c0 2.381 1.716 4.247 2.945 6.09 1.23 1.844 2 3.706 2.664 6.17a.78.78 0 0 0 .733.56c.308 0 .64-.217.733-.56.724-2.69 1.49-4.537 2.704-6.324 1.213-1.786 2.906-3.56 2.906-5.936 0-3.476-2.849-6.31-6.343-6.31zm.04 3.874c1.21 0 2.18.968 2.18 2.174A2.17 2.17 0 0 1 7.016 8.7a2.17 2.17 0 0 1-2.18-2.174 2.17 2.17 0 0 1 2.18-2.174z"/></svg>`;
 
 	export default {
 		props: {
@@ -34,13 +37,72 @@
 				minZoom: this.minZoom,
 				maxZoom: this.maxZoom,
 				scrollWheelZoom: false,
+				zoomControl: false,
 			}).setView(this.latLng, this.zoom);
+
+			const self = this;
+
+			L.Control.CustomZoom = L.Control.extend({
+				onAdd: map => {
+					const wrap   = L.DomUtil.create('div')
+						, zIn    = L.DomUtil.create('button')
+						, zOut   = L.DomUtil.create('button')
+						, center = L.DomUtil.create('button');
+
+					wrap.classList.add(self.$style.control);
+
+					zIn.textContent = '+';
+					zOut.textContent = '-';
+					center.innerHTML = icon(
+						14 * 0.75,
+						20 * 0.75,
+						'rgba(41, 50, 61, 0.75)'
+					);
+
+					zIn.setAttribute('title', t('Zoom In'));
+					zOut.setAttribute('title', t('Zoom Out'));
+					center.setAttribute('title', t('Center on Marker'));
+
+					wrap.appendChild(zIn);
+					wrap.appendChild(zOut);
+					wrap.appendChild(center);
+
+					zIn.addEventListener('click', e => {
+						e.preventDefault();
+						map.setZoomAround(
+							self.getOffsetPoint(map.getCenter(), true),
+							map.getZoom() + map.options.zoomDelta,
+						);
+					});
+
+					zOut.addEventListener('click', e => {
+						e.preventDefault();
+						map.setZoomAround(
+							self.getOffsetPoint(map.getCenter(), true),
+							map.getZoom() - map.options.zoomDelta,
+						);
+					});
+
+					center.addEventListener('click', e => {
+						e.preventDefault();
+						self.panTo(self.latLng);
+					});
+
+					return wrap;
+				},
+				onRemove: () => {},
+			});
+
+			L.control.customZoom = function (opts) {
+				return new L.Control.CustomZoom(opts);
+			};
+
+			L.control.customZoom({ position: 'topright' }).addTo(this.map);
 
 			this.map.panBy(
 				L.point(this.offsetAmount()),
 				{ animate: false }
 			);
-			this.map.zoomControl.setPosition('topright');
 
 			if (this.tiles.indexOf('google') > -1) {
 				this._googleMutant();
@@ -59,8 +121,6 @@
 				this.map.addLayer(tileLayer);
 			}
 
-			// TODO: Override zoom controls that use `setZoomAround` to account
-			//  for the map offset by zooming around the latLng
 			this.map.on('zoom', this.onZoom);
 
 			this.setMarker();
@@ -145,7 +205,7 @@
 					, h = 20 * 2;
 
 				return L.divIcon({
-					html: `<svg width="${w}" height="${h}" viewBox="0 0 14 20"><path fill="#E7433B" d="M6.976.478C3.482.478.634 3.313.634 6.79c0 2.381 1.716 4.247 2.945 6.09 1.23 1.844 2 3.706 2.664 6.17a.78.78 0 0 0 .733.56c.308 0 .64-.217.733-.56.724-2.69 1.49-4.537 2.704-6.324 1.213-1.786 2.906-3.56 2.906-5.936 0-3.476-2.849-6.31-6.343-6.31zm.04 3.874c1.21 0 2.18.968 2.18 2.174A2.17 2.17 0 0 1 7.016 8.7a2.17 2.17 0 0 1-2.18-2.174 2.17 2.17 0 0 1 2.18-2.174z"/></svg>`,
+					html: icon(w, h),
 					iconSize: [w, h],
 					iconAnchor: [w / 2, h],
 					className: '',
@@ -180,11 +240,24 @@
 				return { x, y: this.hideSearch ? 5 : -15 };
 			},
 
-			panTo (latLng) {
+			getOffsetPoint (latLng, invert = false) {
 				const point = this.map.latLngToContainerPoint(latLng);
-				point.x += this.offsetAmount().x;
-				point.y += this.offsetAmount().y;
-				this.map.panTo(this.map.containerPointToLatLng(point));
+				if (invert) {
+					point.x -= this.offsetAmount().x;
+					point.y -= this.offsetAmount().y;
+				} else {
+					point.x += this.offsetAmount().x;
+					point.y += this.offsetAmount().y;
+				}
+				return point;
+			},
+
+			panTo (latLng) {
+				this.map.panTo(
+					this.map.containerPointToLatLng(
+						this.getOffsetPoint(latLng)
+					)
+				);
 			},
 
 			setMarker () {
@@ -208,7 +281,6 @@
 			 * Listens to map zoom event and triggers component zoom event.
 			 */
 			onZoom () {
-				this.panTo(this.latLng);
 				this.$emit('zoom', this.map.getZoom());
 			},
 
@@ -261,6 +333,53 @@
 
 		&.short {
 			height: 250px;
+		}
+	}
+	.control {
+		margin: 24px !important;
+		font-size: 0;
+
+		border-radius: 5px;
+		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
+
+		@media only screen and (max-width: 767px) {
+			margin: 14px !important;
+		}
+
+		button {
+			display: block;
+			width: 100%;
+			padding: 2px 10px 3px;
+
+			color: rgba(41, 50, 61, 0.75);
+			font-size: 20px;
+			font-weight: bold;
+			line-height: normal;
+
+			appearance: none;
+			background-color: #fff;
+			border: none;
+			cursor: pointer;
+
+			transition: background-color 0.15s ease;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid #DCE4EA;
+			}
+
+			&:first-child {
+				padding-bottom: 4px;
+				border-radius: 5px 5px 0 0;
+			}
+
+			&:last-child {
+				padding-top: 4px;
+				border-radius: 0 0 5px 5px;
+			}
+
+			&:hover {
+				background-color: #f0f9ff;
+			}
 		}
 	}
 </style>

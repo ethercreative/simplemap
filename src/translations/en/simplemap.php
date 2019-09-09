@@ -29,6 +29,10 @@ return [
 	'Latitude' => 'Latitude',
 	'Longitude' => 'Longitude',
 
+	'Zoom In' => 'Zoom In',
+	'Zoom Out' => 'Zoom Out',
+	'Center on Marker' => 'Center on Marker',
+
 	// Field: Settings
 	// -------------------------------------------------------------------------
 

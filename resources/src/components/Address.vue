@@ -197,8 +197,6 @@
 
 		&.fade {
 			opacity: 0.8;
-			transition-delay: 0.075s, 0s;
-			transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.275), ease;
 		}
 
 		@media only screen and (max-width: 1199px) {

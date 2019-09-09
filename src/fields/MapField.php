@@ -440,6 +440,9 @@ class MapField extends Field implements PreviewableFieldInterface
 			'Country',
 			'Latitude',
 			'Longitude',
+			'Zoom In',
+			'Zoom Out',
+			'Center on Marker',
 		]);
 
 		/** @var Settings $settings */

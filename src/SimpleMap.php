@@ -26,6 +26,7 @@ use ether\simplemap\integrations\graphql\MapPartsType;
 use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
+use ether\simplemap\services\EmbedService;
 use ether\simplemap\services\GeoLocationService;
 use ether\simplemap\services\MapService;
 use ether\simplemap\services\StaticService;
@@ -39,6 +40,7 @@ use yii\base\Event;
  * @package ether\simplemap
  * @property MapService $map
  * @property StaticService $static
+ * @property EmbedService $embed
  * @property GeoLocationService $geolocation
  */
 class SimpleMap extends Plugin
@@ -83,6 +85,7 @@ class SimpleMap extends Plugin
 		$this->setComponents([
 			'map' => MapService::class,
 			'static' => StaticService::class,
+			'embed' => EmbedService::class,
 			'geolocation' => GeoLocationService::class,
 		]);
 

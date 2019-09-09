@@ -29,8 +29,6 @@ class StaticService extends Component
 {
 
 	/**
-	 * TODO: Add marker support
-	 *
 	 * @param array $options
 	 *
 	 * @return string|void
@@ -38,10 +36,10 @@ class StaticService extends Component
 	 */
 	public function generate ($options = [])
 	{
-		$options = new StaticOptions($options);
-
 		if (SimpleMap::v(SimpleMap::EDITION_LITE))
 			return 'Sorry, static maps are a Maps Pro feature!';
+
+		$options = new StaticOptions($options);
 
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();

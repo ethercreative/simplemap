@@ -84,7 +84,7 @@ class Variable
 		{
 			return GeoService::latLngFromAddress($address, $country);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			\Craft::error($e->getMessage(), 'simplemap');
 
@@ -101,7 +101,7 @@ class Variable
 	 * @param $options - See StaticOptions for the available options
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getImg ($options)
 	{
@@ -114,7 +114,7 @@ class Variable
 	 * @param $options - See StaticOptions for the available options
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getImgSrcSet ($options)
 	{
@@ -122,6 +122,19 @@ class Variable
 		$x2 = $this->getImg(array_merge($options, ['scale' => 2]));
 
 		return $x1 . ' 1x, ' . $x2 . ' 2x';
+	}
+
+	/**
+	 * Will return markup for a dynamic map embed
+	 *
+	 * @param $options - See EmbedOptions for the available options
+	 *
+	 * @return string|void
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	public function getEmbed ($options)
+	{
+		return SimpleMap::getInstance()->embed->embed($options);
 	}
 
 }

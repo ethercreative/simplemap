@@ -81,6 +81,21 @@ class Marker
 		return implode(',', array_values($this->location));
 	}
 
+	/**
+	 * @return array|string|null
+	 * @throws \Exception
+	 */
+	public function getCenter ()
+	{
+		if (is_string($this->location))
+			return GeoService::latLngFromAddress($this->location);
+
+		if (!array_key_exists('lat', $this->location) || !array_key_exists('lng', $this->location))
+			return ['lat' => $this->location[0], 'lng' => $this->location[1]];
+
+		return $this->location;
+	}
+
 	// Helpers
 	// =========================================================================
 

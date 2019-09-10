@@ -41,7 +41,8 @@ class EmbedService extends Component
 	 * @param array $options
 	 *
 	 * @return string|void
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
+	 * @throws \Exception
 	 */
 	public function embed ($options = [])
 	{
@@ -83,7 +84,7 @@ class EmbedService extends Component
 				$code = $this->_embedHere($options, $settings);
 				break;
 			default:
-				$code = $this->_embedDefault($options);
+				$code = $this->_embedDefault($options, $settings);
 		}
 
 		return Template::raw($code);
@@ -92,6 +93,13 @@ class EmbedService extends Component
 	// Embed-ers
 	// =========================================================================
 
+	/**
+	 * @param EmbedOptions $options
+	 * @param Settings     $settings
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
 	private function _embedGoogle (EmbedOptions $options, Settings $settings)
 	{
 		$view = Craft::$app->getView();
@@ -174,6 +182,13 @@ CSS;
 		return '<div id="' . $options->id . '"></div>';
 	}
 
+	/**
+	 * @param EmbedOptions $options
+	 * @param Settings     $settings
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
 	private function _embedApple (EmbedOptions $options, Settings $settings)
 	{
 		$view = Craft::$app->getView();
@@ -274,6 +289,13 @@ CSS;
 		return '<div id="' . $options->id . '"></div>';
 	}
 
+	/**
+	 * @param EmbedOptions $options
+	 * @param Settings     $settings
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
 	private function _embedMapbox (EmbedOptions $options, Settings $settings)
 	{
 		$view = Craft::$app->getView();
@@ -355,6 +377,13 @@ CSS;
 		return '<div id="' . $options->id . '"></div>';
 	}
 
+	/**
+	 * @param EmbedOptions $options
+	 * @param Settings     $settings
+	 *
+	 * @return string
+	 * @throws InvalidConfigException
+	 */
 	private function _embedHere (EmbedOptions $options, Settings $settings)
 	{
 		if (!array_key_exists('apiKey', $settings->mapToken) || !$settings->mapToken['apiKey'])
@@ -467,9 +496,110 @@ CSS;
 		return '<div id="' . $options->id . '"></div>';
 	}
 
-	private function _embedDefault (EmbedOptions $options)
+	/**
+	 * @param EmbedOptions $options
+	 * @param Settings     $settings
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	private function _embedDefault (EmbedOptions $options, Settings $settings)
 	{
-		//
+		$view       = Craft::$app->getView();
+		$markerIcon = $this->_iconSvg();
+
+		switch ($settings->mapTiles)
+		{
+			default:
+			case MapTiles::Wikimedia:
+				$tiles = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}##SCALE##';
+				$attr  = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://maps.wikimedia.org" target="_blank" rel="noreferrer">Wikimedia</a>';
+				break;
+			case MapTiles::OpenStreetMap:
+				$tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+				$attr  = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>';
+				break;
+			case MapTiles::CartoVoyager:
+			case MapTiles::CartoPositron:
+			case MapTiles::CartoDarkMatter:
+				$style = explode('.', $settings->mapTiles)[1];
+				$tiles = 'https://{s}.basemaps.cartocdn.com/' . $style . '/{z}/{x}/{y}##SCALE##';
+				$attr  = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution" target="_blank" rel="noreferrer">CARTO</a>';
+		}
+
+		$formattedOptions = Json::encode($options->options, self::JSON_OPTS);
+		$formattedMarkers = [];
+
+		foreach ($options->markers as $marker)
+			$formattedMarkers[] = [
+				'position' => $marker->getCenter(),
+				'label'    => $marker->label ?: '',
+				'color'    => $marker->color,
+			];
+
+		$formattedMarkers = Json::encode(
+			$formattedMarkers,
+			self::JSON_OPTS
+		);
+
+		$center = Json::encode(array_values($options->getCenter()), self::JSON_OPTS);
+
+		$initJs = <<<JS
+window.LMapTiles = L.tileLayer('{$tiles}'.replace('##SCALE##', L.Browser.retina ? '@2x.png' : '.png'), {
+	attribution: '{$attr}',
+});
+window.LMapMarkerIcon = function (marker) {
+	return L.divIcon({
+		html: '{$markerIcon}'.replace('##FILL##', marker.color).replace('##LABEL##', marker.label),
+		iconSize: [29, 44],
+		iconAnchor: [29/2, 44],
+		className: '',
+	});
+}
+JS;
+
+		$js = <<<JS
+const {$options->id} = L.map('{$options->id}', {$formattedOptions})
+	.setView({$center}, {$options->zoom});
+
+window.LMapTiles.addTo({$options->id});
+{$options->id}._markers = [];
+{$formattedMarkers}.forEach(function (marker) {
+	const m = L.marker(
+		marker.position, 
+		{ icon: window.LMapMarkerIcon(marker) }
+	);
+	{$options->id}._markers.push(m);
+	{$options->id}.addLayer(m);
+});
+JS;
+
+		$css = <<<CSS
+#{$options->id} {
+	width: {$options->width}px;
+	height: {$options->height}px;
+}
+CSS;
+
+		$this->_js(
+			'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
+			[
+				'integrity'   => 'sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==',
+				'crossorigin' => '',
+			]
+		);
+		$view->registerCssFile(
+			'https://unpkg.com/leaflet@1.5.1/dist/leaflet.css',
+			[
+				'integrity'   => 'sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==',
+				'crossorigin' => '',
+			]
+		);
+		$view->registerJs($initJs, View::POS_END);
+		$view->registerJs($js, View::POS_END);
+		$view->registerCss($css);
+
+		return '<div id="' . $options->id . '"></div>';
 	}
 
 	// Helpers

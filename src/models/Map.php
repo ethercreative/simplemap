@@ -188,4 +188,17 @@ class Map extends Model
 		return $x1 . ' 1x, ' . $x2 . ' 2x';
 	}
 
+	/**
+	 * Output an interactive map
+	 *
+	 * @param array $options
+	 *
+	 * @return string|void
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	public function embed ($options = [])
+	{
+		return SimpleMap::getInstance()->embed->embed($options);
+	}
+
 }

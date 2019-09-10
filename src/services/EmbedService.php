@@ -270,7 +270,78 @@ CSS;
 
 	private function _embedMapbox (EmbedOptions $options, Settings $settings)
 	{
-		//
+		$view = Craft::$app->getView();
+
+		switch ($settings->mapTiles)
+		{
+			default:
+			case MapTiles::MapboxStreets:
+				$type = 'streets-v11';
+				break;
+			case MapTiles::MapboxOutdoors:
+				$type = 'outdoors-v11';
+				break;
+			case MapTiles::MapboxLight:
+				$type = 'light-v9';
+				break;
+			case MapTiles::MapboxDark:
+				$type = 'dark-v10';
+				break;
+		}
+
+		$formattedOptions = Json::encode(
+			array_merge(
+				$options->options,
+				[
+					'container' => $options->id,
+					'style' => 'mapbox://styles/mapbox/' . $type,
+					'center' => array_reverse(array_values($options->getCenter())),
+					'zoom' => $options->zoom,
+				]
+			),
+			self::JSON_OPTS
+		);
+
+		$formattedMarkers = [];
+
+		foreach ($options->markers as $marker)
+			$formattedMarkers[] = [
+				'position' => array_reverse(array_values($marker->getCenter())),
+				// TODO: Add label support
+				'color'    => $marker->color,
+			];
+
+		$formattedMarkers = Json::encode(
+			$formattedMarkers,
+			self::JSON_OPTS
+		);
+
+		$js = <<<JS
+mapboxgl.accessToken = '{$settings->mapToken}';
+const {$options->id} = new mapboxgl.Map({$formattedOptions});
+{$options->id}._markers = [];
+{$formattedMarkers}.forEach(function (marker) {
+	{$options->id}._markers.push(
+		new mapboxgl.Marker({ color: marker.color })
+			.setLngLat(marker.position)
+			.addTo({$options->id})
+	);
+});
+JS;
+
+		$css = <<<CSS
+#{$options->id} {
+	width: {$options->width}px;
+	height: {$options->height}px;
+}
+CSS;
+
+		$this->_js('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js');
+		$view->registerCssFile('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css');
+		$view->registerJs($js, View::POS_END);
+		$view->registerCss($css);
+
+		return '<div id="' . $options->id . '"></div>';
 	}
 
 	private function _embedHere (EmbedOptions $options, Settings $settings)

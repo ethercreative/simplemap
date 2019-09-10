@@ -13,6 +13,7 @@ use craft\base\Component;
 use craft\helpers\Json;
 use craft\helpers\Template;
 use craft\web\View;
+use enshrined\svgSanitize\Sanitizer;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\EmbedOptions;
 use ether\simplemap\models\Settings;
@@ -360,6 +361,7 @@ CSS;
 			throw new InvalidConfigException('Missing HERE API Key');
 
 		$view = Craft::$app->getView();
+		$markerIcon = $this->_iconSvg();
 
 		$formattedOptions = Json::encode(
 			array_merge(
@@ -402,6 +404,20 @@ CSS;
 				break;
 		}
 
+		$formattedMarkers = [];
+
+		foreach ($options->markers as $marker)
+			$formattedMarkers[] = [
+				'position' => $marker->getCenter(),
+				'label'    => $marker->label ?: '',
+				'color'    => $marker->color,
+			];
+
+		$formattedMarkers = Json::encode(
+			$formattedMarkers,
+			self::JSON_OPTS
+		);
+
 		$initJs = <<<JS
 const HERE_platform = new H.service.Platform({ apikey: '{$settings->mapToken['apiKey']}' });
 window.HERE_defaultLayers = HERE_platform.createDefaultLayers();
@@ -414,8 +430,20 @@ const {$options->id} = new H.Map(
 	{$formattedOptions}
 );
 
-{$options->id}.__behaviour = new H.mapevents.Behavior(new H.mapevents.MapEvents({$options->id}));
-{$options->id}.__ui = H.ui.UI.createDefault({$options->id}, window.HERE_defaultLayers);
+{$options->id}._behaviour = new H.mapevents.Behavior(new H.mapevents.MapEvents({$options->id}));
+{$options->id}._ui = H.ui.UI.createDefault({$options->id}, window.HERE_defaultLayers);
+{$options->id}._markers = [];
+
+{$formattedMarkers}.forEach(function (marker) {
+	const m = new H.map.Marker(
+		marker.position, 
+		{
+			icon: new H.map.Icon('{$markerIcon}'.replace('##FILL##', marker.color).replace('##LABEL##', marker.label)),
+		}
+	);
+	{$options->id}._markers.push(m);
+	{$options->id}.addObject(m);
+});
 
 window.addEventListener('resize', function () { {$options->id}.getViewPort().resize() });
 JS;
@@ -498,6 +526,26 @@ CSS;
 			return substr($str, 4);
 
 		return $str;
+	}
+
+	private function _iconSvg ()
+	{
+		static $svg;
+
+		if ($svg)
+			return $svg;
+
+		$svg = Craft::getAlias('@simplemap/resources/marker.svg');
+		$svg = file_get_contents($svg);
+		$svg = (new Sanitizer())->sanitize($svg);
+		$svg = preg_replace('/<!--.*?-->\s*/s', '', $svg);
+		$svg = preg_replace('/<title>.*?<\/title>\s*/is', '', $svg);
+		$svg = preg_replace('/<desc>.*?<\/desc>\s*/is', '', $svg);
+		$svg = preg_replace('/<\?xml.*?\?>/', '', $svg);
+		$svg = preg_replace('/[\r\n]/', '', $svg);
+		$svg = preg_replace('/[\s]{2,}/', '', $svg);
+
+		return $svg;
 	}
 
 }

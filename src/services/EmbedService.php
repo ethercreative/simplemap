@@ -174,7 +174,98 @@ CSS;
 
 	private function _embedApple (EmbedOptions $options, Settings $settings)
 	{
-		//
+		$view = Craft::$app->getView();
+
+		$token = GeoService::getToken(
+			$settings->mapToken,
+			$settings->mapTiles
+		);
+		$latLng = implode(', ', array_values($options->getCenter()));
+
+		$formattedOptions = Json::encode(
+			array_merge(
+				$options->options,
+				[
+					'center'         => '##CENTER##',
+					'cameraDistance' => '##ZOOM##',
+					'mapType'        => '##MAPTYPE##',
+				]
+			),
+			self::JSON_OPTS
+		);
+
+		switch ($settings->mapTiles)
+		{
+			default:
+			case MapTiles::MapKitStandard:
+				$type = 'Standard';
+				break;
+			case MapTiles::MapKitSatellite:
+				$type = 'Satellite';
+				break;
+			case MapTiles::MapKitMutedStandard:
+				$type = 'MutedStandard';
+				break;
+			case MapTiles::MapKitHybrid:
+				$type = 'Hybrid';
+				break;
+		}
+
+		$formattedOptions = str_replace([
+			'"##CENTER##"',
+			'"##ZOOM##"',
+			'"##MAPTYPE##"',
+		], [
+			'new mapkit.Coordinate(' . $latLng . ')',
+			'156543.03392 * Math.cos(' . $options->getCenter()['lat'] . ' * Math.PI / 180) / Math.pow(2, ' . $options->zoom . ') * ' . $options->width,
+			'mapkit.Map.MapTypes.' . $type,
+		], $formattedOptions);
+
+		$formattedMarkers = [];
+
+		foreach ($options->markers as $marker)
+			$formattedMarkers[] = [
+				'position' => array_values($marker->getCenter()),
+				'label'    => $marker->label,
+				'color'    => $marker->color,
+			];
+
+		$formattedMarkers = Json::encode(
+			$formattedMarkers,
+			self::JSON_OPTS
+		);
+
+		$js = <<<JS
+mapkit.init({ authorizationCallback: function (done) { done('{$token}') } });
+
+const {$options->id} = new mapkit.Map('{$options->id}', {$formattedOptions});
+{$options->id}._markers = [];
+{$formattedMarkers}.forEach(function (marker) {
+	marker.position.unshift(null);
+	const m = new mapkit.MarkerAnnotation(
+		new (mapkit.Coordinate.bind.apply(mapkit.Coordinate, marker.position)), 
+		{
+			glyphText: marker.label || '',
+			color: marker.color || '',
+		}
+	);
+	{$options->id}._markers.push(m);
+	{$options->id}.addAnnotation(m);
+});
+JS;
+
+		$css = <<<CSS
+#{$options->id} {
+	width: {$options->width}px;
+	height: {$options->height}px;
+}
+CSS;
+
+		$this->_js('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js');
+		$view->registerJs($js, View::POS_END);
+		$view->registerCss($css);
+
+		return '<div id="' . $options->id . '"></div>';
 	}
 
 	private function _embedMapbox (EmbedOptions $options, Settings $settings)

@@ -93,15 +93,28 @@ class EmbedService extends Component
 	private function _embedGoogle (EmbedOptions $options, Settings $settings)
 	{
 		$view = Craft::$app->getView();
-
 		$callbackName = 'init_' . $options->id;
+
+		switch ($settings->mapTiles)
+		{
+			case MapTiles::GoogleRoadmap:
+				$mapTypeId = 'roadmap';
+				break;
+			case MapTiles::GoogleTerrain:
+				$mapTypeId = 'terrain';
+				break;
+			case MapTiles::GoogleHybrid:
+			default:
+				$mapTypeId = 'hybrid';
+		}
 
 		$formattedOptions = Json::encode(
 			array_merge(
 				$options->options,
 				[
-					'center' => $options->getCenter(),
-					'zoom' => $options->zoom,
+					'center'    => $options->getCenter(),
+					'zoom'      => $options->zoom,
+					'mapTypeId' => $mapTypeId,
 				]
 			),
 			self::JSON_OPTS
@@ -156,7 +169,6 @@ CSS;
 		$view->registerJs($js, View::POS_END);
 		$view->registerCss($css);
 
-		// TODO: allow passing of HTML attributes (i.e. class)
 		return '<div id="' . $options->id . '"></div>';
 	}
 

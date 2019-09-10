@@ -99,6 +99,9 @@ return [
 	'App Code' => 'App Code',
 	'Your Here app code.' => 'Your Here app code.',
 
+	'API Key' => 'API Key',
+	'Your Here API Key (only required for front-end embed maps).' => 'Your Here API Key (only required for front-end embed maps).',
+
 	'Geolocation Service' => 'Geolocation Service',
 	'Select the service to be used for Geolocating users.' => 'Select the service to be used for Geolocating users.',
 

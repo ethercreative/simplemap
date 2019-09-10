@@ -17,6 +17,7 @@ use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\EmbedOptions;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
+use yii\base\InvalidConfigException;
 
 /**
  * Class EmbedService
@@ -235,9 +236,12 @@ CSS;
 			self::JSON_OPTS
 		);
 
-		$js = <<<JS
+		$initJs = <<<JS
 mapkit.init({ authorizationCallback: function (done) { done('{$token}') } });
+JS;
 
+
+		$js = <<<JS
 const {$options->id} = new mapkit.Map('{$options->id}', {$formattedOptions});
 {$options->id}._markers = [];
 {$formattedMarkers}.forEach(function (marker) {
@@ -262,6 +266,7 @@ JS;
 CSS;
 
 		$this->_js('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js');
+		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
 		$view->registerCss($css);
 
@@ -316,8 +321,12 @@ CSS;
 			self::JSON_OPTS
 		);
 
-		$js = <<<JS
+		$initJs = <<<JS
 mapboxgl.accessToken = '{$settings->mapToken}';
+JS;
+
+
+		$js = <<<JS
 const {$options->id} = new mapboxgl.Map({$formattedOptions});
 {$options->id}._markers = [];
 {$formattedMarkers}.forEach(function (marker) {
@@ -338,6 +347,7 @@ CSS;
 
 		$this->_js('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js');
 		$view->registerCssFile('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css');
+		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
 		$view->registerCss($css);
 
@@ -346,7 +356,87 @@ CSS;
 
 	private function _embedHere (EmbedOptions $options, Settings $settings)
 	{
-		//
+		if (!array_key_exists('apiKey', $settings->mapToken) || !$settings->mapToken['apiKey'])
+			throw new InvalidConfigException('Missing HERE API Key');
+
+		$view = Craft::$app->getView();
+
+		$formattedOptions = Json::encode(
+			array_merge(
+				$options->options,
+				[
+					'center'     => $options->getCenter(),
+					'zoom'       => $options->zoom,
+					'pixelRatio' => '##PIXELRATIO##',
+				]
+			),
+			self::JSON_OPTS
+		);
+
+		$formattedOptions = str_replace([
+			'"##PIXELRATIO##"',
+		], [
+			'window.devicePixelRatio || 1',
+		], $formattedOptions);
+
+		switch ($settings->mapTiles)
+		{
+			default:
+			case MapTiles::HereReduced:
+			case MapTiles::HerePedestrian:
+			case MapTiles::HereNormalDay:
+				$type = 'normal.map';
+				break;
+			case MapTiles::HereTerrain:
+			case MapTiles::HereNormalDayGrey:
+				$type = 'terrain.map';
+				break;
+			case MapTiles::HereNormalDayTransit:
+				$type = 'normal.transit';
+				break;
+			case MapTiles::HereSatellite:
+				$type = 'satellite.xbase';
+				break;
+			case MapTiles::HereHybrid:
+				$type = 'satellite.map';
+				break;
+		}
+
+		$initJs = <<<JS
+const HERE_platform = new H.service.Platform({ apikey: '{$settings->mapToken['apiKey']}' });
+window.HERE_defaultLayers = HERE_platform.createDefaultLayers();
+JS;
+
+		$js = <<<JS
+const {$options->id} = new H.Map(
+	document.getElementById('{$options->id}'),
+	window.HERE_defaultLayers.raster.{$type},
+	{$formattedOptions}
+);
+
+{$options->id}.__behaviour = new H.mapevents.Behavior(new H.mapevents.MapEvents({$options->id}));
+{$options->id}.__ui = H.ui.UI.createDefault({$options->id}, window.HERE_defaultLayers);
+
+window.addEventListener('resize', function () { {$options->id}.getViewPort().resize() });
+JS;
+
+		$css = <<<CSS
+#{$options->id} {
+	width: {$options->width}px;
+	height: {$options->height}px;
+}
+CSS;
+
+		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-core.js');
+		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-service.js');
+		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-ui.js');
+		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-mapevents.js');
+		$view->registerCssFile('https://js.api.here.com/v3/3.1/mapsjs-ui.css');
+		$view->registerJs($initJs, View::POS_END);
+		$view->registerJs($js, View::POS_END);
+		$view->registerCss($css);
+
+		return '<div id="' . $options->id . '"></div>';
 	}
 
 	private function _embedDefault (EmbedOptions $options)

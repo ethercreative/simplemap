@@ -137,6 +137,15 @@
 					/>
 				{% endset %}
 				{{ label('App Code', 'Your Here app code.', children) }}
+
+				{% set children %}
+					<input
+						type="text"
+						name="mapToken[apiKey]"
+						value="{{ tokenValue(settings.mapToken, 'apiKey') }}"
+					/>
+				{% endset %}
+				{{ label('API Key', 'Your Here API Key (only required for front-end embed maps).', children) }}
 			</div>
 		</div>
 	</section>

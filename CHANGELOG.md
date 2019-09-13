@@ -7,6 +7,7 @@
 - Add new map field size options
 - Add IP based user location lookup
 - Add `coordinate` query argument to CraftQL (Closes #205)
+- Add "mini" size for a tiny field footprint (Closes #203)
 
 ### Changed
 - 🍆 New, sexier UI! 💦

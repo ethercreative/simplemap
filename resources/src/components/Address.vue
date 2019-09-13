@@ -149,7 +149,7 @@
 			},
 
 			styl () {
-				if (this.hasMap)
+				if (!this.hasMap)
 					return {};
 
 				return {
@@ -195,7 +195,7 @@
 		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
 
 		overflow: hidden;
-		transition: transform 0.35s ease, opacity 0.3s ease;
+		transition: transform 0.3s ease, opacity 0.3s ease;
 
 		&:not(:first-child) {
 			margin-top: 24px;

@@ -16,6 +16,7 @@ return [
 
 	'Search for a location' => 'Search for a location',
 	'Clear address' => 'Clear address',
+	'No address selected' => 'No address selected',
 
 	'Full Address' => 'Full Address',
 	'Name / Number' => 'Name / Number',

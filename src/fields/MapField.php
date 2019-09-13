@@ -443,6 +443,7 @@ class MapField extends Field implements PreviewableFieldInterface
 			'Zoom In',
 			'Zoom Out',
 			'Center on Marker',
+			'No address selected',
 		]);
 
 		/** @var Settings $settings */
@@ -542,7 +543,12 @@ class MapField extends Field implements PreviewableFieldInterface
 			json_encode($opts)
 		);
 
-		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'></simple-map></div>';
+		if ($this->size === 'normal')
+			$children = '<div style="height:360px"></div>';
+		else
+			$children = $value->address;
+
+		return '<div id="' . $containerId . '"><simple-map options=\'' . $options . '\'>' . $children . '</simple-map></div>';
 	}
 
 	// Helpers

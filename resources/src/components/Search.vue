@@ -97,8 +97,8 @@
 		},
 
 		methods: {
-			shouldRenderSuggestions (_, loading) {
-				this.shouldShow = !loading;
+			shouldRenderSuggestions (count, loading) {
+				this.shouldShow = count > 0 && !loading;
 				return () => true;
 			},
 
@@ -106,6 +106,9 @@
 			 * Fired on autocomplete input change
 			 */
 			onInputChange (text) {
+				if (text.trim() === '')
+					this.shouldShow = false;
+
 				clearTimeout(to);
 				to = setTimeout(async () => {
 					const data       = await this.geo.search(text);

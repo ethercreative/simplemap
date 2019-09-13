@@ -1,40 +1,52 @@
 <template>
-	<div :class="wrapCls">
-		<Map
-			v-if="!config.hideMap"
-			:tiles="config.mapTiles"
-			:token="config.mapToken"
-			:latLng="{ lat: val.lat, lng: val.lng }"
-			:zoom="+val.zoom"
-			:min-zoom="config.minZoom"
-			:max-zoom="config.maxZoom"
-			@change="onMapChange"
-			@zoom="onZoom"
-			:hide-search="config.hideSearch"
-		/>
-
-		<div :class="$style.content">
-			<Search
-				v-if="!config.hideSearch"
-				:service="config.geoService"
-				:default-value="val.address"
-				:geo="geo"
-				@selected="onSearchSelected"
-				@open-offset="onResultsOpenOffset"
-				:has-map="!config.hideMap"
+	<div>
+		<div :class="wrapCls" ref="field">
+			<Map
+				v-if="!config.hideMap"
+				:tiles="config.mapTiles"
+				:token="config.mapToken"
+				:latLng="{ lat: val.lat, lng: val.lng }"
+				:zoom="+val.zoom"
+				:min-zoom="config.minZoom"
+				:max-zoom="config.maxZoom"
+				@change="onMapChange"
+				@zoom="onZoom"
+				:hide-search="config.hideSearch"
 			/>
 
-			<Address
-				v-if="!config.isSettings"
-				:hide="config.hideAddress"
-				:has-search="!config.hideSearch"
-				:has-map="!config.hideMap"
-				:showLatLng="config.showLatLng"
-				:value="val"
-				@changed="onPartChange"
-				@clear="onClear"
-				:open-offset="resultsOpenOffset"
-			/>
+			<div :class="$style.content">
+				<Search
+					v-if="!config.hideSearch"
+					:service="config.geoService"
+					:default-value="val.address"
+					:geo="geo"
+					@selected="onSearchSelected"
+					@open-offset="onResultsOpenOffset"
+					:has-map="!config.hideMap"
+				/>
+
+				<Address
+					v-if="!config.isSettings"
+					:hide="config.hideAddress"
+					:has-search="!config.hideSearch"
+					:has-map="!config.hideMap"
+					:showLatLng="config.showLatLng"
+					:value="val"
+					@changed="onPartChange"
+					@clear="onClear"
+					:open-offset="resultsOpenOffset"
+				/>
+			</div>
+		</div>
+
+		<div v-if="config.size === 'mini'" :class="$style.mini">
+			<span :class="value.address === '' && $style.empty">{{ value.address || emptyLabel }}</span>
+			<button
+				@click="onEditClick"
+				type="button"
+				ref="btn"
+				class="btn"
+			>Edit</button>
 		</div>
 
 		<input
@@ -65,14 +77,17 @@
 </template>
 
 <script lang="js">
-	import Search from './components/Search';
-	import Address from './components/Address';
-	import Map from './components/Map';
 	import Geo from './common/Geo';
 	import GeoService from './enums/GeoService';
 	import Parts from './models/Parts';
 	import Fragment from './components/Fragment';
 	import PartsLegacy from './models/PartsLegacy';
+	import Search from './components/Search';
+	import Address from './components/Address';
+	import Map from './components/Map';
+	import { t } from './filters/craft';
+
+	const MapHud = window.Garnish.HUD.extend();
 
 	export default {
 		props: {
@@ -117,7 +132,9 @@
 
 				fullAddressDirty: false,
 				defaultValue: null,
+				emptyLabel: t('No address selected'),
 
+				hud: null,
 				resultsOpenOffset: 0,
 			};
 		},
@@ -142,6 +159,11 @@
 			this.geo = new Geo(config);
 		},
 
+		mounted () {
+			if (this.config.size === 'mini')
+				this.$refs.field.style.display = 'none';
+		},
+
 		computed: {
 			wrapCls () {
 				const cls = [this.$style.wrap];
@@ -151,13 +173,27 @@
 
 				return cls;
 			},
-
 			val () {
+				if (this.hud)
+					this.hud.updateSizeAndPosition(true);
+
 				return this.value.lat === null ? this.defaultValue : this.value;
 			},
 		},
 
 		methods: {
+			onEditClick () {
+				if (this.hud) {
+					this.hud.show();
+					return;
+				}
+
+				this.$refs.field.style.display = 'block';
+				this.hud = new MapHud(this.$refs.btn, this.$refs.field, {
+					minBodyWidth: Math.min(1300 - 48, window.innerWidth * 0.9),
+				});
+			},
+
 			onResultsOpenOffset (value) {
 				this.resultsOpenOffset = value;
 			},
@@ -253,6 +289,10 @@
 			margin: 0 -12px;
 		}
 
+		:global(.hud) & {
+			margin: -24px !important;
+		}
+
 		:global(.matrixblock) & {
 			margin: 0 -14px !important;
 		}
@@ -272,6 +312,22 @@
 			}
 		}
 	}
+
+	.mini {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		:global(.btn) {
+			margin-left: 24px;
+			font-size: 14px;
+		}
+	}
+
+	.empty {
+		opacity: 0.5;
+	}
+
 	.content {
 		position: relative;
 		z-index: 2;

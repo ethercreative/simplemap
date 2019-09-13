@@ -6,6 +6,7 @@
 - Add static map image support
 - Add new map field size options
 - Add IP based user location lookup
+- Add `coordinate` query argument to CraftQL (Closes #205)
 
 ### Changed
 - 🍆 New, sexier UI! 💦

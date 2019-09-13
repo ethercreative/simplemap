@@ -185,6 +185,10 @@ class MapService extends Component
 			$query->orderBy = [];
 		}
 
+		// Coordinate CraftQL support
+		if (array_key_exists('coordinate', $value))
+			$value['location'] = $value['coordinate'];
+
 		if (array_key_exists('location', $value))
 			$search = $this->_searchLocation($query, $value, $alias);
 

@@ -48,8 +48,13 @@ class GetCraftQLSchema
 		// Query
 		// ---------------------------------------------------------------------
 
+		$coordinateType = $event->query->createInputObjectType('Coordinate');
+		$coordinateType->addFloatArgument('lat')->nonNull(true);
+		$coordinateType->addFloatArgument('lng')->nonNull(true);
+
 		$query = $event->query->createInputObjectType('MapQuery');
 		$query->addStringArgument('location');
+		$query->addArgument('coordinate')->type($coordinateType);
 		$query->addStringArgument('country');
 		$query->addFloatArgument('radius');
 		$query->addEnumArgument('unit')->values([

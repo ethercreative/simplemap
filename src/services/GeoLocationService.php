@@ -64,11 +64,12 @@ class GeoLocationService extends Component
 			return null;
 		}
 
-		if ($cached = $this->_getUserLocationFromCache($ip))
-			return $cached;
-
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
+
+		if ($cached = $this->_getUserLocationFromCache($ip, $settings))
+			return $cached;
+
 		$userLocation = null;
 
 		switch ($settings->geoLocationService)
@@ -88,7 +89,7 @@ class GeoLocationService extends Component
 		}
 
 		if ($userLocation)
-			$this->_cacheUserLocation($userLocation);
+			$this->_cacheUserLocation($userLocation, $settings);
 
 		return $userLocation;
 	}
@@ -160,12 +161,16 @@ class GeoLocationService extends Component
 	// -------------------------------------------------------------------------
 
 	/**
-	 * @param string $ip
+	 * @param string   $ip
+	 * @param Settings $settings
 	 *
 	 * @return UserLocation|false
 	 */
-	private function _getUserLocationFromCache ($ip)
+	private function _getUserLocationFromCache ($ip, Settings $settings)
 	{
+		if (!$settings->geoLocationCacheDuration)
+			return false;
+
 		return Craft::$app->getCache()->get(
 			'maps_ip_' . $ip
 		);
@@ -173,15 +178,19 @@ class GeoLocationService extends Component
 
 	/**
 	 * @param UserLocation $userLocation
+	 * @param Settings     $settings
 	 *
 	 * @return bool
 	 */
-	private function _cacheUserLocation (UserLocation $userLocation)
+	private function _cacheUserLocation (UserLocation $userLocation, Settings $settings)
 	{
+		if (!$settings->geoLocationCacheDuration)
+			return true;
+
 		return Craft::$app->getCache()->set(
 			'maps_ip_' . $userLocation->ip,
 			$userLocation,
-			60 * 60 * 24 * 30 * 2 // expire after ~2 months
+			$settings->geoLocationCacheDuration
 		);
 	}
 

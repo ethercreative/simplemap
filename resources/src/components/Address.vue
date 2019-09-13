@@ -133,8 +133,11 @@
 			cls () {
 				const cls = [this.$style.grid];
 
-				if (this.openOffset > 0)
+				if (this.hasMap && this.openOffset > 0)
 					cls.push(this.$style.fade);
+
+				if (!this.hasMap)
+					cls.push(this.$style['no-map']);
 
 				if (this.hoverDelete)
 					cls.push(this.$style.delete);
@@ -146,6 +149,9 @@
 			},
 
 			styl () {
+				if (this.hasMap)
+					return {};
+
 				return {
 					transform: `translateY(${this.openOffset}px)`,
 				};
@@ -197,6 +203,11 @@
 
 		&.fade {
 			opacity: 0.8;
+		}
+
+		&.no-map {
+			box-shadow: none;
+			border: 1px solid #DCE4EA;
 		}
 
 		@media only screen and (max-width: 1199px) {

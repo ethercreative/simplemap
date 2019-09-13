@@ -59,6 +59,9 @@
 			inputProps () {
 				const cls = [this.$style.input];
 
+				if (!this.hasMap)
+					cls.push(this.$style['no-map']);
+
 				return {
 					class: cls,
 					initialValue: this.initialValue,
@@ -77,6 +80,9 @@
 
 		watch: {
 			suggestLengthShow () {
+				if (!this.hasMap)
+					return;
+
 				const list = this.$refs.self.$el.lastElementChild;
 
 				if (!this.isOpen || !list.firstElementChild || window.matchMedia('(max-width: 767px)').matches) {
@@ -185,6 +191,11 @@
 		border-bottom: 1px solid transparent;
 		border-radius: 5px;
 		box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.20);
+
+		&.no-map {
+			box-shadow: none;
+			border: 1px solid #DCE4EA;
+		}
 
 		.open & {
 			border-radius: 5px 5px 0 0;

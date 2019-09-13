@@ -265,6 +265,7 @@
 		&.no-map {
 			min-height: 0;
 			margin: 0;
+			overflow: visible;
 
 			.content {
 				padding: 0;

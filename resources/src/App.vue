@@ -174,9 +174,6 @@
 				return cls;
 			},
 			val () {
-				if (this.hud)
-					this.hud.updateSizeAndPosition(true);
-
 				return this.value.lat === null ? this.defaultValue : this.value;
 			},
 		},

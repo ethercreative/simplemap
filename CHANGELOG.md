@@ -6,12 +6,14 @@
 - Add static map image support
 - Add new map field size options
 - Add IP based user location lookup
+- Add ability to redirect to a specific site based off user location
 - Add `coordinate` query argument to CraftQL (Closes #205)
 - Add "mini" size for a tiny field footprint (Closes #203)
 
 ### Changed
 - 🍆 New, sexier UI! 💦
 - Mapbox, Apple Maps, and Here are now only available in Maps Pro
+- Now requires Craft 3.2.1 or newer
 
 ### Improved
 - Remove Vue from JS bundle to reduce file size

@@ -6,7 +6,7 @@
   "license": "MIT",
   "minimum-stability": "dev",
   "require": {
-    "craftcms/cms": "^3.1.0",
+    "craftcms/cms": "^3.2.1",
     "mapkit/jwt": "^1.1.2",
     "geoip2/geoip2": "~2.0",
     "guzzlehttp/guzzle": "^6.3.3",

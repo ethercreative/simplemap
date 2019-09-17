@@ -8,6 +8,7 @@
 
 namespace ether\simplemap;
 
+use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterGqlTypesEvent;
@@ -15,6 +16,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Gql;
+use craft\web\Application;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use ether\simplemap\enums\GeoService;
@@ -72,12 +74,12 @@ class SimpleMap extends Plugin
 	{
 		parent::init();
 
-		\Craft::setAlias(
+		Craft::setAlias(
 			'simplemap',
 			__DIR__
 		);
 
-		\Craft::setAlias(
+		Craft::setAlias(
 			'simplemapimages',
 			__DIR__ . '/web/assets/imgs'
 		);
@@ -133,6 +135,21 @@ class SimpleMap extends Plugin
 				[$this, 'onRegisterFeedMeFields']
 			);
 		}
+
+		$request = Craft::$app->getRequest();
+		if (
+			$request->getMethod() === 'GET' &&
+			$request->getIsSiteRequest() &&
+			!$request->getIsConsoleRequest() &&
+			!$request->getIsPreview() &&
+			!$request->getIsActionRequest()
+		) {
+			Event::on(
+				Application::class,
+				Application::EVENT_INIT,
+				[$this, 'onApplicationInit']
+			);
+		}
 	}
 
 	// Settings
@@ -154,7 +171,7 @@ class SimpleMap extends Plugin
 	protected function settingsHtml ()
 	{
 		// Redirect to our settings page
-		\Craft::$app->controller->redirect(
+		Craft::$app->controller->redirect(
 			UrlHelper::cpUrl('maps/settings')
 		);
 	}
@@ -206,12 +223,18 @@ class SimpleMap extends Plugin
 		$event->types[] = MapPartsType::class;
 	}
 
+	public function onApplicationInit ()
+	{
+		if ($this->getSettings()->geoLocationAutoRedirect)
+			$this->geolocation->redirect();
+	}
+
 	// Helpers
 	// =========================================================================
 
 	public static function t ($message, $params = [])
 	{
-		return \Craft::t('simplemap', $message, $params);
+		return Craft::t('simplemap', $message, $params);
 	}
 
 	public static function v ($version, $operator = '=')

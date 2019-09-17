@@ -94,6 +94,72 @@ class GeoLocationService extends Component
 		return $userLocation;
 	}
 
+	/**
+	 * @throws Exception
+	 */
+	public function redirect ()
+	{
+		$settings = SimpleMap::getInstance()->getSettings();
+		$siteHandle = null;
+		$location = $this->lookup();
+
+		if (!$location || empty($settings->geoLocationAutoRedirect))
+			return;
+
+		foreach ($settings->geoLocationRedirectMap as $handle => $props)
+		{
+			if ($props === '*')
+			{
+				$siteHandle = $handle;
+				continue;
+			}
+
+			if (self::_validateProps($location, $props))
+			{
+				$siteHandle = $handle;
+				break;
+			}
+		}
+
+		if ($siteHandle === null)
+			return;
+
+		$site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+
+		if ($site->id === Craft::$app->getSites()->getCurrentSite()->id)
+			return;
+
+		if (!$site)
+		{
+			Craft::error('Unable to find site with handle "' . $siteHandle . '"', 'simplemap');
+			return;
+		}
+
+		if (!$site->hasUrls)
+		{
+			Craft::error('Selected site (' . $siteHandle . ') doesn\'t have URLs!', 'simplemap');
+			return;
+		}
+
+		$currentBaseUrl = Craft::$app->getSites()->getCurrentSite()->getBaseUrl();
+		$currentUrl = str_replace(
+			$currentBaseUrl,
+			'',
+			Craft::$app->getRequest()->getAbsoluteUrl()
+		);
+
+		if (strpos($currentUrl, '://') !== false)
+			$currentUrl = str_replace(
+				Craft::$app->getRequest()->getBaseUrl(),
+				'',
+				$currentUrl
+			);
+
+		$url = rtrim($site->getBaseUrl(), '/') . '/' . $currentUrl;
+
+		Craft::$app->getResponse()->redirect($url);
+	}
+
 	// Public Helpers
 	// =========================================================================
 
@@ -345,6 +411,31 @@ class GeoLocationService extends Component
 			'isEU'        => $record->country->isInEuropeanUnion,
 			'parts'       => $parts,
 		]);
+	}
+
+	/**
+	 * @param UserLocation $location
+	 * @param              $props
+	 *
+	 * @return bool
+	 */
+	private static function _validateProps (UserLocation $location, $props)
+	{
+		foreach ($props as $key => $value)
+		{
+			if (is_array($value))
+			{
+				if (self::_validateProps($location->$key, $props[$key]))
+					continue;
+
+				return false;
+			}
+
+			if ($location->$key !== $value)
+				return false;
+		}
+
+		return true;
 	}
 
 }

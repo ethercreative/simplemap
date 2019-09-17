@@ -61,7 +61,6 @@ class Settings extends Model
 	/** @var string|int How long to cache IP look-ups for (set to 0 to disable caching) */
 	public $geoLocationCacheDuration = 'P2M';
 
-	// TODO: Actually do the redirecting
 	/** @var bool Will automatically redirect the user according to $geoLocationRedirectMap when true */
 	public $geoLocationAutoRedirect = false;
 

@@ -3,7 +3,7 @@
   "description": "A beautifully simple Map field type for Craft CMS 3",
   "version": "3.7.0",
   "type": "craft-plugin",
-  "license": "MIT",
+  "license": "proprietary",
   "minimum-stability": "dev",
   "require": {
     "craftcms/cms": "^3.2.1",

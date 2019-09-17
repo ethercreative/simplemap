@@ -9,6 +9,7 @@
 - Add ability to redirect to a specific site based off user location
 - Add `coordinate` query argument to CraftQL (Closes #205)
 - Add "mini" size for a tiny field footprint (Closes #203)
+- Add `address()` method to map value for easy address formatting
 
 ### Changed
 - 🍆 New, sexier UI! 💦

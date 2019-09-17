@@ -11,6 +11,7 @@ namespace ether\simplemap\models;
 use craft\base\Model;
 use craft\helpers\Json;
 use ether\simplemap\SimpleMap;
+use Twig\Markup;
 
 /**
  * Class Map
@@ -143,6 +144,50 @@ class Map extends Model
 	public function isValueEmpty ()
 	{
 		return empty($this->lat) && empty($this->lng);
+	}
+
+	/**
+	 * Output the address in an easily formatted way
+	 *
+	 * @param array  $exclude - An array of parts to exclude from the output
+	 * @param string $glue - The glue to join the parts together
+	 *
+	 * @return Markup
+	 */
+	public function address ($exclude = [], $glue = '<br/>')
+	{
+		$addr = [];
+
+		if (!is_array($exclude))
+			$exclude = [$exclude];
+
+		foreach ([['number','address'], 'city', 'county', 'state', 'postcode', 'country'] as $part)
+		{
+			if (is_array($part))
+			{
+				$line = [];
+
+				foreach ($part as $p)
+				{
+					if (in_array($p, $exclude))
+						continue;
+
+					$line[] = $this->parts->$p;
+				}
+
+				$addr[] = implode(' ', array_filter($line));
+				continue;
+			}
+
+			if (in_array($part, $exclude))
+				continue;
+
+			$addr[] = $this->parts->$part;
+		}
+
+		$addr = array_filter($addr);
+
+		return new Markup(implode($glue, $addr), 'utf8');
 	}
 
 	// Render Map

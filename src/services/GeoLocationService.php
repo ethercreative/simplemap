@@ -220,6 +220,14 @@ class GeoLocationService extends Component
 		Craft::$app->getQueue()->push(new MaxMindDBDownloadJob());
 	}
 
+	public static function purgeDb ($filename = 'default.mmdb')
+	{
+		$file = Craft::getAlias(self::DB_STORAGE . DIRECTORY_SEPARATOR . $filename);
+
+		if (file_exists($file))
+			unlink($file);
+	}
+
 	// Private Helpers
 	// =========================================================================
 

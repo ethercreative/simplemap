@@ -19,14 +19,11 @@ use craft\services\Gql;
 use craft\web\Application;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
-use ether\simplemap\enums\GeoService;
-use ether\simplemap\enums\MapTiles;
 use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\integrations\feedme\FeedMeMaps;
 use ether\simplemap\integrations\graphql\MapPartsType;
 use ether\simplemap\integrations\graphql\MapType;
-use ether\simplemap\migrations\m190723_105637_fix_map_field_column_type;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\EmbedService;
 use ether\simplemap\services\GeoLocationService;
@@ -180,10 +177,12 @@ class SimpleMap extends Plugin
 	{
 		parent::afterSaveSettings();
 
-		if (
-			$this->getSettings()->geoLocationService === GeoLocationService::MaxMindLite &&
-			!GeoLocationService::dbExists()
-		) GeoLocationService::dbQueueDownload();
+		$service = $this->getSettings()->geoLocationService;
+
+		if ($service !== GeoLocationService::MaxMindLite)
+			GeoLocationService::purgeDb();
+		else if (!GeoLocationService::dbExists())
+			GeoLocationService::dbQueueDownload();
 	}
 
 	// Events

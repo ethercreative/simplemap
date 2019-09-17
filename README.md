@@ -228,10 +228,3 @@ Lat/Lng, to display it on a map.
 {{ location.lat }}
 {{ location.lng }}
 ```
-
-## Roadmap
-
-> Coming Soon™
-
-- Dynamic Maps template output
-- Support env in settings

@@ -185,9 +185,17 @@
 					return;
 				}
 
+				let minBodyWidth;
+
+				if (this.config.hideMap) {
+					minBodyWidth = Math.min(626, window.innerWidth * 0.9);
+				} else {
+					minBodyWidth = Math.min(1300 - 48, window.innerWidth * 0.9);
+				}
+
 				this.$refs.field.style.display = 'block';
 				this.hud = new MapHud(this.$refs.btn, this.$refs.field, {
-					minBodyWidth: Math.min(1300 - 48, window.innerWidth * 0.9),
+					minBodyWidth,
 				});
 			},
 
@@ -278,7 +286,7 @@
 	.wrap {
 		position: relative;
 		margin: 0 -24px;
-		min-height: 360px;
+		min-height: 250px;
 
 		overflow: hidden;
 
@@ -306,6 +314,11 @@
 
 			.content {
 				padding: 0;
+
+				:global(.hud) & {
+					width: 100%;
+					padding: 24px;
+				}
 			}
 		}
 	}
@@ -329,8 +342,8 @@
 		position: relative;
 		z-index: 2;
 		box-sizing: border-box;
-		padding: 24px;
 		width: 50%;
+		padding: 24px;
 
 		pointer-events: none;
 
@@ -341,8 +354,8 @@
 		}
 
 		@media only screen and (max-width: 767px) {
-			padding: 12px;
 			width: 100%;
+			padding: 12px;
 		}
 
 		& > * {

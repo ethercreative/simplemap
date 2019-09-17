@@ -267,12 +267,14 @@ class MapField extends Field implements PreviewableFieldInterface
 		$originalHideSearch  = $this->hideSearch;
 		$originalHideMap     = $this->hideMap;
 		$originalHideAddress = $this->hideAddress;
+		$originalSize        = $this->size;
 
 		$this->handle      = '__settings__';
 		$this->country     = null;
 		$this->hideSearch  = false;
 		$this->hideMap     = false;
 		$this->hideAddress = true;
+		$this->size        = 'normal';
 
 		$mapField = new Markup(
 			$this->_renderMap($value, true),
@@ -284,6 +286,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$this->hideSearch  = $originalHideSearch;
 		$this->hideMap     = $originalHideMap;
 		$this->hideAddress = $originalHideAddress;
+		$this->size        = $originalSize;
 
 		$view = Craft::$app->getView();
 

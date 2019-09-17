@@ -332,7 +332,7 @@
 		}
 
 		&.short {
-			height: 250px;
+			height: 100%;
 		}
 	}
 	.control {

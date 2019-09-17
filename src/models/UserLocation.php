@@ -36,6 +36,12 @@ class UserLocation
 	/** @var string */
 	public $address;
 
+	/** @var string */
+	public $countryCode;
+
+	/** @var bool */
+	public $isEU;
+
 	/** @var Parts */
 	public $parts;
 
@@ -68,13 +74,6 @@ class UserLocation
 
 	// Methods
 	// =========================================================================
-
-	public function isEU ()
-	{
-		// TODO: check if user is in EU
-
-		return false;
-	}
 
 	public function distance ($to, $unit = 'km')
 	{

@@ -221,11 +221,13 @@ class GeoLocationService extends Component
 		];
 
 		return new UserLocation([
-			'ip'      => $ip,
-			'lat'     => $data['latitude'],
-			'lng'     => $data['longitude'],
-			'address' => implode(', ', array_filter($parts)),
-			'parts'   => $parts,
+			'ip'          => $ip,
+			'lat'         => $data['latitude'],
+			'lng'         => $data['longitude'],
+			'address'     => implode(', ', array_filter($parts)),
+			'countryCode' => $data['country_code'],
+			'isEU'        => $data['location']['is_eu'],
+			'parts'       => $parts,
 		]);
 	}
 
@@ -250,20 +252,7 @@ class GeoLocationService extends Component
 			return null;
 		}
 
-		$parts = [
-			'city'     => $record->city->name,
-			'postcode' => $record->postal->code,
-			'state'    => $record->mostSpecificSubdivision->name,
-			'country'  => $record->country->name,
-		];
-
-		return new UserLocation([
-			'ip'      => $ip,
-			'lat'     => $record->location->latitude,
-			'lng'     => $record->location->longitude,
-			'address' => implode(', ', array_filter($parts)),
-			'parts'   => $parts,
-		]);
+		return self::_populateMaxMind($ip, $record);
 	}
 
 	/**
@@ -300,22 +289,7 @@ class GeoLocationService extends Component
 			return null;
 		}
 
-		$parts = [
-			'city'     => $record->city->name,
-			'postcode' => $record->postal->code,
-			'state'    => $record->mostSpecificSubdivision->name,
-			'country'  => $record->country->name,
-		];
-
-		return new UserLocation(
-			[
-				'ip'      => $ip,
-				'lat'     => $record->location->latitude,
-				'lng'     => $record->location->longitude,
-				'address' => implode(', ', array_filter($parts)),
-				'parts'   => $parts,
-			]
-		);
+		return self::_populateMaxMind($ip, $record);
 	}
 
 	// Misc
@@ -345,6 +319,32 @@ class GeoLocationService extends Component
 			FILTER_VALIDATE_IP,
 			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
 		);
+	}
+
+	/**
+	 * @param $ip
+	 * @param $record
+	 *
+	 * @return UserLocation
+	 */
+	private static function _populateMaxMind ($ip, $record)
+	{
+		$parts = [
+			'city'     => $record->city->name,
+			'postcode' => $record->postal->code,
+			'state'    => $record->mostSpecificSubdivision->name,
+			'country'  => $record->country->name,
+		];
+
+		return new UserLocation([
+			'ip'          => $ip,
+			'lat'         => $record->location->latitude,
+			'lng'         => $record->location->longitude,
+			'address'     => implode(', ', array_filter($parts)),
+			'countryCode' => $record->country->isoCode,
+			'isEU'        => $record->country->isInEuropeanUnion,
+			'parts'       => $parts,
+		]);
 	}
 
 }

@@ -14,6 +14,15 @@ get their tokens.
 
 #### Map Tiles & Geocoding
 
+##### OpenStreetMap / Nominatim
+No token required
+
+##### Wikimedia
+No token required
+
+##### Carto
+No token required
+
 ##### [Google](https://cloud.google.com/maps-platform/#get-started)
 You will need to enable the **Maps Javascript API** and **Places API** for if 
 using Google for the map tiles, and the **Places API** and **Geocoding API** if 
@@ -34,6 +43,9 @@ needed!
 
 ##### [ipstack](https://ipstack.com/product)
 ipstack offer free and paid-for versions of their API.
+
+##### MaxMind Lite
+No token required
 
 ##### [MaxMind](https://www.maxmind.com/en/geoip2-precision-services)
 MaxMind offer free lookup database that must be stored locally, and a more 

@@ -4,6 +4,7 @@
     "getting-started": {
       "_label": "Getting Started",
       "installation": "Installation",
+      "config": "Configuration",
       "usage": "Usage"
     },
     "rendering": {

@@ -18,7 +18,7 @@ Maps offers full mutli-site support, compatibility with Matrix,
 [CraftQL](https://plugins.craftcms.com/craftql), and the ability to search by 
 location and sort by distance.
 
-**[View in the Plugin Store](https://plugins.craftcms.com/simplemap)**
+**[View Maps on the Plugin Store](https://plugins.craftcms.com/simplemap)**
 
 ![Maps Field](./normal.png)
 

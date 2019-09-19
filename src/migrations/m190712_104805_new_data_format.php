@@ -230,11 +230,14 @@ class m190712_104805_new_data_format extends Migration
 				    []
 			    ));
 
+			    // Look, I know this is hacky but whatever who still uses MySQL
+			    // anyway? You know Postgres exists, right?
+			    $this->getDb()->createCommand('SET foreign_key_checks = 0;')->execute();
+
 			    foreach ($indexNames as $name)
-			    	$this->dropIndex($name, MapRecord::TableName);
-//			    	$this->getDb()->createCommand(
-//			    		'ALTER TABLE "' . $rawTableName . '" RENAME INDEX "' . $name . '" TO "' . $name . '_old"'
-//				    )->execute();
+				    $this->dropIndex($name, MapRecord::TableName);
+
+			    $this->getDb()->createCommand('SET foreign_key_checks = 1;')->execute();
 		    }
 
 		    $this->renameTable(MapRecord::TableName, MapRecord::OldTableName);

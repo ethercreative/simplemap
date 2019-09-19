@@ -135,9 +135,9 @@ class SimpleMap extends Plugin
 
 		$request = Craft::$app->getRequest();
 		if (
-			$request->getMethod() === 'GET'
+			!$request->getIsConsoleRequest()
+			&& $request->getMethod() === 'GET'
 			&& $request->getIsSiteRequest()
-			&& !$request->getIsConsoleRequest()
 			&& !$request->getIsPreview()
 			&& !$request->getIsActionRequest()
 		) {

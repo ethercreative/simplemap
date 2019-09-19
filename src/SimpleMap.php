@@ -149,6 +149,14 @@ class SimpleMap extends Plugin
 		}
 	}
 
+	protected function beforeUninstall (): bool
+	{
+		if ($this->getSettings()->geoLocationService === GeoLocationService::MaxMindLite)
+			GeoLocationService::purgeDb();
+
+		return parent::beforeUninstall();
+	}
+
 	// Settings
 	// =========================================================================
 

@@ -61,6 +61,7 @@ The parts contains the, well, parts that make up the address.
 - **`state`** The state or region of the location
 - **`country`** The locations country
 
+&nbsp;
 
 - **`planet`** The planet of the location
 - **`system`** The system containing the planet of the location

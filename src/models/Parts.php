@@ -45,6 +45,27 @@ class Parts extends BaseObject
 	/** @var string */
 	public $country = '';
 
+	/** @var string */
+	public $planet = 'Earth';
+
+	/** @var string */
+	public $system = 'the Solar System';
+
+	/** @var string */
+	public $arm = 'Orion Arm';
+
+	/** @var string */
+	public $galaxy = 'Milky Way';
+
+	/** @var string */
+	public $group = 'the Local Group';
+
+	/** @var string */
+	public $cluster = 'Virgo Cluster';
+
+	/** @var string */
+	public $supercluster = 'Laniakea Supercluster';
+
 	// Methods
 	// =========================================================================
 

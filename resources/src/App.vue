@@ -286,7 +286,7 @@
 	.wrap {
 		position: relative;
 		margin: 0 -24px;
-		min-height: 250px;
+		min-height: 284px;
 
 		overflow: hidden;
 

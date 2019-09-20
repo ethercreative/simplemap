@@ -10,6 +10,7 @@
 - Add `coordinate` query argument to CraftQL (Closes #205)
 - Add "mini" size for a tiny field footprint (Closes #203)
 - Add `address()` method to map value for easy address formatting
+- Add galactic address parts
 
 ### Changed
 - 🍆 New, sexier UI! 💦

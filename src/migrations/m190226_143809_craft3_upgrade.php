@@ -39,7 +39,7 @@ class m190226_143809_craft3_upgrade extends Migration
     public function safeUp()
     {
         // 1. Run the install migration
-	    if (!$this->db->tableExists(MapRecord::OldTableName))
+	    if (!$this->db->tableExists(MapRecord::OldTableName) && !$this->db->tableExists(MapRecord::TableName))
 	        (new Install())->safeUp();
 
 	    // 2. Upgrade the data

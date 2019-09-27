@@ -68,6 +68,7 @@ class m190226_143809_craft3_upgrade extends Migration
     private function _upgrade2 ()
     {
     	$mapService = SimpleMap::getInstance()->map;
+        $fieldsService = Craft::$app->getFields();
 
     	// Delete the old plugin row
 	    $this->delete(Table::PLUGINS, ['handle' => 'simple-map']);

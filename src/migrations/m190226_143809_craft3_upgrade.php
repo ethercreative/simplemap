@@ -69,7 +69,7 @@ class m190226_143809_craft3_upgrade extends Migration
     private function _upgrade2 ()
     {
     	$mapService = SimpleMap::getInstance()->map;
-        $fieldsService = Craft::$app->getFields();
+		$fieldsService = Craft::$app->getFields();
 
     	// Delete the old plugin row
 	    $this->delete(Table::PLUGINS, ['handle' => 'simple-map']);
@@ -130,7 +130,7 @@ class m190226_143809_craft3_upgrade extends Migration
 				];
 
 				$newField = $fieldsService->createField([
-					'type'                 => MapField::class,
+					'type'                 => 'ether\simplemap\fields\MapField',
 					'id'                   => $field->id,
 					'groupId'              => $field->groupId,
 					'name'                 => $field->name,

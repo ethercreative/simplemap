@@ -33,7 +33,7 @@ class Variable
 		$settings = SimpleMap::getInstance()->getSettings();
 
 		return GeoService::getToken(
-			$settings->mapToken,
+			$settings->geoToken,
 			$settings->mapTiles
 		);
 	}

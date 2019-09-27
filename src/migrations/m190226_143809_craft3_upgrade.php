@@ -121,16 +121,7 @@ class m190226_143809_craft3_upgrade extends Migration
 
 				$oldSettings = Json::decodeIfJson($field->settings);
 
-				$newSettings = [
-					'lat'     => $oldSettings['lat'],
-					'lng'     => $oldSettings['lng'],
-					'zoom'    => $oldSettings['zoom'] ?? 15,
-					'country' => strtoupper($oldSettings['countryRestriction'] ?? '') ?: null,
-					'hideMap' => $oldSettings['hideMap'],
-				];
-
-				$newField = $fieldsService->createField([
-					'type'                 => 'ether\simplemap\fields\MapField',
+				$newField = new MapField([
 					'id'                   => $field->id,
 					'groupId'              => $field->groupId,
 					'name'                 => $field->name,
@@ -139,7 +130,12 @@ class m190226_143809_craft3_upgrade extends Migration
 					'searchable'           => $field->searchable,
 					'translationMethod'    => $field->translationMethod,
 					'translationKeyFormat' => $field->translationKeyFormat,
-					'settings'             => Json::encode($newSettings),
+
+					'lat'     => $oldSettings['lat'],
+					'lng'     => $oldSettings['lng'],
+					'zoom'    => $oldSettings['zoom'] ?? 15,
+					'country' => strtoupper($oldSettings['countryRestriction'] ?? '') ?: null,
+					'hideMap' => $oldSettings['hideMap'],
 				]);
 
 				$fieldsService->saveField($newField);

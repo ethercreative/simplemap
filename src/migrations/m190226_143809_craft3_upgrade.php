@@ -99,39 +99,49 @@ class m190226_143809_craft3_upgrade extends Migration
 	    $this->dropTable('{{%simplemap_maps}}');
 
 	    // Update old field types
-	    echo '    > Upgrade map field type upgrade' . PHP_EOL;
+		echo '    > Upgrade map field type upgrade' . PHP_EOL;
 
-	    $rows = (new Query())
-		    ->select(['id', 'settings', 'handle'])
-		    ->from(Table::FIELDS)
-		    ->where(['type' => 'SimpleMap_Map'])
-		    ->all();
+		$fieldContexts = [];
+		$fieldContextsData = (new \craft\db\Query())
+			->select(['context'])
+			->from(['{{%fields}}'])
+			->all();
+		foreach ($fieldContextsData as $fieldData) {
+			$fieldContexts[] = $fieldData['context'];
+		}
+		$fieldContexts = array_unique($fieldContexts);
 
-	    foreach ($rows as $row)
-	    {
-		    echo '    > Upgrade map field ' . $row['handle'] . PHP_EOL;
+		$fields = $fieldsService->getAllFields($fieldContexts);
+		foreach ($fields as $field)
+		{
+			if ($field instanceof \craft\fields\MissingField && $field->expectedType === 'SimpleMap_Map') {
+				echo '    > Upgrade map field ' . $field->handle . PHP_EOL;
 
-	    	$id = $row['id'];
-	    	$oldSettings = Json::decodeIfJson($row['settings']);
+				$oldSettings = Json::decodeIfJson($field->settings);
 
-	    	$newSettings = [
-			    'lat'     => $oldSettings['lat'],
-			    'lng'     => $oldSettings['lng'],
-			    'zoom'    => $oldSettings['zoom'] ?? 15,
-			    'country' => strtoupper($oldSettings['countryRestriction'] ?? '') ?: null,
-			    'hideMap' => $oldSettings['hideMap'],
-		    ];
+				$newSettings = [
+					'lat'     => $oldSettings['lat'],
+					'lng'     => $oldSettings['lng'],
+					'zoom'    => $oldSettings['zoom'] ?? 15,
+					'country' => strtoupper($oldSettings['countryRestriction'] ?? '') ?: null,
+					'hideMap' => $oldSettings['hideMap'],
+				];
 
-		    $this->db->createCommand()
-			    ->update(
-			    	Table::FIELDS,
-				    [
-				    	'type' => MapField::class,
-					    'settings' => Json::encode($newSettings),
-				    ],
-				    compact('id')
-			    )
-			    ->execute();
+				$newField = $fieldsService->createField([
+					'type'                 => MapField::class,
+					'id'                   => $field->id,
+					'groupId'              => $field->groupId,
+					'name'                 => $field->name,
+					'handle'               => $field->handle,
+					'instructions'         => $field->instructions,
+					'searchable'           => $field->searchable,
+					'translationMethod'    => $field->translationMethod,
+					'translationKeyFormat' => $field->translationKeyFormat,
+					'settings'             => Json::encode($newSettings),
+				]);
+
+				$fieldsService->saveField($newField);
+			}
 	    }
 
 	    // Update the plugin settings

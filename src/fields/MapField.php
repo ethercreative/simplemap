@@ -360,6 +360,9 @@ class MapField extends Field implements PreviewableFieldInterface
 		return $this->normalizeValue($value)->isValueEmpty();
 	}
 
+	// GraphQl
+	// -------------------------------------------------------------------------
+
 	public function getContentGqlType ()
 	{
 		return MapType::getType();

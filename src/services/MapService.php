@@ -261,12 +261,7 @@ class MapService extends Component
 		$unit     = $value['unit'] ?? 'km';
 
 		// Normalize location
-		if (is_string($location))
-			$location = GeoService::latLngFromAddress($location, $country);
-		else if ($location instanceof Map)
-			$location = ['lat' => $location->lat, 'lng' => $location->lng];
-		else if (!is_array($location) || !isset($location['lat'], $location['lng']))
-			$location = null;
+		$location = GeoService::normalizeLocation($location, $country);
 
 		if ($location === null)
 			return false;
@@ -282,9 +277,7 @@ class MapService extends Component
 			$radius = 50.0;
 
 		// Normalize unit
-		if ($unit === 'miles') $unit = 'mi';
-		else if ($unit === 'kilometers') $unit = 'km';
-		else if (!in_array($unit, ['mi', 'km'])) $unit = 'km';
+		$unit = GeoService::normalizeDistance($unit);
 
 		// Base Distance
 		$distance = $unit === 'km' ? '111.045' : '69.0';

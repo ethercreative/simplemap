@@ -13,6 +13,7 @@ use craft\base\Component;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\enums\MapTiles;
+use ether\simplemap\models\Map;
 use ether\simplemap\models\Parts;
 use ether\simplemap\models\PartsLegacy;
 use ether\simplemap\models\Settings;
@@ -653,6 +654,43 @@ class GeoService extends Component
 					'Unknown geo-coding service: ' . $settings->geoService
 				);
 		}
+	}
+
+	/**
+	 * Normalize the given distance unit
+	 *
+	 * @param string $unit
+	 *
+	 * @return string
+	 */
+	public static function normalizeDistance ($unit)
+	{
+		if ($unit === 'miles') $unit = 'mi';
+		else if ($unit === 'kilometers') $unit = 'km';
+		else if (!in_array($unit, ['mi', 'km'])) $unit = 'km';
+
+		return $unit;
+	}
+
+	/**
+	 * Will normalize the given location to a lat/lng array
+	 *
+	 * @param mixed       $location
+	 * @param string|null $country
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	public static function normalizeLocation ($location, $country = null)
+	{
+		if (is_string($location))
+			$location = self::latLngFromAddress($location, $country);
+		else if ($location instanceof Map)
+			$location = ['lat' => $location->lat, 'lng' => $location->lng];
+		else if (!is_array($location) || !isset($location['lat'], $location['lng']))
+			$location = null;
+
+		return $location;
 	}
 
 	// Private Methods

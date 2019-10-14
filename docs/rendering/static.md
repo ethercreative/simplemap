@@ -20,7 +20,7 @@ method (we'll cover that later):
 - **`height`** - The height of the map image (see max image sizes below).
 - **`zoom`** - The zoom level of the map (must be between 0 and 18).
 - **`scale`** - The scale of the image (can be either 1 or 2 (retina), defaults to 1).
-- **`markers`** - An array of map markers (see below)
+- **`markers`** - An array of map [markers](#markers) (see below)
 
 ### Markers
 

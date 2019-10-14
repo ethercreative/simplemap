@@ -19,7 +19,7 @@ use Twig\Markup;
  * @author  Ether Creative
  * @package ether\simplemap\models
  */
-class Map extends Model
+class Map extends BaseLocation
 {
 
 	// Properties
@@ -37,20 +37,8 @@ class Map extends Model
 	/** @var int */
 	public $fieldId;
 
-	/** @var float */
-	public $lat;
-
-	/** @var float */
-	public $lng;
-
 	/** @var int */
 	public $zoom = 15;
-
-	/** @var string */
-	public $address;
-
-	/** @var Parts */
-	public $parts;
 
 	/** @var float|null */
 	public $distance = null;
@@ -65,20 +53,6 @@ class Map extends Model
 				unset($config[$key]);
 
 		parent::__construct($config);
-
-		if ($this->address === null)
-			$this->address = '';
-
-		if (!($this->parts instanceof Parts))
-		{
-			if ($this->parts && !is_array($this->parts))
-				$this->parts = Json::decodeIfJson($this->parts, true);
-
-			if (Parts::isLegacy($this->parts))
-				$this->parts = new PartsLegacy($this->parts);
-			else
-				$this->parts = new Parts($this->parts);
-		}
 
 		$this->distance = SimpleMap::getInstance()->map->getDistance($this);
 	}
@@ -144,50 +118,6 @@ class Map extends Model
 	public function isValueEmpty ()
 	{
 		return empty($this->lat) && empty($this->lng);
-	}
-
-	/**
-	 * Output the address in an easily formatted way
-	 *
-	 * @param array  $exclude - An array of parts to exclude from the output
-	 * @param string $glue - The glue to join the parts together
-	 *
-	 * @return Markup
-	 */
-	public function address ($exclude = [], $glue = '<br/>')
-	{
-		$addr = [];
-
-		if (!is_array($exclude))
-			$exclude = [$exclude];
-
-		foreach ([['number','address'], 'city', 'county', 'state', 'postcode', 'country'] as $part)
-		{
-			if (is_array($part))
-			{
-				$line = [];
-
-				foreach ($part as $p)
-				{
-					if (in_array($p, $exclude))
-						continue;
-
-					$line[] = $this->parts->$p;
-				}
-
-				$addr[] = implode(' ', array_filter($line));
-				continue;
-			}
-
-			if (in_array($part, $exclude))
-				continue;
-
-			$addr[] = $this->parts->$part;
-		}
-
-		$addr = array_filter($addr);
-
-		return new Markup(implode($glue, $addr), 'utf8');
 	}
 
 	// Render Map

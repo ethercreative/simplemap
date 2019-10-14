@@ -14,7 +14,6 @@
     },
     "geolocation": {
       "_label": "Geo-location",
-      "config": "Configuration",
       "get": "Get User Location",
       "redirect": "User Location Redirecting"
     }

@@ -248,7 +248,7 @@ and value is a key value array of user location properties and their required
 matches or an string to catch all.
 
 For more details on how to setup your geolocation redirects have a look at the
-[Geolocation / Configuration](../geolocation/config.md) docs.
+[Geolocation / Redirect](../geolocation/redirect.md) docs.
 
 ```php
 <?php

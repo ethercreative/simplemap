@@ -70,7 +70,7 @@ class Settings extends Model
 	 *   and their required matches or an * string to catch all.
 	 *
 	 * @example [
-	 *   'uk'     => [ 'country' => 'uk' ],
+	 *   'uk'     => [ 'countryCode' => 'uk' ],
 	 *   'eu'     => [ 'isEU' => true ],
 	 *   'global' => '*',
 	 * ]

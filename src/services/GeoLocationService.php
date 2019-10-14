@@ -433,11 +433,15 @@ class GeoLocationService extends Component
 		{
 			if (is_array($value))
 			{
-				if (self::_validateProps($location->$key, $props[$key]))
-					continue;
+				foreach ($value as $item)
+					if ($location->$key === $item)
+						continue;
 
 				return false;
 			}
+
+			if (is_callable($value))
+				return $value($location->$key);
 
 			if ($location->$key !== $value)
 				return false;

@@ -1,4 +1,4 @@
-## [Unreleased] 3.7.0
+## 3.7.0 - 2019-10-15
 ### Added
 - Add docs
 - Add Craft GraphQL support

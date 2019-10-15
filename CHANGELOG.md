@@ -24,6 +24,7 @@
 ### Fixed
 - Fix map not showing when other Vue based plugins interfere (Fixes #196)
 - Fix issue when migrating from an older version of Maps (Fixes #195)
+- Fix project config migration issue (Fixes #207)
 
 ## 3.6.4.3 - 2019-08-30
 ### Fixed

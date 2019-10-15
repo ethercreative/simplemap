@@ -37,13 +37,13 @@ class m190723_105637_fix_map_field_column_type extends Migration
 				$updates["fields.$f.contentColumnType"] = 'text';
 
 		foreach ($matrixBlockTypes as $b => $blockType)
-			if (array_key_exists('fields', $blockType))
+			if (array_key_exists('fields', $blockType) && is_array($blockType['fields']))
 				foreach ($blockType['fields'] as $f => $field)
 					if ($field['type'] === MapField::class && $field['contentColumnType'] !== 'text')
 						$updates["matrixBlockTypes.$b.fields.$f.contentColumnType"] = 'text';
 
 		foreach ($superTableBlockTypes as $b => $blockType)
-			if (array_key_exists('fields', $blockType))
+			if (array_key_exists('fields', $blockType) && is_array($blockType['fields']))
 				foreach ($blockType['fields'] as $f => $field)
 					if ($field['type'] === MapField::class && $field['contentColumnType'] !== 'text')
 						$updates["superTableBlockTypes.$b.fields.$f.contentColumnType"] = 'text';

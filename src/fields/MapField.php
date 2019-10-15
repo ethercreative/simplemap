@@ -363,6 +363,9 @@ class MapField extends Field implements PreviewableFieldInterface
 	// GraphQl
 	// -------------------------------------------------------------------------
 
+	/**
+	 * @inheritdoc
+	 */
 	public function getContentGqlType ()
 	{
 		return MapType::getType();

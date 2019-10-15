@@ -34,7 +34,7 @@ Maps supports the following map tiles:
 
   [Wikimedia](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use) | | | 
   --- | --- | ---  
-  ![Wikimedia](./src/web/assets/imgs/wikimedia.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
+  ![Wikimedia](./resources/imgs/tilesets/wikimedia.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
   Wikimedia | | 
 </details>
 <details>
@@ -42,7 +42,7 @@ Maps supports the following map tiles:
   
   [OpenStreetMap](https://www.openstreetmap.org) | | | 
   --- | --- | ---
-  ![OpenStreetMap](./src/web/assets/imgs/openstreetmap.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
+  ![OpenStreetMap](./resources/imgs/tilesets/openstreetmap.png) | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" /> | <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27400%27%20style%3D%27background%3Atransparent%27%2F%3E" />
   OpenStreetMap | | 
 </details>
 <details>
@@ -50,7 +50,7 @@ Maps supports the following map tiles:
  
   [Carto](https://carto.com/location-data-services/basemaps/) | | | 
   --- | --- | ---
-  ![Carto Voyager](./src/web/assets/imgs/carto-rastertiles-voyager.png) | ![Carto Positron](./src/web/assets/imgs/carto-light_all.png) | ![Carto Dark Matter](./src/web/assets/imgs/carto-dark_all.png)
+  ![Carto Voyager](./resources/imgs/tilesets/carto-rastertiles-voyager.png) | ![Carto Positron](./resources/imgs/tilesets/carto-light_all.png) | ![Carto Dark Matter](./resources/imgs/tilesets/carto-dark_all.png)
   Voyager | Positron | Dark Matter
 </details>
 <details>
@@ -58,9 +58,9 @@ Maps supports the following map tiles:
 
   [Mapbox](https://www.mapbox.com) | | | 
   --- | --- | ---  
-  ![Mapbox Outdoors](./src/web/assets/imgs/mapbox-outdoors.png) | ![Mapbox Streets](./src/web/assets/imgs/mapbox-streets.png) | ![Mapbox Dark](./src/web/assets/imgs/mapbox-dark.png)
+  ![Mapbox Outdoors](./resources/imgs/tilesets/mapbox-outdoors.png) | ![Mapbox Streets](./resources/imgs/tilesets/mapbox-streets.png) | ![Mapbox Dark](./resources/imgs/tilesets/mapbox-dark.png)
   Outdoors | Streets | Dark
-  ![Mapbox Light](./src/web/assets/imgs/mapbox-light.png) | |
+  ![Mapbox Light](./resources/imgs/tilesets/mapbox-light.png) | |
   Light | |
 </details>
 <details>
@@ -68,7 +68,7 @@ Maps supports the following map tiles:
 
   [Google Maps](https://www.google.com/maps) | | | 
   --- | --- | ---  
-  ![Google Roadmap](./src/web/assets/imgs/google-roadmap.png) | ![Google Terrain](./src/web/assets/imgs/google-terrain.png) | ![Google Hybrid](./src/web/assets/imgs/google-hybrid.png)
+  ![Google Roadmap](./resources/imgs/tilesets/google-roadmap.png) | ![Google Terrain](./resources/imgs/tilesets/google-terrain.png) | ![Google Hybrid](./resources/imgs/tilesets/google-hybrid.png)
   Roadmap | Terrain | Hybrid
 </details>
 <details>
@@ -76,9 +76,9 @@ Maps supports the following map tiles:
 
   [Apple MapKit](https://developer.apple.com/maps/mapkitjs/) | | | 
   --- | --- | ---  
-  ![MapKit Standard](./src/web/assets/imgs/mapkit-standard.png) | ![MapKit Muted](./src/web/assets/imgs/mapkit-muted.png) | ![MapKit Satellite](./src/web/assets/imgs/mapkit-satellite.png)
+  ![MapKit Standard](./resources/imgs/tilesets/mapkit-standard.png) | ![MapKit Muted](./resources/imgs/tilesets/mapkit-muted.png) | ![MapKit Satellite](./resources/imgs/tilesets/mapkit-satellite.png)
   Standard | Muted | Satellite
-  ![MapKit Hybrid](./src/web/assets/imgs/mapkit-hybrid.png) | |
+  ![MapKit Hybrid](./resources/imgs/tilesets/mapkit-hybrid.png) | |
   Hybrid | |  
 </details>
 <details>
@@ -86,11 +86,11 @@ Maps supports the following map tiles:
   
   [Here](https://www.here.com/) | | | 
   --- | --- | ---
-  ![Here Day](./src/web/assets/imgs/here-normal-day.png) | ![Here Day Grey](./src/web/assets/imgs/here-normal-day-grey.png) | ![Here Day Transit](./src/web/assets/imgs/here-normal-day-transit.png)
+  ![Here Day](./resources/imgs/tilesets/here-normal-day.png) | ![Here Day Grey](./resources/imgs/tilesets/here-normal-day-grey.png) | ![Here Day Transit](./resources/imgs/tilesets/here-normal-day-transit.png)
   Day | Day Grey | Day Transit
-  ![Here Reduced](./src/web/assets/imgs/here-reduced-day.png) | ![Here Pedestrian](./src/web/assets/imgs/here-pedestrian-day.png) | ![Here Terrain](./src/web/assets/imgs/here-terrain-day.png)
+  ![Here Reduced](./resources/imgs/tilesets/here-reduced-day.png) | ![Here Pedestrian](./resources/imgs/tilesets/here-pedestrian-day.png) | ![Here Terrain](./resources/imgs/tilesets/here-terrain-day.png)
   Reduced | Pedestrian | Terrain
-  ![Here Satellite](./src/web/assets/imgs/here-satellite-day.png) | ![Here Hybrid](./src/web/assets/imgs/here-hybrid-day.png) |
+  ![Here Satellite](./resources/imgs/tilesets/here-satellite-day.png) | ![Here Hybrid](./resources/imgs/tilesets/here-hybrid-day.png) |
   Satellite | Hybrid |
 </details>
 

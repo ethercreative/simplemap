@@ -16,7 +16,7 @@ icon.
 To install via command-line execute the following from inside your projects root
 directory:
 
-```shell script
+```bash
 composer require ether/simplemap
 
 ./craft install/plugin simplemap

@@ -174,8 +174,8 @@ return [
 	// -------------------------------------------------------------------------
 
 	'Getting API Keys' => 'Getting API Keys',
-	'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.' =>
-		'You will need to enable the **Maps Javascript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.',
+	'You will need to enable the **Maps JavaScript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.' =>
+		'You will need to enable the **Maps JavaScript API** and **Places API** for if using Google for the map tiles, and the **Places API** and **Geocoding API** if you are using it for the Geo service.',
 	'You can use the same key for both map tiles and geo service, no configuration needed!' =>
 		'You can use the same key for both map tiles and geo service, no configuration needed!',
 	'We currently only support Apple MapKit for map tiles only.' =>

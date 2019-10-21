@@ -4,12 +4,12 @@ title: Configuration
 
 # Configuration
 
-There are two ways to configure **Maps**, via the Craft CP or using a config 
+There are two ways to configure **Maps**, via the Craft CP or using a config
 file (for advanced configuration).
 
 ### Services & Tokens
 
-Below is a list of the various services supported by Maps and links on how to 
+Below is a list of the various services supported by Maps and links on how to
 get their tokens.
 
 #### Map Tiles & Geocoding
@@ -24,19 +24,19 @@ No token required
 No token required
 
 ##### [Google](https://cloud.google.com/maps-platform/#get-started)
-You will need to enable the **Maps Javascript API** and **Places API** for if 
-using Google for the map tiles, and the **Places API** and **Geocoding API** if 
+You will need to enable the **Maps JavaScript API** and **Places API** for if
+using Google for the map tiles, and the **Places API** and **Geocoding API** if
 you are using it for the Geo service.
 
 ##### [Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
-You can use the same key for both map tiles and geo service, no configuration 
+You can use the same key for both map tiles and geo service, no configuration
 needed!
 
 ##### [Apple MapKit](https://developer.apple.com/documentation/mapkitjs/setting_up_mapkit_js)
 We currently only support Apple MapKit for map tiles only.
 
 ##### [Here](https://developer.here.com/)
-You can use the same key for both map tiles and geo service, no configuration 
+You can use the same key for both map tiles and geo service, no configuration
 needed!
 
 #### Geolocation
@@ -48,12 +48,12 @@ ipstack offer free and paid-for versions of their API.
 No token required
 
 ##### [MaxMind](https://www.maxmind.com/en/geoip2-precision-services)
-MaxMind offer free lookup database that must be stored locally, and a more 
+MaxMind offer free lookup database that must be stored locally, and a more
 accurate paid-for version of their API.
 
 ## CP
 
-You can get to the Maps settings in the Craft CP by navigating to "Settings" -> 
+You can get to the Maps settings in the Craft CP by navigating to "Settings" ->
 "Maps" in an environment where `allowAdminChanges` is set to `true`.
 
 ## Config File
@@ -92,7 +92,7 @@ _Default: `''`_
 The token to use with your selected map tileset. This is only required when you
 are using a tileset that requires a token.
 
-**Mapbox & Google Maps**  
+**Mapbox & Google Maps**
 For these services your token should be a string containing the token.
 
 ```php
@@ -103,7 +103,7 @@ return [
 ];
 ```
 
-**Apple MapKit**  
+**Apple MapKit**
 Your token should be an array containing `privateKey`, `teamId`, `keyId`.
 
 ```php
@@ -118,7 +118,7 @@ return [
 ];
 ```
 
-**Here**  
+**Here**
 The token should be an array containing `appId`, `apiKey`, `appCode`.
 
 ```php
@@ -151,10 +151,10 @@ return [
 #### `geoToken`
 _Default: `''`_
 
-The token to use with your selected geocoding service. This is only required 
+The token to use with your selected geocoding service. This is only required
 when you are using a geocoding that requires a token.
 
-**Mapbox & Google Maps**  
+**Mapbox & Google Maps**
 For these services your token should be a string containing the token.
 
 ```php
@@ -165,7 +165,7 @@ return [
 ];
 ```
 
-**Here**  
+**Here**
 The token should be an array containing `appId`, `appCode`.
 
 ```php
@@ -182,7 +182,7 @@ return [
 #### `geoLocationService`
 _Default: `GeoLocationService::None`_
 
-The geolocation service to use. Must be set to one of the `GeoLocationService` 
+The geolocation service to use. Must be set to one of the `GeoLocationService`
 constants.
 
 ```php
@@ -198,10 +198,10 @@ return [
 #### `geoLocationToken`
 _Default: `''`_
 
-The token to use with your selected geolocation service. This is only required 
+The token to use with your selected geolocation service. This is only required
 when you are using a geolocation that requires a token.
 
-**ipstack**  
+**ipstack**
 For this services your token should be a string containing the token.
 
 ```php
@@ -212,7 +212,7 @@ return [
 ];
 ```
 
-**MaxMind**  
+**MaxMind**
 The token should be an array containing `accountId`, `licenseKey`.
 
 ```php
@@ -243,8 +243,8 @@ _Default: `[]`_
 
 This dictates what site the user is redirected to based off their IPs location.
 
-It should be a key value array where key is the handle of the site to redirect, 
-and value is a key value array of user location properties and their required 
+It should be a key value array where key is the handle of the site to redirect,
+and value is a key value array of user location properties and their required
 matches or an string to catch all.
 
 For more details on how to setup your geolocation redirects have a look at the

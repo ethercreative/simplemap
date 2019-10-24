@@ -2,6 +2,9 @@
 ### Added
 - Add support for `:empty:` and `:notempty:` (Fixes #214)
 
+### Fixed
+- Fix `embed` and `imgSrcSet` not setting options correctly when outputting from a map field (Fixes #215)
+
 ## 3.7.0 - 2019-10-15
 ### Added
 - Add docs

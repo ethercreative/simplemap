@@ -53,6 +53,7 @@ class StaticOptions
 	 * @param array $config
 	 *
 	 * @throws InvalidConfigException
+	 * @throws \Exception
 	 */
 	public function __construct ($config = [])
 	{
@@ -62,6 +63,8 @@ class StaticOptions
 			$center = ['lat' => $center->lat, 'lng' => $center->lng, 'zoom' => $center->zoom];
 		elseif ($center instanceof UserLocation)
 			$center = ['lat' => $center->lat, 'lng' => $center->lng];
+		elseif (is_string($center))
+			$center = GeoService::latLngFromAddress($this->center);
 
 		$config['center'] = $center;
 
@@ -96,9 +99,6 @@ class StaticOptions
 	 */
 	public function getCenter ()
 	{
-		if (is_string($this->center))
-			$this->center = GeoService::latLngFromAddress($this->center);
-
 		if (!array_key_exists('lat', $this->center) || !array_key_exists('lng', $this->center))
 			$this->center = ['lat' => $this->center[0], 'lng' => $this->center[1]];
 

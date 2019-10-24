@@ -137,13 +137,7 @@ class Map extends BaseLocation
 	public function img ($options = [])
 	{
 		return SimpleMap::getInstance()->static->generate(
-			array_merge($options, [
-				'center' => [
-					$this->lat,
-					$this->lng,
-				],
-				'zoom' => $this->zoom,
-			])
+			$this->_getMapOptions($options)
 		);
 	}
 
@@ -157,6 +151,8 @@ class Map extends BaseLocation
 	 */
 	public function imgSrcSet ($options = [])
 	{
+		$options = $this->_getMapOptions($options);
+
 		$x1 = $this->img(array_merge($options, ['scale' => 1]));
 		$x2 = $this->img(array_merge($options, ['scale' => 2]));
 
@@ -173,7 +169,29 @@ class Map extends BaseLocation
 	 */
 	public function embed ($options = [])
 	{
+		$options = $this->_getMapOptions($options);
 		return SimpleMap::getInstance()->embed->embed($options);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	/**
+	 * Merge options w/ map properties
+	 *
+	 * @param array $options
+	 *
+	 * @return array
+	 */
+	private function _getMapOptions ($options)
+	{
+		return array_merge($options, [
+			'center' => [
+				$this->lat,
+				$this->lng,
+			],
+			'zoom'   => $this->zoom,
+		]);
 	}
 
 }

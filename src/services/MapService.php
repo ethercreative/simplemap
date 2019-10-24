@@ -176,6 +176,24 @@ class MapService extends Component
 		$query->query->join('JOIN', $table . ' ' . $alias, $on);
 		$query->subQuery->join('JOIN', $table . ' ' . $alias, $on);
 
+		if ($value === ':empty:')
+		{
+			$query->query->andWhere([
+				'[[' . $alias . '.lat]]' => null,
+			]);
+
+			return;
+		}
+		else if ($value === ':notempty:' || $value === 'not :empty:')
+		{
+			$query->query->andWhere([
+				'not',
+				['[[' . $alias . '.lat]]' => null],
+			]);
+
+			return;
+		}
+
 		$oldOrderBy = null;
 		$search = false;
 

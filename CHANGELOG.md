@@ -1,4 +1,4 @@
-## [Unreleased] 3.7.1
+## 3.7.1 - 2019-10-24
 ### Added
 - Add support for `:empty:` and `:notempty:` (Fixes #214)
 

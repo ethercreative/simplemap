@@ -64,7 +64,7 @@ class StaticOptions
 		elseif ($center instanceof UserLocation)
 			$center = ['lat' => $center->lat, 'lng' => $center->lng];
 		elseif (is_string($center))
-			$center = GeoService::latLngFromAddress($this->center);
+			$center = GeoService::latLngFromAddress($center);
 
 		$config['center'] = $center;
 

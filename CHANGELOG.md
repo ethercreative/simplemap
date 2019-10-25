@@ -1,3 +1,7 @@
+## [Unreleased] 3.7.2
+### Fixed
+- Fix map embed / static options not converting center string correctly
+
 ## 3.7.1 - 2019-10-24
 ### Added
 - Add support for `:empty:` and `:notempty:` (Fixes #214)

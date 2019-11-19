@@ -53,6 +53,9 @@
 				if (this.isOpen)
 					cls.push(this.$style.open);
 
+				if (!this.hasMap)
+					cls.push(this.$style['no-map']);
+
 				return cls;
 			},
 
@@ -181,6 +184,10 @@
 			left: 16px;
 			pointer-events: none;
 		}
+
+		&.no-map {
+			margin-right: 0;
+		}
 	}
 	.input {
 		width: 100%;
@@ -215,6 +222,7 @@
 		padding: 0 20px 20px;
 
 		overflow: hidden;
+		pointer-events: none;
 	}
 	.results {
 		position: relative;
@@ -228,6 +236,7 @@
 
 		transform: translateY(calc(-100% - 15px));
 		transition: transform 0.3s ease;
+		pointer-events: all;
 
 		.open & {
 			transform: translateY(0);

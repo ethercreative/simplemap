@@ -12,6 +12,7 @@
 				@change="onMapChange"
 				@zoom="onZoom"
 				:hide-search="config.hideSearch"
+				:hide-address="config.hideAddress"
 			/>
 
 			<div :class="$style.content">

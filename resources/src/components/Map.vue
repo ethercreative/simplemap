@@ -23,6 +23,7 @@
 			minZoom: Number,
 			maxZoom: Number,
 			hideSearch: Boolean,
+			hideAddress: Boolean,
 		},
 
 		data () {
@@ -138,12 +139,7 @@
 
 		computed: {
 			cls () {
-				const cls = [this.$style.map];
-
-				if (this.hideSearch)
-					cls.push(this.$style.short);
-
-				return cls;
+				return [this.$style.map];
 			},
 
 			tileLayer () {
@@ -329,10 +325,6 @@
 		@media only screen and (max-width: 767px) {
 			height: 300px;
 			bottom: auto;
-		}
-
-		&.short {
-			height: 100%;
 		}
 	}
 	.control {

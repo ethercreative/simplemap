@@ -136,6 +136,9 @@
 				if (this.hasMap && this.openOffset > 0)
 					cls.push(this.$style.fade);
 
+				if (!this.hasSearch)
+					cls.push(this.$style['no-search']);
+
 				if (!this.hasMap)
 					cls.push(this.$style['no-map']);
 
@@ -219,7 +222,12 @@
 		}
 
 		@media only screen and (max-width: 767px) {
-			margin-top: 200px !important;
+			&:not(.no-map):not(.no-search) {
+				margin-top: 200px !important;
+			}
+			&:not(.no-map).no-search {
+				margin-top: 260px !important;
+			}
 		}
 
 		&, * {

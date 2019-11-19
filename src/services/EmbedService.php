@@ -545,9 +545,11 @@ CSS;
 		$center = Json::encode(array_values($options->getCenter()), self::JSON_OPTS);
 
 		$initJs = <<<JS
-window.LMapTiles = L.tileLayer('{$tiles}'.replace('##SCALE##', L.Browser.retina ? '@2x.png' : '.png'), {
-	attribution: '{$attr}',
-});
+window.LMapTiles = function (map) {
+	L.tileLayer('{$tiles}'.replace('##SCALE##', L.Browser.retina ? '@2x.png' : '.png'), {
+		attribution: '{$attr}',
+	}).addTo(map);
+};
 window.LMapMarkerIcon = function (marker) {
 	return L.divIcon({
 		html: '{$markerIcon}'.replace('##FILL##', marker.color).replace('##LABEL##', marker.label),
@@ -559,10 +561,11 @@ window.LMapMarkerIcon = function (marker) {
 JS;
 
 		$js = <<<JS
+/* Start Map: {$options->id} */
 const {$options->id} = L.map('{$options->id}', {$formattedOptions})
 	.setView({$center}, {$options->zoom});
 
-window.LMapTiles.addTo({$options->id});
+window.LMapTiles({$options->id});
 {$options->id}._markers = [];
 {$formattedMarkers}.forEach(function (marker) {
 	const m = L.marker(
@@ -572,6 +575,7 @@ window.LMapTiles.addTo({$options->id});
 	{$options->id}._markers.push(m);
 	{$options->id}.addLayer(m);
 });
+/* End Map: {$options->id} */
 JS;
 
 		$css = <<<CSS

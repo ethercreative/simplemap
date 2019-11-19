@@ -6,6 +6,7 @@
 - Fix map embed / static options not converting center string correctly
 - Fix multiple leaflet maps not rendering correctly
 - Fix map not being draggable on mobile (Fixes #220)
+- Fix mini-map going off screen on small laptops (Fixes #222)
 
 ## 3.7.1 - 2019-10-24
 ### Added

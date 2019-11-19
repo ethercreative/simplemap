@@ -191,7 +191,7 @@
 				if (this.config.hideMap) {
 					minBodyWidth = Math.min(626, window.innerWidth * 0.9);
 				} else {
-					minBodyWidth = Math.min(1300 - 48, window.innerWidth * 0.9);
+					minBodyWidth = Math.min(834, window.innerWidth * 0.9);
 				}
 
 				this.$refs.field.style.display = 'block';

@@ -74,7 +74,7 @@ class StaticOptions
 		if (!empty($config))
 			Yii::configure($this, $config);
 
-		foreach (['center', 'width', 'height', 'zoom', 'scale'] as $key)
+		foreach (['center', 'zoom', 'scale'] as $key)
 			if (empty($this->$key))
 				throw new InvalidConfigException('Map ' . $key . ' is missing!');
 
@@ -107,7 +107,7 @@ class StaticOptions
 
 	public function getSize ()
 	{
-		return $this->width . 'x' . $this->height;
+		return ($this->width ?? 0) . 'x' . ($this->height ?? 0);
 	}
 
 }

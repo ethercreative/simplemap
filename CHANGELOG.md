@@ -1,4 +1,7 @@
 ## [Unreleased] 3.7.2
+### Changed
+- Embed map width and height can now be set to `null` (Fixes #221)
+
 ### Fixed
 - Fix map embed / static options not converting center string correctly
 - Fix multiple leaflet maps not rendering correctly

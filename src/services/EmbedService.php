@@ -168,16 +168,11 @@ function {$callbackName} () {
 }
 JS;
 
-		$css = <<<CSS
-#{$options->id} {
-	width: {$options->width}px;
-	height: {$options->height}px;
-}
-CSS;
+		$css = $this->_getCss($options);
 
 
 		$view->registerJs($js, View::POS_END);
-		$view->registerCss($css);
+		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';
 	}
@@ -274,17 +269,12 @@ const {$options->id} = new mapkit.Map('{$options->id}', {$formattedOptions});
 });
 JS;
 
-		$css = <<<CSS
-#{$options->id} {
-	width: {$options->width}px;
-	height: {$options->height}px;
-}
-CSS;
+		$css = $this->_getCss($options);
 
 		$this->_js('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js');
 		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
-		$view->registerCss($css);
+		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';
 	}
@@ -361,18 +351,13 @@ const {$options->id} = new mapboxgl.Map({$formattedOptions});
 });
 JS;
 
-		$css = <<<CSS
-#{$options->id} {
-	width: {$options->width}px;
-	height: {$options->height}px;
-}
-CSS;
+		$css = $this->_getCss($options);
 
 		$this->_js('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js');
 		$view->registerCssFile('https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css');
 		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
-		$view->registerCss($css);
+		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';
 	}
@@ -477,12 +462,7 @@ const {$options->id} = new H.Map(
 window.addEventListener('resize', function () { {$options->id}.getViewPort().resize() });
 JS;
 
-		$css = <<<CSS
-#{$options->id} {
-	width: {$options->width}px;
-	height: {$options->height}px;
-}
-CSS;
+		$css = $this->_getCss($options);
 
 		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-core.js');
 		$this->_js('https://js.api.here.com/v3/3.1/mapsjs-service.js');
@@ -491,7 +471,7 @@ CSS;
 		$view->registerCssFile('https://js.api.here.com/v3/3.1/mapsjs-ui.css');
 		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
-		$view->registerCss($css);
+		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';
 	}
@@ -578,12 +558,7 @@ window.LMapTiles({$options->id});
 /* End Map: {$options->id} */
 JS;
 
-		$css = <<<CSS
-#{$options->id} {
-	width: {$options->width}px;
-	height: {$options->height}px;
-}
-CSS;
+		$css = $this->_getCss($options);
 
 		$this->_js(
 			'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
@@ -601,7 +576,7 @@ CSS;
 		);
 		$view->registerJs($initJs, View::POS_END);
 		$view->registerJs($js, View::POS_END);
-		$view->registerCss($css);
+		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';
 	}
@@ -680,6 +655,22 @@ CSS;
 		$svg = preg_replace('/[\s]{2,}/', '', $svg);
 
 		return $svg;
+	}
+
+	private function _getCss (EmbedOptions $options)
+	{
+		if ($options->width === null && $options->height === null)
+			return null;
+
+		$css = "#{$options->id} {";
+
+		if ($options->width !== null)
+			$css .= 'width:' . $options->width . 'px;';
+
+		if ($options->height !== null)
+			$css .= 'height:' . $options->height . 'px;';
+
+		return $css . '}';
 	}
 
 }

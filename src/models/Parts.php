@@ -199,7 +199,7 @@ class Parts extends BaseObject
 				return $a;
 			},
 			[
-				'number' => $parts['address'],
+				'number' => @$parts['address'],
 				$parts['place_type'][0] => $parts['text'],
 			]
 		);

@@ -213,7 +213,7 @@ class MapService extends Component
 		if (array_key_exists('distance', $query->orderBy))
 			$this->_replaceOrderBy($query, $search);
 
-		if ($oldOrderBy !== null)
+		if (empty($query->orderBy))
 			$query->orderBy = $oldOrderBy;
 	}
 

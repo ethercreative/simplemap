@@ -1,6 +1,7 @@
 ## [Unreleased] 3.7.3
 ### Fixed
 - Fix issue with Mapbox parts lookup when address property is missing
+- Fix issue with count when doing a location search
 
 ## 3.7.2 - 2019-11-19
 ### Changed

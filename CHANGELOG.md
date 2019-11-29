@@ -1,3 +1,7 @@
+## [Unreleased] 3.7.3
+### Fixed
+- Fix issue with Mapbox parts lookup when address property is missing
+
 ## 3.7.2 - 2019-11-19
 ### Changed
 - Embed map width and height can now be set to `null` (Fixes #221)

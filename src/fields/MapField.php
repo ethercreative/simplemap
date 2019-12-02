@@ -294,7 +294,6 @@ class MapField extends Field implements PreviewableFieldInterface
 			'*' => SimpleMap::t('All Countries'),
 		], GeoService::$countries);
 
-		/** @noinspection PhpComposerExtensionStubsInspection */
 		return $view->renderTemplate('simplemap/field-settings', [
 			'map' => $mapField,
 			'field' => $this,
@@ -314,7 +313,6 @@ class MapField extends Field implements PreviewableFieldInterface
 		if ($element !== null && $element->hasEagerLoadedElements($this->handle))
 			$value = $element->getEagerLoadedElements($this->handle);
 
-		/** @noinspection PhpComposerExtensionStubsInspection */
 		return new Markup(
 			$this->_renderMap($value ?: new Map()),
 			'utf-8'
@@ -354,6 +352,7 @@ class MapField extends Field implements PreviewableFieldInterface
 
 	/**
 	 * @inheritdoc
+	 * @throws \Exception
 	 */
 	public function isValueEmpty ($value, ElementInterface $element): bool
 	{

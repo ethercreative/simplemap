@@ -704,7 +704,7 @@ class GeoService extends Component
 		$url = 'https://geocoder.api.here.com/6.2/geocode.json';
 		$url .= '?app_id=' . $token['appId'];
 		$url .= '&app_code=' . $token['appCode'];
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&searchtext=' . rawurlencode($address);
 
 		if ($country !== null)
@@ -733,7 +733,7 @@ class GeoService extends Component
 	{
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json';
 		$url .= '?address=' . rawurlencode($address);
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		if ($country !== null)
 		{
 			if (static::_validateCountryCode($country))
@@ -759,7 +759,7 @@ class GeoService extends Component
 	{
 		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 		$url .= rawurlencode($address) . '.json?limit=1';
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&access_token=' . $token;
 		if ($country !== null)
 		{
@@ -784,7 +784,7 @@ class GeoService extends Component
 	private static function _latLngFromAddress_Nominatim ($address, $country)
 	{
 		$url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1';
-		$url .= '&accept-language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&q=' . rawurlencode($address);
 		if ($country !== null)
 		{
@@ -814,7 +814,7 @@ class GeoService extends Component
 		$url = 'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json';
 		$url .= '?app_id=' . $token['appId'];
 		$url .= '&app_code=' . $token['appCode'];
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&mode=retrieveAddresses&limit=1&jsonattributes=1';
 		$url .= '&prox=' . rawurlencode($lat) . ',' . rawurldecode($lng) . ',1';
 
@@ -836,7 +836,7 @@ class GeoService extends Component
 	{
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json';
 		$url .= '?latlng=' . rawurlencode($lat) . ',' . rawurldecode($lng);
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&key=' . $token;
 
 		$data = (string) static::_client()->get($url)->getBody();
@@ -858,7 +858,7 @@ class GeoService extends Component
 		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 		$url .= rawurlencode($lng) . ',' . rawurldecode($lat) . '.json?limit=1';
 		$url .= '&types=address,country,postcode,place,locality,district,neighborhood';
-		$url .= '&language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&access_token=' . $token;
 
 		$data = (string) static::_client()->get($url)->getBody();
@@ -878,7 +878,7 @@ class GeoService extends Component
 	private static function _addressFromLatLng_Nominatim ($lat, $lng)
 	{
 		$url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&addressdetails=1';
-		$url .= '&accept-language=' . \Craft::$app->locale->getLanguageID();
+		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&lat=' . rawurlencode($lat) . '&lon=' . rawurldecode($lng);
 
 		$data = (string) static::_client()->get($url)->getBody();

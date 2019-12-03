@@ -8,6 +8,7 @@
 
 namespace ether\simplemap\services;
 
+use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -173,12 +174,11 @@ class MapService extends Component
 			'[[' . $alias . '.fieldId]] = ' . $field->id,
 		];
 
-		$query->query->join('JOIN', $table . ' ' . $alias, $on);
 		$query->subQuery->join('JOIN', $table . ' ' . $alias, $on);
 
 		if ($value === ':empty:')
 		{
-			$query->query->andWhere([
+			$query->subQuery->andWhere([
 				'[[' . $alias . '.lat]]' => null,
 			]);
 
@@ -186,7 +186,7 @@ class MapService extends Component
 		}
 		else if ($value === ':notempty:' || $value === 'not :empty:')
 		{
-			$query->query->andWhere([
+			$query->subQuery->andWhere([
 				'not',
 				['[[' . $alias . '.lat]]' => null],
 			]);
@@ -336,10 +336,15 @@ class MapService extends Component
 		// Filter the query
 		$query
 			->subQuery
-			->andWhere($restrict)
-			->andWhere($search . ' <= ' . $radius);
+			->addSelect($search . ' as [[mapsCalculatedDistance]]')
+			->andWhere($restrict);
 
-		return $search;
+		if (Craft::$app->getDb()->driverName === 'pgsql')
+			$query->subQuery->andWhere($search . ' <= ' . $radius);
+		else
+			$query->subQuery->andHaving('[[mapsCalculatedDistance]] <= ' . $radius);
+
+		return '[[mapsCalculatedDistance]]';
 	}
 
 	/**

@@ -1,3 +1,7 @@
+## 3.7.4 - 2019-12-03
+### Improved
+- 🔥 Improved location searching and distance sorting by up to 1800%! ⚡️
+
 ## 3.7.3 - 2019-11-29
 ### Fixed
 - Fix issue with Mapbox parts lookup when address property is missing

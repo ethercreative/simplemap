@@ -17,6 +17,7 @@ use craft\elements\db\ElementQueryInterface;
 use ether\simplemap\models\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\records\Map as MapRecord;
+use ether\simplemap\SimpleMap;
 
 /**
  * Class MapService
@@ -227,6 +228,14 @@ class MapService extends Component
 	 */
 	public function populateMissingData (Map $map, MapField $field)
 	{
+		// Missing zoom
+		if (!$map->zoom)
+			$map->zoom = $field->zoom;
+
+		// Skip the rest if populate missing is disabled
+		if (SimpleMap::getInstance()->getSettings()->disablePopulateMissingFieldData)
+			return;
+
 		$postcode = is_array($map->parts)
 			? @$map->parts['postcode']
 			: $map->parts->postcode;
@@ -249,10 +258,6 @@ class MapService extends Component
 				array_filter((array) $map->parts)
 			);
 		}
-
-		// Missing zoom
-		if (!$map->zoom)
-			$map->zoom = $field->zoom;
 	}
 
 	// Private Methods

@@ -179,6 +179,12 @@ return [
 ];
 ```
 
+#### `disablePopulateMissingFieldData`
+_Default: `false`_
+
+Will disable the automatic population of missing field data. This can be useful 
+in preventing API spam when importing lots of map data.
+
 #### `geoLocationService`
 _Default: `GeoLocationService::None`_
 

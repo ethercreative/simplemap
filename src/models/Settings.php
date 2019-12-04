@@ -49,6 +49,13 @@ class Settings extends Model
 	/** @var string|array The token for the geo-coding service */
 	public $geoToken = '';
 
+	/**
+	 * @var bool Will disable the automatic population of missing field data.
+	 *   This can be useful in preventing API spam when importing lots of map
+	 *   data.
+	 */
+	public $disablePopulateMissingFieldData = false;
+
 	// Properties: Geo-location
 	// -------------------------------------------------------------------------
 

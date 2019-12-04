@@ -1,3 +1,7 @@
+## [Unreleased] 3.7.5
+### Added
+- Add config option to disable missing field data population (Fixes #226)
+
 ## 3.7.4 - 2019-12-03
 ### Improved
 - 🔥 Improved location searching and distance sorting by up to 1800%! ⚡️

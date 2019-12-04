@@ -1,4 +1,4 @@
-## [Unreleased] 3.7.5
+## 3.7.5 - 2019-12-04
 ### Added
 - Add config option to disable missing field data population (Fixes #226)
 - Add Current Location button to Map (Closes #219)

@@ -13,6 +13,7 @@
 				@zoom="onZoom"
 				:hide-search="config.hideSearch"
 				:hide-address="config.hideAddress"
+				:show-current-location="config.showCurrentLocation"
 			/>
 
 			<div :class="$style.content">
@@ -111,6 +112,7 @@
 					hideMap: false,
 					hideAddress: false,
 					showLatLng: false,
+					showCurrentLocation: false,
 					minZoom: 3,
 					maxZoom: 20,
 					mapTiles: 'wikimedia',

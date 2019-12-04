@@ -93,6 +93,12 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $showLatLng = false;
 
 	/**
+	 * @var bool - If true, will show a button to centre the map on the users
+	 *   current location.
+	 */
+	public $showCurrentLocation = false;
+
+	/**
 	 * @var string - The size of the field
 	 *   (can be either "normal", "mini")
 	 */
@@ -262,31 +268,34 @@ class MapField extends Field implements PreviewableFieldInterface
 		$value->lng  = $this->lng;
 		$value->zoom = $this->zoom;
 
-		$originalHandle      = $this->handle;
-		$originalCountry     = $this->country;
-		$originalHideSearch  = $this->hideSearch;
-		$originalHideMap     = $this->hideMap;
-		$originalHideAddress = $this->hideAddress;
-		$originalSize        = $this->size;
+		$originalHandle              = $this->handle;
+		$originalCountry             = $this->country;
+		$originalHideSearch          = $this->hideSearch;
+		$originalHideMap             = $this->hideMap;
+		$originalHideAddress         = $this->hideAddress;
+		$originalShowCurrentLocation = $this->showCurrentLocation;
+		$originalSize                = $this->size;
 
-		$this->handle      = '__settings__';
-		$this->country     = null;
-		$this->hideSearch  = false;
-		$this->hideMap     = false;
-		$this->hideAddress = true;
-		$this->size        = 'normal';
+		$this->handle              = '__settings__';
+		$this->country             = null;
+		$this->hideSearch          = false;
+		$this->hideMap             = false;
+		$this->hideAddress         = true;
+		$this->showCurrentLocation = true;
+		$this->size                = 'normal';
 
 		$mapField = new Markup(
 			$this->_renderMap($value, true),
 			'utf-8'
 		);
 
-		$this->handle      = $originalHandle;
-		$this->country     = $originalCountry;
-		$this->hideSearch  = $originalHideSearch;
-		$this->hideMap     = $originalHideMap;
-		$this->hideAddress = $originalHideAddress;
-		$this->size        = $originalSize;
+		$this->handle              = $originalHandle;
+		$this->country             = $originalCountry;
+		$this->hideSearch          = $originalHideSearch;
+		$this->hideMap             = $originalHideMap;
+		$this->hideAddress         = $originalHideAddress;
+		$this->showCurrentLocation = $originalShowCurrentLocation;
+		$this->size                = $originalSize;
 
 		$view = Craft::$app->getView();
 
@@ -451,6 +460,7 @@ class MapField extends Field implements PreviewableFieldInterface
 			'Zoom In',
 			'Zoom Out',
 			'Center on Marker',
+			'Current Location',
 			'No address selected',
 		]);
 
@@ -466,15 +476,16 @@ class MapField extends Field implements PreviewableFieldInterface
 			'config' => [
 				'isSettings' => $isSettings,
 
-				'name'        => $view->namespaceInputName($this->handle),
-				'country'     => $country,
-				'hideSearch'  => (bool) $this->hideSearch,
-				'hideMap'     => (bool) $this->hideMap,
-				'hideAddress' => (bool) $this->hideAddress,
-				'showLatLng'  => (bool) $this->showLatLng,
-				'minZoom'     => $isSettings ? 0  : (float) $this->minZoom,
-				'maxZoom'     => $isSettings ? 18 : (float) $this->maxZoom,
-				'size'        => $this->size,
+				'name'                => $view->namespaceInputName($this->handle),
+				'country'             => $country,
+				'hideSearch'          => (bool) $this->hideSearch,
+				'hideMap'             => (bool) $this->hideMap,
+				'hideAddress'         => (bool) $this->hideAddress,
+				'showLatLng'          => (bool) $this->showLatLng,
+				'showCurrentLocation' => (bool) $this->showCurrentLocation,
+				'minZoom'             => $isSettings ? 0 : (float) $this->minZoom,
+				'maxZoom'             => $isSettings ? 18 : (float) $this->maxZoom,
+				'size'                => $this->size,
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(

@@ -33,6 +33,7 @@ return [
 	'Zoom In' => 'Zoom In',
 	'Zoom Out' => 'Zoom Out',
 	'Center on Marker' => 'Center on Marker',
+	'Current Location' => 'Current Location',
 
 	// Field: Settings
 	// -------------------------------------------------------------------------
@@ -52,6 +53,10 @@ return [
 
 	'Show Latitude / Longitude' => 'Show Latitude / Longitude',
 	'Show the latitude / longitude fields' => 'Show the latitude / longitude fields',
+
+	'Show Current Location' => 'Show Current Location',
+	'Show a button to centre the map on the users current location' =>
+		'Show a button to centre the map on the users current location',
 
 	'Field Size' => 'Field Size',
 	'Choose the size of the field to display' => 'Choose the size of the field to display',

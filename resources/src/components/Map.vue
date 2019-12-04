@@ -3,8 +3,8 @@
 </template>
 
 <script lang="js">
-	import L from 'leaflet';
 	// TODO: Only load mutants in if they're needed
+	import L from 'leaflet';
 	import 'leaflet.gridlayer.googlemutant';
 	import 'leaflet.mapkitmutant';
 	import MapTiles from '../enums/MapTiles';
@@ -13,6 +13,7 @@
 	import { t } from '../filters/craft';
 
 	const icon = (w, h, f = '#E7433B') => `<svg width="${w}" height="${h}" viewBox="0 0 14 20"><path fill="${f}" d="M6.976.478C3.482.478.634 3.313.634 6.79c0 2.381 1.716 4.247 2.945 6.09 1.23 1.844 2 3.706 2.664 6.17a.78.78 0 0 0 .733.56c.308 0 .64-.217.733-.56.724-2.69 1.49-4.537 2.704-6.324 1.213-1.786 2.906-3.56 2.906-5.936 0-3.476-2.849-6.31-6.343-6.31zm.04 3.874c1.21 0 2.18.968 2.18 2.174A2.17 2.17 0 0 1 7.016 8.7a2.17 2.17 0 0 1-2.18-2.174 2.17 2.17 0 0 1 2.18-2.174z"/></svg>`;
+	const posIcon = (w, h) => `<svg width="${w}" height="${h}" viewBox="0 0 48 48"><path fill="rgba(41, 50, 61, 0.75)" d="M24 16c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm17.88 6c-.92-8.34-7.54-14.96-15.88-15.88v-4.12h-4v4.12c-8.34.92-14.96 7.54-15.88 15.88h-4.12v4h4.12c.92 8.34 7.54 14.96 15.88 15.88v4.12h4v-4.12c8.34-.92 14.96-7.54 15.88-15.88h4.12v-4h-4.12zm-17.88 16c-7.73 0-14-6.27-14-14s6.27-14 14-14 14 6.27 14 14-6.27 14-14 14z"/></svg>`;
 
 	export default {
 		props: {
@@ -24,6 +25,7 @@
 			maxZoom: Number,
 			hideSearch: Boolean,
 			hideAddress: Boolean,
+			showCurrentLocation: Boolean,
 		},
 
 		data () {
@@ -45,10 +47,11 @@
 
 			L.Control.CustomZoom = L.Control.extend({
 				onAdd: map => {
-					const wrap   = L.DomUtil.create('div')
-						, zIn    = L.DomUtil.create('button')
-						, zOut   = L.DomUtil.create('button')
-						, center = L.DomUtil.create('button');
+					const wrap    = L.DomUtil.create('div')
+						, zIn     = L.DomUtil.create('button')
+						, zOut    = L.DomUtil.create('button')
+						, center  = L.DomUtil.create('button')
+						, current = L.DomUtil.create('button');
 
 					wrap.classList.add(self.$style.control);
 
@@ -59,14 +62,22 @@
 						20 * 0.75,
 						'rgba(41, 50, 61, 0.75)'
 					);
+					current.innerHTML = posIcon(
+						20 * 0.75,
+						20 * 0.75,
+					);
 
 					zIn.setAttribute('title', t('Zoom In'));
 					zOut.setAttribute('title', t('Zoom Out'));
 					center.setAttribute('title', t('Center on Marker'));
+					current.setAttribute('title', t('Current Location'));
 
 					wrap.appendChild(zIn);
 					wrap.appendChild(zOut);
 					wrap.appendChild(center);
+
+					if (this.showCurrentLocation && 'geolocation' in navigator)
+						wrap.appendChild(current);
 
 					zIn.addEventListener('click', e => {
 						e.preventDefault();
@@ -87,6 +98,20 @@
 					center.addEventListener('click', e => {
 						e.preventDefault();
 						self.panTo(self.latLng);
+					});
+
+					current.addEventListener('click', e => {
+						e.preventDefault();
+						navigator.geolocation.getCurrentPosition(({ coords }) => {
+							const latLng = { lat: coords.latitude, lng: coords.longitude };
+							self.panTo(latLng);
+							self.marker.setLatLng(latLng);
+							self.$emit('change', latLng);
+						}, err => {
+							window.Craft.cp.displayError(`<strong>Maps:</strong> ${err.message}`);
+						}, {
+							enableHighAccuracy: true,
+						});
 					});
 
 					return wrap;

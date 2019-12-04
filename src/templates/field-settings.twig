@@ -37,6 +37,14 @@
 	on: field.showLatLng
 }) }}
 
+{{ forms.lightswitchField({
+	label: 'Show Current Location'|t('simplemap'),
+	instructions: 'Show a button to centre the map on the users current location'|t('simplemap'),
+	id: 'showCurrentLocation',
+	name: 'showCurrentLocation',
+	on: field.showCurrentLocation
+}) }}
+
 {{ forms.selectField({
 	label: 'Field Size'|t('simplemap'),
 	instructions: 'Choose the size of the field to display'|t('simplemap'),

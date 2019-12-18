@@ -274,7 +274,15 @@ class m190712_104805_new_data_format extends Migration
 		    	$map->ownerSiteId = $row['siteId'];
 		    	$map->fieldId = $mapData['fieldId'];
 
-		    	$field = $fields[$mapData['fieldId']];
+		    	$field = @$fields[$mapData['fieldId']];
+
+		    	// Skip if the field no longer exists
+		    	if (!$field)
+			    {
+				    echo '- Skipping ' . $map->address . ' (' . $mapData['id'] . ') - Field no longer exists' . PHP_EOL;
+				    continue;
+			    }
+
 		    	$col = $fieldColumnPrefix . $field->handle;
 
 		    	$db->createCommand()

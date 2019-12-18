@@ -131,11 +131,11 @@ class MapService extends Component
 		if (!$this->_location || !$this->_distance)
 			return null;
 
-		$originLat = $this->_location['lat'];
-		$originLng = $this->_location['lng'];
+		$originLat = (float) $this->_location['lat'];
+		$originLng = (float) $this->_location['lng'];
 
-		$targetLat = $map->lat;
-		$targetLng = $map->lng;
+		$targetLat = (float) $map->lat;
+		$targetLng = (float) $map->lng;
 
 		return (
 			$this->_distance *

@@ -1,3 +1,7 @@
+## [Unreleased] 3.7.6
+### Fixed
+- Fix issue with getting distance when lat/lng was stored as string (Fixes #230) 
+
 ## 3.7.5 - 2019-12-04
 ### Added
 - Add config option to disable missing field data population (Fixes #226)

@@ -1,4 +1,4 @@
-## [Unreleased] 3.7.6
+## 3.7.6 - 2019-12-18
 ### Fixed
 - Fix issue with getting distance when lat/lng was stored as string (Fixes #230)
 - Fix issue when upgrading maps for fields that no longer exist (Fixes #227) 

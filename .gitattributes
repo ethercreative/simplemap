@@ -5,3 +5,4 @@ CHANGELOG.md    export-ignore
 .gitattributes  export-ignore
 /.idea          export-ignore
 .editorconfig   export-ignore
+/docs           export-ignore

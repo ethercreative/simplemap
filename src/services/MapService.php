@@ -241,22 +241,28 @@ class MapService extends Component
 			: $map->parts->postcode;
 
 		// Missing Lat / Lng
-		if (!($map->lat && $map->lng) && ($map->address || $postcode))
+		if (!($map->lat && $map->lng) && !empty($map->address ?: $postcode))
 		{
-			$latLng   = GeoService::latLngFromAddress($map->address ?: $postcode);
-			$map->lat = $latLng['lat'];
-			$map->lng = $latLng['lng'];
+			$latLng = GeoService::latLngFromAddress($map->address ?: $postcode);
+			if ($latLng)
+			{
+				$map->lat = $latLng['lat'];
+				$map->lng = $latLng['lng'];
+			}
 		}
 
 		// Missing address / parts
 		if ((!$map->address || $map->address === $postcode) && ($map->lat && $map->lng))
 		{
-			$loc          = GeoService::addressFromLatLng($map->lat, $map->lng);
-			$map->address = $loc['address'];
-			$map->parts   = array_merge(
-				array_filter((array) $loc['parts']),
-				array_filter((array) $map->parts)
-			);
+			$loc = GeoService::addressFromLatLng($map->lat, $map->lng);
+			if ($loc)
+			{
+				$map->address = $loc['address'];
+				$map->parts   = array_merge(
+					array_filter((array) $loc['parts']),
+					array_filter((array) $map->parts)
+				);
+			}
 		}
 	}
 

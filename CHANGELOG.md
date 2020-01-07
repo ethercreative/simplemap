@@ -1,7 +1,11 @@
+## [Unreleased] 3.7.7
+### Fixes
+- Fix error when attempts to populate missing data return null (Fixes #233)
+
 ## 3.7.6 - 2019-12-18
 ### Fixed
 - Fix issue with getting distance when lat/lng was stored as string (Fixes #230)
-- Fix issue when upgrading maps for fields that no longer exist (Fixes #227) 
+- Fix issue when upgrading maps for fields that no longer exist (Fixes #227)
 
 ## 3.7.5 - 2019-12-04
 ### Added

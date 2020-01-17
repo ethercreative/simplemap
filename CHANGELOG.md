@@ -1,4 +1,4 @@
-## [Unreleased] 3.7.7
+## 3.7.7 - 2020-01-17
 ### Fixes
 - Fix error when attempts to populate missing data return null (Fixes #233)
 

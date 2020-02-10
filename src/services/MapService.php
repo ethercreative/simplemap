@@ -228,12 +228,14 @@ class MapService extends Component
 	 */
 	public function populateMissingData (Map $map, MapField $field)
 	{
+		$settings = SimpleMap::getInstance()->getSettings();
+
 		// Missing zoom
 		if (!$map->zoom)
 			$map->zoom = $field->zoom;
 
 		// Skip the rest if populate missing is disabled
-		if (SimpleMap::getInstance()->getSettings()->disablePopulateMissingFieldData)
+		if ($settings->disablePopulateMissingFieldData)
 			return;
 
 		$postcode = is_array($map->parts)
@@ -264,6 +266,10 @@ class MapService extends Component
 				);
 			}
 		}
+
+		// Missing what3words
+		if ($settings->isW3WEnabled() && empty($map->what3words))
+			$map->what3words = What3WordsService::convertLatLngToW3W($map->lat, $map->lng);
 	}
 
 	// Private Methods

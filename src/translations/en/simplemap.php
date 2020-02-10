@@ -68,6 +68,12 @@ return [
 	'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.' =>
 		'When searching for a location, results in this country will take precedence. Be aware that some services will show results ONLY within this country.',
 
+	'Enable what3words grid' => 'Enable what3words grid',
+	'Will enable the what3words grid overlay when zoomed in above 17' => 'Will enable the what3words grid overlay when zoomed in above 17',
+
+	'Show what3words field' => 'Show what3words field',
+	'Show the what3words field for the selected location' => 'Show the what3words field for the selected location',
+
 	// Settings
 	// =========================================================================
 
@@ -119,6 +125,14 @@ return [
 
 	'License Key' => 'License Key',
 	'Your MaxMind license key.' => 'Your MaxMind license key.',
+
+	'what3words' => 'what3words',
+	'Enable what3words Integration' => 'Enable what3words Integration',
+	'what3words Token' => 'what3words Token',
+	'Your what3words API key.' => 'Your what3words API key.',
+
+	'Getting a what3words API Key' => 'Getting a what3words API Key',
+	'what3words offer a free public API key.' => 'what3words offer a free public API key.',
 
 	// Settings: Map Tiles Options
 	// -------------------------------------------------------------------------

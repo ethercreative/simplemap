@@ -105,6 +105,16 @@ class MapField extends Field implements PreviewableFieldInterface
 	public $size = 'normal';
 
 	/**
+	 * @var bool - Will show the what3words overlay when true
+	 */
+	public $showW3WGrid = false;
+
+	/**
+	 * @var bool - Show the what3words field on the map field
+	 */
+	public $showW3WField = false;
+
+	/**
 	 * @deprecated
 	 */
 	public $hideLatLng;
@@ -259,6 +269,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 * @throws InvalidConfigException
+	 * @throws \yii\base\Exception
 	 */
 	public function getSettingsHtml ()
 	{
@@ -275,6 +286,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		$originalHideAddress         = $this->hideAddress;
 		$originalShowCurrentLocation = $this->showCurrentLocation;
 		$originalSize                = $this->size;
+		$originalShowW3WGrid         = $this->showW3WGrid;
+		$originalShowW3WField        = $this->showW3WField;
 
 		$this->handle              = '__settings__';
 		$this->country             = null;
@@ -283,6 +296,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		$this->hideAddress         = true;
 		$this->showCurrentLocation = true;
 		$this->size                = 'normal';
+		$this->showW3WGrid         = false;
+		$this->showW3WField        = false;
 
 		$mapField = new Markup(
 			$this->_renderMap($value, true),
@@ -296,6 +311,8 @@ class MapField extends Field implements PreviewableFieldInterface
 		$this->hideAddress         = $originalHideAddress;
 		$this->showCurrentLocation = $originalShowCurrentLocation;
 		$this->size                = $originalSize;
+		$this->showW3WGrid         = $originalShowW3WGrid;
+		$this->showW3WField        = $originalShowW3WField;
 
 		$view = Craft::$app->getView();
 
@@ -307,6 +324,7 @@ class MapField extends Field implements PreviewableFieldInterface
 			'map' => $mapField,
 			'field' => $this,
 			'countries' => $countries,
+			'settings' => SimpleMap::getInstance()->getSettings(),
 		]);
 	}
 
@@ -462,6 +480,7 @@ class MapField extends Field implements PreviewableFieldInterface
 			'Center on Marker',
 			'Current Location',
 			'No address selected',
+			'what3words',
 		]);
 
 		/** @var Settings $settings */
@@ -499,23 +518,29 @@ class MapField extends Field implements PreviewableFieldInterface
 					$settings->geoService
 				),
 
+				'w3wEnabled'   => $settings->isW3WEnabled(),
+				'showW3WGrid'  => (bool) $this->showW3WGrid,
+				'showW3WField' => (bool) $this->showW3WField,
+
 				'locale' => Craft::$app->locale->getLanguageID(),
 			],
 
 			'value' => [
-				'address' => $value->address,
-				'lat'     => self::_parseFloat($value->lat),
-				'lng'     => self::_parseFloat($value->lng),
-				'zoom'    => $value->zoom,
-				'parts'   => $value->parts,
+				'address'    => $value->address,
+				'lat'        => self::_parseFloat($value->lat),
+				'lng'        => self::_parseFloat($value->lng),
+				'zoom'       => $value->zoom,
+				'parts'      => $value->parts,
+				'what3words' => $value->what3words,
 			],
 
 			'defaultValue' => [
-				'address' => null,
-				'lat'     => self::_parseFloat($this->lat),
-				'lng'     => self::_parseFloat($this->lng),
-				'zoom'    => $this->zoom,
-				'parts'   => null,
+				'address'    => null,
+				'lat'        => self::_parseFloat($this->lat),
+				'lng'        => self::_parseFloat($this->lng),
+				'zoom'       => $this->zoom,
+				'parts'      => null,
+				'what3words' => null,
 			],
 		];
 
@@ -555,6 +580,19 @@ class MapField extends Field implements PreviewableFieldInterface
 				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 			);
 		}
+
+		// what3words
+		// ---------------------------------------------------------------------
+
+		if ($settings->w3wEnabled && !empty($settings->w3wToken))
+		{
+			$view->registerJsFile(
+				'https://assets.what3words.com/sdk/v3/what3words.js?key=' .
+				$settings->w3wToken
+			);
+		}
+
+		// ---------------------------------------------------------------------
 
 		$options = preg_replace(
 			'/\'/',

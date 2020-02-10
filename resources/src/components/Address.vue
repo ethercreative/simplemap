@@ -34,6 +34,14 @@
 			</button>
 		</div>
 
+		<Input
+			:label="labels.what3words"
+			:value="'/// ' + (value.what3words || '')"
+			:class="$style.full"
+			disabled
+			v-if="showW3wField"
+		/>
+
 		<Fragment v-if="!hide">
 			<Input
 				:label="labels.number"
@@ -45,6 +53,7 @@
 				:label="labels.address"
 				:value="value.parts.address"
 				@input="onInput('address', $event)"
+				:class="$style.right"
 			/>
 
 			<Input
@@ -57,6 +66,7 @@
 				:label="labels.postcode"
 				:value="value.parts.postcode"
 				@input="onInput('postcode', $event)"
+				:class="$style.right"
 			/>
 
 			<Input
@@ -69,6 +79,7 @@
 				:label="labels.state"
 				:value="value.parts.state"
 				@input="onInput('state', $event)"
+				:class="$style.right"
 			/>
 
 			<Input
@@ -94,6 +105,7 @@
 					lat: 0,
 					lng: 0,
 					parts: {},
+					what3words: '',
 				}),
 			},
 			showLatLng: Boolean,
@@ -103,6 +115,7 @@
 			hasMap: Boolean,
 			size: String,
 			openOffset: Number,
+			showW3wField: Boolean,
 		},
 
 		components: {
@@ -125,6 +138,7 @@
 					lat: t('Latitude'),
 					lng: t('Longitude'),
 					clear: t('Clear address'),
+					what3words: t('what3words'),
 				}
 			};
 		},
@@ -234,8 +248,7 @@
 			box-sizing: border-box;
 		}
 
-		label:nth-child(odd):not(:first-child),
-		label:not(.full) + label:nth-child(2) {
+		label.right {
 			border-right: none;
 		}
 

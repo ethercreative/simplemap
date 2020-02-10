@@ -9,4 +9,6 @@ return [
 
 	'geoService' => GeoService::Nominatim,
 	'geoToken' => '',
+
+	'w3wToken' => '',
 ];

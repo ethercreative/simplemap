@@ -273,8 +273,7 @@
 			</h2>
 			{% set children %}
 				<div class="maps-select">
-					<select name="geoLocationService"
-					        v-model="geoLocationService">
+					<select name="geoLocationService" v-model="geoLocationService">
 						{{ selectLoop(geoLocationOptions, settings.geoLocationService) }}
 					</select>
 				</div>
@@ -329,6 +328,48 @@
 				</span>
 			</a>
 		</div>
+
+		<hr>
+
+		<div class="maps-card {{ isLite ? 'disabled' }}">
+			<h2>
+				{{ 'what3words'|t('simplemap') }}
+				<span class="maps-pro">Pro</span>
+			</h2>
+
+			{% set children %}
+				<div class="maps-select">
+					<select name="w3wEnabled" v-model="w3wEnabled">
+						{{ selectLoop([
+							{ label: 'Yes', value: '1' },
+							{ label: 'No', value: '' },
+						], settings.w3wEnabled ? '1' : '') }}
+					</select>
+				</div>
+			{% endset %}
+			{{ label('Enable what3words Integration', '', children) }}
+
+			<div v-if="requiresW3WToken">
+				{% set children %}
+					<input
+						type="text"
+						name="w3wToken"
+						value="{{ settings.w3wToken }}"
+					/>
+				{% endset %}
+				{{ label('what3words Token', 'Your what3words API key.', children) }}
+			</div>
+		</div>
+		<div class="maps-card maps-help">
+			<h2>{{ 'Getting a what3words API Key'|t('simplemap') }}</h2>
+			<a href="https://developer.what3words.com/public-api" target="_blank" rel="nofollow" class="active">
+				{{ svg('@simplemap/web/assets/svgs/w3w.svg') }}
+				<span>
+					<em>{{ 'what3words'|t('simplemap') }}</em>
+					{{ 'what3words offer a free public API key.'|raw }}
+				</span>
+			</a>
+		</div>
 	</section>
 
 	{% endnamespace %}
@@ -343,6 +384,7 @@ new Vue({
 			mapTiles: '{{ settings.mapTiles }}',
 			geoService: '{{ settings.geoService }}',
 			geoLocationService: '{{ settings.geoLocationService }}',
+			w3wEnabled: '{{ settings.w3wEnabled ? 1 }}',
 		};
 	},
 	computed: {
@@ -380,6 +422,9 @@ new Vue({
 			return (
 				this.geoLocationService.indexOf('maxmind') === -1
 			);
+		},
+		requiresW3WToken () {
+			return this.w3wEnabled;
 		},
 	}
 });
@@ -721,7 +766,7 @@ hr {
 	padding-top: 25px;
 }
 .maps-help a:last-child {
-	padding-bottom: 34px;
+	padding-bottom: 24px;
 }
 .maps-help svg {
 	width: 30px;

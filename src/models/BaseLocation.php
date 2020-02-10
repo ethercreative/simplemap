@@ -36,6 +36,9 @@ abstract class BaseLocation extends Model
 	/** @var Parts */
 	public $parts;
 
+	/** @var string */
+	public $what3words;
+
 	// Constructor
 	// =========================================================================
 

@@ -248,9 +248,10 @@ export default class Geo {
 	 *
 	 * @param lat
 	 * @param lng
+	 * @param oldVal
 	 * @return {Promise<{address: *, lng: *, parts: Parts, lat: *}>}
 	 */
-	async reverseNominatim ({ lat, lng }) {
+	async reverseNominatim ({ lat, lng }, oldVal) {
 		const params = new URLSearchParams({
 			lat,
 			lon: lng,
@@ -264,6 +265,7 @@ export default class Geo {
 		).then(res => res.json());
 
 		return {
+			...oldVal,
 			address: result.display_name,
 			lat,
 			lng,
@@ -279,9 +281,10 @@ export default class Geo {
 	 *
 	 * @param lat
 	 * @param lng
+	 * @param oldVal
 	 * @return {Promise<{address: *, lng: *, parts: Parts, lat: *}>}
 	 */
-	async reverseMapbox ({ lat, lng }) {
+	async reverseMapbox ({ lat, lng }, oldVal) {
 		const params = new URLSearchParams({
 			types: 'address,country,postcode,place,locality,district,neighborhood',
 			limit: 1,
@@ -296,6 +299,7 @@ export default class Geo {
 		const feature = result.features[0];
 
 		return {
+			...oldVal,
 			address: feature.place_name,
 			lat,
 			lng,
@@ -307,9 +311,10 @@ export default class Geo {
 	 * Lookup the given lat/lng using Google Maps
 	 *
 	 * @param latLng
+	 * @param oldVal
 	 * @return {Promise<any>}
 	 */
-	reverseGoogle (latLng) {
+	reverseGoogle (latLng, oldVal) {
 		return new Promise(resolve => {
 			this.google.geocoder.geocode({
 				location: latLng,
@@ -317,6 +322,7 @@ export default class Geo {
 				const result = results[0];
 
 				resolve({
+					...oldVal,
 					address: result.formatted_address,
 					...latLng,
 					parts: new PartsLegacy(
@@ -332,9 +338,10 @@ export default class Geo {
 	 *
 	 * @param lat
 	 * @param lng
+	 * @param oldVal
 	 * @return {Promise<any>}
 	 */
-	reverseApple ({ lat, lng }) {
+	reverseApple ({ lat, lng }, oldVal) {
 		return new Promise(resolve => {
 			this.apple.Geocoder.reverseLookup(
 				new this.apple.Coordinate(lat, lng),
@@ -342,6 +349,7 @@ export default class Geo {
 					const result = data.results[0];
 
 					resolve({
+						...oldVal,
 						address: result.formattedAddress,
 						lat,
 						lng,
@@ -358,9 +366,10 @@ export default class Geo {
 	 *
 	 * @param lat
 	 * @param lng
+	 * @param oldVal
 	 * @return {Promise<{address: *, lng: *, parts: Parts, lat: *}>}
 	 */
-	async reverseHere ({ lat, lng }) {
+	async reverseHere ({ lat, lng }, oldVal) {
 		const params = new URLSearchParams({
 			app_id: this.token.appId,
 			app_code: this.token.appCode,
@@ -378,6 +387,7 @@ export default class Geo {
 		const { address } = response.view[0].result[0].location;
 
 		return {
+			...oldVal,
 			address: address.label,
 			lat,
 			lng,
@@ -405,6 +415,7 @@ export default class Geo {
 				],
 			}, place => {
 				resolve({
+					...item,
 					address: item.address,
 					lat: place.geometry.location.lat(),
 					lng: place.geometry.location.lng(),

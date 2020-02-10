@@ -89,3 +89,21 @@
 	max: 18,
 	step: 0.01,
 }) }}
+
+{% if settings.isW3WEnabled() %}
+	{{ forms.lightswitchField({
+		label: 'Enable what3words grid'|t('simplemap'),
+		instructions: 'Will enable the what3words grid overlay when zoomed in above 17'|t('simplemap'),
+		id: 'showW3WGrid',
+		name: 'showW3WGrid',
+		on: field.showW3WGrid
+	}) }}
+
+	{{ forms.lightswitchField({
+		label: 'Show what3words field'|t('simplemap'),
+		instructions: 'Show the what3words field for the selected location'|t('simplemap'),
+		id: 'showW3WField',
+		name: 'showW3WField',
+		on: field.showW3WField
+	}) }}
+{% endif %}

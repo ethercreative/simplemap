@@ -14,6 +14,8 @@
 				:hide-search="config.hideSearch"
 				:hide-address="config.hideAddress"
 				:show-current-location="config.showCurrentLocation"
+				:w3w-enabled="config.w3wEnabled"
+				:show-w3w-grid="config.showW3WGrid"
 			/>
 
 			<div :class="$style.content">
@@ -37,6 +39,7 @@
 					@changed="onPartChange"
 					@clear="onClear"
 					:open-offset="resultsOpenOffset"
+					:show-w3w-field="config.showW3WField"
 				/>
 			</div>
 		</div>
@@ -119,6 +122,9 @@
 					mapToken: '',
 					geoService: 'nominatim',
 					geoToken: '',
+					w3wEnabled: false,
+					showW3WGrid: false,
+					showW3WField: false,
 					locale: 'en',
 					size: 'large',
 				},
@@ -129,6 +135,7 @@
 					lat: null,
 					lng: null,
 					parts: new Parts(),
+					what3words: '',
 				},
 
 				geo: null,
@@ -218,22 +225,33 @@
 
 				switch (this.config.geoService) {
 					case GeoService.Nominatim:
-						this.value = await this.geo.reverseNominatim(latLng);
+						this.value = await this.geo.reverseNominatim(latLng, this.value);
 						break;
 					case GeoService.Mapbox:
-						this.value = await this.geo.reverseMapbox(latLng);
+						this.value = await this.geo.reverseMapbox(latLng, this.value);
 						break;
 					case GeoService.GoogleMaps:
-						this.value = await this.geo.reverseGoogle(latLng);
+						this.value = await this.geo.reverseGoogle(latLng, this.value);
 						break;
 					case GeoService.AppleMapKit:
-						this.value = await this.geo.reverseApple(latLng);
+						this.value = await this.geo.reverseApple(latLng, this.value);
 						break;
 					case GeoService.Here:
-						this.value = await this.geo.reverseHere(latLng);
+						this.value = await this.geo.reverseHere(latLng, this.value);
 						break;
 					default:
 						throw new Error('Unknown geo service: ' + this.config.geoService);
+				}
+
+				if (this.config.w3wEnabled) {
+					try {
+						const res = await window.what3words.api.convertTo3wa(latLng);
+						this.value.what3words = res.words;
+					} catch (e) {
+						this.value.what3words = null;
+					}
+				} else {
+					this.value.what3words = null;
 				}
 
 				this.value.zoom       = zoom;
@@ -279,6 +297,7 @@
 					lat: null,
 					lng: null,
 					parts: new Parts(),
+					what3words: null,
 				};
 			},
 		},

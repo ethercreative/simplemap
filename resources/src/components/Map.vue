@@ -11,6 +11,7 @@
 	import 'leaflet/dist/leaflet.css';
 	import waitForGlobal from '../helpers/waitForGlobal';
 	import { t } from '../filters/craft';
+	import createW3WGrid from '../helpers/createW3WGrid';
 
 	const icon = (w, h, f = '#E7433B') => `<svg width="${w}" height="${h}" viewBox="0 0 14 20"><path fill="${f}" d="M6.976.478C3.482.478.634 3.313.634 6.79c0 2.381 1.716 4.247 2.945 6.09 1.23 1.844 2 3.706 2.664 6.17a.78.78 0 0 0 .733.56c.308 0 .64-.217.733-.56.724-2.69 1.49-4.537 2.704-6.324 1.213-1.786 2.906-3.56 2.906-5.936 0-3.476-2.849-6.31-6.343-6.31zm.04 3.874c1.21 0 2.18.968 2.18 2.174A2.17 2.17 0 0 1 7.016 8.7a2.17 2.17 0 0 1-2.18-2.174 2.17 2.17 0 0 1 2.18-2.174z"/></svg>`;
 	const posIcon = (w, h) => `<svg width="${w}" height="${h}" viewBox="0 0 48 48"><path fill="rgba(41, 50, 61, 0.75)" d="M24 16c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm17.88 6c-.92-8.34-7.54-14.96-15.88-15.88v-4.12h-4v4.12c-8.34.92-14.96 7.54-15.88 15.88h-4.12v4h4.12c.92 8.34 7.54 14.96 15.88 15.88v4.12h4v-4.12c8.34-.92 14.96-7.54 15.88-15.88h4.12v-4h-4.12zm-17.88 16c-7.73 0-14-6.27-14-14s6.27-14 14-14 14 6.27 14 14-6.27 14-14 14z"/></svg>`;
@@ -26,6 +27,8 @@
 			hideSearch: Boolean,
 			hideAddress: Boolean,
 			showCurrentLocation: Boolean,
+			w3wEnabled: Boolean,
+			showW3wGrid: Boolean,
 		},
 
 		data () {
@@ -145,6 +148,12 @@
 					opts
 				);
 				this.map.addLayer(tileLayer);
+			}
+
+			if (this.w3wEnabled && this.showW3wGrid) {
+				const drawGrid = createW3WGrid(L, this.map);
+				this.map.whenReady(drawGrid);
+				this.map.on('move', drawGrid);
 			}
 
 			this.map.on('zoom', this.onZoom);

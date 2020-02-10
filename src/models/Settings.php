@@ -14,6 +14,7 @@ use craft\helpers\ConfigHelper;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\services\GeoLocationService;
+use ether\simplemap\SimpleMap;
 use Exception;
 
 /**
@@ -55,6 +56,19 @@ class Settings extends Model
 	 *   data.
 	 */
 	public $disablePopulateMissingFieldData = false;
+
+	// Properties: w3w
+	// -------------------------------------------------------------------------
+
+	/**
+	 * @var bool Will enable what3words integration when set to true
+	 */
+	public $w3wEnabled = false;
+
+	/**
+	 * @var string The token (API Key) for what3words
+	 */
+	public $w3wToken = '';
 
 	// Properties: Geo-location
 	// -------------------------------------------------------------------------
@@ -98,6 +112,11 @@ class Settings extends Model
 		} catch (Exception $e) {
 			Craft::error($e->getMessage());
 		}
+	}
+
+	public function isW3WEnabled ()
+	{
+		return $this->w3wEnabled && SimpleMap::v(SimpleMap::EDITION_PRO);
 	}
 
 }

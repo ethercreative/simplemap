@@ -24,6 +24,8 @@
 	import GeoService from '../enums/GeoService';
 	import Geo from '../common/Geo';
 
+	// TODO: Add what3words to autocomplete
+
 	let to;
 
 	export default {

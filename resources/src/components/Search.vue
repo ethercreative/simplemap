@@ -25,6 +25,9 @@
 	import Geo from '../common/Geo';
 
 	// TODO: Add what3words to autocomplete
+	// TODO: Fire height change event on search results height change
+	//  (try searching "a" then "ab")
+	// TODO: Make w3w field editable and auto-decode the value
 
 	let to;
 

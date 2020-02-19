@@ -86,7 +86,8 @@ class StaticMap
 		$this->zoom   = $zoom;
 		$this->scale  = $scale;
 
-		if ($markers !== null)
+		if (empty($markers)) $this->markers = [];
+		else
 		{
 			$this->markers = array_map(function ($m) {
 				$m = explode('|', $m);

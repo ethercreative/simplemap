@@ -2,6 +2,9 @@
 ### Added
 - Add What3Words support (Closes #236)
 
+### Fixed
+- Fix issue when trying to render a static map without markers (Fixes #225)
+
 ## 3.7.7 - 2020-01-17
 ### Fixes
 - Fix error when attempts to populate missing data return null (Fixes #233)

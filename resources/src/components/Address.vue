@@ -38,8 +38,8 @@
 			:label="labels.what3words"
 			:value="'/// ' + (value.what3words || '')"
 			:class="$style.full"
-			disabled
 			v-if="showW3wField"
+			@input="onW3WInput"
 		/>
 
 		<Fragment v-if="!hide">
@@ -185,6 +185,13 @@
 					name,
 					value: e.target.value,
 				});
+			},
+
+			async onW3WInput (e) {
+				this.$emit(
+					'w3w-change',
+					e.target.value.trim().replace(/\/|\s/g, '').toLowerCase()
+				);
 			},
 
 			onClear () {

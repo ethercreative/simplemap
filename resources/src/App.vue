@@ -38,6 +38,7 @@
 					:value="val"
 					@changed="onPartChange"
 					@clear="onClear"
+					@w3w-change="onW3WChange"
 					:open-offset="resultsOpenOffset"
 					:show-w3w-field="config.showW3WField"
 				/>
@@ -223,6 +224,37 @@
 			async onMapChange (latLng) {
 				const zoom = this.value.zoom;
 
+				await this.onLatLngChange(latLng);
+
+				if (this.config.w3wEnabled) {
+					try {
+						const res = await window.what3words.api.convertTo3wa(latLng);
+						this.value.what3words = res.words;
+					} catch (e) {
+						this.value.what3words = null;
+					}
+				} else {
+					this.value.what3words = null;
+				}
+
+				this.value.zoom       = zoom;
+				this.fullAddressDirty = false;
+			},
+
+			async onW3WChange (words) {
+				if (this.config.w3wEnabled && !/([a-z]+\.){2}[a-z]+/g.test(words))
+					return;
+
+				try {
+					const res = await window.what3words.api.convertToCoordinates(words);
+					this.onLatLngChange(res.coordinates);
+					this.value.what3words = words;
+				} catch (e) {
+					// do nothing
+				}
+			},
+
+			async onLatLngChange (latLng) {
 				switch (this.config.geoService) {
 					case GeoService.Nominatim:
 						this.value = await this.geo.reverseNominatim(latLng, this.value);
@@ -242,20 +274,6 @@
 					default:
 						throw new Error('Unknown geo service: ' + this.config.geoService);
 				}
-
-				if (this.config.w3wEnabled) {
-					try {
-						const res = await window.what3words.api.convertTo3wa(latLng);
-						this.value.what3words = res.words;
-					} catch (e) {
-						this.value.what3words = null;
-					}
-				} else {
-					this.value.what3words = null;
-				}
-
-				this.value.zoom       = zoom;
-				this.fullAddressDirty = false;
 			},
 
 			onZoom (zoom) {

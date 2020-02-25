@@ -24,11 +24,6 @@
 	import GeoService from '../enums/GeoService';
 	import Geo from '../common/Geo';
 
-	// TODO: Add what3words to autocomplete
-	// TODO: Fire height change event on search results height change
-	//  (try searching "a" then "ab")
-	// TODO: Make w3w field editable and auto-decode the value
-
 	let to;
 
 	export default {
@@ -88,19 +83,7 @@
 
 		watch: {
 			suggestLengthShow () {
-				if (!this.hasMap)
-					return;
-
-				const list = this.$refs.self.$el.lastElementChild;
-
-				if (!this.isOpen || !list.firstElementChild || window.matchMedia('(max-width: 767px)').matches) {
-					this.$emit('open-offset', 0);
-					return;
-				}
-
-				setTimeout(() => {
-					this.$emit('open-offset', list.firstElementChild.getBoundingClientRect().height);
-				});
+				this.emitHeightChange();
 			},
 		},
 
@@ -121,6 +104,7 @@
 				to = setTimeout(async () => {
 					const data       = await this.geo.search(text);
 					this.suggestions = [{ data }];
+					this.emitHeightChange();
 				}, 500);
 			},
 
@@ -166,6 +150,25 @@
 			 * @returns {string}
 			 */
 			getSuggestionValue: suggestion => suggestion.item.address,
+
+			/**
+			 * Notifies the parent of a height change in the dropdown
+			 */
+			emitHeightChange () {
+				if (!this.hasMap)
+					return;
+
+				const list = this.$refs.self.$el.lastElementChild;
+
+				if (!this.isOpen || !list.firstElementChild || window.matchMedia('(max-width: 767px)').matches) {
+					this.$emit('open-offset', 0);
+					return;
+				}
+
+				setTimeout(() => {
+					this.$emit('open-offset', list.firstElementChild.getBoundingClientRect().height);
+				});
+			},
 		},
 	};
 </script>

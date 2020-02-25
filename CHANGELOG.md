@@ -1,4 +1,4 @@
-## [Unreleased] 3.8.0
+## 3.8.0 - 2020-02-25
 ### Added
 - Add What3Words support (Closes #236)
 

@@ -145,7 +145,7 @@ class EmbedService extends Component
 		);
 
 		$params = http_build_query([
-			'key' => $settings->mapToken,
+			'key' => $settings->getMapToken(),
 			'callback' => $callbackName,
 		]);
 
@@ -159,7 +159,7 @@ let {$options->id};
 
 function {$callbackName} () {
 	{$options->id} = new google.maps.Map(document.getElementById('{$options->id}'), $formattedOptions);
-	
+
 	{$options->id}._markers = [];
 	{$formattedMarkers}.forEach(function (marker) {
 		marker.map = {$options->id};
@@ -189,7 +189,7 @@ JS;
 		$view = Craft::$app->getView();
 
 		$token = GeoService::getToken(
-			$settings->mapToken,
+			$settings->getMapToken(),
 			$settings->mapTiles
 		);
 		$latLng = implode(', ', array_values($options->getCenter()));
@@ -258,7 +258,7 @@ const {$options->id} = new mapkit.Map('{$options->id}', {$formattedOptions});
 {$formattedMarkers}.forEach(function (marker) {
 	marker.position.unshift(null);
 	const m = new mapkit.MarkerAnnotation(
-		new (mapkit.Coordinate.bind.apply(mapkit.Coordinate, marker.position)), 
+		new (mapkit.Coordinate.bind.apply(mapkit.Coordinate, marker.position)),
 		{
 			glyphText: marker.label || '',
 			color: marker.color || '',
@@ -335,7 +335,7 @@ JS;
 		);
 
 		$initJs = <<<JS
-mapboxgl.accessToken = '{$settings->mapToken}';
+mapboxgl.accessToken = '{$settings->getMapToken()}';
 JS;
 
 
@@ -371,7 +371,7 @@ JS;
 	 */
 	private function _embedHere (EmbedOptions $options, Settings $settings)
 	{
-		if (!array_key_exists('apiKey', $settings->mapToken) || !$settings->mapToken['apiKey'])
+		if (!array_key_exists('apiKey', $settings->getMapToken()) || !$settings->getMapToken()['apiKey'])
 			throw new InvalidConfigException('Missing HERE API Key');
 
 		$view = Craft::$app->getView();
@@ -433,7 +433,7 @@ JS;
 		);
 
 		$initJs = <<<JS
-const HERE_platform = new H.service.Platform({ apikey: '{$settings->mapToken['apiKey']}' });
+const HERE_platform = new H.service.Platform({ apikey: '{$settings->getMapToken()['apiKey']}' });
 window.HERE_defaultLayers = HERE_platform.createDefaultLayers();
 JS;
 
@@ -450,7 +450,7 @@ const {$options->id} = new H.Map(
 
 {$formattedMarkers}.forEach(function (marker) {
 	const m = new H.map.Marker(
-		marker.position, 
+		marker.position,
 		{
 			icon: new H.map.Icon('{$markerIcon}'.replace('##FILL##', marker.color).replace('##LABEL##', marker.label)),
 		}
@@ -549,7 +549,7 @@ window.LMapTiles({$options->id});
 {$options->id}._markers = [];
 {$formattedMarkers}.forEach(function (marker) {
 	const m = L.marker(
-		marker.position, 
+		marker.position,
 		{ icon: window.LMapMarkerIcon(marker) }
 	);
 	{$options->id}._markers.push(m);

@@ -4,6 +4,8 @@
 {% set fullPageForm = true %}
 {% do craft.app.view.registerAssetBundle('craft\\web\\assets\\vue\\VueAsset') %}
 
+{#{% dd settings %}#}
+
 {% macro selectLoop (options, value) %}
 	{% set hasOptgroups = false %}
 	{% for key, option in options %}
@@ -42,6 +44,7 @@
 {% from _self import selectLoop, label, tokenValue %}
 
 {% block content %}
+<div v-cloak>
 	<input type="hidden" name="action" value="plugins/save-plugin-settings">
 	<input type="hidden" name="pluginHandle" value="simplemap">
 	{{ redirectInput('maps/settings') }}
@@ -60,15 +63,12 @@
 		{% for key, label in mapTileOptions if key != '0' and key != '1' %}
 			{% set x1 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '-1x.jpg', true) %}
 			{% set x2 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.jpg', true) %}
-			<transition name="fade">
-				<img
-					src="{{ x1 }}"
-					srcset="{{ x1 }} 1x, {{ x2 }} 2x"
-					alt="{{ label is iterable ? label.label : label }}"
-					v-if="mapTiles === '{{ key }}'"
-					loading="lazy"
-				/>
-			</transition>
+			<image-fade-on-load
+				src="{{ x1 }}"
+				srcset="{{ x1 }} 1x, {{ x2 }} 2x"
+				alt="{{ label is iterable ? label.label : label }}"
+				:show="mapTiles === '{{ key }}'"
+			></image-fade-on-load>
 		{% endfor %}
 
 		{% namespace 'settings' %}
@@ -84,11 +84,10 @@
 
 			<div v-if="mapTilesSimple && requiresMapToken">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken"
 						value="{{ not mapTokenIterable ? settings.mapToken }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Map Token', 'Add the API key for map tiles service you are using.', children) }}
 			</div>
@@ -99,51 +98,46 @@
 						rows="6"
 					>{{ tokenValue(settings.mapToken, 'privateKey') }}</textarea>
 				{% endset %}
-				{{ label('Private Key', 'Paste the contents of your private key files below.', children) }}
+				{{ label('Private Key', 'Paste the contents of your private key files below (supports env variables).', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken[keyId]"
 						value="{{ tokenValue(settings.mapToken, 'keyId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Key ID', 'The ID of the key associated with your private key.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken[teamId]"
 						value="{{ tokenValue(settings.mapToken, 'teamId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Team ID', 'The team ID that created the key ID and private key.', children) }}
 			</div>
 			<div v-if="mapTiles.indexOf('here') > -1">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken[appId]"
 						value="{{ tokenValue(settings.mapToken, 'appId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('App ID', 'Your Here app ID.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken[appCode]"
 						value="{{ tokenValue(settings.mapToken, 'appCode') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('App Code', 'Your Here app code.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="mapToken[apiKey]"
 						value="{{ tokenValue(settings.mapToken, 'apiKey') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('API Key', 'Your Here API Key (only required for front-end embed maps).', children) }}
 			</div>
@@ -166,11 +160,10 @@
 
 			<div v-if="geoServiceSimple && requiresGeoToken">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoToken"
 						value="{{ not geoTokenIterable ? settings.geoToken }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Geo Token', 'Add the API key for the geocoding service.', children) }}
 			</div>
@@ -191,43 +184,39 @@
 						rows="6"
 					>{{ tokenValue(settings.geoToken, 'privateKey') }}</textarea>
 				{% endset %}
-				{{ label('Private Key', 'Paste the contents of your private key files below.', children) }}
+				{{ label('Private Key', 'Paste the contents of your private key files below (supports env variables).', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoToken[keyId]"
 						value="{{ tokenValue(settings.geoToken, 'keyId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Key ID', 'The ID of the key associated with your private key.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoToken[teamId]"
 						value="{{ tokenValue(settings.geoToken, 'teamId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Team ID', 'The team ID that created the key ID and private key.', children) }}
 			</div>
 
 			<div v-if="geoService.indexOf('here') > -1">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoToken[appId]"
 						value="{{ tokenValue(settings.geoToken, 'appId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('App ID', 'Your Here app ID.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoToken[appCode]"
 						value="{{ tokenValue(settings.geoToken, 'appCode') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('App Code', 'Your Here app code.', children) }}
 			</div>
@@ -283,30 +272,27 @@
 			{% set geoLocationTokenIterable = settings.geoLocationToken is iterable %}
 			<div v-if="geoLocationSimple && requiresGeoLocationToken">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoLocationToken"
 						value="{{ not geoLocationTokenIterable ? settings.geoLocationToken }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Geolocation Token', 'Add the API key for the geolocation service.', children) }}
 			</div>
 			<div v-if="requiresGeoLocationToken && geoLocationService.indexOf('maxmind') > -1">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoLocationToken[accountId]"
 						value="{{ tokenValue(settings.geoLocationToken, 'accountId') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('Account ID', 'Your MaxMind account ID.', children) }}
 
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="geoLocationToken[licenseKey]"
 						value="{{ tokenValue(settings.geoLocationToken, 'licenseKey') }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('License Key', 'Your MaxMind license key.', children) }}
 			</div>
@@ -351,11 +337,10 @@
 
 			<div v-if="requiresW3WToken">
 				{% set children %}
-					<input
-						type="text"
+					<craft-autosuggest
 						name="w3wToken"
 						value="{{ settings.w3wToken }}"
-					/>
+					></craft-autosuggest>
 				{% endset %}
 				{{ label('what3words Token', 'Your what3words API key.', children) }}
 			</div>
@@ -373,19 +358,149 @@
 	</section>
 
 	{% endnamespace %}
+</div>
 {% endblock %}
 
 {% do craft.app.view.registerAssetBundle('craft\\web\\assets\\vue\\VueAsset') %}
+{# Note: these are separate purely as a workaround for issues with PHPStorms syntax highlighting :( #}
 {% js %}
-new Vue({
-	el: '#content',
+window.__mapsData = {
+	mapTiles: '{{ settings.mapTiles }}',
+	geoService: '{{ settings.geoService }}',
+	geoLocationService: '{{ settings.geoLocationService }}',
+	w3wEnabled: '{{ settings.w3wEnabled ? 1 }}',
+};
+window.__mapsCraftAutosuggestSuggestions = {{ craft.cp.getEnvSuggestions()|json_encode|raw }};
+{% endjs %}
+{% js %}
+const CraftAutosuggest = {
+	props: ['name', 'value'],
+	delimiters: ['%{', '}'],
+	template: `<div class="autosuggest-container">
+		<vue-autosuggest
+			:suggestions="filteredOptions"
+			:get-suggestion-value="getSuggestionValue"
+			:input-props="inputProps"
+			:limit="limit"
+			@selected="onSelected"
+		>
+			<template slot-scope="{suggestion}">
+				%{suggestion.item.name || suggestion.item}
+				<span v-if="suggestion.item.hint" class="light">- %{suggestion.item.hint}</span>
+			</template>
+		</vue-autosuggest>
+	</div>`,
 	data () {
 		return {
-			mapTiles: '{{ settings.mapTiles }}',
-			geoService: '{{ settings.geoService }}',
-			geoLocationService: '{{ settings.geoLocationService }}',
-			w3wEnabled: '{{ settings.w3wEnabled ? 1 }}',
+			selected: '',
+			filteredOptions: [],
+			suggestions: window.__mapsCraftAutosuggestSuggestions || [],
+			limit: 5,
+			inputProps: {
+				initialValue: this.value,
+				name: this.name,
+				onInputChange: this.onInputChange,
+			},
 		};
+	},
+	methods: {
+		onInputChange(text) {
+			if (text === '' || text === undefined) {
+				this.filteredOptions = this.suggestions;
+				return;
+			}
+
+			text = text.toLowerCase();
+
+			var filtered = [];
+			var i, j, sectionFilter, item, name;
+			var that = this;
+
+			for (i = 0; i < this.suggestions.length; i++) {
+				sectionFilter = [];
+				for (j = 0; j < this.suggestions[i].data.length; j++) {
+					item = this.suggestions[i].data[j];
+					if (
+						(item.name || item).toLowerCase().indexOf(text) !== -1 ||
+						(item.hint && item.hint.toLowerCase().indexOf(text) !== -1)
+					) {
+						sectionFilter.push(item.name ? item : {name: item});
+					}
+				}
+				if (sectionFilter.length) {
+					sectionFilter.sort(function(a, b) {
+						var scoreA = that.scoreItem(a, text);
+						var scoreB = that.scoreItem(b, text);
+						if (scoreA === scoreB) {
+							return 0;
+						}
+						return scoreA < scoreB ? 1 : -1;
+					});
+					filtered.push({
+						label: this.suggestions[i].label || null,
+						data: sectionFilter.slice(0, this.limit)
+					});
+				}
+			}
+
+			this.filteredOptions = filtered;
+		},
+		scoreItem(item, text) {
+			var score = 0;
+			if (item.name.toLowerCase().indexOf(text) !== -1) {
+				score += 100 + text.length / item.name.length;
+			}
+			if (item.hint && item.hint.toLowerCase().indexOf(text) !== -1) {
+				score += text.length / item.hint.length;
+			}
+			return score;
+		},
+		onSelected(option) {
+			this.selected = option.item;
+
+			// Bring focus back to the input if they selected an alias
+			if (option.item.name[0] == '@') {
+				var input = this.$el.querySelector('input');
+				input.focus();
+				input.selectionStart = input.selectionEnd = input.value.length;
+			}
+		},
+		getSuggestionValue(suggestion) {
+			return suggestion.item.name || suggestion.item;
+		},
+	},
+};
+
+const ImageFadeOnLoad = {
+	props: ['src', 'srcset', 'alt', 'show'],
+	template: `<transition name="fade">
+		<img
+			:src="src"
+			:srcset="srcset"
+			:alt="alt"
+			loading="lazy"
+			@load="onLoaded"
+			v-show="loaded && show"
+		/>
+	</transition>`,
+	data () {
+		return { loaded: false };
+	},
+	methods: {
+		onLoaded () {
+			this.loaded = true;
+		},
+	},
+};
+
+new Vue({
+	el: '#content',
+	components: {
+		'craft-autosuggest': CraftAutosuggest,
+		'image-fade-on-load': ImageFadeOnLoad,
+	},
+	data () {
+		return window.__mapsData;
 	},
 	computed: {
 		requiresMapToken () {
@@ -449,6 +564,10 @@ hr {
 	margin: 0 50px var(--y-pad, 30px);
 	border-top: 1px solid #D2DBE1;
 	opacity: 0.5;
+}
+
+[v-cloak] {
+	display: none;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -567,6 +686,7 @@ hr {
 	padding: 30px;
 	padding: var(--y-pad, 30px) var(--x-pad, 30px);
 	min-height: 561px;
+	background-color: #e4edf6;
 }
 @media only screen and (max-width: 767px) {
 	.maps-map {

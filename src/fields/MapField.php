@@ -508,13 +508,13 @@ class MapField extends Field implements PreviewableFieldInterface
 
 				'mapTiles' => $settings->mapTiles,
 				'mapToken' => GeoService::getToken(
-					$settings->mapToken,
+					$settings->getMapToken(),
 					$settings->mapTiles
 				),
 
 				'geoService' => $settings->geoService,
 				'geoToken'   => GeoService::getToken(
-					$settings->geoToken,
+					$settings->getGeoToken(),
 					$settings->geoService
 				),
 
@@ -549,11 +549,11 @@ class MapField extends Field implements PreviewableFieldInterface
 
 		if (strpos($settings->mapTiles, 'google') !== false)
 		{
-			if ($settings->mapToken !== $settings->geoToken)
+			if ($settings->getMapToken() !== $settings->getGeoToken())
 			{
 				$view->registerJsFile(
 					'https://maps.googleapis.com/maps/api/js?key=' .
-					$settings->mapToken
+					$settings->getMapToken()
 				);
 			}
 		}
@@ -571,7 +571,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		{
 			$view->registerJsFile(
 				'https://maps.googleapis.com/maps/api/js?libraries=places&key=' .
-				$settings->geoToken
+				$settings->getGeoToken()
 			);
 		}
 		elseif ($settings->geoService === GeoEnum::AppleMapKit)
@@ -584,11 +584,11 @@ class MapField extends Field implements PreviewableFieldInterface
 		// what3words
 		// ---------------------------------------------------------------------
 
-		if ($settings->w3wEnabled && !empty($settings->w3wToken))
+		if ($settings->w3wEnabled && !empty($settings->getW3WToken()))
 		{
 			$view->registerJsFile(
 				'https://assets.what3words.com/sdk/v3/what3words.js?key=' .
-				$settings->w3wToken
+				$settings->getW3WToken()
 			);
 		}
 

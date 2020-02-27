@@ -1,3 +1,10 @@
+## 3.8.1 - 2020-02-27
+### Added
+- Add env support to settings (Closes #241)
+
+### Improved
+- Improve settings page appearance during load
+
 ## 3.8.0 - 2020-02-25
 ### Added
 - Add What3Words support (Closes #236)

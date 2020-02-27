@@ -93,7 +93,7 @@ class StaticService extends Component
 			'language' => Craft::$app->getLocale()->getLanguageID(),
 			'region' => $this->_getTld(),
 			'key' => GeoService::getToken(
-				$settings->mapToken,
+				$settings->getMapToken(),
 				$settings->mapTiles
 			),
 		];
@@ -152,8 +152,8 @@ class StaticService extends Component
 			'size' => $options->getSize(),
 			'scale' => $options->scale,
 			'lang' => Craft::$app->getLocale()->getLanguageID(),
-			'teamId' => $settings->mapToken['teamId'],
-			'keyId' => $settings->mapToken['keyId'],
+			'teamId' => $settings->getMapToken()['teamId'],
+			'keyId' => $settings->getMapToken()['keyId'],
 		];
 
 		if (!empty($options->markers))
@@ -189,7 +189,7 @@ class StaticService extends Component
 		}
 
 		$path = '/api/v1/snapshot?' . http_build_query($params);
-		openssl_sign($path, $signature, $settings->mapToken['privateKey'], OPENSSL_ALGO_SHA256);
+		openssl_sign($path, $signature, $settings->getMapToken()['privateKey'], OPENSSL_ALGO_SHA256);
 		$signature = $this->_encode($signature);
 
 		return 'https://snapshot.apple-mapkit.com' . $path . '&signature=' . $signature;
@@ -251,7 +251,7 @@ class StaticService extends Component
 		if ($options->scale > 1)
 			$url .= '@2x';
 
-		return $url . '?access_token=' . $settings->mapToken;
+		return $url . '?access_token=' . $settings->getMapToken();
 	}
 
 	/**
@@ -264,8 +264,8 @@ class StaticService extends Component
 	private function _generateHere ($options, $settings)
 	{
 		$params = [
-			'app_id' => $settings->mapToken['appId'],
-			'app_code' => $settings->mapToken['appCode'],
+			'app_id' => $settings->getMapToken()['appId'],
+			'app_code' => $settings->getMapToken()['appCode'],
 			'nodot' => true,
 			'c' => implode(',', $options->getCenter()),
 			'z' => $options->zoom,

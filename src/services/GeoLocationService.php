@@ -75,10 +75,10 @@ class GeoLocationService extends Component
 		switch ($settings->geoLocationService)
 		{
 			case self::IpStack:
-				$userLocation = $this->_lookup_IpStack($settings->geoLocationToken, $ip);
+				$userLocation = $this->_lookup_IpStack($settings->getGeoLocationToken(), $ip);
 				break;
 			case self::MaxMind:
-				$userLocation = $this->_lookup_MaxMind($settings->geoLocationToken, $ip);
+				$userLocation = $this->_lookup_MaxMind($settings->getGeoLocationToken(), $ip);
 				break;
 			case self::MaxMindLite:
 				$userLocation = $this->_lookup_MaxMindLite($ip);

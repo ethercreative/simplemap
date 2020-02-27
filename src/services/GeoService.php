@@ -582,7 +582,7 @@ class GeoService extends Component
 	{
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
-		$token = static::getToken($settings->geoToken, $settings->geoService);
+		$token = static::getToken($settings->getGeoToken(), $settings->geoService);
 
 		switch ($settings->geoService)
 		{
@@ -626,7 +626,7 @@ class GeoService extends Component
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
 		$token    =
-			static::getToken($settings->geoToken, $settings->geoService);
+			static::getToken($settings->getGeoToken(), $settings->geoService);
 
 		switch ($settings->geoService)
 		{

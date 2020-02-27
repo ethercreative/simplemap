@@ -119,4 +119,40 @@ class Settings extends Model
 		return $this->w3wEnabled && SimpleMap::v(SimpleMap::EDITION_PRO);
 	}
 
+	// Getters
+	// =========================================================================
+
+	public function getMapToken ()
+	{
+		return $this->_parseEnv($this->mapToken);
+	}
+
+	public function getGeoToken ()
+	{
+		return $this->_parseEnv($this->geoToken);
+	}
+
+	public function getW3WToken ()
+	{
+		return $this->_parseEnv($this->w3wToken);
+	}
+
+	public function getGeoLocationToken ()
+	{
+		return $this->_parseEnv($this->geoLocationToken);
+	}
+
+	// Helpers
+	// =========================================================================
+
+	private function _parseEnv ($value)
+	{
+		if (is_string($value))
+			return Craft::parseEnv($value);
+
+		return array_map(function ($v) {
+			return Craft::parseEnv($v);
+		}, $value);
+	}
+
 }

@@ -32,7 +32,7 @@ class What3WordsService
 		if ($geocoder)
 			return $geocoder;
 
-		return $geocoder = new Geocoder(SimpleMap::getInstance()->getSettings()->w3wToken);
+		return $geocoder = new Geocoder(SimpleMap::getInstance()->getSettings()->getW3WToken());
 	}
 
 }

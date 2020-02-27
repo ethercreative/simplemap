@@ -166,7 +166,7 @@ class SimpleMap extends Plugin
 	}
 
 	/**
-	 * @return Settings
+	 * @return bool|\craft\base\Model|Settings
 	 */
 	public function getSettings ()
 	{
@@ -230,6 +230,9 @@ class SimpleMap extends Plugin
 		$event->types[] = MapPartsType::class;
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function onApplicationInit ()
 	{
 		if ($this->getSettings()->geoLocationAutoRedirect)

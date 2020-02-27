@@ -94,7 +94,7 @@ return [
 		'Add the API key for the geocoding service.',
 
 	'Private Key' => 'Private Key',
-	'Paste the contents of your private key files below.' => 'Paste the contents of your private key files below.',
+	'Paste the contents of your private key files below (supports env variables).' => 'Paste the contents of your private key files below (supports env variables).',
 
 	'Key ID' => 'Key ID',
 	'The ID of the key associated with your private key.' => 'The ID of the key associated with your private key.',

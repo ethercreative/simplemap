@@ -1,3 +1,8 @@
+## 3.8.2 - 2020-03-04
+### Fixed
+- Fix issue where elements failed to save when searching for a location via Google or Here (Fixes #242)
+- Fix what3words not updating when searching for a location
+
 ## 3.8.1 - 2020-02-27
 ### Added
 - Add env support to settings (Closes #241)

@@ -118,14 +118,16 @@
 					return;
 
 				let item = selected.item;
+				const placeId = item.__placeId;
+				delete item.__placeId;
 
 				// eslint-disable-next-line default-case
 				switch (this.service) {
 					case GeoService.GoogleMaps:
-						item = await this.geo.getGooglePlaceDetails(item.__placeId, item);
+						item = await this.geo.getGooglePlaceDetails(placeId, item);
 						break;
 					case GeoService.Here:
-						item = await this.geo.getHerePlaceDetails(item.__placeId, item);
+						item = await this.geo.getHerePlaceDetails(placeId, item);
 						break;
 				}
 

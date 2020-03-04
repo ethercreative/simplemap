@@ -214,18 +214,26 @@
 				this.resultsOpenOffset = value;
 			},
 
-			onSearchSelected (item) {
+			async onSearchSelected (item) {
 				this.value = {
 					...this.value,
 					...item,
 				};
+
+				await this.updateW3WByLatLng({ lat: item.lat, lng: item.lng });
 			},
 
 			async onMapChange (latLng) {
 				const zoom = this.value.zoom;
 
 				await this.onLatLngChange(latLng);
+				await this.updateW3WByLatLng(latLng);
 
+				this.value.zoom       = zoom;
+				this.fullAddressDirty = false;
+			},
+
+			async updateW3WByLatLng (latLng) {
 				if (this.config.w3wEnabled) {
 					try {
 						const res = await window.what3words.api.convertTo3wa(latLng);
@@ -236,9 +244,6 @@
 				} else {
 					this.value.what3words = null;
 				}
-
-				this.value.zoom       = zoom;
-				this.fullAddressDirty = false;
 			},
 
 			async onW3WChange (words) {

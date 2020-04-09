@@ -9,6 +9,7 @@
     },
     "how-to": {
       "_label": "How-to Guides",
+      "search": "Search by Location",
       "graphql": "Querying in GraphQL"
     },
     "rendering": {

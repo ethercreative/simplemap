@@ -1,4 +1,4 @@
-## [Unreleased] 3.8.3
+## 3.8.3 - 2020-04-09
 ### Added
 - Added JSON support when filtering by a map field. Very useful for Crafts current GQL implementation (Fixes #248)
 

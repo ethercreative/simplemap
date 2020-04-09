@@ -10,13 +10,15 @@ around this, we've added support for JSON strings within the query argument for
 Map fields. It's not pretty, but it works.
 
 The JSON object can support all the parameters that you can use in regular 
-[Searching](../getting-started/usage/#searching).
+[Searching](../getting-started/usage/#searching). You can also order by a 
+locations distance from the search location.
 
 ```graphql
 {
   entries (
     map:"{\"location\":\"Maidstone, Kent\", \"country\": \"UK\", \"radius\": 50}"
     section: "locations"
+    orderBy: "distance"
   ) {
     title
     ... on locations_locations_Entry {

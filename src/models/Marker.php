@@ -91,7 +91,7 @@ class Marker
 			return GeoService::latLngFromAddress($this->location);
 
 		if (!array_key_exists('lat', $this->location) || !array_key_exists('lng', $this->location))
-			return ['lat' => $this->location[0], 'lng' => $this->location[1]];
+			return ['lat' => (float)$this->location[0], 'lng' => (float)$this->location[1]];
 
 		return $this->location;
 	}

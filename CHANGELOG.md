@@ -1,3 +1,7 @@
+## [Unreleased] 3.8.3
+### Fixed
+- Markers coodinates are now cast to floats (via [@Sekonda](https://github.com/Sekonda))
+
 ## 3.8.2 - 2020-03-04
 ### Fixed
 - Fix issue where elements failed to save when searching for a location via Google or Here (Fixes #242)

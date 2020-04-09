@@ -1,4 +1,7 @@
 ## [Unreleased] 3.8.3
+### Added
+- Added JSON support when filtering by a map field. Very useful for Crafts current GQL implementation (Fixes #248)
+
 ### Fixed
 - Markers coodinates are now cast to floats (via [@Sekonda](https://github.com/Sekonda))
 

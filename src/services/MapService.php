@@ -14,10 +14,12 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Json;
 use ether\simplemap\models\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\records\Map as MapRecord;
 use ether\simplemap\SimpleMap;
+use function Arrayy\array_first;
 
 /**
  * Class MapService
@@ -162,6 +164,20 @@ class MapService extends Component
 	{
 		if (empty($value))
 			return;
+
+
+		// Work-around for Craft built-in GraphQL not supporting custom
+		// arguments for fields:
+
+		// If it's an array with a 0 key, that means it's likely to be a `[QueryArgument]`
+		if (is_array($value) && array_key_exists(0, $value))
+			$value = $value[0];
+
+		// If it's a string, check to see if it's JSON and decode it.
+		if (is_string($value))
+			$value = Json::decodeIfJson($value);
+
+		// End work-around
 
 		/** @var ElementQuery $query */
 

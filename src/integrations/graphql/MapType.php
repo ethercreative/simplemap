@@ -29,30 +29,35 @@ class MapType
 	public static function getFieldDefinitions (): array
 	{
 		return [
-			'lat'     => [
+			'lat'      => [
 				'name'        => 'lat',
 				'type'        => Type::float(),
 				'description' => 'The maps latitude.',
 			],
-			'lng'     => [
+			'lng'      => [
 				'name'        => 'lng',
 				'type'        => Type::float(),
 				'description' => 'The maps longitude.',
 			],
-			'zoom'    => [
+			'zoom'     => [
 				'name'        => 'zoom',
 				'type'        => Type::int(),
 				'description' => 'The maps zoom level.',
 			],
-			'address' => [
+			'distance' => [
+				'name'        => 'distance',
+				'type'        => Type::float(),
+				'description' => 'The distance to this location.',
+			],
+			'address'  => [
 				'name'        => 'address',
 				'type'        => Type::string(),
 				'description' => 'The full address.',
 			],
-			'parts' => [
+			'parts'    => [
 				'name'        => 'parts',
 				'type'        => MapPartsType::getType(),
-				'description' => 'The maps address parts.'
+				'description' => 'The maps address parts.',
 			],
 		];
 	}

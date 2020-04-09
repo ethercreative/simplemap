@@ -370,7 +370,11 @@ class MapService extends Component
 		$query
 			->subQuery
 			->addSelect($search . ' as [[mapsCalculatedDistance]]')
-			->andWhere($restrict);
+			->andWhere($restrict)
+			->andWhere([
+				'not',
+				['[[' . $table . '.lat]]' => null],
+			]);
 
 		if (Craft::$app->getDb()->driverName === 'pgsql')
 			$query->subQuery->andWhere($search . ' <= ' . $radius);

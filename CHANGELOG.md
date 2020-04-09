@@ -4,6 +4,7 @@
 
 ### Fixed
 - Markers coodinates are now cast to floats (via [@Sekonda](https://github.com/Sekonda))
+- Exclude empty map fields when sorting by distance (Fixes #245)
 
 ## 3.8.2 - 2020-03-04
 ### Fixed

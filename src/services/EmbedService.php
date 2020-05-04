@@ -120,10 +120,12 @@ class EmbedService extends Component
 
 		$formattedOptions = Json::encode(
 			array_merge(
+				[
+					'zoom' => $options->zoom,
+				],
 				$options->options,
 				[
 					'center'    => $options->getCenter(),
-					'zoom'      => $options->zoom,
 					'mapTypeId' => $mapTypeId,
 				]
 			),
@@ -309,12 +311,14 @@ JS;
 
 		$formattedOptions = Json::encode(
 			array_merge(
+				[
+					'style' => 'mapbox://styles/mapbox/' . $type,
+					'zoom' => $options->zoom,
+				],
 				$options->options,
 				[
 					'container' => $options->id,
-					'style' => 'mapbox://styles/mapbox/' . $type,
 					'center' => array_reverse(array_values($options->getCenter())),
-					'zoom' => $options->zoom,
 				]
 			),
 			self::JSON_OPTS
@@ -379,10 +383,12 @@ JS;
 
 		$formattedOptions = Json::encode(
 			array_merge(
+				[
+					'zoom' => $options->zoom,
+				],
 				$options->options,
 				[
 					'center'     => $options->getCenter(),
-					'zoom'       => $options->zoom,
 					'pixelRatio' => '##PIXELRATIO##',
 				]
 			),

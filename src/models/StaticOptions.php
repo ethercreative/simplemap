@@ -102,6 +102,9 @@ class StaticOptions
 		if (!array_key_exists('lat', $this->center) || !array_key_exists('lng', $this->center))
 			$this->center = ['lat' => $this->center[0], 'lng' => $this->center[1]];
 
+		$this->center['lat'] = floatval($this->center['lat']);
+		$this->center['lng'] = floatval($this->center['lng']);
+
 		return $this->center;
 	}
 

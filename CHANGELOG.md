@@ -1,3 +1,11 @@
+## [Unreleased] 3.8.4
+### Changed
+- Allow zoom override on Google/Mapbox embeds
+- Allow style override on Mapbox embeds (Fixes #256)
+
+### Fixed
+- Cast embed center coordinates to floats
+
 ## 3.8.3 - 2020-04-09
 ### Added
 - Added JSON support when filtering by a map field. Very useful for Crafts current GQL implementation (Fixes #248)

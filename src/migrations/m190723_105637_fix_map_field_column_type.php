@@ -33,7 +33,7 @@ class m190723_105637_fix_map_field_column_type extends Migration
 		$updates              = [];
 
 		foreach ($fields as $f => $field)
-			if ($field['type'] === MapField::class && $field['contentColumnType'] !== 'text')
+			if (!empty($field['type']) && $field['type'] === MapField::class && $field['contentColumnType'] !== 'text')
 				$updates["fields.$f.contentColumnType"] = 'text';
 
 		foreach ($matrixBlockTypes as $b => $blockType)

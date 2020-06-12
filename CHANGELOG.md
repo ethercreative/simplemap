@@ -1,10 +1,11 @@
-## [Unreleased] 3.8.4
+## 3.8.4 - 2020-06-12
 ### Changed
 - Allow zoom override on Google/Mapbox embeds
 - Allow style override on Mapbox embeds (Fixes #256)
 
 ### Fixed
 - Cast embed center coordinates to floats
+- Upgraded Mapbox to use new Static Tiles API
 
 ## 3.8.3 - 2020-04-09
 ### Added

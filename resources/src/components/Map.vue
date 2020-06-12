@@ -138,7 +138,10 @@
 			} else if (this.tiles.indexOf('mapkit') > -1) {
 				this._mapKitMutant();
 			} else {
-				const opts = { attribution: this.tileLayer.attr };
+				const opts = {
+					attribution: this.tileLayer.attr,
+					...(this.tileLayer.opts || {}),
+				};
 
 				if (this.tileLayer.subdomains)
 					opts.subdomains = this.tileLayer.subdomains;
@@ -179,6 +182,7 @@
 			tileLayer () {
 				const scale     = L.Browser.retina ? '@2x.png' : '.png'
 					, hereScale = L.Browser.retina ? '512' : '256'
+					, mbScale   = L.Browser.retina ? '@2x' : ''
 					, style     = this.tiles.split(/\.(.+)/)[1];
 
 				switch (this.tiles) {
@@ -202,11 +206,24 @@
 					case MapTiles.MapboxOutdoors:
 					case MapTiles.MapboxStreets:
 					case MapTiles.MapboxLight:
-					case MapTiles.MapboxDark:
+					case MapTiles.MapboxDark: {
+						let v = '-v11';
+
+						if (this.tiles === MapTiles.MapboxLight || this.tiles === MapTiles.MapboxDark)
+							v = '-v10';
+
 						return {
-							url: `https://api.tiles.mapbox.com/v4/mapbox.${style}/{z}/{x}/{y}${scale}?access_token=${this.token}`,
+							url: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}{scale}?access_token={accessToken}',
 							attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://www.mapbox.com/" target="_blank" rel="noreferrer">Mapbox</a>',
+							opts: {
+								accessToken: this.token,
+								id: `mapbox/${style}${v}`,
+								tileSize: 512,
+								zoomOffset: -1,
+								scale: mbScale,
+							},
 						};
+					}
 					case MapTiles.HereNormalDay:
 					case MapTiles.HereNormalDayGrey:
 					case MapTiles.HereNormalDayTransit:

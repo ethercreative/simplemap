@@ -215,7 +215,7 @@ class StaticService extends Component
 				$url .= 'outdoors-v11';
 				break;
 			case MapTiles::MapboxLight:
-				$url .= 'light-v9';
+				$url .= 'light-v10';
 				break;
 			case MapTiles::MapboxDark:
 				$url .= 'dark-v10';

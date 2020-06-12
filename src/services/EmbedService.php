@@ -302,7 +302,7 @@ JS;
 				$type = 'outdoors-v11';
 				break;
 			case MapTiles::MapboxLight:
-				$type = 'light-v9';
+				$type = 'light-v10';
 				break;
 			case MapTiles::MapboxDark:
 				$type = 'dark-v10';

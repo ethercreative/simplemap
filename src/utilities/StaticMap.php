@@ -97,7 +97,7 @@ class StaticMap
 					'color' => $m[1],
 					'label' => $m[2],
 				]);
-			}, explode(';', $markers));
+			}, explode(';', urldecode($markers)));
 		}
 
 		/** @var Settings $settings */

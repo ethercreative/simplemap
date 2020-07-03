@@ -1,3 +1,7 @@
+## 3.8.4.1 - 2020-07-03
+### Fixed
+- Fix url encode issue for markers in static map images
+
 ## 3.8.4 - 2020-06-12
 ### Changed
 - Allow zoom override on Google/Mapbox embeds

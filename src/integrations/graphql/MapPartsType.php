@@ -23,7 +23,7 @@ class MapPartsType
 
 	public static function getName (): string
 	{
-		return 'MapParts';
+		return 'Ether_MapParts';
 	}
 
 	public static function getFieldDefinitions (): array

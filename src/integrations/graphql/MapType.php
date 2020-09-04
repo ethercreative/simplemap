@@ -23,7 +23,7 @@ class MapType
 
 	public static function getName (): string
 	{
-		return 'Map';
+		return 'Ether_Map';
 	}
 
 	public static function getFieldDefinitions (): array

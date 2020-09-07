@@ -212,7 +212,6 @@ class MapService extends Component
 		}
 
 		$oldOrderBy = null;
-		$search = false;
 
 		if (!is_array($query->orderBy))
 		{
@@ -220,12 +219,7 @@ class MapService extends Component
 			$query->orderBy = [];
 		}
 
-		// Coordinate CraftQL support
-		if (array_key_exists('coordinate', $value))
-			$value['location'] = $value['coordinate'];
-
-		if (array_key_exists('location', $value))
-			$search = $this->_searchLocation($query, $value, $alias);
+		$search = $this->_searchLocation($query, $value, $alias);
 
 		if (array_key_exists('distance', $query->orderBy))
 			$this->_replaceOrderBy($query, $search);
@@ -298,90 +292,118 @@ class MapService extends Component
 	 * search string if we can.
 	 *
 	 * @param ElementQuery $query
-	 * @param mixed        $value
-	 * @param string       $table
+	 * @param mixed $values
+	 * @param string $table
 	 *
-	 * @return bool|string
+	 * @return array|bool
 	 * @throws \Exception
 	 */
-	private function _searchLocation (ElementQuery $query, $value, $table)
+	private function _searchLocation (ElementQuery $query, $values, $table)
 	{
-		$location = $value['location'];
-		$country  = $value['country'] ?? null;
-		$radius   = $value['radius'] ?? 50.0;
-		$unit     = $value['unit'] ?? 'km';
+		if (array_key_exists('location', $values)) {
+			$values = [$values];
+		}
 
-		// Normalize location
-		$location = GeoService::normalizeLocation($location, $country);
+		$queryOrderBy = [];
+		$queryRestrict = ['or'];
+		$queryWhere = ['or'];
+		$queryHaving = ['or'];
 
-		if ($location === null)
-			return false;
+		foreach ($values as $index => $value) {
+			// Coordinate CraftQL support
+			if (array_key_exists('coordinate', $value))
+				$value['location'] = $value['coordinate'];
 
-		$lat = $location['lat'];
-		$lng = $location['lng'];
+			$location = $value['location'];
+			$country  = $value['country'] ?? null;
+			$radius   = $value['radius'] ?? 50.0;
+			$unit     = $value['unit'] ?? 'km';
 
-		// Normalize radius
-		if (!is_numeric($radius))
-			$radius = (float) $radius;
+			// Normalize location
+			$location = GeoService::normalizeLocation($location, $country);
 
-		if (!is_numeric($radius))
-			$radius = 50.0;
+			if ($location === null)
+				return false;
 
-		// Normalize unit
-		$unit = GeoService::normalizeDistance($unit);
+			$lat = $location['lat'];
+			$lng = $location['lng'];
 
-		// Base Distance
-		$distance = $unit === 'km' ? '111.045' : '69.0';
+			// Normalize radius
+			if (!is_numeric($radius))
+				$radius = (float) $radius;
 
-		// Store for populating search result distance
-		$this->_location = $location;
-		$this->_distance = (float) $distance;
+			if (!is_numeric($radius))
+				$radius = 50.0;
 
-		// Search Query
-		$search = str_replace(["\r", "\n", "\t"], '', "(
-			$distance *
-			DEGREES(
-				ACOS(
-					COS(RADIANS($lat)) *
-					COS(RADIANS([[$table.lat]])) *
-					COS(RADIANS($lng) - RADIANS([[$table.lng]])) +
-					SIN(RADIANS($lat)) *
-					SIN(RADIANS([[$table.lat]]))
+			// Normalize unit
+			$unit = GeoService::normalizeDistance($unit);
+
+			// Base Distance
+			$distance = $unit === 'km' ? '111.045' : '69.0';
+
+			// Store for populating search result distance
+			$this->_location = $location;
+			$this->_distance = (float) $distance;
+
+			// Search Query
+			$search = str_replace(["\r", "\n", "\t"], '', "(
+				$distance *
+				DEGREES(
+					ACOS(
+						COS(RADIANS($lat)) *
+						COS(RADIANS([[$table.lat]])) *
+						COS(RADIANS($lng) - RADIANS([[$table.lng]])) +
+						SIN(RADIANS($lat)) *
+						SIN(RADIANS([[$table.lat]]))
+					)
 				)
-			)
-		)");
+			)");
 
-		// Restrict the results
-		$restrict = [
-			'and',
-			[
+			// Restrict the results
+			$queryRestrict[] = [
 				'and',
-				"[[$table.lat]] >= $lat - ($radius / $distance)",
-				"[[$table.lat]] <= $lat + ($radius / $distance)",
-			],
-			[
-				'and',
-				"[[$table.lng]] >= $lng - ($radius / ($distance * COS(RADIANS($lat))))",
-				"[[$table.lng]] <= $lng + ($radius / ($distance * COS(RADIANS($lat))))",
-			]
-		];
+				[
+					'and',
+					"[[$table.lat]] >= $lat - ($radius / $distance)",
+					"[[$table.lat]] <= $lat + ($radius / $distance)",
+				],
+				[
+					'and',
+					"[[$table.lng]] >= $lng - ($radius / ($distance * COS(RADIANS($lat))))",
+					"[[$table.lng]] <= $lng + ($radius / ($distance * COS(RADIANS($lat))))",
+				]
+			];
 
-		// Filter the query
-		$query
-			->subQuery
-			->addSelect($search . ' as [[mapsCalculatedDistance]]')
-			->andWhere($restrict)
-			->andWhere([
-				'not',
-				['[[' . $table . '.lat]]' => null],
-			]);
+			$key = "mapsCalculatedDistance_$index";
 
-		if (Craft::$app->getDb()->driverName === 'pgsql')
-			$query->subQuery->andWhere($search . ' <= ' . $radius);
-		else
-			$query->subQuery->andHaving('[[mapsCalculatedDistance]] <= ' . $radius);
+			// Filter the query
+			$query
+				->subQuery
+				->addSelect("$search as [[$key]]");
 
-		return '[[mapsCalculatedDistance]]';
+			$queryWhere[]   = "$search <= $radius";
+			$queryHaving[]  = "[[$key]] <= $radius";
+			$queryOrderBy[] = "[[$key]]";
+		}
+
+		if ($queryOrderBy) {
+			$query
+				->subQuery
+			    ->andWhere($queryRestrict)
+				->andWhere([
+					'not',
+					['[[' . $table . '.lat]]' => null],
+				]);
+
+			if (Craft::$app->getDb()->driverName === 'pgsql')
+				$query->subQuery->andWhere($queryWhere);
+			else
+				$query->subQuery->andHaving($queryHaving);
+
+			return $queryOrderBy;
+		}
+
+		return  false;
 	}
 
 	/**
@@ -389,7 +411,7 @@ class MapService extends Component
 	 * or otherwise remove it.
 	 *
 	 * @param ElementQuery $query
-	 * @param bool         $search
+	 * @param array|bool   $search
 	 */
 	private function _replaceOrderBy (ElementQuery $query, $search = false)
 	{
@@ -397,8 +419,13 @@ class MapService extends Component
 
 		foreach ((array) $query->orderBy as $order => $sort)
 		{
-			if ($order === 'distance' && $search) $nextOrder[$search] = $sort;
-			elseif ($order !== 'distance') $nextOrder[$order] = $sort;
+			if ($order === 'distance' && $search) {
+				foreach ($search as $searchParam) {
+					$nextOrder[$searchParam] = $sort;
+				}
+			} elseif ($order !== 'distance') {
+				$nextOrder[$order] = $sort;
+			}
 		}
 
 		$query->orderBy($nextOrder);

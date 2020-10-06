@@ -27,6 +27,9 @@ class StaticOptions
 	/** @var string|array Can be an address string, or a [lat, lng] or ['lat' => lat, 'lng' => lng] array */
 	public $center = [51.272154, 0.514951];
 
+	/** @var string|array Must be [lat, lng] or ['lat' => lat, 'lng' => lng] array */
+	public $centerFallback = [51.272154, 0.514951];
+
 	/** @var int The width of the map */
 	public $width = 640;
 
@@ -65,6 +68,9 @@ class StaticOptions
 			$center = ['lat' => $center->lat, 'lng' => $center->lng];
 		elseif (is_string($center))
 			$center = GeoService::latLngFromAddress($center);
+
+		if (empty($center))
+			$center = $config['centerFallback'] ?? $this->centerFallback;
 
 		$config['center'] = $center;
 

@@ -766,7 +766,7 @@ class GeoService extends Component
 			if (static::_validateCountryCode($country))
 				$url .= '&country=' . rawurlencode(strtolower($country));
 			else
-				$url = str_replace('.json', rawurlencode(', ' . $country), $url);
+				$url = str_replace('.json', rawurlencode(', ' . $country) . '.json', $url);
 		}
 
 		$data = (string) static::_client()->get($url)->getBody();

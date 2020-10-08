@@ -5,6 +5,9 @@
 ### Changed
 - Prefix name of `Map` graphql elements
 
+### Fixed
+- Reduce search radius to 0 if location is not valid (Fixes #277)
+
 ## 3.8.4.1 - 2020-07-03
 ### Fixed
 - Fix url encode issue for markers in static map images

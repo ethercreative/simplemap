@@ -16,6 +16,8 @@ method (we'll cover that later):
 - **`center`** - This can be an address string (i.e. "Maidstone, UK"), a lat / 
                  lng variable (i.e. `[51.272154, 0.514951]` or 
                  `{ lat: 51.272154, lng: 0.514951 }`).
+- **`centerFallback`** - The fallback location that will be used if the center 
+                         specified above is empty. Must be lat / lng.
 - **`width`** - The width of the map image (see max image sizes below).
 - **`height`** - The height of the map image (see max image sizes below).
 - **`zoom`** - The zoom level of the map (must be between 0 and 18).

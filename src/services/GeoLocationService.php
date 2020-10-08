@@ -168,7 +168,7 @@ class GeoLocationService extends Component
 		return [
 			self::None => SimpleMap::t('None'),
 			self::IpStack => SimpleMap::t('ipstack'),
-			self::MaxMindLite => SimpleMap::t('MaxMind (Lite, ~60MB download)'),
+//			self::MaxMindLite => SimpleMap::t('MaxMind (Lite, ~60MB download)'),
 			self::MaxMind => SimpleMap::t('MaxMind'),
 		];
 	}
@@ -339,13 +339,14 @@ class GeoLocationService extends Component
 	{
 		if (!self::dbExists())
 		{
-			self::dbQueueDownload();
+//			self::dbQueueDownload();
 
-			throw new Exception('No MaxMind database exists, starting download...');
+			throw new Exception('MaxMind Lite is no longer supported');
 		}
 
-		if (self::dbShouldUpdate())
-			self::dbQueueDownload();
+//		if (self::dbShouldUpdate())
+//			self::dbQueueDownload();
+		Craft::warning('MaxMind Lite is no longer supported and will not receive updates');
 
 		try
 		{

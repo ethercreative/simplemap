@@ -9,6 +9,9 @@
 - Reduce search radius to 0 if location is not valid (Fixes #277)
 - Fix mapbox geocode error when country is not valid ISO code (Fixes #276)
 
+### Removed
+- Remove MaxMind Lite option
+
 ## 3.8.4.1 - 2020-07-03
 ### Fixed
 - Fix url encode issue for markers in static map images

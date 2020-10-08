@@ -1,4 +1,4 @@
-## [Unreleased] 3.8.5
+## 3.8.5 - 2020-10-08
 ### Added
 - Add `centerFallback` option to map embeds (Fixes #263)
 

@@ -2,6 +2,9 @@
 ### Added
 - Add `centerFallback` option to map embeds (Fixes #263)
 
+### Changed
+- Prefix name of `Map` graphql elements
+
 ## 3.8.4.1 - 2020-07-03
 ### Fixed
 - Fix url encode issue for markers in static map images

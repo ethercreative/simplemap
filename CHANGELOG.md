@@ -1,3 +1,10 @@
+## [Unreleased] 3.8.6
+### Added
+- Added GraphQL support for query filtering and mutations
+
+### Improved
+- Address inputs will span full width when map is disabled (Fixes #282)
+
 ## 3.8.5 - 2020-10-08
 ### Added
 - Add `centerFallback` option to map embeds (Fixes #263)

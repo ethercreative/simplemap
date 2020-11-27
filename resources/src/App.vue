@@ -18,7 +18,7 @@
 				:show-w3w-grid="config.showW3WGrid"
 			/>
 
-			<div :class="$style.content">
+			<div :class="[$style.content, config.hideMap && $style.noMap]">
 				<Search
 					v-if="!config.hideSearch"
 					:service="config.geoService"
@@ -391,6 +391,10 @@
 		padding: 24px;
 
 		pointer-events: none;
+
+		&.noMap {
+			width: 100%;
+		}
 
 		:global(.matrixblock) &,
 		:global(.superTable-layout-table) &,

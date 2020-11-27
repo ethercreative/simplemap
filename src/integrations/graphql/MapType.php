@@ -9,6 +9,9 @@
 namespace ether\simplemap\integrations\graphql;
 
 use craft\gql\GqlEntityRegistry;
+use GraphQL\Type\Definition\EnumType;
+use GraphQL\Type\Definition\InputObjectType;
+use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -26,7 +29,7 @@ class MapType
 		return 'Ether_Map';
 	}
 
-	public static function getFieldDefinitions (): array
+	public static function getFieldDefinitions ($input = false): array
 	{
 		return [
 			'lat'      => [
@@ -56,8 +59,39 @@ class MapType
 			],
 			'parts'    => [
 				'name'        => 'parts',
-				'type'        => MapPartsType::getType(),
+				'type'        => $input ? MapPartsType::getInputType() : MapPartsType::getType(),
 				'description' => 'The maps address parts.',
+			],
+		];
+	}
+
+	public static function getInputDefinitions (): array
+	{
+		return static::getFieldDefinitions(true);
+	}
+
+	public static function getQueryInputDefinitions (): array
+	{
+		return [
+			'coordinate' => [
+				'name' => 'coordinate',
+				'type' => static::getCoordsType(),
+			],
+			'location' => [
+				'name' => 'location',
+				'type' => Type::string(),
+			],
+			'country' => [
+				'name' => 'country',
+				'type' => Type::string(),
+			],
+			'radius' => [
+				'name' => 'radius',
+				'type' => Type::float(),
+			],
+			'unit' => [
+				'name' => 'unit',
+				'type' => static::getUnitType(),
 			],
 		];
 	}
@@ -72,6 +106,82 @@ class MapType
 			new ObjectType([
 				'name' => static::getName(),
 				'fields' => static::class . '::getFieldDefinitions',
+			])
+		);
+	}
+
+	public static function getInputType (): InputType
+	{
+		$name = static::class . 'Input';
+
+		if ($type = GqlEntityRegistry::getEntity($name))
+			return $type;
+
+		return GqlEntityRegistry::createEntity(
+			$name,
+			new InputObjectType([
+				'name' => static::getName() . 'Input',
+				'fields' => static::class . '::getInputDefinitions',
+			])
+		);
+	}
+
+	public static function getQueryType (): InputType
+	{
+		$name = static::class . 'Query';
+
+		if ($type = GqlEntityRegistry::getEntity($name))
+			return $type;
+
+		return GqlEntityRegistry::createEntity(
+			$name,
+			new InputObjectType([
+				'name' => static::getName() . 'Query',
+				'fields' => static::class . '::getQueryInputDefinitions',
+			])
+		);
+	}
+
+	public static function getCoordsType (): InputType
+	{
+		$name = static::class . 'Coords';
+
+		if ($type = GqlEntityRegistry::getEntity($name))
+			return $type;
+
+		return GqlEntityRegistry::createEntity(
+			$name,
+			new InputObjectType([
+				'name' => static::getName() . 'Coords',
+				'fields' => [
+					'lat' => [
+						'name' => 'lat',
+						'type' => Type::nonNull(Type::float()),
+					],
+					'lng' => [
+						'name' => 'lat',
+						'type' => Type::nonNull(Type::float()),
+					],
+				],
+			])
+		);
+	}
+
+	public static function getUnitType (): EnumType
+	{
+		$name = static::class . 'Unit';
+
+		if ($type = GqlEntityRegistry::getEntity($name))
+			return $type;
+
+		return GqlEntityRegistry::createEntity(
+			$name,
+			new EnumType([
+				'name' => static::getName() . 'Unit',
+				'values' => [
+					'Miles' => 'mi',
+					'Kilometres' => 'km',
+				],
 			])
 		);
 	}

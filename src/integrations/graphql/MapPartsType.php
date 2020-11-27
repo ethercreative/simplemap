@@ -9,6 +9,8 @@
 namespace ether\simplemap\integrations\graphql;
 
 use craft\gql\GqlEntityRegistry;
+use GraphQL\Type\Definition\InputObjectType;
+use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
@@ -80,6 +82,22 @@ class MapPartsType
 					'fields' => static::class . '::getFieldDefinitions',
 				]
 			)
+		);
+	}
+
+	public static function getInputType (): InputType
+	{
+		$name = static::class . 'Input';
+
+		if ($type = GqlEntityRegistry::getEntity($name))
+			return $type;
+
+		return GqlEntityRegistry::createEntity(
+			$name,
+			new InputObjectType([
+				'name'   => static::getName() . 'Input',
+				'fields' => static::class . '::getFieldDefinitions',
+			])
 		);
 	}
 

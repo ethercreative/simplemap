@@ -397,6 +397,16 @@ class MapField extends Field implements PreviewableFieldInterface
 		return MapType::getType();
 	}
 
+	public function getContentGqlQueryArgumentType ()
+	{
+		return MapType::getQueryType();
+	}
+
+	public function getContentGqlMutationArgumentType ()
+	{
+		return MapType::getInputType();
+	}
+
 	// Methods: Events
 	// -------------------------------------------------------------------------
 

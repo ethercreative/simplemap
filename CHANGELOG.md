@@ -1,4 +1,8 @@
-## [Unreleased] 3.8.6
+## 3.9.0 - 2020-11-27
+> {warning} **BREAKING**: This release changes how GraphQL querying works for
+the map field. You should now pass the search query as an input rather than a 
+JSON string.
+
 ### Added
 - Added GraphQL support for query filtering and mutations
 

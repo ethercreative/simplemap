@@ -1,3 +1,7 @@
+## 3.9.0.1 - 2020-11-27
+### Fixed
+- Removed distance field from GQL mutation input
+
 ## 3.9.0 - 2020-11-27
 > {warning} **BREAKING**: This release changes how GraphQL querying works for
 the map field. You should now pass the search query as an input rather than a 

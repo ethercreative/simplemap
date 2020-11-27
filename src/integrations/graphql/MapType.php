@@ -29,7 +29,7 @@ class MapType
 		return 'Ether_Map';
 	}
 
-	public static function getFieldDefinitions ($input = false): array
+	public static function getFieldDefinitions (): array
 	{
 		return [
 			'lat'      => [
@@ -59,7 +59,7 @@ class MapType
 			],
 			'parts'    => [
 				'name'        => 'parts',
-				'type'        => $input ? MapPartsType::getInputType() : MapPartsType::getType(),
+				'type'        => MapPartsType::getType(),
 				'description' => 'The maps address parts.',
 			],
 		];
@@ -67,7 +67,12 @@ class MapType
 
 	public static function getInputDefinitions (): array
 	{
-		return static::getFieldDefinitions(true);
+		$fields = static::getFieldDefinitions();
+
+		unset($fields['distance']);
+		$fields['parts']['type'] = MapPartsType::getInputType();
+
+		return $fields;
 	}
 
 	public static function getQueryInputDefinitions (): array

@@ -164,7 +164,7 @@ class MapType
 						'type' => Type::nonNull(Type::float()),
 					],
 					'lng' => [
-						'name' => 'lat',
+						'name' => 'lng',
 						'type' => Type::nonNull(Type::float()),
 					],
 				],

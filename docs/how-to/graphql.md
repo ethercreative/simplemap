@@ -4,19 +4,24 @@ title: Querying in GraphQL
 
 # Querying in GraphQL
 
-While the _CraftQL_ plugin has great support for custom arguments for field 
-types, Crafts current built-in implementation of GraphQL doesn't. To work 
-around this, we've added support for JSON strings within the query argument for 
-Map fields. It's not pretty, but it works.
-
-The JSON object can support all the parameters that you can use in regular 
-[Searching](../getting-started/usage/#searching). You can also order by a 
-locations distance from the search location.
+The query input can support all the parameters that you can use in regular 
+[Searching](../getting-started/usage/#searching), with the exception that 
+`location` only supports a string value. This means if you want to search by 
+lat/lng you need to pass them to the `coordinate` input.
 
 ```graphql
 {
   entries (
-    map:"{\"location\":\"Maidstone, Kent\", \"country\": \"UK\", \"radius\": 50}"
+    map: {
+      unit: Kilometres
+      location: "Maidstone, Kent"
+      country: "UK"
+      radius: 10
+      coordinate: {
+        lat: 51.27136675686769
+        lng: 0.4939985275268555
+      }
+    }
     section: "locations"
     orderBy: "distance"
   ) {
@@ -42,11 +47,3 @@ locations distance from the search location.
   }
 }
 ```
-
-As you can see in the example above, the JSON string is escaped within a string
-argument. Remember, you can't pass a JSON object to the argument, it has to be 
-stringified.
- 
-If and when Craft give plugins the ability to define their own arguments we'll
-switch to using a Map specific type, until then we'll have to make do with 
-JSON in a string.

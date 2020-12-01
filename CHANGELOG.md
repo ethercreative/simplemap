@@ -1,3 +1,10 @@
+## 3.9.0.2 - 2020-12-01
+### Improved
+- Improved GQL docs
+
+### Fixed
+- Fix GQL Coords type missing `lng`
+
 ## 3.9.0.1 - 2020-11-27
 ### Fixed
 - Removed distance field from GQL mutation input

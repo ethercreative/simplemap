@@ -22,7 +22,7 @@ class What3WordsService
 
 	public static function convertLatLngToW3W ($lat, $lng)
 	{
-		return self::_geocoder()->convertTo3wa($lat, $lng)['words'];
+		return self::_geocoder()->convertTo3wa($lat, $lng)['words'] ?? false;
 	}
 
 	private static function _geocoder ()

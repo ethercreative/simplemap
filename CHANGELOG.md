@@ -1,3 +1,7 @@
+## 3.9.1 - 2021-04-30
+### Added
+- Add Guzzle 7 support (via @dwheeldo)
+
 ## 3.9.0.2 - 2020-12-01
 ### Improved
 - Improved GQL docs

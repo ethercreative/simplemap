@@ -36,7 +36,7 @@ class Settings extends Model
 	// -------------------------------------------------------------------------
 
 	/** @var string The map tile set to use */
-	public $mapTiles = MapTiles::Wikimedia;
+	public $mapTiles = MapTiles::CartoVoyager;
 
 	/** @var string|array The token for the map tile set */
 	public $mapToken = '';

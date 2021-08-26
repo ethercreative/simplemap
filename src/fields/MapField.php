@@ -476,6 +476,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$view->registerTranslations('simplemap', [
 			'Search for a location',
 			'Clear address',
+			'Full Address',
 			'Name / Number',
 			'Street Address',
 			'Town / City',

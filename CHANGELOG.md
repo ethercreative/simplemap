@@ -1,3 +1,7 @@
+## 3.9.2 - 2021-08-26
+### Fixed
+- Fix some geolocation services conversion failing when the given location is not a valid address (Fixes #322)
+
 ## 3.9.1 - 2021-04-30
 ### Added
 - Add Guzzle 7 support (via @dwheeldo)

@@ -264,6 +264,10 @@ export default class Geo {
 			'https://nominatim.openstreetmap.org/reverse?' + params
 		).then(res => res.json());
 
+
+		if (!result || (result.hasOwnProperty('error') && result.error))
+			return { address: '', lat, lng, parts: new Parts() };
+
 		return {
 			...oldVal,
 			address: result.display_name,
@@ -297,6 +301,9 @@ export default class Geo {
 		).then(res => res.json());
 
 		const feature = result.features[0];
+
+		if (!feature)
+			return { address: '', lat, lng, parts: new Parts() };
 
 		return {
 			...oldVal,
@@ -383,6 +390,9 @@ export default class Geo {
 		const { response } = await fetch(
 			'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json?' + params
 		).then(res => res.json());
+
+		if (response.view.length === 0)
+			return { address: '', lat, lng, parts: new Parts() };
 
 		const { address } = response.view[0].result[0].location;
 

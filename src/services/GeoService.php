@@ -884,7 +884,7 @@ class GeoService extends Component
 		$data = (string) static::_client()->get($url)->getBody();
 		$data = Json::decodeIfJson($data);
 
-		if (!is_array($data) || empty($data))
+		if (!is_array($data) || empty($data) || array_key_exists('error', $data))
 			return null;
 
 		return [

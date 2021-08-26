@@ -1,6 +1,7 @@
 ## 3.9.2 - 2021-08-26
 ### Fixed
 - Fix some geolocation services conversion failing when the given location is not a valid address (Fixes #322)
+- Fix error when upgrading due to missing `type` field (via @cornernote)
 
 ## 3.9.1 - 2021-04-30
 ### Added

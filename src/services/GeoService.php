@@ -769,7 +769,11 @@ class GeoService extends Component
 				$url = str_replace('.json', rawurlencode(', ' . $country) . '.json', $url);
 		}
 
-		$data = (string) static::_client()->get($url)->getBody();
+		$data = (string) static::_client()->get($url, [
+            'headers' => [
+                'referer' => Craft::$app->urlManager->getHostInfo()
+            ]
+        ])->getBody();
 		$data = Json::decodeIfJson($data);
 
 		if (!is_array($data) || empty($data['features']))

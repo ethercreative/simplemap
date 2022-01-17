@@ -1,3 +1,7 @@
+## 3.9.3 - 2022-01-17
+### Fixed
+- Fix Mapbox Forbidden issue (Fixes #218, via @Saboteur777)
+
 ## 3.9.2 - 2021-08-26
 ### Changed
 - Change default map tileset to Carto Voyager

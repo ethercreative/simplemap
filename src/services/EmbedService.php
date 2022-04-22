@@ -616,14 +616,13 @@ JS;
 			);
 		}
 
-		$view->registerScript(
-			'',
+		$view->registerJsFile(
+			$url,
+			$options,
+			'[]',
 			View::POS_END,
-			array_merge(
-				['src' => $url],
-				$options
-			),
-			md5($url)
+			true,
+			md5($url),
 		);
 	}
 

@@ -34,7 +34,7 @@ class GeoService extends Component
 	// Properties
 	// =========================================================================
 
-	public static $countries = [
+	public static array $countries = [
 		'AF' => 'Afghanistan',
 		'AX' => 'Åland Islands',
 		'AL' => 'Albania',
@@ -286,7 +286,7 @@ class GeoService extends Component
 		'ZW' => 'Zimbabwe',
 	];
 
-	public static $countriesIso3 = [
+	public static array $countriesIso3 = [
 		'AD' => 'AND',
 		'AE' => 'ARE',
 		'AF' => 'AFG',
@@ -548,9 +548,9 @@ class GeoService extends Component
 	 * @param array|string $token
 	 * @param string       $service
 	 *
-	 * @return false|string
+	 * @return bool|array|string
 	 */
-	public static function getToken ($token, string $service)
+	public static function getToken (array|string $token, string $service): bool|array|string
 	{
 		switch ($service)
 		{
@@ -578,38 +578,33 @@ class GeoService extends Component
 	 * @return array|null
 	 * @throws Exception
 	 */
-	public static function latLngFromAddress ($address, $country = null)
+	public static function latLngFromAddress (string $address, string $country = null): ?array
 	{
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
 		$token = static::getToken($settings->getGeoToken(), $settings->geoService);
 
-		switch ($settings->geoService)
+		return match ($settings->geoService)
 		{
-			case GeoEnum::Here:
-				return static::_latLngFromAddress_Here(
-					$token,
-					$address, $country
-				);
-			case GeoEnum::GoogleMaps:
-				return static::_latLngFromAddress_Google(
-					$token,
-					$address, $country
-				);
-			case GeoEnum::Mapbox:
-				return static::_latLngFromAddress_Mapbox(
-					$token,
-					$address, $country
-				);
-			case GeoEnum::Nominatim:
-				return static::_latLngFromAddress_Nominatim(
-					$address, $country
-				);
-			default:
-				throw new Exception(
-					'Unknown geo-coding service: ' . $settings->geoService
-				);
-		}
+			GeoEnum::Here => static::_latLngFromAddress_Here(
+				$token,
+				$address, $country
+			),
+			GeoEnum::GoogleMaps => static::_latLngFromAddress_Google(
+				$token,
+				$address, $country
+			),
+			GeoEnum::Mapbox => static::_latLngFromAddress_Mapbox(
+				$token,
+				$address, $country
+			),
+			GeoEnum::Nominatim => static::_latLngFromAddress_Nominatim(
+				$address, $country
+			),
+			default => throw new Exception(
+				'Unknown geo-coding service: ' . $settings->geoService
+			),
+		};
 	}
 
 	/**
@@ -621,39 +616,34 @@ class GeoService extends Component
 	 * @return array|null - Returns the address and associated parts
 	 * @throws Exception
 	 */
-	public static function addressFromLatLng ($lat, $lng)
+	public static function addressFromLatLng (float $lat, float $lng): ?array
 	{
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
 		$token    =
 			static::getToken($settings->getGeoToken(), $settings->geoService);
 
-		switch ($settings->geoService)
+		return match ($settings->geoService)
 		{
-			case GeoEnum::Here:
-				return static::_addressFromLatLng_Here(
-					$token,
-					$lat, $lng
-				);
-			case GeoEnum::GoogleMaps:
-				return static::_addressFromLatLng_Google(
-					$token,
-					$lat, $lng
-				);
-			case GeoEnum::Mapbox:
-				return static::_addressFromLatLng_Mapbox(
-					$token,
-					$lat, $lng
-				);
-			case GeoEnum::Nominatim:
-				return static::_addressFromLatLng_Nominatim(
-					$lat, $lng
-				);
-			default:
-				throw new Exception(
-					'Unknown geo-coding service: ' . $settings->geoService
-				);
-		}
+			GeoEnum::Here => static::_addressFromLatLng_Here(
+				$token,
+				$lat, $lng
+			),
+			GeoEnum::GoogleMaps => static::_addressFromLatLng_Google(
+				$token,
+				$lat, $lng
+			),
+			GeoEnum::Mapbox => static::_addressFromLatLng_Mapbox(
+				$token,
+				$lat, $lng
+			),
+			GeoEnum::Nominatim => static::_addressFromLatLng_Nominatim(
+				$lat, $lng
+			),
+			default => throw new Exception(
+				'Unknown geo-coding service: ' . $settings->geoService
+			),
+		};
 	}
 
 	/**
@@ -663,7 +653,7 @@ class GeoService extends Component
 	 *
 	 * @return string
 	 */
-	public static function normalizeDistance ($unit)
+	public static function normalizeDistance (string $unit): string
 	{
 		if ($unit === 'miles') $unit = 'mi';
 		else if ($unit === 'kilometers') $unit = 'km';
@@ -681,7 +671,7 @@ class GeoService extends Component
 	 * @return array
 	 * @throws Exception
 	 */
-	public static function normalizeLocation ($location, $country = null)
+	public static function normalizeLocation (mixed $location, string $country = null): array
 	{
 		if (is_string($location))
 			$location = self::latLngFromAddress($location, $country);
@@ -699,7 +689,7 @@ class GeoService extends Component
 	// Lat/Lng from Address
 	// -------------------------------------------------------------------------
 
-	private static function _latLngFromAddress_Here ($token, $address, $country)
+	private static function _latLngFromAddress_Here ($token, $address, $country): ?array
 	{
 		$url = 'https://geocoder.api.here.com/6.2/geocode.json';
 		$url .= '?app_id=' . $token['appId'];
@@ -729,7 +719,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _latLngFromAddress_Google ($token, $address, $country)
+	private static function _latLngFromAddress_Google ($token, $address, $country): ?array
 	{
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json';
 		$url .= '?address=' . rawurlencode($address);
@@ -755,7 +745,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _latLngFromAddress_Mapbox ($token, $address, $country)
+	private static function _latLngFromAddress_Mapbox ($token, $address, $country): ?array
 	{
 		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 		$url .= rawurlencode($address) . '.json?limit=1';
@@ -785,7 +775,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _latLngFromAddress_Nominatim ($address, $country)
+	private static function _latLngFromAddress_Nominatim ($address, $country): ?array
 	{
 		$url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1';
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
@@ -813,7 +803,7 @@ class GeoService extends Component
 	// Address from Lat/Lng
 	// -------------------------------------------------------------------------
 
-	private static function _addressFromLatLng_Here ($token, $lat, $lng)
+	private static function _addressFromLatLng_Here ($token, $lat, $lng): ?array
 	{
 		$url = 'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json';
 		$url .= '?app_id=' . $token['appId'];
@@ -836,7 +826,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _addressFromLatLng_Google ($token, $lat, $lng)
+	private static function _addressFromLatLng_Google ($token, $lat, $lng): ?array
 	{
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json';
 		$url .= '?latlng=' . rawurlencode($lat) . ',' . rawurldecode($lng);
@@ -857,7 +847,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _addressFromLatLng_Mapbox ($token, $lat, $lng)
+	private static function _addressFromLatLng_Mapbox ($token, $lat, $lng): ?array
 	{
 		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 		$url .= rawurlencode($lng) . ',' . rawurldecode($lat) . '.json?limit=1';
@@ -879,7 +869,7 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _addressFromLatLng_Nominatim ($lat, $lng)
+	private static function _addressFromLatLng_Nominatim ($lat, $lng): ?array
 	{
 		$url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&addressdetails=1';
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
@@ -916,7 +906,7 @@ class GeoService extends Component
 		return $client;
 	}
 
-	private static function _validateCountryCode (string $code)
+	private static function _validateCountryCode (string $code): bool
 	{
 		return in_array(strtoupper($code), array_keys(static::$countries));
 	}

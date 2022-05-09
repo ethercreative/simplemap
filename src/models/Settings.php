@@ -10,6 +10,7 @@ namespace ether\simplemap\models;
 
 use Craft;
 use craft\base\Model;
+use craft\helpers\App;
 use craft\helpers\ConfigHelper;
 use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
@@ -36,26 +37,26 @@ class Settings extends Model
 	// -------------------------------------------------------------------------
 
 	/** @var string The map tile set to use */
-	public $mapTiles = MapTiles::CartoVoyager;
+	public string $mapTiles = MapTiles::CartoVoyager;
 
 	/** @var string|array The token for the map tile set */
-	public $mapToken = '';
+	public string|array $mapToken = '';
 
 	// Properties: Geo-coding
 	// -------------------------------------------------------------------------
 
 	/** @var string The geo-coding service to use */
-	public $geoService = GeoService::Nominatim;
+	public string $geoService = GeoService::Nominatim;
 
 	/** @var string|array The token for the geo-coding service */
-	public $geoToken = '';
+	public string|array $geoToken = '';
 
 	/**
 	 * @var bool Will disable the automatic population of missing field data.
 	 *   This can be useful in preventing API spam when importing lots of map
 	 *   data.
 	 */
-	public $disablePopulateMissingFieldData = false;
+	public bool $disablePopulateMissingFieldData = false;
 
 	// Properties: w3w
 	// -------------------------------------------------------------------------
@@ -63,27 +64,27 @@ class Settings extends Model
 	/**
 	 * @var bool Will enable what3words integration when set to true
 	 */
-	public $w3wEnabled = false;
+	public bool $w3wEnabled = false;
 
 	/**
 	 * @var string The token (API Key) for what3words
 	 */
-	public $w3wToken = '';
+	public string $w3wToken = '';
 
 	// Properties: Geo-location
 	// -------------------------------------------------------------------------
 
 	/** @var string The geo-location service */
-	public $geoLocationService = GeoLocationService::None;
+	public string $geoLocationService = GeoLocationService::None;
 
 	/** @var string The token for the geo-location service */
-	public $geoLocationToken = '';
+	public string $geoLocationToken = '';
 
 	/** @var string|int How long to cache IP look-ups for (set to 0 to disable caching) */
-	public $geoLocationCacheDuration = 'P2M';
+	public string|int $geoLocationCacheDuration = 'P2M';
 
 	/** @var bool Will automatically redirect the user according to $geoLocationRedirectMap when true */
-	public $geoLocationAutoRedirect = false;
+	public bool $geoLocationAutoRedirect = false;
 
 	/**
 	 * @var array A key value array where key is the handle of the site to
@@ -96,7 +97,7 @@ class Settings extends Model
 	 *   'global' => '*',
 	 * ]
 	 */
-	public $geoLocationRedirectMap = [];
+	public array $geoLocationRedirectMap = [];
 
 	// Methods
 	// =========================================================================
@@ -114,7 +115,7 @@ class Settings extends Model
 		}
 	}
 
-	public function isW3WEnabled ()
+	public function isW3WEnabled (): bool
 	{
 		return $this->w3wEnabled && SimpleMap::v(SimpleMap::EDITION_PRO);
 	}
@@ -122,22 +123,22 @@ class Settings extends Model
 	// Getters
 	// =========================================================================
 
-	public function getMapToken ()
+	public function getMapToken (): bool|array|string|null
 	{
 		return $this->_parseEnv($this->mapToken);
 	}
 
-	public function getGeoToken ()
+	public function getGeoToken (): bool|array|string|null
 	{
 		return $this->_parseEnv($this->geoToken);
 	}
 
-	public function getW3WToken ()
+	public function getW3WToken (): bool|array|string|null
 	{
 		return $this->_parseEnv($this->w3wToken);
 	}
 
-	public function getGeoLocationToken ()
+	public function getGeoLocationToken (): bool|array|string|null
 	{
 		return $this->_parseEnv($this->geoLocationToken);
 	}
@@ -145,13 +146,13 @@ class Settings extends Model
 	// Helpers
 	// =========================================================================
 
-	private function _parseEnv ($value)
+	private function _parseEnv ($value): array|bool|string|null
 	{
 		if (is_string($value))
-			return Craft::parseEnv($value);
+			return App::parseEnv($value);
 
 		return array_map(function ($v) {
-			return Craft::parseEnv($v);
+			return App::parseEnv($v);
 		}, $value);
 	}
 

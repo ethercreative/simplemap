@@ -11,6 +11,7 @@ namespace ether\simplemap\enums;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\services\GeoService;
+use Exception;
 
 /**
  * Class MapTiles
@@ -74,7 +75,7 @@ abstract class MapTiles
 	// Methods
 	// =========================================================================
 
-	public static function getSelectOptions ()
+	public static function getSelectOptions (): array
 	{
 		$isLite = SimpleMap::v(SimpleMap::EDITION_LITE);
 
@@ -120,15 +121,15 @@ abstract class MapTiles
 	 * Get the tiles url for the given type and scale
 	 *
 	 * @param string $type
-	 * @param int $scale
+	 * @param int    $scale
 	 *
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public static function getTiles ($type, $scale = 1)
+	public static function getTiles (string $type, int $scale = 1): array
 	{
 		$scale = $scale == 1 ? '.png' : '@2x.png';
-		$style = strpos($type, '.') !== false ? explode('.', $type, 2)[1] : '';
+		$style = str_contains($type, '.') ? explode('.', $type, 2)[1] : '';
 
 		switch ($type)
 		{
@@ -151,13 +152,13 @@ abstract class MapTiles
 				];
 		}
 
-		throw new \Exception('Unknown tile type "' . $type . '"');
+		throw new Exception('Unknown tile type "' . $type . '"');
 	}
 
 	// Helpers
 	// =========================================================================
 
-	public static function pro ($label, $isLite)
+	public static function pro ($label, $isLite): array
 	{
 		return [
 			'label'    => SimpleMap::t($label) . ($isLite ? ' (Pro)' : ''),

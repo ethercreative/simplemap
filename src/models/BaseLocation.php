@@ -25,19 +25,19 @@ abstract class BaseLocation extends Model
 	// =========================================================================
 
 	/** @var float */
-	public $lat;
+	public float $lat;
 
 	/** @var float */
-	public $lng;
+	public float $lng;
 
 	/** @var string */
-	public $address;
+	public string $address;
 
 	/** @var Parts */
-	public $parts;
+	public PartsLegacy|Parts $parts;
 
 	/** @var string */
-	public $what3words;
+	public string $what3words;
 
 	// Constructor
 	// =========================================================================
@@ -71,12 +71,12 @@ abstract class BaseLocation extends Model
 	/**
 	 * Output the address in an easily formatted way
 	 *
-	 * @param array $exclude - An array of parts to exclude from the output
-	 * @param string $glue   - The glue to join the parts together
+	 * @param array  $exclude - An array of parts to exclude from the output
+	 * @param string $glue    - The glue to join the parts together
 	 *
 	 * @return Markup
 	 */
-	public function address ($exclude = [], $glue = '<br/>')
+	public function address (array $exclude = [], string $glue = '<br/>'): Markup
 	{
 		$addr = [];
 

@@ -25,7 +25,7 @@ class m190226_143809_craft3_upgrade extends Migration
 	// Properties
 	// =========================================================================
 
-	static $sitesByOldLocale = [];
+	static array $sitesByOldLocale = [];
 
 	// Methods
 	// =========================================================================

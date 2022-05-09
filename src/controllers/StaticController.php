@@ -8,8 +8,10 @@
 
 namespace ether\simplemap\controllers;
 
+use Craft;
 use craft\web\Controller;
 use ether\simplemap\utilities\StaticMap;
+use Exception;
 use Yii;
 use yii\web\BadRequestHttpException;
 
@@ -22,15 +24,15 @@ use yii\web\BadRequestHttpException;
 class StaticController extends Controller
 {
 
-	protected $allowAnonymous = true;
+	protected int|bool|array $allowAnonymous = true;
 
 	/**
 	 * @throws BadRequestHttpException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function actionIndex ()
 	{
-		$request = \Craft::$app->getRequest();
+		$request = Craft::$app->getRequest();
 
 		if (!$request->validateCsrfToken($request->getRequiredQueryParam('csrf')))
 			throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));

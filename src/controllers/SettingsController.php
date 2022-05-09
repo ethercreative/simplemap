@@ -13,6 +13,7 @@ use ether\simplemap\enums\GeoService;
 use ether\simplemap\enums\MapTiles;
 use ether\simplemap\services\GeoLocationService;
 use ether\simplemap\SimpleMap;
+use yii\web\Response as YiiResponse;
 
 /**
  * Class SettingsController
@@ -23,10 +24,7 @@ use ether\simplemap\SimpleMap;
 class SettingsController extends Controller
 {
 
-	/**
-	 * @return string
-	 */
-	public function actionIndex ()
+	public function actionIndex (): YiiResponse
 	{
 		return $this->renderTemplate(
 			'simplemap/settings',

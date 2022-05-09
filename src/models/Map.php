@@ -11,7 +11,9 @@ namespace ether\simplemap\models;
 use craft\base\Model;
 use craft\helpers\Json;
 use ether\simplemap\SimpleMap;
+use Exception;
 use Twig\Markup;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Map
@@ -26,22 +28,22 @@ class Map extends BaseLocation
 	// =========================================================================
 
 	/** @var int */
-	public $id;
+	public int $id;
 
 	/** @var int */
-	public $ownerId;
+	public int $ownerId;
 
 	/** @var int */
-	public $ownerSiteId;
+	public int $ownerSiteId;
 
 	/** @var int */
-	public $fieldId;
+	public int $fieldId;
 
 	/** @var int */
-	public $zoom = 15;
+	public int $zoom = 15;
 
 	/** @var float|null */
-	public $distance = null;
+	public int|null|float $distance = null;
 
 	// Constructor
 	// =========================================================================
@@ -72,7 +74,7 @@ class Map extends BaseLocation
 		return parent::__get($name);
 	}
 
-	public function canGetProperty ($name, $checkVars = true, $checkBehaviors = true)
+	public function canGetProperty ($name, $checkVars = true, $checkBehaviors = true): bool
 	{
 		try
 		{
@@ -81,7 +83,7 @@ class Map extends BaseLocation
 				$name === 'streetAddress' ||
 				in_array($name, PartsLegacy::$legacyKeys)
 			) return true;
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			return false;
 		}
 
@@ -91,7 +93,7 @@ class Map extends BaseLocation
 	// Methods
 	// =========================================================================
 
-	public function rules ()
+	public function rules (): array
 	{
 		$rules = parent::rules();
 
@@ -115,7 +117,7 @@ class Map extends BaseLocation
 		return $rules;
 	}
 
-	public function isValueEmpty ()
+	public function isValueEmpty (): bool
 	{
 		return empty($this->lat) && empty($this->lng);
 	}
@@ -132,9 +134,9 @@ class Map extends BaseLocation
 	 * @param array $options
 	 *
 	 * @return string|void
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function img ($options = [])
+	public function img (array $options = [])
 	{
 		return SimpleMap::getInstance()->static->generate(
 			$this->_getMapOptions($options)
@@ -147,9 +149,9 @@ class Map extends BaseLocation
 	 * @param array $options
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function imgSrcSet ($options = [])
+	public function imgSrcSet (array $options = []): string
 	{
 		$options = $this->_getMapOptions($options);
 
@@ -165,9 +167,9 @@ class Map extends BaseLocation
 	 * @param array $options
 	 *
 	 * @return string|void
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
 	 */
-	public function embed ($options = [])
+	public function embed (array $options = [])
 	{
 		$options = $this->_getMapOptions($options);
 		return SimpleMap::getInstance()->embed->embed($options);
@@ -183,7 +185,7 @@ class Map extends BaseLocation
 	 *
 	 * @return array
 	 */
-	private function _getMapOptions ($options)
+	private function _getMapOptions (array $options): array
 	{
 		return array_merge($options, [
 			'center' => [

@@ -14,11 +14,13 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\InvalidFieldException;
 use craft\helpers\Json;
 use ether\simplemap\models\Map;
 use ether\simplemap\fields\MapField;
 use ether\simplemap\records\Map as MapRecord;
 use ether\simplemap\SimpleMap;
+use Exception;
 use function Arrayy\array_first;
 
 /**
@@ -41,11 +43,12 @@ class MapService extends Component
 
 	/**
 	 * @param MapField         $field
-	 * @param ElementInterface|Element $owner
+	 * @param ElementInterface $owner
 	 *
 	 * @return bool
+	 * @throws InvalidFieldException
 	 */
-	public function validateField (MapField $field, ElementInterface $owner)
+	public function validateField (MapField $field, ElementInterface $owner): bool
 	{
 		/** @var Map $map */
 		$map = $owner->getFieldValue($field->handle);
@@ -59,10 +62,10 @@ class MapService extends Component
 	}
 
 	/**
-	 * @param MapField                 $field
-	 * @param ElementInterface|Element $owner
+	 * @param MapField         $field
+	 * @param ElementInterface $owner
 	 *
-	 * @throws \Throwable
+	 * @throws InvalidFieldException
 	 */
 	public function saveField (MapField $field, ElementInterface $owner)
 	{
@@ -89,7 +92,7 @@ class MapService extends Component
 	 * @param Map $map
 	 * @param     $isNew
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function saveRecord (Map $map, $isNew)
 	{
@@ -100,7 +103,7 @@ class MapService extends Component
 			$record = MapRecord::findOne($map->id);
 
 			if (!$record)
-				throw new \Exception('Invalid map ID: ' . $map->id);
+				throw new Exception('Invalid map ID: ' . $map->id);
 		}
 
 		if ($record === null)
@@ -128,7 +131,7 @@ class MapService extends Component
 	 *
 	 * @return float|int|null
 	 */
-	public function getDistance (Map $map)
+	public function getDistance (Map $map): float|int|null
 	{
 		if (!$this->_location || !$this->_distance)
 			return null;
@@ -158,9 +161,9 @@ class MapService extends Component
 	 * @param mixed                 $value
 	 * @param MapField              $field
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function modifyElementsQuery (ElementQueryInterface $query, $value, MapField $field)
+	public function modifyElementsQuery (ElementQueryInterface $query, mixed $value, MapField $field)
 	{
 		if (empty($value))
 			return;
@@ -240,7 +243,7 @@ class MapService extends Component
 	 * @param Map      $map
 	 * @param MapField $field
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function populateMissingData (Map $map, MapField $field)
 	{
@@ -302,9 +305,9 @@ class MapService extends Component
 	 * @param string       $table
 	 *
 	 * @return bool|string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _searchLocation (ElementQuery $query, $value, $table)
+	private function _searchLocation (ElementQuery $query, mixed $value, string $table): bool|string
 	{
 		$location = $value['location'];
 		$country  = $value['country'] ?? null;
@@ -395,7 +398,7 @@ class MapService extends Component
 	 * @param ElementQuery $query
 	 * @param bool         $search
 	 */
-	private function _replaceOrderBy (ElementQuery $query, $search = false)
+	private function _replaceOrderBy (ElementQuery $query, bool $search = false)
 	{
 		$nextOrder = [];
 

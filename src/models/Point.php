@@ -25,12 +25,12 @@ class Point implements PointInterface
 	/**
 	 * @var int
 	 */
-	private $x;
+	private int $x;
 
 	/**
 	 * @var int
 	 */
-	private $y;
+	private int $y;
 
 	/**
 	 * Constructs a point of coordinates.
@@ -38,7 +38,7 @@ class Point implements PointInterface
 	 * @param int $x
 	 * @param int $y
 	 */
-	public function __construct ($x, $y)
+	public function __construct (int $x, int $y)
 	{
 		$this->x = $x;
 		$this->y = $y;
@@ -49,7 +49,7 @@ class Point implements PointInterface
 	 *
 	 * @see \Imagine\Image\PointInterface::getX()
 	 */
-	public function getX ()
+	public function getX (): int
 	{
 		return $this->x;
 	}
@@ -59,7 +59,7 @@ class Point implements PointInterface
 	 *
 	 * @see \Imagine\Image\PointInterface::getY()
 	 */
-	public function getY ()
+	public function getY (): int
 	{
 		return $this->y;
 	}
@@ -69,7 +69,7 @@ class Point implements PointInterface
 	 *
 	 * @see \Imagine\Image\PointInterface::in()
 	 */
-	public function in (BoxInterface $box)
+	public function in (BoxInterface $box): bool
 	{
 		return $this->x < $box->getWidth() && $this->y < $box->getHeight();
 	}
@@ -79,7 +79,7 @@ class Point implements PointInterface
 	 *
 	 * @see \Imagine\Image\PointInterface::move()
 	 */
-	public function move ($amount)
+	public function move ($amount): Point|PointInterface
 	{
 		return new self($this->x + $amount, $this->y + $amount);
 	}

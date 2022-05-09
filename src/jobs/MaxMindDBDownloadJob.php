@@ -13,6 +13,9 @@ use craft\helpers\FileHelper;
 use craft\queue\BaseJob;
 use craft\queue\QueueInterface;
 use ether\simplemap\services\GeoLocationService;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
+use yii\queue\Queue;
 
 /**
  * Class MaxMindDBDownloadJob
@@ -23,17 +26,17 @@ use ether\simplemap\services\GeoLocationService;
 class MaxMindDBDownloadJob extends BaseJob
 {
 
-	protected function defaultDescription ()
+	protected function defaultDescription (): string
 	{
 		return 'Downloading MaxMind DB';
 	}
 
 	/**
-	 * @param \yii\queue\Queue|QueueInterface $queue The queue the job belongs to
+	 * @param Queue|QueueInterface $queue The queue the job belongs to
 	 *
-	 * @throws \Exception
+	 * @throws Exception|GuzzleException
 	 */
-	public function execute ($queue)
+	public function execute ($queue): void
 	{
 		try {
 			$temp   = tempnam(sys_get_temp_dir(), 'mmdb');
@@ -71,7 +74,7 @@ class MaxMindDBDownloadJob extends BaseJob
 				Craft::error('Unable to save MaxMind DB!', 'maps');
 
 			Craft::$app->getCache()->delete('maps_db_updating');
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			Craft::$app->getCache()->delete('maps_db_updating');
 			throw $e;
 		}

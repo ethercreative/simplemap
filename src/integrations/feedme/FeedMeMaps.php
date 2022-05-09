@@ -35,12 +35,12 @@ class FeedMeMaps extends Field implements FieldInterface
 	// Methods
 	// =========================================================================
 
-	public function getMappingTemplate ()
+	public function getMappingTemplate (): string
 	{
 		return 'simplemap/_feedme-mapping';
 	}
 
-	public function parseField ()
+	public function parseField (): ?Map
 	{
 		$preppedData = [];
 

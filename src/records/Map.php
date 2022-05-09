@@ -38,11 +38,11 @@ class Map extends ActiveRecord
 
 	const TableName = '{{%maps}}';
 	const TableNameClean = 'maps';
-	
+
 	// Methods
 	// =========================================================================
 
-	public static function tableName ()
+	public static function tableName (): string
 	{
 		return self::TableName;
 	}

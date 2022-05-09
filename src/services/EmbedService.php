@@ -18,6 +18,7 @@ use ether\simplemap\enums\MapTiles;
 use ether\simplemap\models\EmbedOptions;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
+use Exception;
 use yii\base\InvalidConfigException;
 
 /**
@@ -42,9 +43,9 @@ class EmbedService extends Component
 	 *
 	 * @return string|void
 	 * @throws InvalidConfigException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function embed ($options = [])
+	public function embed (array $options = [])
 	{
 		if (SimpleMap::v(SimpleMap::EDITION_LITE))
 			return 'Sorry, embed maps are a Maps Pro feature!';
@@ -98,25 +99,19 @@ class EmbedService extends Component
 	 * @param Settings     $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _embedGoogle (EmbedOptions $options, Settings $settings)
+	private function _embedGoogle (EmbedOptions $options, Settings $settings): string
 	{
 		$view = Craft::$app->getView();
 		$callbackName = 'init_' . $options->id;
 
-		switch ($settings->mapTiles)
+		$mapTypeId = match ($settings->mapTiles)
 		{
-			case MapTiles::GoogleRoadmap:
-				$mapTypeId = 'roadmap';
-				break;
-			case MapTiles::GoogleTerrain:
-				$mapTypeId = 'terrain';
-				break;
-			case MapTiles::GoogleHybrid:
-			default:
-				$mapTypeId = 'hybrid';
-		}
+			MapTiles::GoogleRoadmap => 'roadmap',
+			MapTiles::GoogleTerrain => 'terrain',
+			default => 'hybrid',
+		};
 
 		$formattedOptions = Json::encode(
 			array_merge(
@@ -184,9 +179,9 @@ JS;
 	 * @param Settings     $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _embedApple (EmbedOptions $options, Settings $settings)
+	private function _embedApple (EmbedOptions $options, Settings $settings): string
 	{
 		$view = Craft::$app->getView();
 
@@ -286,9 +281,9 @@ JS;
 	 * @param Settings     $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _embedMapbox (EmbedOptions $options, Settings $settings)
+	private function _embedMapbox (EmbedOptions $options, Settings $settings): string
 	{
 		$view = Craft::$app->getView();
 
@@ -373,7 +368,7 @@ JS;
 	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	private function _embedHere (EmbedOptions $options, Settings $settings)
+	private function _embedHere (EmbedOptions $options, Settings $settings): string
 	{
 		if (!array_key_exists('apiKey', $settings->getMapToken()) || !$settings->getMapToken()['apiKey'])
 			throw new InvalidConfigException('Missing HERE API Key');
@@ -487,9 +482,9 @@ JS;
 	 * @param Settings     $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _embedDefault (EmbedOptions $options, Settings $settings)
+	private function _embedDefault (EmbedOptions $options, Settings $settings): string
 	{
 		$view       = Craft::$app->getView();
 		$markerIcon = $this->_iconSvg();
@@ -595,7 +590,7 @@ JS;
 	 * @param array  $options - An array of options to be used as attributes
 	 * @param string $pre     - Will link rel="pre${pre}" if not null
 	 */
-	private function _js ($url, $options = [], $pre = 'connect')
+	private function _js (string $url, array $options = [], string $pre = 'connect')
 	{
 		$view = Craft::$app->getView();
 
@@ -627,7 +622,7 @@ JS;
 		);
 	}
 
-	private function _compareUrls ($a, $b)
+	private function _compareUrls ($a, $b): bool
 	{
 		$a = parse_url($a, PHP_URL_HOST);
 		$b = parse_url($b, PHP_URL_HOST);
@@ -635,7 +630,7 @@ JS;
 		return $this->_trim($a) === $this->_trim($b);
 	}
 
-	private function _trim ($str)
+	private function _trim ($str): string
 	{
 		if (stripos($str, 'www.') === 0)
 			return substr($str, 4);
@@ -663,7 +658,7 @@ JS;
 		return $svg;
 	}
 
-	private function _getCss (EmbedOptions $options)
+	private function _getCss (EmbedOptions $options): ?string
 	{
 		if ($options->width === null && $options->height === null)
 			return null;

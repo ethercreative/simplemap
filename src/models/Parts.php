@@ -25,46 +25,46 @@ class Parts extends BaseObject
 	// =========================================================================
 
 	/** @var string */
-	public $number = '';
+	public string $number = '';
 
 	/** @var string */
-	public $address = '';
+	public string $address = '';
 
 	/** @var string */
-	public $city = '';
+	public string $city = '';
 
 	/** @var string */
-	public $postcode = '';
+	public string $postcode = '';
 
 	/** @var string */
-	public $county = '';
+	public string $county = '';
 
 	/** @var string */
-	public $state = '';
+	public string $state = '';
 
 	/** @var string */
-	public $country = '';
+	public string $country = '';
 
 	/** @var string */
-	public $planet = 'Earth';
+	public string $planet = 'Earth';
 
 	/** @var string */
-	public $system = 'the Solar System';
+	public string $system = 'the Solar System';
 
 	/** @var string */
-	public $arm = 'Orion Arm';
+	public string $arm = 'Orion Arm';
 
 	/** @var string */
-	public $galaxy = 'Milky Way';
+	public string $galaxy = 'Milky Way';
 
 	/** @var string */
-	public $group = 'the Local Group';
+	public string $group = 'the Local Group';
 
 	/** @var string */
-	public $cluster = 'Virgo Cluster';
+	public string $cluster = 'Virgo Cluster';
 
 	/** @var string */
-	public $supercluster = 'Laniakea Supercluster';
+	public string $supercluster = 'Laniakea Supercluster';
 
 	// Methods
 	// =========================================================================
@@ -98,7 +98,7 @@ class Parts extends BaseObject
 		}
 	}
 
-	public function getStreetAddress ()
+	public function getStreetAddress (): string
 	{
 		return $this->address;
 	}
@@ -299,11 +299,11 @@ class Parts extends BaseObject
 	/**
 	 * Determines if the given array of parts contains legacy data
 	 *
-	 * @param array $parts
+	 * @param array|null $parts
 	 *
 	 * @return bool
 	 */
-	public static function isLegacy (array $parts = null)
+	public static function isLegacy (array $parts = null): bool
 	{
 		if ($parts === null)
 			return false;
@@ -326,7 +326,7 @@ class Parts extends BaseObject
 	 *
 	 * @return string
 	 */
-	private function _join (array $parts)
+	private function _join (array $parts): string
 	{
 		return implode(', ', array_filter($parts));
 	}
@@ -354,7 +354,7 @@ class Parts extends BaseObject
 	 *
 	 * @return bool
 	 */
-	protected function _isAssoc (array $arr)
+	protected function _isAssoc (array $arr): bool
 	{
 		if ([] === $arr) return false;
 		return array_keys($arr) !== range(0, count($arr) - 1);

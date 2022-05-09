@@ -16,7 +16,9 @@ use ether\simplemap\models\Marker;
 use ether\simplemap\models\Point;
 use ether\simplemap\models\Settings;
 use ether\simplemap\SimpleMap;
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Imagine\Image\Box;
 use Imagine\Image\FontInterface;
 use Imagine\Image\ImageInterface;
@@ -24,6 +26,7 @@ use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point\Center;
 use Imagine\Imagick\Imagick;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Class StaticMap
@@ -44,15 +47,22 @@ class StaticMap
 	const TILE_CACHE_DIR = '@runtime/maps/tiles';
 	const MAP_CACHE_DIR  = '@runtime/maps/maps';
 
-	private $lat, $lng, $width, $height, $zoom, $scale;
-	private $tiles, $tileSize, $mapTiles;
-	private $centerX, $centerY, $offsetX, $offsetY;
-	private $markers;
+	private float  $lat;
+	private float  $lng;
+	private int    $width;
+	private int    $height;
+	private int    $zoom;
+	private int    $scale;
+	private mixed  $tiles;
+	private mixed  $tileSize;
+	private string $mapTiles;
+	private        $centerX, $centerY, $offsetX, $offsetY;
+	private array  $markers;
 
 	/**
 	 * @var ImageInterface
 	 */
-	private $image;
+	private ImageInterface $image;
 
 	// Constructor
 	// =========================================================================
@@ -60,24 +70,24 @@ class StaticMap
 	/**
 	 * StaticMap constructor.
 	 *
-	 * @param float $lat
-	 * @param float $lng
-	 * @param int $width
-	 * @param int $height
-	 * @param int $zoom
-	 * @param int $scale
+	 * @param float       $lat
+	 * @param float       $lng
+	 * @param int         $width
+	 * @param int         $height
+	 * @param int         $zoom
+	 * @param int         $scale
 	 * @param string|null $markers
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct (
-		$lat = 51.272154,
-		$lng = 0.514951,
-		$width = 640,
-		$height = 480,
-		$zoom = 15,
-		$scale = 1,
-		$markers = null
+		float $lat = 51.272154,
+		float $lng = 0.514951,
+		int   $width = 640,
+		int   $height = 480,
+		int   $zoom = 15,
+		int   $scale = 1,
+		string $markers = null
 	) {
 		$this->lat    = $lat;
 		$this->lng    = $lng;
@@ -134,13 +144,13 @@ class StaticMap
 	// Private Methods
 	// =========================================================================
 
-	private function _initCoords ()
+	private function _initCoords (): void
 	{
 		$this->centerX = $this->_lngToTile($this->lng);
 		$this->centerY = $this->_latToTile($this->lat);
 	}
 
-	private function _createBaseMap ()
+	private function _createBaseMap (): void
 	{
 		$imagine = $this->_getImagine();
 		$palette = new RGB();
@@ -201,7 +211,7 @@ class StaticMap
 		}
 	}
 
-	private function _placeMarkers ()
+	private function _placeMarkers (): void
 	{
 		$w   = $this->width * $this->scale;
 		$h   = $this->height * $this->scale;
@@ -247,7 +257,7 @@ class StaticMap
 	// Helpers
 	// =========================================================================
 
-	public static function getLabelColour ($color)
+	public static function getLabelColour ($color): string
 	{
 		$r = hexdec($color[1] . $color[2]);
 		$g = hexdec($color[3] . $color[4]);
@@ -256,7 +266,7 @@ class StaticMap
 		return (($r * 299 + $g * 587 + $b * 114) / 1000 > 130) ? '000' : 'fff';
 	}
 
-	private static function _join ()
+	private static function _join (): string
 	{
 		$paths = func_get_args();
 		$paths = array_map(function ($p) {
@@ -267,7 +277,7 @@ class StaticMap
 		return join('/', $paths);
 	}
 
-	private static function _mkdirRecursive ($pathname, $mode)
+	private static function _mkdirRecursive ($pathname, $mode): bool
 	{
 		is_dir(dirname($pathname)) || self::_mkdirRecursive(dirname($pathname), $mode);
 		return is_dir($pathname) || mkdir($pathname, $mode);
@@ -310,7 +320,7 @@ class StaticMap
 		return $imagine;
 	}
 
-	private function _getFont (ColorInterface $colour, $size = 10)
+	private function _getFont (ColorInterface $colour, $size = 10): \Imagine\Imagick\Font|FontInterface|\Imagine\Gd\Font
 	{
 		$key = ((string) $colour) . '-' . $size;
 
@@ -330,7 +340,7 @@ class StaticMap
 		return $fonts[$key];
 	}
 
-	private function _renderMarker ($colour, $label = null)
+	private function _renderMarker ($colour, $label = null): ImageInterface
 	{
 		$resizeMultiplier = 0.1 * $this->scale;
 		$fontSize = 12 * $this->scale;
@@ -370,17 +380,20 @@ class StaticMap
 	// Tiles
 	// -------------------------------------------------------------------------
 
-	private function _latToTile ($lat)
+	private function _latToTile ($lat): float|int
 	{
 		return (1 - log(tan($lat * pi() / 180) + 1 / cos($lat * pi() / 180)) / pi()) / 2 * pow(2, $this->zoom);
 	}
 
-	private function _lngToTile ($lng)
+	private function _lngToTile ($lng): float|int
 	{
 		return (($lng + 180) / 360) * pow(2, $this->zoom);
 	}
 
-	private function _fetchTile ($url)
+	/**
+	 * @throws GuzzleException
+	 */
+	private function _fetchTile ($url): StreamInterface|string
 	{
 		if ($cached = $this->_checkTileCache($url))
 			return $cached;
@@ -396,7 +409,7 @@ class StaticMap
 	// Map
 	// -------------------------------------------------------------------------
 
-	private function _getMapId ()
+	private function _getMapId (): string
 	{
 		return md5(
 			http_build_query([
@@ -415,17 +428,17 @@ class StaticMap
 	// Cache
 	// -------------------------------------------------------------------------
 
-	private static function _tileCache ()
+	private static function _tileCache (): bool|string
 	{
 		return Craft::getAlias(self::TILE_CACHE_DIR);
 	}
 
-	private static function _mapCache ()
+	private static function _mapCache (): bool|string
 	{
 		return Craft::getAlias(self::MAP_CACHE_DIR);
 	}
 
-	private function _tileUrlToFilename ($url)
+	private function _tileUrlToFilename ($url): string
 	{
 		return self::_join(
 			self::_tileCache(),
@@ -433,7 +446,7 @@ class StaticMap
 		);
 	}
 
-	private function _mapCacheIdToFilename ()
+	private function _mapCacheIdToFilename (): string
 	{
 		$id = $this->_getMapId();
 
@@ -445,19 +458,19 @@ class StaticMap
 		) . '.png';
 	}
 
-	private function _checkTileCache ($url)
+	private function _checkTileCache ($url): bool|string|null
 	{
 		$filename = $this->_tileUrlToFilename($url);
 
 		return file_exists($filename) ? file_get_contents($filename) : null;
 	}
 
-	private function _checkMapCache ()
+	private function _checkMapCache (): bool
 	{
 		return file_exists($this->_mapCacheIdToFilename());
 	}
 
-	private function _writeTileToCache ($url, $data)
+	private function _writeTileToCache ($url, $data): void
 	{
 		$filename = $this->_tileUrlToFilename($url);
 		self::_mkdirRecursive(dirname($filename), 0777);

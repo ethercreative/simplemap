@@ -18,6 +18,7 @@ use ether\simplemap\models\Settings;
 use ether\simplemap\models\StaticOptions;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\utilities\StaticMap;
+use Exception;
 
 /**
  * Class StaticService
@@ -31,10 +32,10 @@ class StaticService extends Component
 	/**
 	 * @param array $options
 	 *
-	 * @return string|void
-	 * @throws \Exception
+	 * @return string
+	 * @throws Exception
 	 */
-	public function generate ($options = [])
+	public function generate (array $options = []): string
 	{
 		if (SimpleMap::v(SimpleMap::EDITION_LITE))
 			return 'Sorry, static maps are a Maps Pro feature!';
@@ -81,9 +82,9 @@ class StaticService extends Component
 	 * @param Settings      $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _generateGoogle ($options, $settings)
+	private function _generateGoogle (StaticOptions $options, Settings $settings): string
 	{
 		$params = [
 			'center' => implode(',', $options->getCenter()),
@@ -121,18 +122,12 @@ class StaticService extends Component
 			$markersString = '&markers=' . implode('&markers=', $markers);
 		}
 
-		switch ($settings->mapTiles)
+		$params['maptype'] = match ($settings->mapTiles)
 		{
-			case MapTiles::GoogleTerrain:
-				$params['maptype'] = 'terrain';
-				break;
-			case MapTiles::GoogleRoadmap:
-				$params['maptype'] = 'roadmap';
-				break;
-			case MapTiles::GoogleHybrid:
-				$params['maptype'] = 'hybrid';
-				break;
-		}
+			MapTiles::GoogleTerrain => 'terrain',
+			MapTiles::GoogleRoadmap => 'roadmap',
+			MapTiles::GoogleHybrid => 'hybrid',
+		};
 
 		return 'https://maps.googleapis.com/maps/api/staticmap?' . http_build_query($params) . $markersString;
 	}
@@ -142,9 +137,9 @@ class StaticService extends Component
 	 * @param Settings      $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _generateApple ($options, $settings)
+	private function _generateApple (StaticOptions $options, Settings $settings): string
 	{
 		$params = [
 			'center' => implode(',', $options->getCenter()),
@@ -200,9 +195,9 @@ class StaticService extends Component
 	 * @param Settings      $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _generateMapbox ($options, $settings)
+	private function _generateMapbox (StaticOptions $options, Settings $settings): string
 	{
 		$url = 'https://api.mapbox.com/styles/v1/mapbox/';
 
@@ -259,9 +254,9 @@ class StaticService extends Component
 	 * @param Settings      $settings
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _generateHere ($options, $settings)
+	private function _generateHere (StaticOptions $options, Settings $settings): string
 	{
 		$params = [
 			'app_id' => $settings->getMapToken()['appId'],
@@ -324,9 +319,9 @@ class StaticService extends Component
 	 * @param StaticOptions $options
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function _generateDefault ($options)
+	private function _generateDefault (StaticOptions $options): string
 	{
 		$center = $options->getCenter();
 
@@ -348,14 +343,14 @@ class StaticService extends Component
 	// Helpers
 	// =========================================================================
 
-	private function _getTld ()
+	private function _getTld (): array
 	{
 		$url = 'http://' . $_SERVER['SERVER_NAME'];
 
 		return explode(".", parse_url($url, PHP_URL_HOST));
 	}
 
-	private function _encode ($data)
+	private function _encode ($data): string
 	{
 		$encoded = strtr(base64_encode($data), '+/', '-_');
 

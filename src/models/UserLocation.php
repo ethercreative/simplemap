@@ -10,6 +10,7 @@ namespace ether\simplemap\models;
 
 use craft\helpers\Json;
 use ether\simplemap\services\GeoService;
+use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -26,13 +27,13 @@ class UserLocation extends BaseLocation
 	// =========================================================================
 
 	/** @var string */
-	public $ip;
+	public string $ip;
 
 	/** @var string */
-	public $countryCode;
+	public string $countryCode;
 
 	/** @var bool */
-	public $isEU;
+	public bool $isEU;
 
 	// Methods
 	// =========================================================================
@@ -46,9 +47,9 @@ class UserLocation extends BaseLocation
 	 *
 	 * @return float|int
 	 * @throws InvalidConfigException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function distance ($to, $unit = 'km')
+	public function distance (array $to, string $unit = 'km'): float|int
 	{
 		// Normalize unit
 		$unit = GeoService::normalizeDistance($unit);

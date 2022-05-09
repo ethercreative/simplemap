@@ -8,11 +8,14 @@
 
 namespace ether\simplemap\web;
 
+use Craft;
+use craft\errors\DeprecationException;
 use ether\simplemap\models\Settings;
 use ether\simplemap\models\UserLocation;
 use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
 use Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Variable
@@ -28,7 +31,7 @@ class Variable
 	 *
 	 * @return string
 	 */
-	public function getMapToken ()
+	public function getMapToken (): string
 	{
 		/** @var Settings $settings */
 		$settings = SimpleMap::getInstance()->getSettings();
@@ -44,11 +47,11 @@ class Variable
 	 *
 	 * @deprecated as of 3.4.0
 	 * @return string
-	 * @throws \craft\errors\DeprecationException
+	 * @throws DeprecationException
 	 */
-	public function getApiKey ()
+	public function getApiKey (): string
 	{
-		\Craft::$app->getDeprecator()->log(
+		Craft::$app->getDeprecator()->log(
 			'Variable::getApiKey()',
 			'ether\simplemap\web\Variable::getApiKey() has been deprecated. Use `getMapToken()` instead.'
 		);
@@ -64,7 +67,7 @@ class Variable
 	 * @return UserLocation|null
 	 * @throws Exception
 	 */
-	public function getUserLocation ($ip = null)
+	public function getUserLocation (string $ip = null): ?UserLocation
 	{
 		return SimpleMap::getInstance()->geolocation->lookup($ip);
 	}
@@ -78,7 +81,7 @@ class Variable
 	 *
 	 * @return array|null
 	 */
-	public function getLatLngFromAddress ($address, $country = null)
+	public function getLatLngFromAddress (string $address, string $country = null): ?array
 	{
 		try
 		{
@@ -86,7 +89,7 @@ class Variable
 		}
 		catch (Exception $e)
 		{
-			\Craft::error($e->getMessage(), 'simplemap');
+			Craft::error($e->getMessage(), 'simplemap');
 
 			return [
 				'lat' => '',
@@ -103,7 +106,7 @@ class Variable
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getImg ($options)
+	public function getImg ($options): string
 	{
 		return SimpleMap::getInstance()->static->generate($options);
 	}
@@ -116,7 +119,7 @@ class Variable
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getImgSrcSet ($options)
+	public function getImgSrcSet ($options): string
 	{
 		$x1 = $this->getImg(array_merge($options, ['scale' => 1]));
 		$x2 = $this->getImg(array_merge($options, ['scale' => 2]));
@@ -130,7 +133,7 @@ class Variable
 	 * @param $options - See EmbedOptions for the available options
 	 *
 	 * @return string|void
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
 	 */
 	public function getEmbed ($options)
 	{

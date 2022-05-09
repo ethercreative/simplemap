@@ -27,7 +27,7 @@ class PartsLegacy extends Parts
 	// Properties: Static
 	// -------------------------------------------------------------------------
 
-	public static $legacyKeys = [
+	public static array $legacyKeys = [
 		'administrative_area_level_1',
 		'administrative_area_level_2',
 		'administrative_area_level_3',

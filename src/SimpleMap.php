@@ -9,9 +9,9 @@
 namespace ether\simplemap;
 
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
-use craft\events\RegisterGqlQueriesEvent;
 use craft\events\RegisterGqlTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\UrlHelper;
@@ -21,7 +21,6 @@ use craft\web\Application;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use ether\simplemap\fields\MapField as MapField;
-use ether\simplemap\integrations\craftql\GetCraftQLSchema;
 use ether\simplemap\integrations\feedme\FeedMeMaps;
 use ether\simplemap\integrations\graphql\MapPartsType;
 use ether\simplemap\integrations\graphql\MapType;
@@ -31,7 +30,9 @@ use ether\simplemap\services\GeoLocationService;
 use ether\simplemap\services\MapService;
 use ether\simplemap\services\StaticService;
 use ether\simplemap\web\Variable;
+use Exception;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
 
 /**
  * Class SimpleMap
@@ -52,7 +53,7 @@ class SimpleMap extends Plugin
 	// Properties
 	// =========================================================================
 
-	public $hasCpSettings = true;
+	public bool $hasCpSettings = true;
 
 	// Static
 	// =========================================================================
@@ -116,15 +117,6 @@ class SimpleMap extends Plugin
 			);
 		}
 
-		if (class_exists(\markhuot\CraftQL\CraftQL::class))
-		{
-			Event::on(
-				MapField::class,
-				'craftQlGetFieldSchema',
-				[new GetCraftQLSchema, 'handle']
-			);
-		}
-
 		if (class_exists(\craft\feedme\Plugin::class))
 		{
 			Event::on(
@@ -150,39 +142,39 @@ class SimpleMap extends Plugin
 		}
 	}
 
-	protected function beforeUninstall (): bool
+	protected function beforeUninstall (): void
 	{
 		if ($this->getSettings()->geoLocationService === GeoLocationService::MaxMindLite)
 			GeoLocationService::purgeDb();
-
-		return parent::beforeUninstall();
 	}
 
 	// Settings
 	// =========================================================================
 
-	protected function createSettingsModel ()
+	protected function createSettingsModel (): Model
 	{
 		return new Settings();
 	}
 
 	/**
-	 * @return bool|\craft\base\Model|Settings
+	 * @return Model
 	 */
-	public function getSettings ()
+	public function getSettings (): Model
 	{
 		return parent::getSettings();
 	}
 
-	protected function settingsHtml ()
+	protected function settingsHtml (): ?string
 	{
 		// Redirect to our settings page
 		Craft::$app->controller->redirect(
 			UrlHelper::cpUrl('maps/settings')
 		);
+
+		return null;
 	}
 
-	public function afterSaveSettings ()
+	public function afterSaveSettings (): void
 	{
 		parent::afterSaveSettings();
 
@@ -210,7 +202,7 @@ class SimpleMap extends Plugin
 	/**
 	 * @param Event $event
 	 *
-	 * @throws \yii\base\InvalidConfigException
+	 * @throws InvalidConfigException
 	 */
 	public function onRegisterVariable (Event $event)
 	{
@@ -232,7 +224,7 @@ class SimpleMap extends Plugin
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function onApplicationInit ()
 	{
@@ -243,12 +235,12 @@ class SimpleMap extends Plugin
 	// Helpers
 	// =========================================================================
 
-	public static function t ($message, $params = [])
+	public static function t ($message, $params = []): string
 	{
 		return Craft::t('simplemap', $message, $params);
 	}
 
-	public static function v ($version, $operator = '=')
+	public static function v ($version, $operator = '='): bool
 	{
 		return SimpleMap::getInstance()->is($version, $operator);
 	}

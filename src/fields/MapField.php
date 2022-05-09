@@ -14,6 +14,7 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\InvalidFieldException;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
 use ether\simplemap\integrations\graphql\MapType;
@@ -22,6 +23,8 @@ use ether\simplemap\services\GeoService;
 use ether\simplemap\SimpleMap;
 use ether\simplemap\models\Map;
 use ether\simplemap\web\assets\MapAsset;
+use Exception;
+use GraphQL\Type\Definition\Type;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -45,74 +48,74 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * @var float - The maps latitude
 	 */
-	public $lat = 51.272154;
+	public float $lat = 51.272154;
 
 	/**
 	 * @var float - The maps longitude
 	 */
-	public $lng = 0.514951;
+	public float $lng = 0.514951;
 
 	/**
 	 * @var int - The maps zoom level
 	 */
-	public $zoom = 15;
+	public int $zoom = 15;
 
 	/**
 	 * @var float - The maps min zoom level (how far OUT it can be zoomed)
 	 */
-	public $minZoom = 3;
+	public float $minZoom = 3;
 
 	/**
 	 * @var float - The maps max zoom level (how far IN it can be zoomed)
 	 */
-	public $maxZoom = 18;
+	public float $maxZoom = 18;
 
 	/**
-	 * @var string - The preferred country when searching
+	 * @var string|null - The preferred country when searching
 	 */
-	public $country = null;
+	public ?string $country = null;
 
 	/**
 	 * @var bool - If true, the location search will not be displayed
 	 */
-	public $hideSearch = false;
+	public bool $hideSearch = false;
 
 	/**
 	 * @var bool - If true, the map will not be displayed
 	 */
-	public $hideMap = false;
+	public bool $hideMap = false;
 
 	/**
 	 * @var bool - If true, the address fields will not be displayed
 	 */
-	public $hideAddress = false;
+	public bool $hideAddress = false;
 
 	/**
 	 * @var bool - If true, show the lat/lng fields
 	 */
-	public $showLatLng = false;
+	public bool $showLatLng = false;
 
 	/**
 	 * @var bool - If true, will show a button to centre the map on the users
 	 *   current location.
 	 */
-	public $showCurrentLocation = false;
+	public bool $showCurrentLocation = false;
 
 	/**
 	 * @var string - The size of the field
 	 *   (can be either "normal", "mini")
 	 */
-	public $size = 'normal';
+	public string $size = 'normal';
 
 	/**
 	 * @var bool - Will show the what3words overlay when true
 	 */
-	public $showW3WGrid = false;
+	public bool $showW3WGrid = false;
 
 	/**
 	 * @var bool - Show the what3words field on the map field
 	 */
-	public $showW3WField = false;
+	public bool $showW3WField = false;
 
 	/**
 	 * @deprecated
@@ -149,7 +152,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * @deprecated
 	 */
-	public $boundary = '""';
+	public string $boundary = '""';
 
 	// Methods
 	// =========================================================================
@@ -191,7 +194,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		$this->country = $value;
 	}
 
-	public function rules ()
+	public function rules (): array
 	{
 		$rules = parent::rules();
 
@@ -225,13 +228,13 @@ class MapField extends Field implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param Map|array|string|null         $value
+	 * @param mixed                         $value
 	 * @param ElementInterface|Element|null $element
 	 *
 	 * @return Map
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function normalizeValue ($value, ElementInterface $element = null)
+	public function normalizeValue (mixed $value, ElementInterface|Element $element = null): Map
 	{
 		if (is_string($value))
 			$value = Json::decodeIfJson($value);
@@ -264,14 +267,14 @@ class MapField extends Field implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @return string|Markup|null
+	 * @return string
+	 * @throws InvalidConfigException
 	 * @throws LoaderError
 	 * @throws RuntimeError
 	 * @throws SyntaxError
-	 * @throws InvalidConfigException
 	 * @throws \yii\base\Exception
 	 */
-	public function getSettingsHtml ()
+	public function getSettingsHtml (): string
 	{
 		$value = new Map();
 
@@ -329,8 +332,8 @@ class MapField extends Field implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param Map $value
-	 * @param ElementInterface|Element|null $element
+	 * @param null                  $value
+	 * @param ElementInterface|null $element
 	 *
 	 * @return string
 	 * @throws InvalidConfigException
@@ -353,9 +356,9 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @param ElementInterface $element
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function getTableAttributeHtml ($value, ElementInterface $element): string
+	public function getTableAttributeHtml (mixed $value, ElementInterface $element): string
 	{
 		return $this->normalizeValue($value, $element)->address;
 	}
@@ -364,22 +367,20 @@ class MapField extends Field implements PreviewableFieldInterface
 	 * @param ElementQueryInterface $query
 	 * @param                       $value
 	 *
-	 * @return bool|false|null
-	 * @throws \Exception
+	 * @return void
+	 * @throws Exception
 	 */
-	public function modifyElementsQuery (ElementQueryInterface $query, $value)
+	public function modifyElementsQuery (ElementQueryInterface $query, $value): void
 	{
 		if (!SimpleMap::getInstance())
-			return null;
+			return;
 
 		SimpleMap::getInstance()->map->modifyElementsQuery($query, $value, $this);
-
-		return null;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function isValueEmpty ($value, ElementInterface $element): bool
 	{
@@ -392,17 +393,17 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * @inheritdoc
 	 */
-	public function getContentGqlType ()
+	public function getContentGqlType (): Type|array
 	{
 		return MapType::getType();
 	}
 
-	public function getContentGqlQueryArgumentType ()
+	public function getContentGqlQueryArgumentType (): Type|array
 	{
 		return MapType::getQueryType();
 	}
 
-	public function getContentGqlMutationArgumentType ()
+	public function getContentGqlMutationArgumentType (): Type|array
 	{
 		return MapType::getInputType();
 	}
@@ -426,10 +427,11 @@ class MapField extends Field implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param ElementInterface|Element $element
+	 * @param ElementInterface $element
 	 * @param bool             $isNew
 	 *
 	 * @return bool
+	 * @throws InvalidFieldException
 	 */
 	public function beforeElementSave (ElementInterface $element, bool $isNew): bool
 	{
@@ -440,12 +442,13 @@ class MapField extends Field implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param ElementInterface|Element $element
+	 * @param ElementInterface $element
 	 * @param bool             $isNew
 	 *
+	 * @throws InvalidFieldException
 	 * @throws Throwable
 	 */
-	public function afterElementSave (ElementInterface $element, bool $isNew)
+	public function afterElementSave (ElementInterface $element, bool $isNew): void
 	{
 		SimpleMap::getInstance()->map->saveField($this, $element);
 
@@ -458,13 +461,13 @@ class MapField extends Field implements PreviewableFieldInterface
 	/**
 	 * Renders the map input
 	 *
-	 * @param Map $value
+	 * @param Map  $value
 	 * @param bool $isSettings
 	 *
 	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	private function _renderMap ($value, $isSettings = false)
+	private function _renderMap (Map $value, bool $isSettings = false): string
 	{
 		$view = Craft::$app->getView();
 
@@ -558,7 +561,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		// Map Services
 		// ---------------------------------------------------------------------
 
-		if (strpos($settings->mapTiles, 'google') !== false)
+		if (str_contains($settings->mapTiles, 'google'))
 		{
 			if ($settings->getMapToken() !== $settings->getGeoToken())
 			{
@@ -568,7 +571,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				);
 			}
 		}
-		elseif (strpos($settings->mapTiles, 'mapkit') !== false)
+		elseif (str_contains($settings->mapTiles, 'mapkit'))
 		{
 			$view->registerJsFile(
 				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
@@ -629,7 +632,8 @@ class MapField extends Field implements PreviewableFieldInterface
 	 *
 	 * @return float|null
 	 */
-	private static function _parseFloat ($value = null) {
+	private static function _parseFloat ($value = null): ?float
+	{
 		if ($value === null)
 			return null;
 

@@ -42,7 +42,7 @@ abstract class GeoService
 	// Helpers
 	// =========================================================================
 
-	public static function getSelectOptions ()
+	public static function getSelectOptions (): array
 	{
 		$isLite = SimpleMap::v(SimpleMap::EDITION_LITE);
 

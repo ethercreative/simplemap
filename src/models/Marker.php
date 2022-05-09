@@ -10,6 +10,7 @@ namespace ether\simplemap\models;
 
 use craft\helpers\Json;
 use ether\simplemap\services\GeoService;
+use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -26,13 +27,13 @@ class Marker
 	// =========================================================================
 
 	/** @var string|array Can be an address string, or a [lat, lng] or ['lat' => lat, 'lng' => lng] array */
-	public $location;
+	public string|array $location;
 
 	/** @var string The colour of the marker in Hex format */
-	public $color = '#ff0000';
+	public string $color = '#ff0000';
 
 	/** @var string|null A single character label, or null for no label */
-	public $label = null;
+	public mixed $label = null;
 
 	// Constructor
 	// =========================================================================
@@ -71,7 +72,7 @@ class Marker
 		]);
 	}
 
-	public function getLocation ($toLatLng = false)
+	public function getLocation ($toLatLng = false): array|string
 	{
 		if (is_string($this->location))
 			return $toLatLng
@@ -83,9 +84,9 @@ class Marker
 
 	/**
 	 * @return array|string|null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function getCenter ()
+	public function getCenter (): array|string|null
 	{
 		if (is_string($this->location))
 			return GeoService::latLngFromAddress($this->location);
@@ -99,7 +100,7 @@ class Marker
 	// Helpers
 	// =========================================================================
 
-	private static function _expandHex ($hex)
+	private static function _expandHex ($hex): string
 	{
 		$r = $hex[1];
 		$g = $hex[2];

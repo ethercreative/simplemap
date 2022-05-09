@@ -11,6 +11,7 @@ namespace ether\simplemap\services;
 use Craft;
 use craft\base\Component;
 use craft\helpers\Json;
+use DateTime;
 use ether\simplemap\jobs\MaxMindDBDownloadJob;
 use ether\simplemap\models\Settings;
 use ether\simplemap\models\UserLocation;
@@ -49,7 +50,7 @@ class GeoLocationService extends Component
 	 * @return UserLocation|null
 	 * @throws Exception
 	 */
-	public function lookup ($ip = null)
+	public function lookup (string $ip = null): ?UserLocation
 	{
 		if (SimpleMap::v(SimpleMap::EDITION_LITE))
 			throw new Exception('Sorry, user geolocation is a Maps Pro feature!');
@@ -70,23 +71,17 @@ class GeoLocationService extends Component
 		if ($cached = $this->_getUserLocationFromCache($ip, $settings))
 			return $cached;
 
-		$userLocation = null;
-
-		switch ($settings->geoLocationService)
+		$userLocation = match ($settings->geoLocationService)
 		{
-			case self::IpStack:
-				$userLocation = $this->_lookup_IpStack($settings->getGeoLocationToken(), $ip);
-				break;
-			case self::MaxMind:
-				$userLocation = $this->_lookup_MaxMind($settings->getGeoLocationToken(), $ip);
-				break;
-			case self::MaxMindLite:
-				$userLocation = $this->_lookup_MaxMindLite($ip);
-				break;
-			case self::None:
-			default:
-				$userLocation = null;
-		}
+			self::IpStack => $this->_lookup_IpStack(
+				$settings->getGeoLocationToken(), $ip
+			),
+			self::MaxMind => $this->_lookup_MaxMind(
+				$settings->getGeoLocationToken(), $ip
+			),
+			self::MaxMindLite => $this->_lookup_MaxMindLite($ip),
+			default => null,
+		};
 
 		if ($userLocation)
 			$this->_cacheUserLocation($userLocation, $settings);
@@ -148,7 +143,7 @@ class GeoLocationService extends Component
 			Craft::$app->getRequest()->getAbsoluteUrl()
 		);
 
-		if (strpos($currentUrl, '://') !== false)
+		if (str_contains($currentUrl, '://'))
 			$currentUrl = str_replace(
 				Craft::$app->getRequest()->getBaseUrl(),
 				'',
@@ -163,7 +158,7 @@ class GeoLocationService extends Component
 	// Public Helpers
 	// =========================================================================
 
-	public static function getSelectOptions ()
+	public static function getSelectOptions (): array
 	{
 		return [
 			self::None => SimpleMap::t('None'),
@@ -183,7 +178,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return bool
 	 */
-	public static function dbExists ($filename = 'default.mmdb')
+	public static function dbExists (string $filename = 'default.mmdb'): bool
 	{
 		return file_exists(
 			Craft::getAlias(self::DB_STORAGE . DIRECTORY_SEPARATOR . $filename)
@@ -198,14 +193,14 @@ class GeoLocationService extends Component
 	 * @return bool
 	 * @throws Exception
 	 */
-	public static function dbShouldUpdate ($filename = 'default.mmdb')
+	public static function dbShouldUpdate (string $filename = 'default.mmdb'): bool
 	{
 		$updated = filemtime(
 			Craft::getAlias(self::DB_STORAGE . DIRECTORY_SEPARATOR . $filename)
 		);
 
 		if ($updated === false) return false;
-		return $updated < (new \DateTime())->modify('-7 days')->getTimestamp();
+		return $updated < (new DateTime())->modify('-7 days')->getTimestamp();
 	}
 
 	/**
@@ -240,7 +235,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return UserLocation|false
 	 */
-	private function _getUserLocationFromCache ($ip, Settings $settings)
+	private function _getUserLocationFromCache (string $ip, Settings $settings): bool|UserLocation
 	{
 		if (!$settings->geoLocationCacheDuration)
 			return false;
@@ -256,7 +251,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return bool
 	 */
-	private function _cacheUserLocation (UserLocation $userLocation, Settings $settings)
+	private function _cacheUserLocation (UserLocation $userLocation, Settings $settings): bool
 	{
 		if (!$settings->geoLocationCacheDuration)
 			return true;
@@ -271,7 +266,7 @@ class GeoLocationService extends Component
 	// Lookup Services
 	// -------------------------------------------------------------------------
 
-	private function _lookup_IpStack ($token, $ip)
+	private function _lookup_IpStack ($token, $ip): ?UserLocation
 	{
 		$url = 'http://api.ipstack.com/' . $ip;
 		$url .= '?access_key=' . $token;
@@ -305,7 +300,7 @@ class GeoLocationService extends Component
 		]);
 	}
 
-	private function _lookup_MaxMind ($token, $ip)
+	private function _lookup_MaxMind ($token, $ip): ?UserLocation
 	{
 		$client = new Client(
 			$token['accountId'],
@@ -335,7 +330,7 @@ class GeoLocationService extends Component
 	 * @return UserLocation|null
 	 * @throws Exception
 	 */
-	private function _lookup_MaxMindLite ($ip)
+	private function _lookup_MaxMindLite ($ip): ?UserLocation
 	{
 		if (!self::dbExists())
 		{
@@ -387,7 +382,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return mixed
 	 */
-	private static function _isValidIp ($ip)
+	private static function _isValidIp (string $ip): mixed
 	{
 		return filter_var(
 			$ip,
@@ -402,7 +397,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return UserLocation
 	 */
-	private static function _populateMaxMind ($ip, $record)
+	private static function _populateMaxMind ($ip, $record): UserLocation
 	{
 		$parts = [
 			'city'     => $record->city->name,
@@ -428,7 +423,7 @@ class GeoLocationService extends Component
 	 *
 	 * @return bool
 	 */
-	private static function _validateProps (UserLocation $location, $props)
+	private static function _validateProps (UserLocation $location, $props): bool
 	{
 		foreach ($props as $key => $value)
 		{

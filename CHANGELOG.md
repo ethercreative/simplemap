@@ -1,3 +1,7 @@
+## 4.0.0 - 2022-05-10
+### Fixed
+- Mostly functional, only slightly buggy, Craft 4 Support
+
 ## 3.9.3 - 2022-01-17
 ### Fixed
 - Fix Mapbox Forbidden issue (Fixes #218, via @Saboteur777)

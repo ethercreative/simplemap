@@ -60,15 +60,17 @@
 	</header>
 
 	<section class="maps-map">
-		{% for key, label in mapTileOptions if key != '0' and key != '1' %}
-			{% set x1 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '-1x.jpg', true) %}
-			{% set x2 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.jpg', true) %}
-			<image-fade-on-load
-				src="{{ x1 }}"
-				srcset="{{ x1 }} 1x, {{ x2 }} 2x"
-				alt="{{ label is iterable ? label.label : label }}"
-				:show="mapTiles === '{{ key }}'"
-			></image-fade-on-load>
+		{% for key, label in mapTileOptions %}
+			{% if key != '0' and key != '1' %}
+				{% set x1 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '-1x.jpg', true) %}
+				{% set x2 = craft.app.assetManager.getPublishedUrl('@simplemapimages/' ~ (key|replace({'.':'-','/':'-'})) ~ '.jpg', true) %}
+				<image-fade-on-load
+					src="{{ x1 }}"
+					srcset="{{ x1 }} 1x, {{ x2 }} 2x"
+					alt="{{ label is iterable ? label.label : label }}"
+					:show="mapTiles === '{{ key }}'"
+				></image-fade-on-load>
+			{% endif %}
 		{% endfor %}
 
 		{% namespace 'settings' %}
@@ -593,12 +595,13 @@ hr {
 }
 
 .maps-header h1 {
+	display: flex;
+	align-items: center;
 	font-size: 0;
 	margin-bottom: 0;
 }
 .maps-header svg {
 	position: relative;
-	top: -3px;
 	width: 30px;
 	height: 30px;
 	vertical-align: bottom;
@@ -748,6 +751,7 @@ hr {
 }
 .maps-style select {
 	width: 100%;
+	height: 80px;
 	padding: 32px 40px 13px 20px;
 	font-size: 24px;
 

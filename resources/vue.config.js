@@ -5,6 +5,7 @@ module.exports = {
 		https: true,
 		headers: { "Access-Control-Allow-Origin": "*" },
 		disableHostCheck: true,
+		port: 8080,
 	},
 	configureWebpack: config => {
 		config.output.library = 'EtherMaps';

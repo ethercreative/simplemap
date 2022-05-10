@@ -24,20 +24,20 @@ abstract class BaseLocation extends Model
 	// Properties
 	// =========================================================================
 
-	/** @var float */
-	public float $lat;
+	/** @var float|null */
+	public ?float $lat = null;
 
-	/** @var float */
-	public float $lng;
+	/** @var float|null */
+	public ?float $lng = null;
 
-	/** @var string */
-	public string $address;
+	/** @var string|null */
+	public ?string $address = null;
 
-	/** @var Parts */
-	public PartsLegacy|Parts $parts;
+	/** @var PartsLegacy|Parts|array|null */
+	public PartsLegacy|Parts|array|null $parts = null;
 
-	/** @var string */
-	public string $what3words;
+	/** @var string|null */
+	public ?string $what3words = null;
 
 	// Constructor
 	// =========================================================================

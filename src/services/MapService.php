@@ -318,7 +318,7 @@ class MapService extends Component
 		$location = GeoService::normalizeLocation($location, $country);
 
 		// If we don't have a location, reduce the search radius to 0
-		if ($location === null)
+		if (empty($location))
 		{
 			$location = ['lat' => 0, 'lng' => 0];
 			$radius = 0;

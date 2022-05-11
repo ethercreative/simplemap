@@ -117,7 +117,7 @@ class MapType
 
 	public static function getInputType (): InputType
 	{
-		$name = static::class . 'Input';
+		$name = static::getName() . 'Input';
 
 		if ($type = GqlEntityRegistry::getEntity($name))
 			return $type;
@@ -133,7 +133,7 @@ class MapType
 
 	public static function getQueryType (): InputType
 	{
-		$name = static::class . 'Query';
+		$name = static::getName() . 'Query';
 
 		if ($type = GqlEntityRegistry::getEntity($name))
 			return $type;
@@ -149,7 +149,7 @@ class MapType
 
 	public static function getCoordsType (): InputType
 	{
-		$name = static::class . 'Coords';
+		$name = static::getName() . 'Coords';
 
 		if ($type = GqlEntityRegistry::getEntity($name))
 			return $type;
@@ -174,7 +174,7 @@ class MapType
 
 	public static function getUnitType (): EnumType
 	{
-		$name = static::class . 'Unit';
+		$name = static::getName() . 'Unit';
 
 		if ($type = GqlEntityRegistry::getEntity($name))
 			return $type;

@@ -34,10 +34,10 @@ abstract class BaseLocation extends Model
 	public string $address;
 
 	/** @var Parts */
-	public PartsLegacy|Parts $parts;
+	public mixed $parts;
 
 	/** @var string */
-	public string $what3words;
+	public mixed $what3words;
 
 	// Constructor
 	// =========================================================================

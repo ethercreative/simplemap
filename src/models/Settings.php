@@ -77,8 +77,8 @@ class Settings extends Model
 	/** @var string The geo-location service */
 	public string $geoLocationService = GeoLocationService::None;
 
-	/** @var string The token for the geo-location service */
-	public string $geoLocationToken = '';
+	/** @var string|array The token for the geo-location service */
+	public string|array $geoLocationToken = '';
 
 	/** @var string|int How long to cache IP look-ups for (set to 0 to disable caching) */
 	public string|int $geoLocationCacheDuration = 'P2M';

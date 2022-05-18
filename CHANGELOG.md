@@ -1,3 +1,7 @@
+## 4.0.1 - 2022-05-18
+### Fixed
+- Fix Geo Location Token only allowing string (Fixes #343)
+
 ## 4.0.0 - 2022-05-10
 ### Fixed
 - Mostly functional, only slightly buggy, Craft 4 Support

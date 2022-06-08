@@ -678,7 +678,7 @@ class GeoService extends Component
 		else if ($location instanceof Map)
 			$location = ['lat' => $location->lat, 'lng' => $location->lng];
 		else if (!is_array($location) || !isset($location['lat'], $location['lng']))
-			$location = null;
+			$location = [];
 
 		return $location;
 	}

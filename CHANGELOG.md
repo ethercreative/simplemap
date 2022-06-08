@@ -1,3 +1,7 @@
+## 4.0.2 - 2022-06-08
+### Fixed
+- Misc fixes via @davidwebca & @jamesedmonston
+
 ## 4.0.1 - 2022-05-18
 ### Fixed
 - Fix Geo Location Token only allowing string (Fixes #343)

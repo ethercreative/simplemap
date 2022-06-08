@@ -60,7 +60,7 @@ class UserLocation extends BaseLocation
 		// Coordinates
 		$to = GeoService::normalizeLocation($to);
 
-		if ($to === null)
+		if (empty($to))
 			throw new InvalidConfigException('Invalid target lat/lng');
 
 		$targetLat = $to['lat'];

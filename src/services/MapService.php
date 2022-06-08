@@ -165,9 +165,8 @@ class MapService extends Component
 	 */
 	public function modifyElementsQuery (ElementQueryInterface $query, mixed $value, MapField $field)
 	{
-		if (empty($value))
+		if (is_null($value))
 			return;
-
 
 		// Work-around for Craft built-in GraphQL not supporting custom
 		// arguments for fields:
@@ -318,7 +317,7 @@ class MapService extends Component
 		$location = GeoService::normalizeLocation($location, $country);
 
 		// If we don't have a location, reduce the search radius to 0
-		if ($location === null)
+		if (empty($location))
 		{
 			$location = ['lat' => 0, 'lng' => 0];
 			$radius = 0;
@@ -398,13 +397,13 @@ class MapService extends Component
 	 * @param ElementQuery $query
 	 * @param bool         $search
 	 */
-	private function _replaceOrderBy (ElementQuery $query, bool $search = false)
+	private function _replaceOrderBy (ElementQuery $query, string $search = "")
 	{
 		$nextOrder = [];
 
 		foreach ((array) $query->orderBy as $order => $sort)
 		{
-			if ($order === 'distance' && $search) $nextOrder[$search] = $sort;
+			if ($order === 'distance' && !empty($search)) $nextOrder[$search] = $sort;
 			elseif ($order !== 'distance') $nextOrder[$order] = $sort;
 		}
 

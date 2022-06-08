@@ -1,7 +1,6 @@
 {
   "name": "ether/simplemap",
   "description": "A beautifully simple Map field type for Craft CMS",
-  "version": "4.0.0",
   "type": "craft-plugin",
   "license": "proprietary",
   "minimum-stability": "dev",

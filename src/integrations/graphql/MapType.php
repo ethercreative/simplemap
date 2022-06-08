@@ -103,11 +103,11 @@ class MapType
 
 	public static function getType (): Type
 	{
-		if ($type = GqlEntityRegistry::getEntity(static::class))
+		if ($type = GqlEntityRegistry::getEntity(static::getName()))
 			return $type;
 
 		return GqlEntityRegistry::createEntity(
-			static::class,
+			static::getName(),
 			new ObjectType([
 				'name' => static::getName(),
 				'fields' => static::class . '::getFieldDefinitions',

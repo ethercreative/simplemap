@@ -27,22 +27,22 @@ class Map extends BaseLocation
 	// Properties
 	// =========================================================================
 
-	/** @var int */
-	public int $id;
+	/** @var int|null */
+	public ?int $id = null;
 
-	/** @var int */
-	public int $ownerId;
+	/** @var int|null */
+	public ?int $ownerId = null;
 
-	/** @var int */
-	public int $ownerSiteId;
+	/** @var int|null */
+	public ?int $ownerSiteId = null;
 
-	/** @var int */
-	public int $fieldId;
+	/** @var int|null */
+	public ?int $fieldId = null;
 
 	/** @var int */
 	public int $zoom = 15;
 
-	/** @var float|null */
+	/** @var int|float|null */
 	public int|null|float $distance = null;
 
 	// Constructor

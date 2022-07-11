@@ -30,6 +30,7 @@ abstract class MapTiles
 
 	// Wikimedia
 	// https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
+	// No longer available, falling back to osm in MapField.php::_renderMap
 	const Wikimedia = 'wikimedia';
 
 	// OpenStreetMaps
@@ -82,7 +83,7 @@ abstract class MapTiles
 		return [
 			['optgroup' => SimpleMap::t('Open Source')],
 
-			self::Wikimedia => SimpleMap::t('Wikimedia'),
+//			self::Wikimedia => SimpleMap::t('Wikimedia'),
 
 			self::OpenStreetMap => SimpleMap::t('OpenStreetMap'),
 

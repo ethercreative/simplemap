@@ -4,6 +4,9 @@
 - Allow all Parts to be null as well as an empty string (Fixes #349)
 - Fix issue placing marker along coastline when using Mapbox (Fixes #322)
 
+### Changed
+- Removed WikiMedia tiles, falling back to OpenStreetMap (Fixes #307)
+
 ## 4.0.2 - 2022-06-08
 ### Fixed
 - Misc fixes via @davidwebca & @jamesedmonston

@@ -17,6 +17,7 @@ use craft\elements\db\ElementQueryInterface;
 use craft\errors\InvalidFieldException;
 use craft\helpers\Json;
 use ether\simplemap\enums\GeoService as GeoEnum;
+use ether\simplemap\enums\MapTiles;
 use ether\simplemap\integrations\graphql\MapType;
 use ether\simplemap\models\Settings;
 use ether\simplemap\services\GeoService;
@@ -505,6 +506,10 @@ class MapField extends Field implements PreviewableFieldInterface
 		if ($country && $settings->geoService === GeoEnum::Here)
 			$country = GeoService::$countriesIso3[$country];
 
+		$tiles = $settings->mapTiles;
+		if ($tiles === MapTiles::Wikimedia)
+			$tiles = MapTiles::OpenStreetMap;
+
 		$opts = [
 			'config' => [
 				'isSettings' => $isSettings,
@@ -520,10 +525,10 @@ class MapField extends Field implements PreviewableFieldInterface
 				'maxZoom'             => $isSettings ? 18 : (float) $this->maxZoom,
 				'size'                => $this->size,
 
-				'mapTiles' => $settings->mapTiles,
+				'mapTiles' => $tiles,
 				'mapToken' => GeoService::getToken(
 					$settings->getMapToken(),
-					$settings->mapTiles
+					$tiles
 				),
 
 				'geoService' => $settings->geoService,
@@ -561,7 +566,7 @@ class MapField extends Field implements PreviewableFieldInterface
 		// Map Services
 		// ---------------------------------------------------------------------
 
-		if (str_contains($settings->mapTiles, 'google'))
+		if (str_contains($tiles, 'google'))
 		{
 			if ($settings->getMapToken() !== $settings->getGeoToken())
 			{
@@ -571,7 +576,7 @@ class MapField extends Field implements PreviewableFieldInterface
 				);
 			}
 		}
-		elseif (str_contains($settings->mapTiles, 'mapkit'))
+		elseif (str_contains($tiles, 'mapkit'))
 		{
 			$view->registerJsFile(
 				'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'

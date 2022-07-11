@@ -1,6 +1,7 @@
 ## 4.0.3 - 2022-07-11
 ### Fixed
 - Fixed $id embed issue (Fixes #353)
+- Allow all Parts to be null as well as an empty string (Fixes #349)
 
 ## 4.0.2 - 2022-06-08
 ### Fixed

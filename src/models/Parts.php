@@ -24,47 +24,47 @@ class Parts extends BaseObject
 	// Properties
 	// =========================================================================
 
-	/** @var string */
-	public string $number = '';
+	/** @var string|null */
+	public ?string $number = '';
 
-	/** @var string */
-	public string $address = '';
+	/** @var string|null */
+	public ?string $address = '';
 
-	/** @var string */
-	public string $city = '';
+	/** @var string|null */
+	public ?string $city = '';
 
-	/** @var string */
-	public string $postcode = '';
+	/** @var string|null */
+	public ?string $postcode = '';
 
-	/** @var string */
-	public string $county = '';
+	/** @var string|null */
+	public ?string $county = '';
 
-	/** @var string */
-	public string $state = '';
+	/** @var string|null */
+	public ?string $state = '';
 
-	/** @var string */
-	public string $country = '';
+	/** @var string|null */
+	public ?string $country = '';
 
-	/** @var string */
-	public string $planet = 'Earth';
+	/** @var string|null */
+	public ?string $planet = 'Earth';
 
-	/** @var string */
-	public string $system = 'the Solar System';
+	/** @var string|null */
+	public ?string $system = 'the Solar System';
 
-	/** @var string */
-	public string $arm = 'Orion Arm';
+	/** @var string|null */
+	public ?string $arm = 'Orion Arm';
 
-	/** @var string */
-	public string $galaxy = 'Milky Way';
+	/** @var string|null */
+	public ?string $galaxy = 'Milky Way';
 
-	/** @var string */
-	public string $group = 'the Local Group';
+	/** @var string|null */
+	public ?string $group = 'the Local Group';
 
-	/** @var string */
-	public string $cluster = 'Virgo Cluster';
+	/** @var string|null */
+	public ?string $cluster = 'Virgo Cluster';
 
-	/** @var string */
-	public string $supercluster = 'Laniakea Supercluster';
+	/** @var string|null */
+	public ?string $supercluster = 'Laniakea Supercluster';
 
 	// Methods
 	// =========================================================================

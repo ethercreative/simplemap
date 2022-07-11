@@ -1,3 +1,7 @@
+## 3.9.4 - 2022-07-11
+### Fixed
+- Fix JS script cache issue (#340, #341) via @RedLucas.
+
 ## 3.9.3 - 2022-01-17
 ### Fixed
 - Fix Mapbox Forbidden issue (Fixes #218, via @Saboteur777)

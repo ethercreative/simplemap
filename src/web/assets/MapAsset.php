@@ -30,7 +30,7 @@ class MapAsset extends AssetBundle
 			VueAsset::class,
 		];
 
-		if (getenv('ETHER_ENVIRONMENT'))
+		if (getenv('ETHER_ENVIRONMENT') === 'true')
 		{
 			$this->js = [
 				'https://localhost:8080/app.js',

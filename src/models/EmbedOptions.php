@@ -22,8 +22,8 @@ class EmbedOptions extends StaticOptions
 	// Properties
 	// =========================================================================
 
-	/** @var string The ID of the map (unique ID will be generated if null) */
-	public string $id;
+	/** @var string|null The ID of the map (unique ID will be generated if null) */
+	public ?string $id = null;
 
 	/** @var array Options to be passed to the JS map */
 	public array $options = [];

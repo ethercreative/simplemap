@@ -1,3 +1,7 @@
+## 4.0.3 - 2022-07-11
+### Fixed
+- Fixed $id embed issue (Fixes #353)
+
 ## 4.0.2 - 2022-06-08
 ### Fixed
 - Misc fixes via @davidwebca & @jamesedmonston

@@ -113,6 +113,17 @@ export default class Parts {
 	 * @private
 	 */
 	_mapbox (parts) {
+		if (!parts.context) {
+			this.number   = null;
+			this.address  = null;
+			this.city     = null;
+			this.postcode = null;
+			this.county   = null;
+			this.state    = null;
+			this.country  = null;
+			return;
+		}
+
 		parts = parts.context.reduce((a, part) => {
 			const key = part.id.split('.')[0];
 			a[key] = part.text;

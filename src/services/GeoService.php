@@ -680,6 +680,10 @@ class GeoService extends Component
 		else if (!is_array($location) || !isset($location['lat'], $location['lng']))
 			$location = [];
 
+		if (!$location) {
+			$location = [];
+		}
+
 		return $location;
 	}
 

@@ -1,3 +1,7 @@
+## 4.0.4 - 2023-06-26
+### Fixed
+- Update settings autosuggest input (Fixes #374)
+
 ## 4.0.3 - 2022-07-11
 ### Fixed
 - Fixed $id embed issue (Fixes #353)

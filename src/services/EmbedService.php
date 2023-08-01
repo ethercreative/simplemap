@@ -105,6 +105,7 @@ class EmbedService extends Component
 	{
 		$view = Craft::$app->getView();
 		$callbackName = 'init_' . $options->id;
+		$loadedCallbackName =  $options->id . '_loaded';
 
 		$mapTypeId = match ($settings->mapTiles)
 		{
@@ -146,11 +147,6 @@ class EmbedService extends Component
 			'callback' => $callbackName,
 		]);
 
-		$this->_js(
-			'https://maps.googleapis.com/maps/api/js?' . $params,
-			['async' => '', 'defer' => '']
-		);
-
 		$js = <<<JS
 let {$options->id};
 
@@ -165,10 +161,15 @@ function {$callbackName} () {
 }
 JS;
 
+
+		$view->registerScript($js, View::POS_END);
+
+		$this->_js(
+			'https://maps.googleapis.com/maps/api/js?' . $params,
+			['async' => '', 'defer' => '', 'onload' => "typeof {$loadedCallbackName} != 'undefined' && {$loadedCallbackName}()"]
+		);
+
 		$css = $this->_getCss($options);
-
-
-		$view->registerJs($js, View::POS_END);
 		$css && $view->registerCss($css);
 
 		return '<div id="' . $options->id . '"></div>';

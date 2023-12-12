@@ -9,6 +9,7 @@
 namespace ether\simplemap\models;
 
 use craft\helpers\Json;
+use craft\helpers\Typecast;
 use Twig\Markup;
 use yii\base\Model;
 
@@ -44,6 +45,8 @@ abstract class BaseLocation extends Model
 
 	public function __construct ($config = [])
 	{
+		Typecast::properties(static::class, $config);
+		
 		parent::__construct($config);
 
 		if ($this->address === null)

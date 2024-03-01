@@ -5,7 +5,7 @@
   "license": "proprietary",
   "minimum-stability": "dev",
   "require": {
-    "craftcms/cms": "^4.0.0",
+    "craftcms/cms": "^5.0.0",
     "mapkit/jwt": "^1.1.2",
     "geoip2/geoip2": "~2.0",
     "guzzlehttp/guzzle": "^6.3.3|^7.2.0",
@@ -13,7 +13,7 @@
     "ext-openssl": "*",
     "ext-json": "*",
     "ext-zlib": "*",
-    "php": "^8.0"
+    "php": "^8.2"
   },
   "autoload": {
     "psr-4": {

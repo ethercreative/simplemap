@@ -171,6 +171,11 @@ class MapField extends Field implements PreviewableFieldInterface
 		return true;
 	}
 
+	public static function icon (): string
+	{
+		return 'map-pin';
+	}
+
 	public function getContentColumnType (): string
 	{
 		return Schema::TYPE_TEXT;
@@ -472,7 +477,7 @@ class MapField extends Field implements PreviewableFieldInterface
 	{
 		$view = Craft::$app->getView();
 
-		$containerId = 'map-' . $this->id . '-container';
+		$containerId = 'map-' . $this->id . 'container';
 		$vueContainerId = $view->namespaceInputId($containerId);
 		$view->registerJsFile('https://polyfill.io/v3/polyfill.min.js?flags=gated&features=default%2CIntersectionObserver%2CIntersectionObserverEntry');
 		$view->registerAssetBundle(MapAsset::class);

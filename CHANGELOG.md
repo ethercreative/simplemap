@@ -1,3 +1,7 @@
+## 5.0.0 - 2024-03-01
+### Changed
+- Add support for Craft 5
+
 ## 4.0.4 - 2023-06-26
 ### Fixed
 - Update settings autosuggest input (Fixes #374)

@@ -1,3 +1,7 @@
+## 4.0.8 - 2024-06-27
+### Security
+- Removed Polyfill.io (https://sansec.io/research/polyfill-supply-chain-attack)
+
 ## 4.0.7 - 2024-06-06
 ### Fixed
 - Fix issue when using count query on location search results (Fixes #391)

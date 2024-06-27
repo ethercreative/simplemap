@@ -1,3 +1,7 @@
+## 3.9.5 - 2024-06-27
+### Security
+- Removed Polyfill.io (https://sansec.io/research/polyfill-supply-chain-attack)
+
 ## 3.9.4 - 2022-07-11
 ### Fixed
 - Fix JS script cache issue (#340, #341) via @RedLucas.

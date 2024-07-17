@@ -622,7 +622,7 @@ JS;
 			'[]',
 			View::POS_END,
 			true,
-			md5($url),
+			md5($url)
 		);
 	}
 

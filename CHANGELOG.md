@@ -1,3 +1,7 @@
+## 5.0.4 - 2024-11-11
+### Added
+- Add support for WordPress ACF -> Craft import (via @brandonkelly)
+
 ## 5.0.3 - 2024-09-16
 ### Fixed
 - Fixed location filter affecting unrelated queries (Fixes #405)

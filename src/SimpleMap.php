@@ -20,6 +20,8 @@ use craft\services\Gql;
 use craft\web\Application;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use craft\wpimport\Command as WpImportCommand;
+use ether\simplemap\acfadapters\GoogleMap as GoogleMapAcfAdapter;
 use ether\simplemap\fields\MapField as MapField;
 use ether\simplemap\integrations\feedme\FeedMeMaps;
 use ether\simplemap\integrations\graphql\MapPartsType;
@@ -138,6 +140,16 @@ class SimpleMap extends Plugin
 				Application::class,
 				Application::EVENT_INIT,
 				[$this, 'onApplicationInit']
+			);
+		}
+
+		if (class_exists(WpImportCommand::class)) {
+			Event::on(
+				WpImportCommand::class,
+				WpImportCommand::EVENT_REGISTER_ACF_ADAPTERS,
+				static function (RegisterComponentTypesEvent $event) {
+					$event->types[] = GoogleMapAcfAdapter::class;
+				}
 			);
 		}
 	}

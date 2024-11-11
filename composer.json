@@ -15,6 +15,9 @@
     "ext-zlib": "*",
     "php": "^8.2"
   },
+  "require-dev": {
+    "craftcms/wp-import": "dev-main"
+  },
   "autoload": {
     "psr-4": {
       "ether\\simplemap\\": "src/"

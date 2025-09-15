@@ -796,7 +796,15 @@ class GeoService extends Component
 				$url .= '&country=' . rawurlencode($country);
 		}
 
-		$data = (string) static::_client()->get($url)->getBody();
+		$referer = Craft::$app->getRequest()->getIsConsoleRequest()
+			? Craft::getAlias('@web')
+			: Craft::$app->urlManager->getHostInfo();
+
+		$data = (string) static::_client()->get($url, [
+			'headers' => [
+				'referer' => $referer
+			]
+		])->getBody();
 		$data = Json::decodeIfJson($data);
 
 		if (!is_array($data) || empty($data))
@@ -883,7 +891,15 @@ class GeoService extends Component
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&lat=' . rawurlencode($lat) . '&lon=' . rawurldecode($lng);
 
-		$data = (string) static::_client()->get($url)->getBody();
+		$referer = Craft::$app->getRequest()->getIsConsoleRequest()
+			? Craft::getAlias('@web')
+			: Craft::$app->urlManager->getHostInfo();
+
+		$data = (string) static::_client()->get($url, [
+			'headers' => [
+				'referer' => $referer
+			]
+		])->getBody();
 		$data = Json::decodeIfJson($data);
 
 		if (!is_array($data) || empty($data) || array_key_exists('error', $data))

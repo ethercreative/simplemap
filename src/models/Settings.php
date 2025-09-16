@@ -58,6 +58,12 @@ class Settings extends Model
 	 */
 	public bool $disablePopulateMissingFieldData = false;
 
+	/**
+	 * @var string The base URL for the Nominatim service. Override to use a
+	 *   self-hosted instance or a proxy.
+	 */
+	public string $nominatimBaseUrl = 'https://nominatim.openstreetmap.org';
+
 	// Properties: w3w
 	// -------------------------------------------------------------------------
 

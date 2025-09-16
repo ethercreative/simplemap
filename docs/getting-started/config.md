@@ -179,8 +179,14 @@ return [
 #### `disablePopulateMissingFieldData`
 _Default: `false`_
 
-Will disable the automatic population of missing field data. This can be useful 
+Will disable the automatic population of missing field data. This can be useful
 in preventing API spam when importing lots of map data.
+
+#### `nominatimBaseUrl`
+_Default: `'https://nominatim.openstreetmap.org'`_
+
+The base URL for the Nominatim service. Override to use a self-hosted instance
+or a proxy.
 
 #### `geoLocationService`
 _Default: `GeoLocationService::None`_

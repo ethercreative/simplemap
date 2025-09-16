@@ -599,7 +599,7 @@ class GeoService extends Component
 				$address, $country
 			),
 			GeoEnum::Nominatim => static::_latLngFromAddress_Nominatim(
-				$address, $country
+				$address, $country, $settings->nominatimBaseUrl
 			),
 			default => throw new Exception(
 				'Unknown geo-coding service: ' . $settings->geoService
@@ -638,7 +638,7 @@ class GeoService extends Component
 				$lat, $lng
 			),
 			GeoEnum::Nominatim => static::_addressFromLatLng_Nominatim(
-				$lat, $lng
+				$lat, $lng, $settings->nominatimBaseUrl
 			),
 			default => throw new Exception(
 				'Unknown geo-coding service: ' . $settings->geoService
@@ -783,9 +783,9 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _latLngFromAddress_Nominatim ($address, $country): ?array
+	private static function _latLngFromAddress_Nominatim ($address, $country, $baseUrl): ?array
 	{
-		$url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1';
+		$url = $baseUrl . '/search?format=jsonv2&limit=1';
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&q=' . rawurlencode($address);
 		if ($country !== null)
@@ -877,9 +877,9 @@ class GeoService extends Component
 		];
 	}
 
-	private static function _addressFromLatLng_Nominatim ($lat, $lng): ?array
+	private static function _addressFromLatLng_Nominatim ($lat, $lng, $baseUrl): ?array
 	{
-		$url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&addressdetails=1';
+		$url = $baseUrl . '/reverse?format=jsonv2&limit=1&addressdetails=1';
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&lat=' . rawurlencode($lat) . '&lon=' . rawurldecode($lng);
 

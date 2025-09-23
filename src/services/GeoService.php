@@ -21,6 +21,7 @@ use ether\simplemap\SimpleMap;
 use GuzzleHttp\Client;
 use Mapkit\JWT;
 use Exception;
+use function GuzzleHttp\default_user_agent;
 
 /**
  * Class GeoService
@@ -763,13 +764,9 @@ class GeoService extends Component
 				$url = str_replace('.json', rawurlencode(', ' . $country) . '.json', $url);
 		}
 
-		$referer = Craft::$app->getRequest()->getIsConsoleRequest()
-			? Craft::getAlias('@web')
-			: Craft::$app->urlManager->getHostInfo();
-
 		$data = (string) static::_client()->get($url, [
             'headers' => [
-                'referer' => $referer,
+                'referer' => static::_referer(),
             ]
         ])->getBody();
 		$data = Json::decodeIfJson($data);
@@ -796,7 +793,12 @@ class GeoService extends Component
 				$url .= '&country=' . rawurlencode($country);
 		}
 
-		$data = (string) static::_client()->get($url)->getBody();
+		$data = (string) static::_client()->get($url, [
+			'headers' => [
+				'referer' => static::_referer(),
+				'user-agent' => static::_userAgent(),
+			]
+		])->getBody();
 		$data = Json::decodeIfJson($data);
 
 		if (!is_array($data) || empty($data))
@@ -883,7 +885,12 @@ class GeoService extends Component
 		$url .= '&accept-language=' . Craft::$app->locale->getLanguageID();
 		$url .= '&lat=' . rawurlencode($lat) . '&lon=' . rawurldecode($lng);
 
-		$data = (string) static::_client()->get($url)->getBody();
+		$data = (string) static::_client()->get($url, [
+			'headers' => [
+				'referer' => static::_referer(),
+				'user-agent' => static::_userAgent(),
+			]
+		])->getBody();
 		$data = Json::decodeIfJson($data);
 
 		if (!is_array($data) || empty($data) || array_key_exists('error', $data))
@@ -912,6 +919,21 @@ class GeoService extends Component
 			$client = Craft::createGuzzleClient();
 
 		return $client;
+	}
+
+	private static function _referer ()
+	{
+		return Craft::$app->getRequest()->getIsConsoleRequest()
+			? Craft::getAlias('@web')
+			: Craft::$app->urlManager->getHostInfo();
+	}
+
+	private static function _userAgent ()
+	{
+		// User agent form based on Craft::createGuzzleClient
+		return 'Craft/' . Craft::$app->getVersion()
+			. ' ' . default_user_agent()
+			. ' ' . static::_referer();
 	}
 
 	private static function _validateCountryCode (string $code): bool

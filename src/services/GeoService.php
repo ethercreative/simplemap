@@ -740,6 +740,11 @@ class GeoService extends Component
 		$data = (string) static::_client()->get($url)->getBody();
 		$data = Json::decodeIfJson($data);
 
+		if (is_array($data) && array_key_exists('error_message', $data)) {
+			Craft::error('Google Maps Geocoding API error: ' . $data['error_message'], 'maps');
+			return null;
+		}
+
 		if (!is_array($data) || empty($data['results']))
 			return null;
 

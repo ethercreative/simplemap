@@ -193,7 +193,7 @@
 						};
 					case MapTiles.OpenStreetMap:
 						return {
-							url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+							url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 							attr: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>',
 						};
 					case MapTiles.CartoVoyager:

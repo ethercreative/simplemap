@@ -499,7 +499,7 @@ JS;
 				$attr  = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>, &copy; <a href="https://maps.wikimedia.org" target="_blank" rel="noreferrer">Wikimedia</a>';
 				break;
 			case MapTiles::OpenStreetMap:
-				$tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+				$tiles = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 				$attr  = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>';
 				break;
 			case MapTiles::CartoVoyager:

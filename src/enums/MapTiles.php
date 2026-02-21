@@ -141,7 +141,7 @@ abstract class MapTiles
 				];
 			case self::OpenStreetMap:
 				return [
-					'url' => 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+					'url' => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 					'size' => 256,
 				];
 			case self::CartoVoyager:

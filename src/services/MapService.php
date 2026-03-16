@@ -189,7 +189,6 @@ class MapService extends Component
 			'and',
 			'[[elements.id]] = [[' . $alias . '.ownerId]]',
 			'[[elements.dateDeleted]] IS NULL',
-			'[[elements_sites.siteId]] = [[' . $alias . '.ownerSiteId]]',
 			'[[' . $alias . '.fieldId]] = ' . $field->id,
 		];
 

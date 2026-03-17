@@ -64,7 +64,7 @@ class Map extends BaseLocation
 
 	public function __get ($name)
 	{
-		$isPart = property_exists($this->parts, $name) || $name === 'streetAddress';
+		$isPart = (is_object($this->parts) && property_exists($this->parts, $name)) || $name === 'streetAddress';
 
 		if (in_array($name, PartsLegacy::$legacyKeys) && !$isPart)
 			return null;
@@ -79,7 +79,7 @@ class Map extends BaseLocation
 		try
 		{
 			if (
-				property_exists($this->parts, $name) ||
+				(is_object($this->parts) && property_exists($this->parts, $name)) ||
 				$name === 'streetAddress' ||
 				in_array($name, PartsLegacy::$legacyKeys)
 			) return true;
